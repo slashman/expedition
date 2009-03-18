@@ -32,6 +32,6 @@ public class World extends FileStaticPattern {
 	
 	@Override
 	public String getFilename() {
-		return "bigmap";
+		return "bigMap";
 	}
 }
