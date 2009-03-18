@@ -1,0 +1,42 @@
+Settlement
+ * Pair<Good, int>
+ > type
+
+Expedition
+ Name
+ * Vehicle
+ > carryCapacity
+ > carrying
+ > power
+ > combatUnits
+
+Vehicle
+ VehicleType
+ * Pair<Unit,int>
+ * Pair<Good, int>
+ > carrying
+
+VehicleType
+ Name
+ moveOnWater
+ moveOnAir
+ speedModifier
+ carryCapacity 
+
+Unit
+ Name
+ Range
+ Attack
+ Defense
+ Speed
+ Movement
+ Resistance
+ Special
+
+Good
+ Name
+ Classifier
+ 
+Units
+ Explorer
+ 
