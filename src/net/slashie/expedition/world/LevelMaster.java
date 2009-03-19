@@ -36,12 +36,6 @@ public class LevelMaster {
 			StaticPattern pattern = new World();
 			ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
 			"slashie-worldtest", 200,200,50,50,	pattern.getCharMap(), new Pair<String, Position>("_START", new Position(30,60)));
-			
-			//StaticPattern pattern = new TestSea();
-			
-			StaticGenerator generator = new ExpeditionStaticGenerator();
-			pattern.setup(generator);
-			generator.createLevel(ret);
 			ret.setDescription(pattern.getDescription());
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());
