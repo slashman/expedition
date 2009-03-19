@@ -9,6 +9,7 @@ import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.levelGeneration.StaticGenerator;
 import net.slashie.serf.levelGeneration.StaticPattern;
 import net.slashie.util.Pair;
+import net.slashie.utils.Position;
 
 public class LevelMaster {
 
@@ -27,14 +28,17 @@ public class LevelMaster {
 				ret.setUnleashers(pattern.getUnleashers());
 			}
 			ret.setLocation(new Pair<Integer,Integer>(37,-6));
-			ret.setMusicKey("SPAIN");
-			ret.setSuperLevelId("WORLD");
+			ret.getHelper().setMusicKey("SPAIN");
+			ret.getHelper().setSuperLevelId("WORLD");
 			ret.setID("SPAIN");
 			return ret;
 		} else if (levelID.equals("WORLD")){
-			ExpeditionMacroLevel ret = new ExpeditionMacroLevel();
-			//StaticPattern pattern = new TestSea();
 			StaticPattern pattern = new World();
+			ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
+			"slashie-worldtest", 200,200,50,50,	pattern.getCharMap(), new Pair<String, Position>("_START", new Position(30,60)));
+			
+			//StaticPattern pattern = new TestSea();
+			
 			StaticGenerator generator = new ExpeditionStaticGenerator();
 			pattern.setup(generator);
 			generator.createLevel(ret);
@@ -42,7 +46,7 @@ public class LevelMaster {
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());
 			}
-			ret.setMusicKey("SEA");
+			ret.getHelper().setMusicKey("SEA");
 			ret.setID("WORLD");
 			return ret;
 		} else if (levelID.equals("NEW_WORLD")){

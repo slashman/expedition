@@ -1,18 +1,22 @@
 package net.slashie.expedition.world;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
-
-import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 
-public class ExpeditionMacroLevel extends ExpeditionLevel{
+public class ExpeditionMacroLevel extends ExpeditionLevelReader{
+	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
+			int levelHeight, int gridWidth, int gridHeight,
+			Hashtable<String, String> charmap, Pair<String, Position> mainExit) {
+		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap,
+				mainExit);
+	}
+
 	private Pair<Integer,Integer> handyReusablePair = new Pair<Integer, Integer>(0,0);
 	
-	private List<GoodsCache> cacheList = new ArrayList<GoodsCache>();
-	private Hashtable<String, GoodsCache> cacheHash = new Hashtable<String, GoodsCache>();
+	/*private List<GoodsCache> cacheList = new ArrayList<GoodsCache>();
+	private Hashtable<String, GoodsCache> cacheHash = new Hashtable<String, GoodsCache>();*/
 	@Override
 	public Pair<Integer, Integer> getLocation() {
 		handyReusablePair.setA(resolveXToLongitude());
@@ -37,4 +41,16 @@ public class ExpeditionMacroLevel extends ExpeditionLevel{
 	public GoodsCache getCacheAt(Position where){
 		return cacheHash.get(where.toString());
 	}*/
+	
+	@Override
+	public int getTemperature() {
+		// TODO Auto-generated method stub
+		return 12;
+	}
+	
+	@Override
+	public String getWeather() {
+		// TODO Auto-generated method stub
+		return "Calm";
+	}
 }
