@@ -53,4 +53,12 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		// TODO Auto-generated method stub
 		return "Calm";
 	}
+	
+	@Override
+	public Pair<String, String> getLocationDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
 }
