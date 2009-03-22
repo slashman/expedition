@@ -9,21 +9,20 @@ import net.slashie.utils.Position;
 
 public abstract class ExpeditionLevelReader extends GridLevelReader implements ExpeditionLevel{
 	
-	public ExpeditionLevelReader(String levelNameset, int levelWidth,
-			int levelHeight, int gridWidth, int gridHeight,
-			Hashtable<String, String> charmap, Pair<String, Position> mainExit) {
+	public ExpeditionLevelReader(String levelNameset, 
+			int levelWidth,
+			int levelHeight, int gridWidth, int gridHeight, 
+			Hashtable<String, String> charmap, Position startPosition) {
 		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap,
-				mainExit);
+				startPosition);
 	}
 
 	private ExpeditionLevelHelper helper = new ExpeditionLevelHelper(this);
 	
-	@Override
 	public String getMusicKey() {
 		return helper.getMusicKey();
 	}
 
-	@Override
 	public String getSuperLevelId() {
 		return helper.getSuperLevelId();
 	}

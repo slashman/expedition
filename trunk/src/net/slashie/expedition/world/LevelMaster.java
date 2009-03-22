@@ -28,7 +28,7 @@ public class LevelMaster {
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());
 			}
-			ret.setLocation(new Pair<Integer,Integer>(37,-6));
+			ret.setLocation(new Pair<Integer,Integer>(38,-6));
 			ret.getHelper().setMusicKey("SPAIN");
 			ret.getHelper().setSuperLevelId("WORLD");
 			ret.setID("SPAIN");
@@ -37,9 +37,9 @@ public class LevelMaster {
 			StaticPattern pattern = new World();
 			
 			/*ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
-			"slashie-worldtest", 200,200,50,50,	pattern.getCharMap(), new Pair<String, Position>("_START", new Position(30,60)));*/
+			"world", 150,150,50,50, pattern.getCharMap(), new Pair<String, Position>("_START", new Position(3198,801)));*/
 			ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
-			"slashie-worldtest2", 150,150,50,50, pattern.getCharMap(), new Pair<String, Position>("_START", new Position(30,60)));
+					"world", 3374,2939,50,50, pattern.getCharMap(), new Position(3236,834));
 			ret.setDescription(pattern.getDescription());
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());

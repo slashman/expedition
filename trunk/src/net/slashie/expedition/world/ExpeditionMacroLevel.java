@@ -8,19 +8,17 @@ import net.slashie.utils.Position;
 public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
 			int levelHeight, int gridWidth, int gridHeight,
-			Hashtable<String, String> charmap, Pair<String, Position> mainExit) {
+			Hashtable<String, String> charmap, Position startPosition) {
 		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap,
-				mainExit);
+				startPosition);
 	}
 
 	private Pair<Integer,Integer> handyReusablePair = new Pair<Integer, Integer>(0,0);
 	
-	/*private List<GoodsCache> cacheList = new ArrayList<GoodsCache>();
-	private Hashtable<String, GoodsCache> cacheHash = new Hashtable<String, GoodsCache>();*/
-	@Override
+
 	public Pair<Integer, Integer> getLocation() {
-		handyReusablePair.setA(resolveXToLongitude());
-		handyReusablePair.setB(resolveYToLatitude());
+		handyReusablePair.setA(resolveYToLatitude());
+		handyReusablePair.setB(resolveXToLongitude());
 		return handyReusablePair;
 	}
 	
@@ -29,35 +27,21 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	}
 	
 	private int resolveYToLatitude(){
-		return (int)Math.round((getPlayer().getPosition().y() - 1572)/19.47d); 
+		return (int)Math.round((getPlayer().getPosition().y() - 1572)/-19.47d); 
 	}
 	
-	/*public void addCache(Position where, GoodsCache cache){
-		addFeature(cache);
-		/*cacheList.add(cache);
-		cacheHash.put(where.toString(), cache);
-	}*/
-	/*
-	public GoodsCache getCacheAt(Position where){
-		return cacheHash.get(where.toString());
-	}*/
-	
-	@Override
 	public int getTemperature() {
 		// TODO Auto-generated method stub
 		return 12;
 	}
 	
-	@Override
 	public String getWeather() {
 		// TODO Auto-generated method stub
 		return "Calm";
 	}
 	
-	@Override
 	public Pair<String, String> getLocationDescription() {
-		// TODO Auto-generated method stub
-		return new Pair<String,String>("","");
+		return getHelper().getLocationDescription();
 	}
 	
 
