@@ -6,6 +6,7 @@ import net.slashie.expedition.locations.TestSea;
 import net.slashie.expedition.locations.World;
 import net.slashie.expedition.worldGen.ExpeditionStaticGenerator;
 import net.slashie.serf.level.AbstractLevel;
+import net.slashie.serf.level.Dispatcher;
 import net.slashie.serf.levelGeneration.StaticGenerator;
 import net.slashie.serf.levelGeneration.StaticPattern;
 import net.slashie.util.Pair;
@@ -34,12 +35,17 @@ public class LevelMaster {
 			return ret;
 		} else if (levelID.equals("WORLD")){
 			StaticPattern pattern = new World();
+			
+			/*ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
+			"slashie-worldtest", 200,200,50,50,	pattern.getCharMap(), new Pair<String, Position>("_START", new Position(30,60)));*/
 			ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
-			"slashie-worldtest", 200,200,50,50,	pattern.getCharMap(), new Pair<String, Position>("_START", new Position(30,60)));
+			"slashie-worldtest2", 150,150,50,50, pattern.getCharMap(), new Pair<String, Position>("_START", new Position(30,60)));
 			ret.setDescription(pattern.getDescription());
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());
 			}
+			ret.setDispatcher(new Dispatcher());
+
 			ret.getHelper().setMusicKey("SEA");
 			ret.setID("WORLD");
 			return ret;
