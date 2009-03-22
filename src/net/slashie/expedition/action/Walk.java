@@ -3,9 +3,7 @@ package net.slashie.expedition.action;
 import java.util.ArrayList;
 
 import net.slashie.expedition.domain.Expedition;
-import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodsCache;
-import net.slashie.expedition.domain.NonPrincipalExpedition;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -14,12 +12,10 @@ import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.action.Message;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
-import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 
