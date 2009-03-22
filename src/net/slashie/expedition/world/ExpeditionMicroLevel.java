@@ -8,30 +8,32 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	public void setLocation(Pair<Integer, Integer> location) {
 		this.location = location;
 	}
-	@Override
 	public Pair<Integer, Integer> getLocation() {
 		return location;
 	}
 	
-	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
+	/*private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
 	public Pair<String,String> getLocationDescription(){
+		
 		Pair<Integer, Integer> location = getLocation();
 		handyReusableObject.setA(Math.abs(location.getA()) + (location.getA() > 0?"N":"S"));
 		handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"W":"E"));
 		
 		return handyReusableObject;
+	}*/
+	
+	public Pair<String,String> getLocationDescription(){
+		return getHelper().getLocationDescription();
 	}
 
-	@Override
 	public int getTemperature() {
 		// TODO Auto-generated method stub
-		return -5;
+		return 12;
 	}
 	
-	@Override
 	public String getWeather() {
 		// TODO Auto-generated method stub
-		return "Sunny";
+		return "Calm";
 	}
 	
 }
