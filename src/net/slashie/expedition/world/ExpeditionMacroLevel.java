@@ -2,6 +2,7 @@ package net.slashie.expedition.world;
 
 import java.util.Hashtable;
 import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.serf.level.Dispatcher;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 

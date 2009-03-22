@@ -44,7 +44,6 @@ public class LevelMaster {
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());
 			}
-			ret.setDispatcher(new Dispatcher());
 
 			ret.getHelper().setMusicKey("SEA");
 			ret.setID("WORLD");

@@ -36,7 +36,7 @@ public class Town extends GoodsCache{
 	
 	@Override
 	public void onStep(Actor a) {
-		if (a instanceof Expedition){
+		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
 			switch (UserInterface.getUI().switchChat("What do you want to do?", "Nothing")){
 			case 0:
     			break;

@@ -54,7 +54,7 @@ public class ShipCache extends GoodsCache{
 	
 	@Override
 	public void onStep(Actor a) {
-		if (a instanceof Expedition){
+		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
 			switch (UserInterface.getUI().switchChat("What do you want to do?", "Transfer To Expedition", "Transfer To Ship", "Board Ship")){
 			case 0:
 				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(this);
