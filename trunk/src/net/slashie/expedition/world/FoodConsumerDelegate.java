@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import net.slashie.expedition.domain.ExpeditionUnit;
+import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.serf.game.Equipment;
@@ -31,7 +32,7 @@ public class FoodConsumerDelegate implements Serializable{
 				dailyFoodConsumption += unit.getDailyFoodConsumption() * equipment.getQuantity();
 			}
 		}
-		return dailyFoodConsumption;
+		return dailyFoodConsumption * foodConsumer.getFoodConsumptionMultiplier();
 	}
 	
 	public void consumeFood(){
@@ -52,19 +53,18 @@ public class FoodConsumerDelegate implements Serializable{
 		int foodToSpend = quantity;
 		List<Equipment> inventory = this.foodConsumer.getInventory();
 		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good){
-				Good good = (Good)equipment.getItem();
-				if (good.getGoodType() == GoodType.FOOD){
-					int unitsToSpend = (int)Math.ceil((double)foodToSpend / (double)good.getUnitsFedPerGood());
-					if (unitsToSpend > equipment.getQuantity()){
-						unitsToSpend = equipment.getQuantity();
-					}
-					foodToSpend -= unitsToSpend * good.getUnitsFedPerGood();
-					equipment.reduceQuantity(unitsToSpend);
-					if (foodToSpend <= 0){
-						return 0;
-					}
+			if (equipment.getItem() instanceof Food){
+				Food good = (Food)equipment.getItem();
+				int unitsToSpend = (int)Math.ceil((double)foodToSpend / (double)good.getUnitsFedPerGood());
+				if (unitsToSpend > equipment.getQuantity()){
+					unitsToSpend = equipment.getQuantity();
 				}
+				foodToSpend -= unitsToSpend * good.getUnitsFedPerGood();
+				foodConsumer.reduceQuantityOf(equipment.getItem(), unitsToSpend);
+				if (foodToSpend <= 0){
+					return 0;
+				}
+
 			}
 		}
 		return foodToSpend;
@@ -72,10 +72,12 @@ public class FoodConsumerDelegate implements Serializable{
 	
 	public void killUnits(double proportion){
 		List<Equipment> inventory = this.foodConsumer.getInventory();
-		for (Equipment equipment: inventory){
+		for (int i = 0; i < inventory.size(); i++){
+			Equipment equipment = inventory.get(i);
 			if (equipment.getItem() instanceof ExpeditionUnit){
 				int killUnits = (int)Math.ceil(equipment.getQuantity() * proportion);
-				equipment.reduceQuantity(killUnits);
+				foodConsumer.reduceQuantityOf(equipment.getItem(), killUnits);
+				i--;
 			}
 		}
 		this.foodConsumer.checkDeath();

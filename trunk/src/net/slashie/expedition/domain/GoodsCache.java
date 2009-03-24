@@ -148,4 +148,22 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 	public List<Equipment> getInventory() {
 		return getItems();
 	}
+	
+	public int getFoodConsumptionMultiplier() {
+		return 1;
+	}
+	
+	public void reduceQuantityOf(AbstractItem item, int quantity) {
+		for (int i = 0; i < items.size(); i++){
+			Equipment equipment = (Equipment) items.get(i);
+			if (equipment.getItem().equals(item)){
+				equipment.reduceQuantity(quantity);
+				if (equipment.isEmpty())
+					items.remove(equipment);
+				return;
+			}
+		}
+		
+		
+	}
 }

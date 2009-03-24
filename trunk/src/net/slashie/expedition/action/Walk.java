@@ -69,7 +69,7 @@ public class Walk extends Action{
 	        	
 	        }
         } else {
-
+        	
         	
 	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
 	        if (cell == null){
@@ -104,8 +104,6 @@ public class Walk extends Action{
 	        		}
 	        	}
 	        }
-	        
-
         }
         AbstractFeature feature =expedition.getLevel().getFeatureAt(destinationPoint);
         if (feature != null && feature.isSolid()){
@@ -136,8 +134,32 @@ public class Walk extends Action{
 		return "WALK";
 	}
 	
+	private Expedition getExpedition(){
+		return (Expedition) performer;
+	}
+	
 	@Override
 	public int getCost() {
+		switch (getExpedition().getMovementMode()){
+		case FOOT: case HORSE:
+			switch (getExpedition().getMovementSpeed()){
+			case FAST:
+				return 20;
+			case NORMAL:
+				return 30;
+			case SLOW:
+				return 50;
+			}
+		case SHIP:
+			switch (getExpedition().getMovementSpeed()){
+			case FAST:
+				return 10;
+			case NORMAL:
+				return 20;
+			case SLOW:
+				return 30;
+			}
+		}
 		return 30;
 	}
 

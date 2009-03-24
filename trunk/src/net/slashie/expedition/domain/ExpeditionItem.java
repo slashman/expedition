@@ -6,7 +6,7 @@ import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 
-public class ExpeditionItem extends AbstractItem{
+public class ExpeditionItem extends AbstractItem implements Cloneable{
 	private String classifierId;
 	private String description;
 	private transient Appearance appearance;
@@ -16,10 +16,6 @@ public class ExpeditionItem extends AbstractItem{
 	
 	public int getWeight() {
 		return weight;
-	}
-
-	public void setWeight(int weight) {
-		this.weight = weight;
 	}
 
 	public ExpeditionItem(String classifierId, String description, String pluralDescription,
@@ -98,6 +94,15 @@ public class ExpeditionItem extends AbstractItem{
 
 	public String getMenuDescription() {
 		return getDescription();
+	}
+	
+	@Override
+	public ExpeditionItem clone()  {
+		try {
+			return (ExpeditionItem) super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 
 }

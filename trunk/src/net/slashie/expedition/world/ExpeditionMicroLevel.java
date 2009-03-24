@@ -4,7 +4,17 @@ import net.slashie.expedition.level.BufferedExpeditionLevel;
 import net.slashie.util.Pair;
 
 public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
+	private boolean dock;
 	private Pair<Integer, Integer> location;
+	
+	
+	
+	public void setDock(boolean dock) {
+		this.dock = dock;
+	}
+	public boolean isDock() {
+		return dock;
+	}
 	public void setLocation(Pair<Integer, Integer> location) {
 		this.location = location;
 	}
@@ -22,8 +32,14 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 		return handyReusableObject;
 	}*/
 	
+	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
 	public Pair<String,String> getLocationDescription(){
-		return getHelper().getLocationDescription();
+		Pair<Integer, Integer> location = getLocation();
+		handyReusableObject.setA("(Land) "+Math.abs(location.getA()) + (location.getA() > 0?"N":"S"));
+		//This is the real longitude calculation:
+		handyReusableObject.setB("(Land) "+Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
+		//handyReusableObject.setB("West (Dead):   "+expeditionLevel.get);
+		return handyReusableObject;
 	}
 
 	public int getTemperature() {

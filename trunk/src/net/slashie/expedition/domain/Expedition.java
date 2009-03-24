@@ -19,12 +19,47 @@ import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
+import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class Expedition extends Player implements FoodConsumer{
-	private FoodConsumerDelegate foodConsumerDelegate; 
+	private FoodConsumerDelegate foodConsumerDelegate;
+	
+	public MovementSpeed getMovementSpeed() {
+		if (getMovementMode() == MovementMode.SHIP){
+			if (hasFullShipCrew()){
+				return MovementSpeed.FAST;
+			} else {
+				return MovementSpeed.SLOW;
+			}
+		} else {
+			return MovementSpeed.NORMAL;
+		}
+		
+	}
+
+	/**
+	 * Determines if the expedition has all the crew it needs to sail
+	 * quickly.
+	 * 
+	 * Crew per ship is:
+	 *  1 Captain
+	 *  10 Sailors
+	 * @return
+	 */
+	private boolean hasFullShipCrew() {
+		int ships = getTotalShips();
+		int requiredCaptains = ships;
+		int requiredSailors = ships * 10;
+		
+		int captains = getItemCount("CAPTAIN");
+		int sailors = getItemCount("SAILOR");
+		return captains >= requiredCaptains && sailors >= requiredSailors;
+		
+	}
+
 	public Expedition(ExpeditionGame game) {
 		setGame(game);
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
@@ -53,6 +88,24 @@ public class Expedition extends Player implements FoodConsumer{
 	
 	private MovementMode movementMode = MovementMode.FOOT;
 	
+	public enum MovementSpeed {
+		SLOW,
+		NORMAL,
+		FAST;
+		
+		public String getDescription(){
+			switch (this){
+			case SLOW:
+				return "Slow";
+			case NORMAL:
+				return "";
+			case FAST:
+				return "Fast";
+			}
+			return "None";
+		}
+		
+	}
 
 	/**
 	 * Represent the gold credit of the player in Spain
@@ -166,7 +219,7 @@ public class Expedition extends Player implements FoodConsumer{
 		}
 	}
 	
-	public List<Equipment> getShips(){
+/*	public List<Equipment> getShips(){
 		List<Equipment> ret = new ArrayList<Equipment>();  
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
@@ -176,7 +229,7 @@ public class Expedition extends Player implements FoodConsumer{
 			}
 		}
 		return ret;
-	}
+	}*/
 	
 	public int getCarryable(ExpeditionItem item){
 		return (int)Math.floor((getCarryCapacity()-getCurrentWeight())/item.getWeight());
@@ -226,83 +279,20 @@ public class Expedition extends Player implements FoodConsumer{
 		int currentFood = 0;
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good){
-				Good good = (Good)equipment.getItem();
-				if (good.getGoodType() == GoodType.FOOD){
-					currentFood += good.getUnitsFedPerGood() * equipment.getQuantity();
-				}
+			if (equipment.getItem() instanceof Food){
+				Food good = (Food)equipment.getItem();
+				currentFood += good.getUnitsFedPerGood() * equipment.getQuantity();
 			}
 		}
 		return currentFood;
 	}
 	
-
-	/*private int getDailyFoodConsumption(){
-		int dailyFoodConsumption = 0;
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof ExpeditionUnit){
-				ExpeditionUnit unit = (ExpeditionUnit)equipment.getItem();
-				dailyFoodConsumption += unit.getDailyFoodConsumption() * equipment.getQuantity();
-			}
-		}
-		return dailyFoodConsumption;
-	}*/
-	
-	//private int expeditionStarveResistance = 5;
-	
-	/*public void elapseDay(){
-		int remainder = reduceFood(getDailyFoodConsumption());
-		if (remainder > 0){
-			//Reduce expedition resistance
-			expeditionStarveResistance --;
-			if (expeditionStarveResistance <= 0){
-				killUnits((double)Util.rand(5, 40)/100.0d);
-			}
-		} else {
-			if (expeditionStarveResistance < 5)
-				expeditionStarveResistance++;
-		}
-	}*/
-	
-	/*public void killUnits(double proportion){
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof ExpeditionUnit){
-				int killUnits = (int)Math.ceil(equipment.getQuantity() * proportion);
-				equipment.reduceQuantity(killUnits);
-			}
-		}
-		checkDeath();
-	}*/
-	
 	public void checkDeath(){
 		if (getTotalUnits() <= 0){
+			UserInterface.getUI().refresh();
 			informPlayerEvent (DEATH);
 		}
 	}
-	
-	/*public int reduceFood(int quantity){
-		int foodToSpend = quantity;
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good){
-				Good good = (Good)equipment.getItem();
-				if (good.getGoodType() == GoodType.FOOD){
-					int unitsToSpend = (int)Math.ceil((double)foodToSpend / (double)good.getUnitsFedPerGood());
-					if (unitsToSpend > equipment.getQuantity()){
-						unitsToSpend = equipment.getQuantity();
-					}
-					foodToSpend -= unitsToSpend * good.getUnitsFedPerGood();
-					equipment.reduceQuantity(unitsToSpend);
-					if (foodToSpend <= 0){
-						return 0;
-					}
-				}
-			}
-		}
-		return foodToSpend;
-	}*/
 	
 	public void recalcCapacity(){
 		//Should I refresh the stats on demand instead of always calculating them??
@@ -515,6 +505,18 @@ public class Expedition extends Player implements FoodConsumer{
 		}
 		return goodCount;
 	}
+	
+	public int getItemCount(String itemId) {
+		int goodCount = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem().getFullID().equals(itemId)){
+				goodCount += equipment.getQuantity();
+			}
+		}
+		return goodCount;
+	}
+	
 
 	public void reduceGood(String goodId, int quantity){
 		List<Equipment> inventory = getInventory();
@@ -522,7 +524,7 @@ public class Expedition extends Player implements FoodConsumer{
 			if (equipment.getItem() instanceof Good){
 				Good good = (Good)equipment.getItem();
 				if (good.getFullID().equals(goodId)){
-					equipment.reduceQuantity(quantity);
+					reduceQuantityOf(equipment.getItem(), quantity);
 					return;
 				}
 			}
@@ -559,7 +561,7 @@ public class Expedition extends Player implements FoodConsumer{
 						currentlyKilled.setB(currentlyKilled.getB()+killUnits);
 					}
 					toKill -= killUnits;
-					equipment.reduceQuantity(killUnits);
+					reduceQuantityOf(equipment.getItem(), killUnits);
 				}
 			}
 			if (getTotalUnits() == 0)
@@ -595,6 +597,86 @@ public class Expedition extends Player implements FoodConsumer{
 		for (Equipment equipment: inventory){
 			if (equipment.getItem() instanceof ExpeditionUnit && ((ExpeditionUnit)equipment.getItem()).getRange() >= distance){
 				ret.add(equipment);
+			}
+		}
+		return ret;
+	}
+
+	public int getSumOfValuables() {
+		int currentValuable = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Valuable){
+				Valuable good = (Valuable)equipment.getItem();
+				currentValuable += good.getGoldValue() * equipment.getQuantity();
+			}
+		}
+		return currentValuable;
+	}
+
+	public void cashValuables() {
+		int valuables = getSumOfValuables();
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Good){
+				Good good = (Good)equipment.getItem();
+				if (good.getGoodType() == GoodType.VALUABLE){
+					equipment.setQuantity(0);
+				}
+			}
+		}
+		addAccountedGold(valuables);
+		
+	}
+
+	private void addAccountedGold(int valuables) {
+		accountedGold += valuables;
+	}
+	
+	public int getFoodConsumptionMultiplier() {
+		/*switch (getMovementSpeed()){
+		case FAST:
+			return 1;
+		case NORMAL:
+			return 2;
+		case SLOW:
+			return 3;
+		}*/
+
+		return 1;
+	}
+
+	public int getOffshoreFoodDays() {
+		MovementMode currentMovementMode = getMovementMode();
+		setMovementMode(MovementMode.SHIP);
+		int ret = getFoodDays();
+		setMovementMode(currentMovementMode);
+		return ret;
+	}
+
+	public int getTotalShips() {
+		int ships = 0;
+		List<Equipment> inventory = getCurrentVehicles();
+		for (Equipment equipment: inventory){
+			ships += equipment.getQuantity();
+		}
+		return ships;
+	}
+
+	public boolean isArmed() {
+		return getFlag("ARMED");
+	}
+	
+	public void setArmed(boolean value){
+		setFlag("ARMED", value);
+	}
+
+	public List<Equipment> getUnarmedUnits() {
+		List<Equipment> units = getUnits();
+		List<Equipment> ret = new ArrayList<Equipment>();
+		for (Equipment unit: units){
+			if (((ExpeditionUnit)unit.getItem()).getWeapon() == null){
+				ret.add(unit);
 			}
 		}
 		return ret;

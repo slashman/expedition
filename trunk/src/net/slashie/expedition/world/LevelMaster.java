@@ -32,6 +32,7 @@ public class LevelMaster {
 			ret.getHelper().setMusicKey("SPAIN");
 			ret.getHelper().setSuperLevelId("WORLD");
 			ret.setID("SPAIN");
+			ret.setDock(true);
 			return ret;
 		} else if (levelID.equals("WORLD")){
 			StaticPattern pattern = new World();

@@ -8,6 +8,7 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.expedition.world.SettlementType;
@@ -30,6 +31,12 @@ public class BuildSettlement extends Action{
 		if (!UserInterface.getUI().promptChat("Establish a town? (Y/n)"))
 			return;
 		Expedition expedition = (Expedition)performer;
+		//Check if the land is claimed
+		if (expedition.getLocation().getLocation().getB() >= -30){
+			msg("This land is claimed already!");
+			return;
+		}
+		
 		//Check resources availability (for the plaza)
 		if (expedition.getGoodCount("WOOD") < 200){
 			msg("You need at least 200 wood for the plaza and the first building.");
@@ -70,6 +77,9 @@ public class BuildSettlement extends Action{
 			return false;
 		if (!((OverworldExpeditionCell) a.getLevel().getMapCell(a.getPosition())).isLand())
 			return false;
+		if (((Expedition)performer).getLocation().getLocation().getB() >= -30){
+			return false;
+		}
 		return true;
 	}
 	
@@ -79,6 +89,9 @@ public class BuildSettlement extends Action{
 			return "You can't build a town here!";
 		if (!((OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition())).isLand())
 			return "You can't build a town here!";
+		if (((Expedition)performer).getLocation().getLocation().getB() >= -30){
+			return "This land is claimed already!";
+		}
 		return "";
 	}
 

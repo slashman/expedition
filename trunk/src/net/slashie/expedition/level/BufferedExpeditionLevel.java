@@ -4,7 +4,7 @@ import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.serf.level.BufferedLevel;
 
 public abstract class BufferedExpeditionLevel extends BufferedLevel implements ExpeditionLevel{
-	private ExpeditionLevelHelper helper = new ExpeditionLevelHelper(this);
+	private ExpeditionLevelHelper helper = new ExpeditionLevelHelper();
 	
 	public String getMusicKey() {
 		return helper.getMusicKey();
