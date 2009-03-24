@@ -46,18 +46,16 @@ public abstract class ExpeditionGenerator {
 		ExpeditionItem food = ItemFactory.createItem("FOOD");
 		ExpeditionItem sailor = ItemFactory.createItem("SAILOR");
 		ExpeditionItem captain = ItemFactory.createItem("CAPTAIN");
-		ExpeditionItem soldier = ItemFactory.createItem("SOLDIER");
 		ExpeditionItem explorer = ItemFactory.createItem("EXPLORER");
-		ExpeditionItem wood = ItemFactory.createItem("WOOD");
 		
-		ret.addItemOffshore(sailor, 60);
+		ret.addItemOffshore(sailor, 30);
 		ret.addItemOffshore(captain, 3);
-		ret.addItemOffshore(soldier, 10);
 		ret.addItemOffshore(explorer, 1);
-		ret.addItemOffshore(wood, 300);
+		ret.addItemOffshore(ItemFactory.createItem("SPEARS"), 34);
+		
 		for (int i = 0; i < 5000; i++){
 			ret.addItemOffshore(food, 100);
-			if (ret.getOffshoreCurrentlyCarrying()>50)
+			if (ret.getOffshoreCurrentlyCarrying()>20)
 				break;
 		}
 		

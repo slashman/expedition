@@ -41,9 +41,16 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return "Calm";
 	}
 	
-	public Pair<String, String> getLocationDescription() {
-		return getHelper().getLocationDescription();
+	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
+	public Pair<String,String> getLocationDescription(){
+		Pair<Integer, Integer> location = getLocation();
+		
+		handyReusableObject.setA("(Sext) "+Math.abs(location.getA()) + (location.getA() > 0?"N":"S"));
+		//This is the real longitude calculation:
+		//handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
+		handyReusableObject.setB("(Dead) Unkn");
+		return handyReusableObject;
 	}
-	
+
 
 }

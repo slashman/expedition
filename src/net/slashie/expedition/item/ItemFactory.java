@@ -3,6 +3,7 @@ package net.slashie.expedition.item;
 import java.util.Hashtable;
 
 import net.slashie.expedition.domain.ExpeditionItem;
+import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.game.ExpeditionGame;
 
 public class ItemFactory {
@@ -18,6 +19,11 @@ public class ItemFactory {
 			ExpeditionGame.crash("Item "+itemId+" not found");
 			return null;
 		}
-		return ret;
+		return ret.clone();
+	}
+
+	public static ExpeditionUnit createUnit(String fullID, String weaponType) {
+		
+		return null;
 	}
 }

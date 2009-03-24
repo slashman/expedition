@@ -1,11 +1,15 @@
 package net.slashie.expedition.data;
 
+import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
+import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.Store;
+import net.slashie.expedition.domain.Valuable;
 import net.slashie.expedition.domain.Vehicle;
+import net.slashie.expedition.domain.Weapon;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionFeature;
@@ -189,41 +193,59 @@ public class ExpeditionDAO {
 	public static ExpeditionItem[] getItemDefinitions(AppearanceFactory appFactory){
 		return new ExpeditionItem[]{
 			//Units
-			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 1,50,1,1,1,1,1,1,1,1,""),
-			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  1,1,50,1,1,1,1,1,1,1,""),
-			new ExpeditionUnit("MARINE", "Marine", "Marines", 1,1,30,1,1,1,1,1,1,1,""),
-			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers",1,1,30,1,1,1,1,1,1,1,""),
-			new ExpeditionUnit("ARCHER", "Archer","Archers",1,1,1,8,1,1,1,1,1,1,""),
-			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 1,1,20,1,1,1,1,1,1,1,""),
-			new ExpeditionUnit("EXPLORER", "Explorer","Explorers",1,1,60,1,1,1,1,1,1,1,""),
+			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 1,50,1,1,1,1,1,1,1,1,"",
+				new String[]{"SPEARS"},
+				new String[]{""}),
+			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  1,1,50,1,1,1,1,1,1,1,"",
+					new String[]{"BOWS", "SPEARS"},
+					new String[]{""}),
+			new ExpeditionUnit("MARINE", "Marine", "Marines", 1,1,30,1,1,1,1,1,1,1,"",
+					new String[]{"XBOWS","BOWS","SWORDS","SPEARS"},
+					new String[]{"STUDDED_LEATHER"}),
+			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers",1,1,30,1,1,1,1,1,1,1,"",
+					new String[]{"GUNS", "SWORDS", "SPEARS"},
+					new String[]{"STUDDED_LEATHER", "PLATE"}),
+			new ExpeditionUnit("ARCHER", "Archer","Archers",1,1,1,8,1,1,1,1,1,1,"",
+					new String[]{"XBOWS", "BOWS", "SPEARS"},
+					new String[]{"STUDDED_LEATHER"}),
+			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 1,1,20,1,1,1,1,1,1,1,"",
+					new String[]{"GUNS", "SWORDS", "SPEARS" },
+					new String[]{"STUDDED_LEATHER", "PLATE"}),
+			new ExpeditionUnit("EXPLORER", "Explorer","Explorers",1,1,60,1,1,1,1,1,1,1,"",
+					new String[]{"SPEARS"},
+					new String[]{"STUDDED_LEATHER"}),
 		
 			//Native Units
-			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 1,1,1,1,1,1,1,1,1,0,""),
-			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers",1,1,1,5,1,1,1,1,1,0,""),
+			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 1,1,1,1,1,1,1,1,1,0,"",
+					new String[]{""},
+					new String[]{""}),
+			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers",1,1,1,5,1,1,1,1,1,0,"",
+					new String[]{""},
+					new String[]{""}),
 			
 			//Goods
-			new Good("FOOD", "Food", 1, GoodType.FOOD, 10),
-			new Good("RUM", "Rum", 1, GoodType.FOOD, 2),
-			new Good("WOOD", "Wood", 1, GoodType.TOOL, 0),
-			new Good("FRESHWATER", "Freshwater", 1, GoodType.FOOD, 0),
-			new Good("FOOD_SAUERKRAUT", "Sauerkraut", 1, GoodType.FOOD, 8),
+			new Food("FOOD", "Food", "Food", 1, 10),
+			new Food("RUM", "Rum", "Rum", 1, 2),
+			new Good("WOOD", "Wood", "Wood", 1, GoodType.TOOL),
+			new Food("FRESHWATER", "Freshwater", "Freshwater", 1,1),
+			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 1, 8),
 			
 			//New Worlds Goods
-			new Good("GOLD_NUGGET", "Gold Nugget", 1, GoodType.VALUABLE, 0),
-			new Good("GOLD_BRACELET", "Gold Bracelet", 1, GoodType.VALUABLE, 0),
-			new Good("DEAD_NATIVE", "Dead Native", 1, GoodType.TRADE, 0),
-			new Good("NATIVE_ARTIFACT", "Pottery", 5, GoodType.VALUABLE, 0),
-			new Good("NATIVE_FOOD", "Barrel of Maíz", 1, GoodType.FOOD, 8),
+			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 1, 10),
+			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  1, 20),
+			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 5, 5),
+			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 1, 8),
 			
 			//Weapons
-			new Good("SPEARS", "Spears", 1, GoodType.WEAPON, 0),
-			new Good("SWORDS", "Swords", 1, GoodType.WEAPON, 0),
-			new Good("BOWS", "Bows", 1, GoodType.WEAPON, 0),
-			new Good("XBOWS", "Crossbows", 1, GoodType.WEAPON, 0),
-			new Good("GUNS", "Harquebus", 1, GoodType.WEAPON, 0),
-			new Good("STUDDED_LEATHER", "Studded Leather", 1, GoodType.WEAPON, 0),
-			new Good("PLATE", "Plate", 1, GoodType.WEAPON, 0),
-			new Good("ARROWS", "Arrows", 1, GoodType.WEAPON, 0),
+			new Weapon("SPEARS", "Spear","Spears", 1, 1, 2, 1),
+			new Weapon("SWORDS", "Sword", "Swords", 1, 1, 3, 0),
+			new Weapon("BOWS", "Bow", "Bows", 1, 1, 2, 0),
+			new Weapon("XBOWS", "Crossbow", "Crossbows", 1, 2, 3, 0),
+			new Weapon("GUNS", "Harquebus", "Harquebuses", 1, 3, 5, 0),
+			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 2, 1, 1),
+			new Armor("PLATE", "Plate","Plate", 4, 4, 3),
+			
+			new Good("ARROWS", "Arrow", "Arrows", 1, GoodType.WEAPON),
 			
 			//Ships
 			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,3,2500),

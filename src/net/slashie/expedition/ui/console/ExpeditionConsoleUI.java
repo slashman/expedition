@@ -12,6 +12,7 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.Vehicle;
+import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionCell;
@@ -51,9 +52,9 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		yrange = 10;
 		
 		expeditionUnitBox = new ListBox(csi);
-		expeditionUnitBox.setPosition(55,8);
+		expeditionUnitBox.setPosition(55,7);
 		expeditionUnitBox.setWidth(22);
-		expeditionUnitBox.setHeight(11);
+		expeditionUnitBox.setHeight(12);
 		
 		idList.setPosition(2,13);
 		idList.setWidth(21);
@@ -73,29 +74,36 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		
 		//csi.print(1,1, getPlayer().getPosition().x()+","+getPlayer().getPosition().y());
 		drawAddornment();
-		csi.print(5, 4, getExpedition().getExpeditionary());
-		csi.print(5, 5, getExpedition().getExpeditionaryTitle());
-		csi.print(5, 6, getExpedition().getAccountedGold()+"$");
-		csi.print(12, 8, statsExpedition.getFoodDays()+"days");
-		csi.print(12, 9, statsExpedition.getPower()+"");
-		csi.print(12, 10, statsExpedition.getMovementMode().getDescription());
+		// Box 1
+		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime(); 
+		csi.print(5, 1, gameTime.get(Calendar.YEAR)+"");
+		csi.print(5, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
+		csi.print(5, 3, getExpedition().getExpeditionary());
+		csi.print(5, 4, getExpedition().getExpeditionaryTitle());
+		csi.print(5, 5, getExpedition().getAccountedGold()+"$");
+		
+		// Box 2
+		csi.print(12, 7, statsExpedition.getTotalShips()+" ships");
+		csi.print(12, 8, statsExpedition.getOffshoreFoodDays()+" days");
+		csi.print(12, 9, statsExpedition.getPower()+(statsExpedition.isArmed()?"(Armed)":""));
+		if (statsExpedition.getMovementSpeed() != MovementSpeed.NORMAL){
+			csi.print(12, 10, statsExpedition.getMovementMode().getDescription()+"("+statsExpedition.getMovementSpeed().getDescription()+")");
+		} else {
+			csi.print(12, 10, statsExpedition.getMovementMode().getDescription());
+		}
 		if (getExpedition().getLevel() instanceof ExpeditionMicroLevel)
 			csi.print(12, 11, statsExpedition.getOffshoreCurrentlyCarrying()+"%");
 		else
 			csi.print(12, 11, statsExpedition.getCurrentlyCarrying()+"%");
 		
-		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime(); 
-		csi.print(5, 1, gameTime.get(Calendar.YEAR)+"");
-		csi.print(5, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
-		csi.print(5, 3, getExpedition().getLocation().getDescription());
-		
-		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription(); 
-		csi.print(70, 2, locationDescription.getA());
-		csi.print(70, 3, locationDescription.getB());
-		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition()); 
-		csi.print(59, 1, currentCell.getDescription());
-		csi.print(59, 4, getExpedition().getWeather());
-		csi.print(70, 5, getExpedition().getTemperature()+"ºC");
+		//Box 3
+		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition());
+		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription();
+		csi.print(59, 1, getExpedition().getLocation().getDescription());
+		csi.print(59, 2, currentCell.getDescription());
+		csi.print(64, 3, locationDescription.getA());
+		csi.print(64, 4, locationDescription.getB());
+		csi.print(59, 5, getExpedition().getWeather()+", "+getExpedition().getTemperature()+"ºC");
 		
 		//This must be replaced on the next version of libjcsi
 		expeditionUnitsVector.clear();
@@ -107,12 +115,12 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		int addornmentColor = ConsoleSystemInterface.TEAL;
 		 csi.print(0, 0, "    /----------------\\           /-----N-----\\           /------------------\\   ", addornmentColor);
 		 csi.print(0, 1, "    |                |          /             \\          |                  |   ", addornmentColor);
-		 csi.print(0, 2, "    |                |         /               \\         | LAT              |   ", addornmentColor);
-		 csi.print(0, 3, "    |                |\\-------/                 \\-------/| LONG             |   ", addornmentColor);
-		 csi.print(0, 4, "    |                |       /                   \\       |                  |   ", addornmentColor);
-		 csi.print(0, 5, "    |                |       |                   |       | Temp             |   ", addornmentColor);
-		 csi.print(0, 6, "    |                |       |                   |       |                  |   ", addornmentColor);
-		 csi.print(0, 7, " /----~ EXPEDITION ~----\\    |                   |    /-----~ EXPEDITION ~----\\ ", addornmentColor);
+		 csi.print(0, 2, "    |                |         /               \\         |                  |   ", addornmentColor);
+		 csi.print(0, 3, "    |                |\\-------/                 \\-------/| LAT              |   ", addornmentColor);
+		 csi.print(0, 4, "    |                |       /                   \\       | LONG             |   ", addornmentColor);
+		 csi.print(0, 5, "    |                |       |                   |       |                  |   ", addornmentColor);
+		 csi.print(0, 6, " /----~ EXPEDITION ~----\\    |                   |    /-----~ EXPEDITION ~----\\ ", addornmentColor);
+		 csi.print(0, 7, " |Ships                 |    |                   |    |                       | ", addornmentColor);
 		 csi.print(0, 8, " |Food Days             |    |                   |    |                       | ", addornmentColor);
 		 csi.print(0, 9, " |Power                 |    |                   |    |                       | ", addornmentColor);
 		 csi.print(0, 10, " |Movement              |    W         @         E    |                       | ", addornmentColor);
@@ -196,11 +204,11 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		}
 		
 		public String getMenuDescription() {
-			String itemDescription = item.getItem().getDescription();
+			String itemDescription = item.getItem().getMenuDescription();
 			int inventory = item.getQuantity();
 			int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
 			if (item.getItem() instanceof ExpeditionUnit){
-				return itemDescription + ", "+store.getPrizeFor((ExpeditionItem)item.getItem())+"$/month (max "+stock+") {"+inventory+" Available}";
+				return itemDescription + ", "+store.getPrizeFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {"+inventory+" Available}";
 			} else {
 				return itemDescription + " for "+store.getPrizeFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {Stock:"+inventory+"}";
 			}
@@ -235,7 +243,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		}
 		
 		public String getMenuDescription() {
-			String itemDescription = item.getItem().getDescription();
+			String itemDescription = item.getItem().getMenuDescription();
 			int inventory = item.getQuantity();
 			int stock = 0;
 			if (expedition != null){
@@ -350,7 +358,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			
 			int gold = store.getPrizeFor(item)*quantity;	
 			if (item instanceof ExpeditionUnit){
-				menuBox.setPrompt("Hire "+quantity+" "+item.getDescription()+" for "+gold+" maravedíes per month? (Y/n)");
+				menuBox.setPrompt("Hire "+quantity+" "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
 			} else {
 				menuBox.setPrompt("Buy "+quantity+" "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
 			}
@@ -537,7 +545,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				cacheBox.draw();
 				continue;
 			}
-			choice.reduceQuantity(quantity);
+			
+			getExpedition().reduceQuantityOf(choice.getItem(), quantity);
 			
 			if (getExpedition().getCurrentlyCarrying()>100){
 				cacheBox.setPrompt("The expedition can't carry the goods!");

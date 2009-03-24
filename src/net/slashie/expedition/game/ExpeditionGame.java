@@ -8,6 +8,7 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionGenerator;
+import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
@@ -18,6 +19,7 @@ import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.CommandListener;
+import net.slashie.serf.ui.UserInterface;
 
 public class ExpeditionGame extends SworeGame {
 	private static ExpeditionGame currentGame;
@@ -124,12 +126,21 @@ public class ExpeditionGame extends SworeGame {
 			STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
 		if (level instanceof ExpeditionMicroLevel)
 			getExpedition().setMovementMode(MovementMode.FOOT);
+		if (level.getID().equals("SPAIN")){
+			int sumOfValuables = getExpedition().getSumOfValuables(); 
+			if (sumOfValuables > 0){
+				String prompt = "Do you want to cash your valuables for "+sumOfValuables+" maravedíes?";
+				if (UserInterface.getUI().promptChat(prompt)){
+					getExpedition().cashValuables();
+				}
+			}
+		}
 
 		
 	}
 	
 	public static String getVersion(){
-		return "v0.1.3";
+		return "v0.1.4";
 	}
 	
 	public Expedition getExpedition(){

@@ -1,5 +1,7 @@
 package net.slashie.expedition.domain;
 
+import java.util.List;
+
 public class ExpeditionUnit extends Vehicle{
 	
 	private String name;
@@ -10,8 +12,23 @@ public class ExpeditionUnit extends Vehicle{
 	private int movement;
 	private int resistance;
 	private int dailyFoodConsumption;
+	private String[] weaponTypes;
+	private String[] armorTypes;
 	private String special;
+	private Weapon weapon;
 	
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
+	public String[] getWeaponTypes() {
+		return weaponTypes;
+	}
+
+	public String[] getArmorTypes() {
+		return armorTypes;
+	}
+
 	/**
 	 * Returns the perceived power for the unit
 	 * @return
@@ -21,13 +38,12 @@ public class ExpeditionUnit extends Vehicle{
 	}
 	
 	public int getDailyFoodConsumption() {
-		return dailyFoodConsumption;
+		if (weapon != null)
+			return dailyFoodConsumption + weapon.getBurden();
+		else
+			return dailyFoodConsumption;
 	}
 
-	public void setDailyFoodConsumption(int dailyFoodConsumption) {
-		this.dailyFoodConsumption = dailyFoodConsumption;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -45,19 +61,18 @@ public class ExpeditionUnit extends Vehicle{
 	}
 
 	public int getAttack() {
-		return attack;
-	}
-
-	public void setAttack(int attack) {
-		this.attack = attack;
+		if (weapon == null)
+			return attack;
+		else 
+			return attack + weapon.getAttack();
 	}
 
 	public int getDefense() {
-		return defense;
-	}
-
-	public void setDefense(int defense) {
-		this.defense = defense;
+		if (weapon == null)
+			return defense;
+		else
+			return defense + weapon.getDefense();
+		
 	}
 
 	public int getSpeed() {
@@ -96,7 +111,7 @@ public class ExpeditionUnit extends Vehicle{
 			int weight, int speedModifier, int carryCapacity,
 			int range, int attack, int defense, int speed,
 			int movement, int resistance, int dailyFoodConsumption,
-			String special) {
+			String special, String[] weaponTypes, String[] armorTypes) {
 		super(classifierId, description, pluralDescription, weight, false,
 				false, speedModifier, carryCapacity);
 		this.name = description;
@@ -108,6 +123,39 @@ public class ExpeditionUnit extends Vehicle{
 		this.resistance = resistance;
 		this.dailyFoodConsumption = dailyFoodConsumption;
 		this.special = special;
+		this.weaponTypes = weaponTypes;
+		this.armorTypes = armorTypes;
+	}
+
+	public void setArm(Weapon createItem) {
+		weapon = createItem;
 	}
 	
+	@Override
+	public String getMenuDescription() {
+		if (weapon != null){
+			return weapon.getDescription()+ " " + getDescription();
+		} else {
+			return getDescription();
+		}
+	}
+	
+	@Override
+	public String getFullID() {
+		if (weapon != null){
+			return super.getFullID()+","+weapon.getFullID();
+		} else {
+			return super.getFullID();
+		}
+	}
+	
+	@Override
+	public int getWeight() {
+		if (weapon != null){
+			return super.getWeight()+weapon.getWeight();
+		} else {
+			return super.getWeight();
+		}
+	}
+
 }

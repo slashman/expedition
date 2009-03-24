@@ -20,7 +20,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 				startPosition);
 	}
 
-	private ExpeditionLevelHelper helper = new ExpeditionLevelHelper(this);
+	private ExpeditionLevelHelper helper = new ExpeditionLevelHelper();
 	
 	public String getMusicKey() {
 		return helper.getMusicKey();
@@ -42,5 +42,9 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			expedition.setPosition(where.x+xoff,where.y+yoff,where.z);
 			addActor(expedition);
 		}
+	}
+	
+	public Expedition getExpedition(){
+		return (Expedition) getPlayer();
 	}
 }
