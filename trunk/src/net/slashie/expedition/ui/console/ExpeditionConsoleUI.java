@@ -481,6 +481,9 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			refresh();
 	 		//menuBox.draw();
 		}
+		
+		if (cache.getItems().size() == 0)
+			level.destroyFeature(cache);
 		Equipment.eqMode = false;
 		//Item.shopMode = false;
 		//si.restore();
@@ -548,7 +551,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			
 			getExpedition().reduceQuantityOf(choice.getItem(), quantity);
 			
-			if (getExpedition().getCurrentlyCarrying()>100){
+			if (choice.getItem() instanceof ExpeditionUnit && getExpedition().getCurrentlyCarrying()>100){
 				cacheBox.setPrompt("The expedition can't carry the goods!");
 				cacheBox.draw();
 				choice.increaseQuantity(quantity);
