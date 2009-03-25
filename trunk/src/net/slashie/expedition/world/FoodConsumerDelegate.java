@@ -77,7 +77,6 @@ public class FoodConsumerDelegate implements Serializable{
 			if (equipment.getItem() instanceof ExpeditionUnit){
 				int killUnits = (int)Math.ceil(equipment.getQuantity() * proportion);
 				foodConsumer.reduceQuantityOf(equipment.getItem(), killUnits);
-				i--;
 			}
 		}
 		this.foodConsumer.checkDeath();
