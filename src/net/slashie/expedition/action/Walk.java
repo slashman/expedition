@@ -9,6 +9,7 @@ import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionCell;
+import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
@@ -28,6 +29,21 @@ public class Walk extends Action{
 			expedition.getLevel().addMessage("You stand alert.");
 			return;
 		}
+		
+		if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
+			if (expedition.getOffshoreCurrentlyCarrying() > 100){
+				expedition.getLevel().addMessage("You are stranded! drop some items!");
+				return;
+			}
+		} else {
+			if (expedition.getCurrentlyCarrying() > 100){
+				expedition.getLevel().addMessage("You are stranded! drop some items!");
+				return;
+			}
+		}
+		
+		
+		
         Position var = directionToVariation(targetDirection);
         Position destinationPoint = Position.add(performer.getPosition(), var);
         
