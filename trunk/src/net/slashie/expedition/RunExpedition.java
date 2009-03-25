@@ -15,8 +15,8 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
 import net.slashie.expedition.action.ArmExpedition;
-import net.slashie.expedition.action.BuildCache;
 import net.slashie.expedition.action.BuildSettlement;
+import net.slashie.expedition.action.DropEquipment;
 import net.slashie.expedition.action.MeleeAttack;
 import net.slashie.expedition.action.NPRainArrows;
 import net.slashie.expedition.action.RainArrows;
@@ -288,13 +288,13 @@ public class RunExpedition {
 		Action walkAction = new Walk();
 		Action meleeAction = new MeleeAttack();
 		
-		Action buildCache = new BuildCache();
+		Action dropEquipment = new DropEquipment();
 		Action buildSettlement = new BuildSettlement();
 		Action rainArrows = new RainArrows();
 		Action armExpedition = new ArmExpedition();
 
 		UserAction[] userActions = new UserAction[] {
-		    new UserAction(buildCache, CharKey.c),
+		    new UserAction(dropEquipment, CharKey.d),
 		    new UserAction(buildSettlement, CharKey.b),
 		    new UserAction(rainArrows, CharKey.r),
 		    new UserAction(armExpedition, CharKey.a),
