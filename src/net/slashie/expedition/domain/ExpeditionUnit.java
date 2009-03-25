@@ -38,9 +38,9 @@ public class ExpeditionUnit extends Vehicle{
 	}
 	
 	public int getDailyFoodConsumption() {
-		if (weapon != null)
+		/*if (weapon != null)
 			return dailyFoodConsumption + weapon.getBurden();
-		else
+		else*/
 			return dailyFoodConsumption;
 	}
 
@@ -53,7 +53,11 @@ public class ExpeditionUnit extends Vehicle{
 	}
 
 	public int getRange() {
-		return range;
+		if (getWeapon() != null){
+			return range + getWeapon().getRange();
+		} else {
+			return 1;
+		}
 	}
 
 	public void setRange(int range) {
