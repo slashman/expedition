@@ -4,6 +4,7 @@ public class Weapon extends Good{
 	private int burden;
 	private int attack;
 	private int defense;
+	private int range;
 	
 	public int getBurden() {
 		return burden;
@@ -18,12 +19,17 @@ public class Weapon extends Good{
 	}
 
 	public Weapon(String classifierId, String description, String pluralDescription,
-			int weight, int burden, int attack, int defense) {
+			int weight, int burden, int attack, int defense, int range) {
 		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON);
 		this.burden = burden;
 		this.attack = attack;
 		this.defense = defense;
+		this.range = range;
 				
+	}
+
+	public int getRange() {
+		return range;
 	}
 
 }
