@@ -214,6 +214,13 @@ public class Expedition extends Player implements FoodConsumer{
 				if (!(equipment.getItem() instanceof Vehicle)){
 					currentlyCarrying += ((ExpeditionItem)equipment.getItem()).getWeight() * equipment.getQuantity();
 				}
+				//If the equipment is an unit, and it has equipment, they must carry the weight of their equipment!
+				if (equipment.getItem() instanceof ExpeditionUnit){
+					ExpeditionUnit unit = (ExpeditionUnit) equipment.getItem();
+					if (unit.getWeapon() != null){
+						currentlyCarrying += unit.getWeapon().getWeight() * equipment.getQuantity();
+					}
+				}
 			}
 			return currentlyCarrying;
 		}
@@ -681,4 +688,15 @@ public class Expedition extends Player implements FoodConsumer{
 		}
 		return ret;
 	}
+
+	public int getMaxFiringRange() {
+		int maxRange = -1;
+		for (Equipment unit: getUnits()){
+			if (((ExpeditionUnit)unit.getItem()).getRange() > maxRange){
+				maxRange = ((ExpeditionUnit)unit.getItem()).getRange();
+			}
+		}
+		return maxRange;
+	}
+
 }
