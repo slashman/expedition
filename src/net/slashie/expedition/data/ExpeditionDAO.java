@@ -205,7 +205,7 @@ public class ExpeditionDAO {
 			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers",1,1,30,1,1,1,1,1,1,1,"",
 					new String[]{"GUNS", "SWORDS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("ARCHER", "Archer","Archers",1,1,1,8,1,1,1,1,1,1,"",
+			new ExpeditionUnit("ARCHER", "Archer","Archers",1,1,1,5,1,1,1,1,1,1,"",
 					new String[]{"XBOWS", "BOWS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
 			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 1,1,20,1,1,1,1,1,1,1,"",
@@ -219,7 +219,7 @@ public class ExpeditionDAO {
 			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 1,1,1,1,1,1,1,1,1,0,"",
 					new String[]{""},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers",1,1,1,5,1,1,1,1,1,0,"",
+			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers",1,1,1,3,1,1,1,1,1,0,"",
 					new String[]{""},
 					new String[]{""}),
 			
@@ -231,17 +231,17 @@ public class ExpeditionDAO {
 			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 1, 8),
 			
 			//New Worlds Goods
-			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 1, 10),
-			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  1, 20),
-			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 5, 5),
+			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 1, 2),
+			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  1, 3),
+			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 5, 1),
 			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 1, 8),
 			
 			//Weapons
-			new Weapon("SPEARS", "Spear","Spears", 1, 1, 2, 1),
-			new Weapon("SWORDS", "Sword", "Swords", 1, 1, 3, 0),
-			new Weapon("BOWS", "Bow", "Bows", 1, 1, 2, 0),
-			new Weapon("XBOWS", "Crossbow", "Crossbows", 1, 2, 3, 0),
-			new Weapon("GUNS", "Harquebus", "Harquebuses", 1, 3, 5, 0),
+			new Weapon("SPEARS", "Spear","Spears", 1, 1, 2, 1, 1),
+			new Weapon("SWORDS", "Sword", "Swords", 1, 1, 3, 0, 1),
+			new Weapon("BOWS", "Bow", "Bows", 1, 1, 2, 0, 5),
+			new Weapon("XBOWS", "Crossbow", "Crossbows", 1, 2, 3, 0, 4),
+			new Weapon("GUNS", "Harquebus", "Harquebuses", 1, 3, 5, 0, 2),
 			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 2, 1, 1),
 			new Armor("PLATE", "Plate","Plate", 4, 4, 3),
 			
