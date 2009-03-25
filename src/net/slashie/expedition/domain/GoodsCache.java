@@ -25,6 +25,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 		game.addFoodConsumer(this);
 	}
 	
+	public GoodsCache() {
+	}
+
 	public List<Equipment> getItems() {
 		return items;
 	}
@@ -134,7 +137,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 	
 	public void checkDeath() {
 		// TODO Auto-generated method stub
-		
+		if (getItems().size() == 0){
+			die();
+		}
 	}
 	
 	public void consumeFood() {
