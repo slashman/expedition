@@ -29,6 +29,10 @@ public class RainArrows extends RangedAction {
 			return false;
 		}
 		Expedition expedition = (Expedition)a;
+		
+		if (expedition.getMaxFiringRange() == 1)
+			return false;
+		
 		//Pre-check ammo
 		if (expedition.getGoodCount("ARROWS") == 0){
 			invalidationMessage = "No arrows in stock.";
@@ -44,6 +48,9 @@ public class RainArrows extends RangedAction {
 			return "You can't do that here!";
 		}
 		Expedition expedition = (Expedition)performer;
+		
+		if (expedition.getMaxFiringRange() == 1)
+			return "You don't have ranged units!";
 		//Pre-check ammo
 		if (expedition.getGoodCount("ARROWS") == 0){
 			return "No arrows in stock.";
