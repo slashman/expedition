@@ -45,16 +45,17 @@ public class ArmExpedition extends Action{
 				boolean useOffShore = getExpedition().getLocation() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)getExpedition().getLocation()).isDock(); 
 				if (eUnit.getWeapon() != null){
 					int quantity = unit.getQuantity();
+					Weapon weapon = eUnit.getWeapon();
 					getExpedition().reduceQuantityOf(eUnit, quantity);
-					if (useOffShore)
-						getExpedition().addItemOffshore(eUnit.getWeapon(), quantity);
-					else
-						getExpedition().addItem(eUnit.getWeapon(), quantity);
 					eUnit.setArm(null);
-					if (useOffShore)
+					
+					if (useOffShore){
 						getExpedition().addItemOffshore(eUnit, quantity);
-					else
+						getExpedition().addItemOffshore(weapon, quantity);
+					} else {
 						getExpedition().addItem(eUnit, quantity);
+						getExpedition().addItem(weapon, quantity);
+					}
 				}
 			}
 			getExpedition().setArmed(false);
@@ -73,7 +74,7 @@ public class ArmExpedition extends Action{
 	
 	@Override
 	public int getCost() {
-		return 400;
+		return getExpedition().getTotalUnits();
 	}
 
 }
