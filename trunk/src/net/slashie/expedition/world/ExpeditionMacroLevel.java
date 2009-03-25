@@ -1,7 +1,10 @@
 package net.slashie.expedition.world;
 
 import java.util.Hashtable;
+import java.util.List;
+
 import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.level.Dispatcher;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
@@ -48,8 +51,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		handyReusableObject.setA("(Sext) "+Math.abs(location.getA()) + (location.getA() > 0?"N":"S"));
 		//This is the real longitude calculation:
 		//handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
-		handyReusableObject.setB("(Dead) Unkn");
+		handyReusableObject.setB("(DRek) ---");
 		return handyReusableObject;
+	}
+	
+	@Override
+	public void updateLevelStatus() {
+		super.updateLevelStatus();
 	}
 
 
