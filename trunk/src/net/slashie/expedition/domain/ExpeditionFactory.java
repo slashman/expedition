@@ -22,13 +22,13 @@ public class ExpeditionFactory {
 		
 		SimpleAI ai = new SimpleAI(game.getPlayer(), new NPWalk()) ;
 		ArrayList<RangedActionSpec> rangedActions = new ArrayList<RangedActionSpec>();
-		rangedActions.add(new RangedActionSpec("NP_RAINARROWS", 6,80,"directionalmissile","rainArrows"));
+		rangedActions.add(new RangedActionSpec("NP_RAINARROWS", 3,80,"directionalmissile","rainArrows"));
 		ai.setRangedActions(rangedActions);
 		ret.setSelector(ai);
 
-		ret.addItem(ItemFactory.createItem("NATIVE_WARRIOR"), Util.rand(5, 60));
+		ret.addItem(ItemFactory.createItem("NATIVE_WARRIOR"), Util.rand(10, 70));
 		ret.addItem(ItemFactory.createItem("ARROWS"), Util.rand(30, 60));
-		ret.addItem(ItemFactory.createItem("NATIVE_ARCHER"), Util.rand(10, 25));
+		ret.addItem(ItemFactory.createItem("NATIVE_ARCHER"), Util.rand(15, 45));
 
 		ret.calculateInitialPower();
 		return ret;
