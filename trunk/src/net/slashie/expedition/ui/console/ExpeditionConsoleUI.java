@@ -335,8 +335,10 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   		menuBox.setForeColor(ConsoleSystemInterface.RED);
   		menuBox.setBorderColor(ConsoleSystemInterface.TEAL);
   		//menuBox.setBorder(true);
+  		String prompt = "Welcome to the "+store.getOwnerName();
+
 		while (true) {
-	  		menuBox.setPrompt("Welcome to the "+store.getOwnerName()+" [Space to leave]");
+			menuBox.setPrompt(prompt+" [Space to leave]");
 			csi.refresh();
 			//menuBox.setTitle(who.getName()+" (Gold:"+player.getGold()+")");
 			StoreItem itemChoice = ((StoreItem)menuBox.getSelection());
@@ -344,23 +346,36 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				break;
 			Equipment choice = itemChoice.getEquipment();
 			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			menuBox.setPrompt("How many "+item.getDescription()+"?");
+			menuBox.setPrompt("How many "+item.getPluralDescription()+"?");
 			menuBox.draw();
 			csi.refresh();
 			int quantity = readQuantity(27, 9, "                       ", 5);
-			if (quantity == 0)
+			if (quantity == 0){
+				prompt = "Ok... Do you need anything else?";
 				continue;
+			}
+			
+			if (quantity > choice.getQuantity()){
+				prompt = "I don't have that many "+item.getPluralDescription()+"... Do you need anything else?";
+				continue;
+			}
 			
 			if (!getExpedition().canCarryOffshore(item, quantity)){
-				menuBox.setPrompt("Your ships are full!");
+				prompt = "Your ships are full! Do you need anything else?";
 				continue;
 			}
 			
 			int gold = store.getPriceFor(item)*quantity;	
 			if (item instanceof ExpeditionUnit){
-				menuBox.setPrompt("Hire "+quantity+" "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
+				if (quantity > 1)
+					menuBox.setPrompt("Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
+				else
+					menuBox.setPrompt("Hire a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
 			} else {
-				menuBox.setPrompt("Buy "+quantity+" "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
+				if (quantity > 1)
+					menuBox.setPrompt("Buy "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
+				else
+					menuBox.setPrompt("Buy a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
 			}
 			menuBox.draw();
 	 		if (prompt())
@@ -368,13 +383,13 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	 				getExpedition().reduceAccountedGold(gold);
 	 				getExpedition().addItemOffshore((ExpeditionItem) choice.getItem(), quantity);
 	 				choice.reduceQuantity(quantity);
-					menuBox.setPrompt("Thanks!");
+	 				prompt = "Thank you! Do you need anything else?";
 					refresh();
 			 	} else {
-			 		menuBox.setPrompt("You can't afford it!");
+			 		prompt = "You can't afford it! Do you need anything else?";
 			 	}
 			else {
-				menuBox.setPrompt("Welcome...");
+				prompt = "Ok, do you need anything else?";
 			}
 	 		//menuBox.draw();
 		}
