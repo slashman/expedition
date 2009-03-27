@@ -52,7 +52,9 @@ public class FoodConsumerDelegate implements Serializable{
 	public int reduceFood(int quantity){
 		int foodToSpend = quantity;
 		List<Equipment> inventory = this.foodConsumer.getInventory();
-		for (Equipment equipment: inventory){
+		int originalSize = inventory.size();
+		for (int i = 0; i < inventory.size(); i++){
+			Equipment equipment = (Equipment) inventory.get(i);
 			if (equipment.getItem() instanceof Food){
 				Food good = (Food)equipment.getItem();
 				int unitsToSpend = (int)Math.ceil((double)foodToSpend / (double)good.getUnitsFedPerGood());
@@ -61,6 +63,12 @@ public class FoodConsumerDelegate implements Serializable{
 				}
 				foodToSpend -= unitsToSpend * good.getUnitsFedPerGood();
 				foodConsumer.reduceQuantityOf(equipment.getItem(), unitsToSpend);
+				if (inventory.size() < originalSize){
+					//Means the people ate all of a kind of item, and it was removed from the inventory
+					// And so, we must check again the same position of the inventory array
+					i--;
+					originalSize = inventory.size();
+				}
 				if (foodToSpend <= 0){
 					return 0;
 				}
