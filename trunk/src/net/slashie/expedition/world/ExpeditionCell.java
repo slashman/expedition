@@ -39,11 +39,16 @@ public class ExpeditionCell extends AbstractCell {
 		this.stepCommand = stepCommand;
 	}
 	
+	@Override
+	public boolean cloneRequired() {
+		return store != null;
+	}
 	
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
-		return super.clone();
+	public AbstractCell clone() {
+		ExpeditionCell ret = (ExpeditionCell) super.clone();
+		ret.store = store.clone();
+		return ret;
 	}
 
 }
