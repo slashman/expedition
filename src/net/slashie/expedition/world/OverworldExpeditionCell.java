@@ -36,17 +36,17 @@ public class OverworldExpeditionCell extends AbstractCell{
 
 
 
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
-
 	public String getWeather() {
 		return "Sunny";
 	}
 	
 	public int getTemperature(){
 		return 18;
+	}
+	
+	@Override
+	public boolean cloneRequired() {
+		return false;
 	}
 
 }

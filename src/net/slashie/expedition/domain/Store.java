@@ -9,8 +9,8 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 
 
-public class Store implements Serializable{
-	private Hashtable<String, Integer> prizes = new Hashtable<String, Integer>();
+public class Store implements Serializable, Cloneable{
+	private Hashtable<String, Integer> prices = new Hashtable<String, Integer>();
 	private List<Equipment> inventory = new ArrayList<Equipment>();
 	private String text;
 	private String ownerName;
@@ -39,8 +39,8 @@ public class Store implements Serializable{
 		this.ownerAppearance = ownerAppearance;
 	}
 	
-	public int getPrizeFor(ExpeditionItem item){
-		return prizes.get(item.getFullID());
+	public int getPriceFor(ExpeditionItem item){
+		return prices.get(item.getFullID());
 	}
 	
 	public void addItem(ExpeditionItem item, int quantity, Integer prize){
@@ -56,8 +56,25 @@ public class Store implements Serializable{
 		} else {
 			existingEquipment.increaseQuantity(quantity);
 		}
-		prizes.put(item.getFullID(), prize);
+		prices.put(item.getFullID(), prize);
 	}
 	
-	
+	@Override
+	public Store clone() {
+		try {
+			Store store = (Store)super.clone();
+			store.inventory = new ArrayList<Equipment>();
+			for (Equipment eq: getInventory()){
+				store.inventory.add(eq.clone());
+			}
+			store.prices = new Hashtable<String, Integer>();
+			for (String key: prices.keySet()){
+				store.prices.put(key, prices.get(key));
+			}
+			return store;
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
