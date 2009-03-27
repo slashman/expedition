@@ -208,9 +208,9 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			int inventory = item.getQuantity();
 			int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
 			if (item.getItem() instanceof ExpeditionUnit){
-				return itemDescription + ", "+store.getPrizeFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {"+inventory+" Available}";
+				return itemDescription + ", "+store.getPriceFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {"+inventory+" Available}";
 			} else {
-				return itemDescription + " for "+store.getPrizeFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {Stock:"+inventory+"}";
+				return itemDescription + " for "+store.getPriceFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {Stock:"+inventory+"}";
 			}
 		}
 	}
@@ -356,7 +356,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				continue;
 			}
 			
-			int gold = store.getPrizeFor(item)*quantity;	
+			int gold = store.getPriceFor(item)*quantity;	
 			if (item instanceof ExpeditionUnit){
 				menuBox.setPrompt("Hire "+quantity+" "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
 			} else {
