@@ -43,6 +43,12 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 		}
 	}
 	
+	public void addAllGoods(GoodsCache cache){
+		for (Equipment equipment: cache.getInventory()){
+			addItem(equipment.getItem(), equipment.getQuantity());
+		}
+	}
+	
 	public int getCarryable(ExpeditionItem item){
 		return -1;
 	}
@@ -168,7 +174,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 				return;
 			}
 		}
-		
-		
+	}
+	
+	public boolean isInfiniteCapacity(){
+		return true;
 	}
 }

@@ -48,5 +48,10 @@ public class Town extends GoodsCache{
 	public void consumeFood() {
 		//Do nothing, this must be handled differently
 	}
+	
+	@Override
+	public boolean isInfiniteCapacity() {
+		return false;
+	}
 
 }

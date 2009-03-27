@@ -12,6 +12,7 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
+import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.util.Pair;
@@ -61,7 +62,14 @@ public class NonPrincipalExpedition extends Expedition{
 				cache.addItem(ItemFactory.createItem(prize.getA()), prize.getB());
 			}
 			//((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(cache);
-			getLevel().addFeature(cache);
+			AbstractFeature previousFeature = getLevel().getFeatureAt(getPosition());
+			if (previousFeature != null && 
+					previousFeature instanceof GoodsCache &&
+					((GoodsCache)previousFeature).isInfiniteCapacity()){
+				((GoodsCache)previousFeature).addAllGoods(cache);
+			} else {
+				getLevel().addFeature(cache);
+			}
 			die();
 		}
 	}

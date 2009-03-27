@@ -10,5 +10,10 @@ public class SeaPseudoCache extends GoodsCache{
 	public String getDescription() {
 		return "Sea";
 	}
+	
+	@Override
+	public boolean isInfiniteCapacity() {
+		return false;
+	}
 
 }
