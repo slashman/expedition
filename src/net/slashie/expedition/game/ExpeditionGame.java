@@ -8,7 +8,6 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionGenerator;
-import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
@@ -88,7 +87,7 @@ public class ExpeditionGame extends SworeGame {
 
 	@Override
 	public void onGameResume() {
-		// TODO Auto-generated method stub
+		currentGame = this;
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
 		if (expeditionLevel.getMusicKey() != null)
 			STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
