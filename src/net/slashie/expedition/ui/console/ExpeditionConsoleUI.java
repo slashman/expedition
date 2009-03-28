@@ -1,6 +1,8 @@
 package net.slashie.expedition.ui.console;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -108,8 +110,15 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		//This must be replaced on the next version of libjcsi
 		expeditionUnitsVector.clear();
 		expeditionUnitsVector.addAll(statsExpedition.getUnits());
+		Collections.sort(expeditionUnitsVector, expeditionUnitsComparator);
 		expeditionUnitBox.setElements(expeditionUnitsVector);
 	}
+	
+	private Comparator<Equipment> expeditionUnitsComparator = new Comparator<Equipment>(){
+		public int compare(Equipment o1, Equipment o2) {
+			return o1.getMenuColor() - o2.getMenuColor();
+		};
+	};
 	
 	private void drawAddornment(){
 		int addornmentColor = ConsoleSystemInterface.TEAL;
