@@ -242,8 +242,8 @@ public class ExpeditionDAO {
 			new Weapon("BOWS", "Bow", "Bows", 1, 1, 2, 0, 5),
 			new Weapon("XBOWS", "Crossbow", "Crossbows", 1, 2, 3, 0, 4),
 			new Weapon("GUNS", "Harquebus", "Harquebuses", 1, 3, 5, 0, 2),
-			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 2, 1, 1),
-			new Armor("PLATE", "Plate","Plate", 4, 4, 3),
+			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 2, 1, 1, "LE"),
+			new Armor("PLATE", "Plate","Plate", 4, 4, 3, "PL"),
 			
 			new Good("ARROWS", "Arrow", "Arrows", 1, GoodType.WEAPON),
 			

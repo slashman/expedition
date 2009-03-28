@@ -688,6 +688,17 @@ public class Expedition extends Player implements FoodConsumer{
 		}
 		return ret;
 	}
+	
+	public List<Equipment> getUnarmoredUnits() {
+		List<Equipment> units = getUnits();
+		List<Equipment> ret = new ArrayList<Equipment>();
+		for (Equipment unit: units){
+			if (((ExpeditionUnit)unit.getItem()).getArmor() == null){
+				ret.add(unit);
+			}
+		}
+		return ret;
+	}
 
 	public int getMaxFiringRange() {
 		int maxRange = -1;
