@@ -24,6 +24,7 @@ public class ExpeditionFactory {
 		ArrayList<RangedActionSpec> rangedActions = new ArrayList<RangedActionSpec>();
 		rangedActions.add(new RangedActionSpec("NP_RAINARROWS", 3,80,"directionalmissile","rainArrows"));
 		ai.setRangedActions(rangedActions);
+		ai.setWaitPlayerRange(20);
 		ret.setSelector(ai);
 
 		ret.addItem(ItemFactory.createItem("NATIVE_WARRIOR"), Util.rand(10, 70));

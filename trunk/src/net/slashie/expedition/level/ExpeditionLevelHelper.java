@@ -1,11 +1,15 @@
 package net.slashie.expedition.level;
 
 import java.io.Serializable;
+import java.util.Hashtable;
 
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.util.Pair;
+import net.slashie.utils.Position;
 
 public class ExpeditionLevelHelper implements Serializable{
+	private Hashtable<String, Boolean> spawnPointsRegistry = new Hashtable<String, Boolean>();
+	
 	public ExpeditionLevelHelper() {
 		super();
 	}
@@ -26,6 +30,17 @@ public class ExpeditionLevelHelper implements Serializable{
 		this.superLevelId = superLevelId;
 	}
 
+	public void setSpawnPointUsed(Position p){
+		spawnPointsRegistry.put(p.toString(), true);
+	}
+	
+	public boolean isSpawnPointUsed(Position spawnPoint){
+		Boolean val = spawnPointsRegistry.get(spawnPoint.toString());
+		return (val != null && val);
+	}
+	
+	
+	
 
 	
 }
