@@ -105,8 +105,9 @@ public class NPWalk extends Action {
    					performer.getLevel().addMessage(" No one is killed.");
    				return;
         	}
-        } 
-        expedition.landOn(destinationPoint);
+        } else {
+        	expedition.landOn(destinationPoint);
+        }
 	}
 
 	@Override
