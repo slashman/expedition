@@ -19,7 +19,6 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			Hashtable<String, String> charmap, Position startPosition) {
 		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap,
 				startPosition);
-		 helper = new ExpeditionLevelHelper(); 
 	}
 
 	
