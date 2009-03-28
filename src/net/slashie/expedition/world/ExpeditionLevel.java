@@ -13,4 +13,6 @@ public interface ExpeditionLevel{
 	public String getDescription();
 	public Pair<String, String> getLocationDescription();
 	public AbstractCell getMapCell(Position position);
+	public boolean isSpawnPointUsed(Position spawnPoint);
+	public void setSpawnPointUsed(Position spawnPoint);
 }
