@@ -1,7 +1,5 @@
 package net.slashie.expedition.domain;
 
-import java.util.List;
-
 public class ExpeditionUnit extends Vehicle{
 	
 	private String name;
@@ -16,7 +14,13 @@ public class ExpeditionUnit extends Vehicle{
 	private String[] armorTypes;
 	private String special;
 	private Weapon weapon;
+	private Armor armor;
 	
+	public void setArmor(Armor armor) {
+		this.armor = armor;
+		updateCompositeVariables();
+	}
+
 	public Weapon getWeapon() {
 		return weapon;
 	}
@@ -52,31 +56,10 @@ public class ExpeditionUnit extends Vehicle{
 		this.name = name;
 	}
 
-	public int getRange() {
-		if (getWeapon() != null){
-			return range + getWeapon().getRange();
-		} else {
-			return 1;
-		}
-	}
+	
 
 	public void setRange(int range) {
 		this.range = range;
-	}
-
-	public int getAttack() {
-		if (weapon == null)
-			return attack;
-		else 
-			return attack + weapon.getAttack();
-	}
-
-	public int getDefense() {
-		if (weapon == null)
-			return defense;
-		else
-			return defense + weapon.getDefense();
-		
 	}
 
 	public int getSpeed() {
@@ -129,37 +112,82 @@ public class ExpeditionUnit extends Vehicle{
 		this.special = special;
 		this.weaponTypes = weaponTypes;
 		this.armorTypes = armorTypes;
+		updateCompositeVariables();
 	}
 
 	public void setArm(Weapon createItem) {
 		weapon = createItem;
+		updateCompositeVariables();
 	}
 	
+	private void updateCompositeVariables(){
+		fullId = super.getFullID();
+		weight = super.getWeight();
+		menuDescription = "";
+		totalRange = 1;
+		totalAttack = attack;
+		totalDefense = defense;
+		if (armor != null){
+			menuDescription += "+"+armor.getDefense()+" ";
+		}
+
+		if (weapon != null){
+			fullId += ","+weapon.getFullID();
+			menuDescription += weapon.getDescription()+" ";
+			weight += weapon.getWeight();
+			totalRange = range + weapon.getRange();
+			totalAttack += weapon.getAttack();
+			totalDefense += weapon.getDefense();
+		}
+		
+		menuDescription += getDescription();
+		if (armor != null){
+			fullId += ";"+armor.getFullID();
+			//menuDescription += "("+armor.getShortDescription()+")";
+			weight += armor.getWeight();
+			totalDefense += armor.getDefense();
+		}
+		
+		
+		
+	}
+	
+	private String menuDescription;
 	@Override
 	public String getMenuDescription() {
-		if (weapon != null){
-			return weapon.getDescription()+ " " + getDescription();
-		} else {
-			return getDescription();
-		}
+		return menuDescription;
 	}
 	
+	private String fullId;
 	@Override
 	public String getFullID() {
-		if (weapon != null){
-			return super.getFullID()+","+weapon.getFullID();
-		} else {
-			return super.getFullID();
-		}
+		return fullId;
 	}
 	
+	private int weight;
 	@Override
 	public int getWeight() {
-		if (weapon != null){
-			return super.getWeight()+weapon.getWeight();
-		} else {
-			return super.getWeight();
-		}
+		return weight;
+	}
+	
+	private int totalRange;
+	public int getRange() {
+		return totalRange;
+	}
+	
+	private int totalAttack;
+	public int getAttack() {
+		return totalAttack;
+	}
+
+	private int totalDefense;
+	public int getDefense() {
+		return totalDefense;
+	}
+	
+
+	public Armor getArmor() {
+		return armor;
 	}
 
 }
