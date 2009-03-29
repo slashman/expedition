@@ -19,6 +19,7 @@ import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
+import net.slashie.utils.Util;
 
 public class Walk extends Action{
 
@@ -120,12 +121,31 @@ public class Walk extends Action{
 	        		}
 	        	}
 	        }
+	        /*
+	         * Dead Reckon Calculation
+	         *  @ latitude 0 (apply for all latitudes to simplify the model)
+				cells	592
+				longitude degrees	30
+				degrees / cell	0,050675676
+				mt / degree 111321  (http://books.google.com.co/books?id=wu7zHtd2LO4C&hl=en)
+				mt / cell	5641,266892
+				nautical leagues / mt	0,000179
+				nautical leagues / cell	1,009786774
+
+	         */
+	        
+	        if (Util.chance(95)) {
+	        	//Simulate the lack of precision
+	        	expedition.increaseDeducedReckonWest(-var.x());
+	        }
         }
         AbstractFeature feature =expedition.getLevel().getFeatureAt(destinationPoint);
         if (feature != null && feature.isSolid()){
         	feature.onStep(expedition);
         	return;
         }
+        
+
         expedition.landOn(destinationPoint);
         
         //UserInterface.getUI().addMessage(new Message("Your expedition travels "+directionDescriptions[targetDirection], performer.getPosition()));
