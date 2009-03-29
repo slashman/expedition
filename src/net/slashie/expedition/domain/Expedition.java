@@ -25,8 +25,23 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class Expedition extends Player implements FoodConsumer{
+	
+	private int deducedReckonWest;
+	
+	public void resetDeducedReckonWest(){
+		deducedReckonWest = 0;
+	}
+	
+	public void increaseDeducedReckonWest(int q){
+		deducedReckonWest += q;
+	}
+	
 	private FoodConsumerDelegate foodConsumerDelegate;
 	
+	public int getDeducedReckonWest() {
+		return deducedReckonWest;
+	}
+
 	public MovementSpeed getMovementSpeed() {
 		if (getMovementMode() == MovementMode.SHIP){
 			if (hasFullShipCrew()){

@@ -22,6 +22,7 @@ import net.slashie.expedition.action.NPRainArrows;
 import net.slashie.expedition.action.RainArrows;
 import net.slashie.expedition.action.Use;
 import net.slashie.expedition.action.Walk;
+import net.slashie.expedition.action.navigation.ResetDeadReckon;
 import net.slashie.expedition.data.ExpeditionDAO;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.GameFiles;
@@ -292,13 +293,17 @@ public class RunExpedition {
 		Action buildSettlement = new BuildSettlement();
 		Action rainArrows = new RainArrows();
 		Action armExpedition = new ArmExpedition();
+		Action resetReckon = new ResetDeadReckon();
 
 		UserAction[] userActions = new UserAction[] {
 		    new UserAction(dropEquipment, CharKey.d),
 		    new UserAction(buildSettlement, CharKey.b),
 		    new UserAction(rainArrows, CharKey.r),
 		    new UserAction(armExpedition, CharKey.a),
+		    new UserAction(resetReckon, CharKey.r),
 		};
+
+
 		
 
 		UserCommand[] userCommands = new UserCommand[]{

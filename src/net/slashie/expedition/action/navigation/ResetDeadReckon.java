@@ -1,14 +1,13 @@
 package net.slashie.expedition.action.navigation;
 
+import net.slashie.expedition.domain.Expedition;
 import net.slashie.serf.action.Action;
 
 public class ResetDeadReckon extends Action{
 
 	@Override
 	public void execute() {
-		
-		// TODO Auto-generated method stub
-		
+		((Expedition)performer).resetDeducedReckonWest();
 	}
 
 	@Override

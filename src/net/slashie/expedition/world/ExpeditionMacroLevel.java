@@ -48,10 +48,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public Pair<String,String> getLocationDescription(){
 		Pair<Integer, Integer> location = getLocation();
 		
-		handyReusableObject.setA("(Sext) "+Math.abs(location.getA()) + (location.getA() > 0?"N":"S"));
+		handyReusableObject.setA("LAT  (Sext)  "+Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
 		//This is the real longitude calculation:
 		//handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
-		handyReusableObject.setB("(DRek) ---");
+		if (getExpedition().getDeducedReckonWest()>0)
+			handyReusableObject.setB("West (DReck) "+getExpedition().getDeducedReckonWest()+"nl");
+		else
+			handyReusableObject.setB("East (DReck) "+(-getExpedition().getDeducedReckonWest())+"nl");
 		return handyReusableObject;
 	}
 	
