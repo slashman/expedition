@@ -35,9 +35,9 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
 	public Pair<String,String> getLocationDescription(){
 		Pair<Integer, Integer> location = getLocation();
-		handyReusableObject.setA("(Land) "+Math.abs(location.getA()) + (location.getA() > 0?"N":"S"));
+		handyReusableObject.setA("LAT  (Land)  "+Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
 		//This is the real longitude calculation:
-		handyReusableObject.setB("(Land) "+Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
+		handyReusableObject.setB("LONG (Land)  "+Math.abs(location.getB()) + (location.getB() > 0?"ºE":"ºW"));
 		//handyReusableObject.setB("West (Dead):   "+expeditionLevel.get);
 		return handyReusableObject;
 	}

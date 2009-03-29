@@ -101,11 +101,11 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		//Box 3
 		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition());
 		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription();
-		csi.print(59, 1, getExpedition().getLocation().getDescription());
-		csi.print(59, 2, currentCell.getDescription());
-		csi.print(64, 3, locationDescription.getA());
-		csi.print(64, 4, locationDescription.getB());
-		csi.print(59, 5, getExpedition().getWeather()+", "+getExpedition().getTemperature()+"ºC");
+		csi.print(56, 1, getExpedition().getLocation().getDescription());
+		csi.print(56, 2, currentCell.getDescription());
+		csi.print(56, 3, locationDescription.getA());
+		csi.print(56, 4, locationDescription.getB());
+		csi.print(56, 5, getExpedition().getWeather()+", "+getExpedition().getTemperature()+"ºC");
 		
 		//This must be replaced on the next version of libjcsi
 		expeditionUnitsVector.clear();
@@ -122,12 +122,12 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	
 	private void drawAddornment(){
 		int addornmentColor = ConsoleSystemInterface.TEAL;
-		csi.print(0, 0,  "    /----------------\\           /-----N-----\\           /------------------\\   ", addornmentColor);
-		csi.print(0, 1,  "    |                |          /             \\          |                  |   ", addornmentColor);
-		csi.print(0, 2,  "    |                |         /               \\         |                  |   ", addornmentColor);
-		csi.print(0, 3,  "    |                |\\-------/                 \\-------/| LAT              |   ", addornmentColor);
-		csi.print(0, 4,  "    |                |......./                   \\.......| LONG             |   ", addornmentColor);
-		csi.print(0, 5,  "    |                |.......|                   |.......|                  |   ", addornmentColor);
+		csi.print(0, 0,  "    /------------------\\         /-----N-----\\         /--------------------\\   ", addornmentColor);
+		csi.print(0, 1,  "    |                  |        /             \\        |                    |   ", addornmentColor);
+		csi.print(0, 2,  "    |                  |       /               \\       |                    |   ", addornmentColor);
+		csi.print(0, 3,  "    |                  |\\-----/                 \\-----/|                    |   ", addornmentColor);
+		csi.print(0, 4,  "    |                  |...../                   \\.....|                    |   ", addornmentColor);
+		csi.print(0, 5,  "    |                  |.....|                   |.....|                    |   ", addornmentColor);
 		csi.print(0, 6,  " /----~ EXPEDITION ~------\\..|                   |../-------~ EXPEDITION ~-----\\", addornmentColor);
 		csi.print(0, 7,  " |Ships                   |..|                   |..|                          |", addornmentColor);
 		csi.print(0, 8,  " |Food Days               |..|                   |..|                          |", addornmentColor);
