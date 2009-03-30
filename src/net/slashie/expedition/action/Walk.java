@@ -22,50 +22,88 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class Walk extends Action{
+	private boolean actionCancelled = false;
+	
+	@Override
+	public boolean canPerform(Actor a) {
+		Expedition expedition = (Expedition) a;
+		
+		if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
+			if (expedition.getOffshoreCurrentlyCarrying() > 100){
+				invalidationMessage = "You are stranded! drop some items!";
+				return false;
+			}
+		} else {
+			if (expedition.getCurrentlyCarrying() > 100){
+				invalidationMessage = "You are stranded! drop some items!";
+				return false;
+			}
+		}
+		
+        Position var = directionToVariation(targetDirection);
+        Position destinationPoint = Position.add(a.getPosition(), var);
+        
+    	Actor actor = expedition.getLevel().getActorAt(destinationPoint);
+    	if (actor != null){
+    		invalidationMessage = "You can't walk there";
+    		return false;
+    	}
+    	
+        AbstractCell absCell = a.getLevel().getMapCell(destinationPoint);
+        if (absCell instanceof ExpeditionCell){
+	        ExpeditionCell cell = (ExpeditionCell)absCell;
+	        if (cell == null){
+	        	invalidationMessage = "You can't walk there";
+	        	return false;
+	        }
+	        
+	        if (cell.isSolid() || cell.isWater()){
+	        	invalidationMessage = "You can't walk there";
+	        	return false;
+	        }
+        } else {
+	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
+	        
+	        if (cell == null){
+	        	invalidationMessage = "You can't walk there";
+	        	return false;
+	        }
+	        
+	        if (!cell.isLand()&& !(expedition.getMovementMode() == MovementMode.SHIP)){
+	        	AbstractFeature feature =expedition.getLevel().getFeatureAt(destinationPoint);
+	            if (feature == null || !feature.isSolid()){
+	            	invalidationMessage = "You can't walk there";
+		        	return false;
+	            }
+	        }
+	        
+	        if (cell.isSolid()){
+	        	invalidationMessage = "You can't walk there";
+	        	return false;
+	        }
+        }
+		return true;
+	}
 
+	
 	@Override
 	public void execute() {
+		actionCancelled = false;
 		Expedition expedition = (Expedition) performer;
 		if (targetDirection == Action.SELF){
 			expedition.getLevel().addMessage("You stand alert.");
 			return;
 		}
 		
-		if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
-			if (expedition.getOffshoreCurrentlyCarrying() > 100){
-				expedition.getLevel().addMessage("You are stranded! drop some items!");
-				return;
-			}
-		} else {
-			if (expedition.getCurrentlyCarrying() > 100){
-				expedition.getLevel().addMessage("You are stranded! drop some items!");
-				return;
-			}
-		}
-		
-		
-		
         Position var = directionToVariation(targetDirection);
         Position destinationPoint = Position.add(performer.getPosition(), var);
         
-    	Actor actor = expedition.getLevel().getActorAt(destinationPoint);
-    	if (actor != null){
-    		return;
-    	}
-    	
         AbstractCell absCell = performer.getLevel().getMapCell(destinationPoint);
         if (absCell instanceof ExpeditionCell){
 	        ExpeditionCell cell = (ExpeditionCell)absCell;
-	        
-	        if (cell == null){
-	        	return;
-	        }
-	        
-	        if (cell.isSolid() || cell.isWater())
-	        	return;
-	        
 	        if (cell.getStore() != null){
 	        	((ExpeditionUserInterface)UserInterface.getUI()).launchStore(cell.getStore());
+	        	actionCancelled = true;
 	        	return;
 	        }
 	        
@@ -81,26 +119,19 @@ public class Walk extends Action{
 	        				//expedition.setCurrentVehicles(expedition.getShips());
 	        			}
 	        		}
+	        		actionCancelled = true;
 	        		return;
 	        	}
 	        	
 	        }
         } else {
-        	
-        	
 	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
-	        if (cell == null){
-	        	return;
-	        }
-	        
-	        if (cell.isSolid())
-	        	return;
-	        
 	        if (!cell.isLand()&& !(expedition.getMovementMode() == MovementMode.SHIP)){
 	        	AbstractFeature feature =expedition.getLevel().getFeatureAt(destinationPoint);
 	            if (feature != null && feature.isSolid()){
 	            	feature.onStep(expedition);
 	            }
+	            actionCancelled = true;
 	            return;
 	        }
 	        
@@ -117,6 +148,7 @@ public class Walk extends Action{
 	        			ship.setPosition(new Position(expedition.getPosition()));
 	        			expedition.getLevel().addFeature(ship);
 	        		} else {
+	        			actionCancelled = true;
 	        			return;
 	        		}
 	        	}
@@ -176,6 +208,10 @@ public class Walk extends Action{
 	
 	@Override
 	public int getCost() {
+		if (actionCancelled){
+			actionCancelled = false;
+			return 0;
+		}
 		switch (getExpedition().getMovementMode()){
 		case FOOT: case HORSE:
 			switch (getExpedition().getMovementSpeed()){
@@ -198,5 +234,7 @@ public class Walk extends Action{
 		}
 		return 30;
 	}
+	
+	
 
 }
