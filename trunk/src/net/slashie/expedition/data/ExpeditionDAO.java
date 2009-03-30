@@ -24,11 +24,11 @@ public class ExpeditionDAO {
 	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
 		Store goodsStore = new Store();
 		goodsStore.setOwnerName("Goods Store");
-		goodsStore.addItem(ItemFactory.createItem("FOOD"), 15300, 5);
+		goodsStore.addItem(ItemFactory.createItem("FOOD"), 15300, 1);
 		goodsStore.addItem(ItemFactory.createItem("RUM"), 160, 20);
 		goodsStore.addItem(ItemFactory.createItem("WOOD"), 550, 20);
 		goodsStore.addItem(ItemFactory.createItem("FRESHWATER"), 165, 2);
-		goodsStore.addItem(ItemFactory.createItem("FOOD_SAUERKRAUT"), 3200, 10);
+		goodsStore.addItem(ItemFactory.createItem("FOOD_SAUERKRAUT"), 3200, 3);
 		
 		//Weapons Store
 		Store weaponsStore = new Store();
@@ -224,11 +224,11 @@ public class ExpeditionDAO {
 					new String[]{""}),
 			
 			//Goods
-			new Food("FOOD", "Food", "Food", 1, 10),
+			new Food("FOOD", "Food", "Food", 1, 1),
 			new Food("RUM", "Rum", "Rum", 1, 2),
 			new Good("WOOD", "Wood", "Wood", 1, GoodType.TOOL),
 			new Food("FRESHWATER", "Freshwater", "Freshwater", 1,1),
-			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 1, 8),
+			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 1, 1),
 			
 			//New Worlds Goods
 			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 1, 2),
