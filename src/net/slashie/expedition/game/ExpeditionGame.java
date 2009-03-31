@@ -157,10 +157,11 @@ public class ExpeditionGame extends SworeGame {
 
 	public void commandSelected (int commandCode){
 		super.commandSelected(commandCode);
-		if (commandCode == CommandListener.HELP){
+		switch (commandCode){
+		case CommandListener.HELP:
 			ExpeditionDisplay.thus.showHelp();
-		} 
-		
+			break;
+		}
 	}
 
 }

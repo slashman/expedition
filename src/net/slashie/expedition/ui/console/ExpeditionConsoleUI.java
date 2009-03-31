@@ -20,6 +20,7 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
+import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.libjcsi.textcomponents.ListBox;
 import net.slashie.libjcsi.textcomponents.MenuBox;
@@ -114,12 +115,6 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		expeditionUnitBox.setElements(expeditionUnitsVector);
 	}
 	
-	private Comparator<Equipment> expeditionUnitsComparator = new Comparator<Equipment>(){
-		public int compare(Equipment o1, Equipment o2) {
-			return o1.getMenuColor() - o2.getMenuColor();
-		};
-	};
-	
 	private void drawAddornment(){
 		int addornmentColor = ConsoleSystemInterface.TEAL;
 		csi.print(0, 0,  "    /------------------\\         /-----N-----\\         /--------------------\\   ", addornmentColor);
@@ -188,116 +183,6 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	public void beforeRefresh() {
 		expeditionUnitBox.draw();
 	}
-	private class StoreItem implements MenuItem{
-		private Equipment item;
-		private Store store;
-		private Expedition offShore;
-
-		public StoreItem(Equipment item, Store store, Expedition offShore) {
-			super();
-			this.item = item;
-			this.store = store;
-			this.offShore = offShore;
-		}
-		
-		public Equipment getEquipment(){
-			return item;
-		}
-
-		public char getMenuChar() {
-			return ((CharAppearance)item.getItem().getAppearance()).getChar();
-		}
-		
-		public int getMenuColor() {
-			return ((CharAppearance)item.getItem().getAppearance()).getColor();
-		}
-		
-		public String getMenuDescription() {
-			String itemDescription = item.getItem().getMenuDescription();
-			int inventory = item.getQuantity();
-			int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
-			if (item.getItem() instanceof ExpeditionUnit){
-				return itemDescription + ", "+store.getPriceFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {"+inventory+" Available}";
-			} else {
-				return itemDescription + " for "+store.getPriceFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {Stock:"+inventory+"}";
-			}
-		}
-	}
-	
-	private class CacheItem implements MenuItem{
-		private Equipment item;
-		private GoodsCache cache;
-		private Expedition expedition;
-
-		public CacheItem(Equipment item, GoodsCache cache) {
-			this.item = item;
-			this.cache = cache;
-		}
-		
-		public CacheItem(Equipment item, Expedition expedition) {
-			this.item = item;
-			this.expedition = expedition;
-		}
-		
-		public Equipment getEquipment(){
-			return item;
-		}
-
-		public char getMenuChar() {
-			return ((CharAppearance)item.getItem().getAppearance()).getChar();
-		}
-		
-		public int getMenuColor() {
-			return ((CharAppearance)item.getItem().getAppearance()).getColor();
-		}
-		
-		public String getMenuDescription() {
-			String itemDescription = item.getItem().getMenuDescription();
-			int inventory = item.getQuantity();
-			int stock = 0;
-			if (expedition != null){
-				if (item.getItem() instanceof Good){ 
-					stock = expedition.getCarryable((ExpeditionItem)item.getItem());
-					return itemDescription + " (Max "+stock+") {Available "+inventory+"}";
-				} else {
-					return itemDescription + " {Available "+inventory+"}";
-				}
-			} else {
-				stock = cache.getCarryable((ExpeditionItem)item.getItem());
-				if (stock == -1)
-					return itemDescription + " {On Expedition "+inventory+"}";
-				else 
-					return itemDescription + " (Max "+stock+") {On Expedition "+inventory+"}";
-			}
-		}
-	}
-	
-	private class SimpleItem implements MenuItem{
-		private String text;
-		private int value;
-	
-		private SimpleItem (int value, String text){
-			this.text = text;
-			this.value = value;
-		}
-		
-		public char getMenuChar() {
-			return '*';
-		}
-		
-		public int getMenuColor() {
-			return ConsoleSystemInterface.WHITE;
-		}
-		
-		public String getMenuDescription() {
-			return text;
-		}
-		
-		public int getValue(){
-			return value;
-		}
-	}
-	
 	private int readQuantity(int x, int y, String spaces, int inputLength){
 		int quantity = -1;
 		while (quantity == -1){
@@ -627,5 +512,246 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	
 	public String inputBox(String prompt){
 		return inputBox(prompt, 20, 2, 31, 8, 22, 6,20);
+	}
+	
+	@Override
+	public void showInventory() {
+		Equipment.eqMode = true;
+		int xpos = 1, ypos = 0;
+  		MenuBox menuBox = new MenuBox(csi);
+  		menuBox.setHeight(17);
+  		menuBox.setWidth(50);
+  		menuBox.setPosition(1,5);
+  		menuBox.setBorder(false);
+  		TextBox itemDescription = new TextBox(csi);
+  		itemDescription.setBounds(52,9,25,5);
+  		csi.saveBuffer();
+  		csi.cls();
+  		csi.print(xpos,ypos,    "------------------------------------------------------------------------", ConsoleSystemInterface.BLUE);
+  		csi.print(xpos,ypos+1,  "Inventory", ConsoleSystemInterface.WHITE);
+  		csi.print(xpos,ypos+2,    "------------------------------------------------------------------------", ConsoleSystemInterface.BLUE);
+  		csi.print(xpos,24,  "[Space] to continue, Up and Down to browse");
+  		int choice = 0;
+  		while (true){
+  			csi.print(xpos,ypos+3,  "   (*) Units        ( ) Tools        ( ) Goods        ( ) Valuables     ", ConsoleSystemInterface.BLUE);
+  			csi.print(5+choice*17, ypos+3, "*", ConsoleSystemInterface.WHITE);
+  			
+  	  		List<Equipment> inventory = null;
+  	  		switch (choice){
+  	  		case 0:
+  	  			inventory = getExpedition().getUnits();
+  	  			break;
+  	  		case 1:
+  	  			inventory = getExpedition().getTools();
+  	  			break;
+  	  		case 2:
+  	  			inventory = getExpedition().getGoods();
+  	  			break;
+  	  		case 3:
+  	  			inventory = getExpedition().getValuables();
+  	  		}
+  	  		Collections.sort(inventory, inventoryItemsComparator);
+  	  		Vector menuItems = new Vector();
+  	  		for (Equipment item: inventory){
+  	  			menuItems.add(new InventoryItem(item, getExpedition()));
+  	  		}
+  	  		menuBox.setMenuItems(menuItems);
+  	  		menuBox.draw();
+  	  		csi.refresh();
+  	  		
+	  		CharKey x = new CharKey(CharKey.NONE);
+			while (x.code != CharKey.SPACE && !x.isArrow())
+				x = csi.inkey();
+			if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+				break;
+			}
+			if (x.isLeftArrow()){
+				choice--;
+				if (choice == -1)
+					choice = 0;
+			}
+			if (x.isRightArrow()){
+				choice++;
+				if (choice == 4)
+					choice = 3;
+			}
+	 		
+	 		//menuBox.getSelection();
+  		}
+ 		
+ 		
+		csi.restore();
+		csi.refresh();
+		Equipment.eqMode = false;
+	}
+
+	private Comparator<Equipment> expeditionUnitsComparator = new Comparator<Equipment>(){
+		public int compare(Equipment o1, Equipment o2) {
+			return o1.getMenuColor() - o2.getMenuColor();
+		};
+	};
+	
+	private Comparator<Equipment> inventoryItemsComparator = new Comparator<Equipment>(){
+		public int compare(Equipment o1, Equipment o2) {
+			if (o1.getItem() instanceof ExpeditionUnit){
+				if (o2.getItem() instanceof ExpeditionUnit){
+					return o1.getMenuColor() - o2.getMenuColor();
+				} else {
+					return -1;
+				}
+			} else if (o2.getItem() instanceof ExpeditionUnit){
+				if (o1.getItem() instanceof ExpeditionUnit){
+					return o1.getMenuColor() - o2.getMenuColor();
+				} else {
+					return 1;
+				}
+			} else {
+				return o1.getItem().getDescription().compareTo(o2.getItem().getDescription());
+			}
+		};
+	};
+	
+	private class StoreItem implements MenuItem{
+		private Equipment item;
+		private Store store;
+		private Expedition offShore;
+
+		public StoreItem(Equipment item, Store store, Expedition offShore) {
+			super();
+			this.item = item;
+			this.store = store;
+			this.offShore = offShore;
+		}
+		
+		public Equipment getEquipment(){
+			return item;
+		}
+
+		public char getMenuChar() {
+			return ((CharAppearance)item.getItem().getAppearance()).getChar();
+		}
+		
+		public int getMenuColor() {
+			return ((CharAppearance)item.getItem().getAppearance()).getColor();
+		}
+		
+		public String getMenuDescription() {
+			String itemDescription = item.getItem().getMenuDescription();
+			int inventory = item.getQuantity();
+			int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
+			if (item.getItem() instanceof ExpeditionUnit){
+				return itemDescription + ", "+store.getPriceFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {"+inventory+" Available}";
+			} else {
+				return itemDescription + " for "+store.getPriceFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {Stock:"+inventory+"}";
+			}
+		}
+	}
+	
+	private class CacheItem implements MenuItem{
+		private Equipment item;
+		private GoodsCache cache;
+		private Expedition expedition;
+
+		public CacheItem(Equipment item, GoodsCache cache) {
+			this.item = item;
+			this.cache = cache;
+		}
+		
+		public CacheItem(Equipment item, Expedition expedition) {
+			this.item = item;
+			this.expedition = expedition;
+		}
+		
+		public Equipment getEquipment(){
+			return item;
+		}
+
+		public char getMenuChar() {
+			return ((CharAppearance)item.getItem().getAppearance()).getChar();
+		}
+		
+		public int getMenuColor() {
+			return ((CharAppearance)item.getItem().getAppearance()).getColor();
+		}
+		
+		public String getMenuDescription() {
+			String itemDescription = item.getItem().getMenuDescription();
+			int inventory = item.getQuantity();
+			int stock = 0;
+			if (expedition != null){
+				if (item.getItem() instanceof Good){ 
+					stock = expedition.getCarryable((ExpeditionItem)item.getItem());
+					return itemDescription + " (Max "+stock+") {Available "+inventory+"}";
+				} else {
+					return itemDescription + " {Available "+inventory+"}";
+				}
+			} else {
+				stock = cache.getCarryable((ExpeditionItem)item.getItem());
+				if (stock == -1)
+					return itemDescription + " {On Expedition "+inventory+"}";
+				else 
+					return itemDescription + " (Max "+stock+") {On Expedition "+inventory+"}";
+			}
+		}
+	}
+	
+	private class InventoryItem implements MenuItem{
+		private Equipment item;
+		private Expedition expedition;
+
+		public InventoryItem(Equipment item, Expedition expedition) {
+			this.item = item;
+			this.expedition = expedition;
+		}
+		
+		public Equipment getEquipment(){
+			return item;
+		}
+
+		public char getMenuChar() {
+			return ((CharAppearance)item.getItem().getAppearance()).getChar();
+		}
+		
+		public int getMenuColor() {
+			return ((CharAppearance)item.getItem().getAppearance()).getColor();
+		}
+		
+		public String getMenuDescription() {
+			String itemDescription = item.getItem().getMenuDescription();
+			int quantity = item.getQuantity();
+			ExpeditionItem eitem = (ExpeditionItem)item.getItem();
+			if (eitem instanceof ExpeditionUnit){
+				ExpeditionUnit unit = (ExpeditionUnit) eitem;
+				return quantity + " " + itemDescription + " ATK"+ unit.getAttack()+" DEF"+ unit.getDefense() +" {Weight: "+(eitem.getWeight() * quantity)+")";
+			} else {
+				return quantity + " " + itemDescription + " {Weight: "+(eitem.getWeight() * quantity)+")";
+			}
+		}
+	}
+	
+	private class SimpleItem implements MenuItem{
+		private String text;
+		private int value;
+	
+		private SimpleItem (int value, String text){
+			this.text = text;
+			this.value = value;
+		}
+		
+		public char getMenuChar() {
+			return '*';
+		}
+		
+		public int getMenuColor() {
+			return ConsoleSystemInterface.WHITE;
+		}
+		
+		public String getMenuDescription() {
+			return text;
+		}
+		
+		public int getValue(){
+			return value;
+		}
 	}
 }
