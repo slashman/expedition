@@ -312,6 +312,8 @@ public class RunExpedition {
 			new UserCommand(CommandListener.LOOK, CharKey.l),
 			new UserCommand(CommandListener.PROMPTSAVE, CharKey.S),
 			new UserCommand(CommandListener.HELP, CharKey.h),
+			new UserCommand(CommandListener.SHOWINVEN, CharKey.i),
+
 			//new UserCommand(CommandListener.SHOWSTATS, CharKey.c),
 			//new UserCommand(CommandListener.CHARDUMP, CharKey.C),
 			//new UserCommand(CommandListener.SHOWMESSAGEHISTORY, CharKey.m),
