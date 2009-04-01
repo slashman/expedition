@@ -79,7 +79,8 @@ public class ShipCache extends GoodsCache{
 	
 	@Override
 	public boolean canCarry(ExpeditionItem item, int quantity) {
-		return getCarryable(item) >= quantity;
+		//return getCarryable(item) >= quantity;
+		return getCurrentWeight() + item.getWeight() * quantity <= getCarryCapacity();
 	}
 	
 	public boolean canCarryWeight(int weight){
