@@ -650,11 +650,12 @@ public class Expedition extends Player implements FoodConsumer{
 	public void cashValuables() {
 		int valuables = getSumOfValuables();
 		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
+		for (int i = 0; i < inventory.size(); i++){
+			Equipment equipment = inventory.get(i);
 			if (equipment.getItem() instanceof Good){
 				Good good = (Good)equipment.getItem();
 				if (good.getGoodType() == GoodType.VALUABLE){
-					equipment.setQuantity(0);
+					reduceQuantityOf(good, equipment.getQuantity());
 				}
 			}
 		}
