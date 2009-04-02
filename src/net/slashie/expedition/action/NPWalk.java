@@ -100,7 +100,7 @@ public class NPWalk extends Action {
    					outcome = 0;
    				int deaths = outcome;
    				if (deaths > 0)
-   					targetExpedition.killUnitsOnMeleeBattle(deaths);
+   					targetExpedition.killUnits(deaths);
    				else
    					performer.getLevel().addMessage(" No one is killed.");
    				return;

@@ -560,18 +560,29 @@ public class Expedition extends Player implements FoodConsumer{
 		return foodConsumerDelegate.getDailyFoodConsumption();
 	}
 
-	public void killUnitsOnMeleeBattle(int deaths) {
+	public void killUnits(int deaths) {
 		int toKill = deaths;
 		List<Equipment> inventory = getInventory();
 		String killMessage = "";
 		Hashtable<String, Pair<ExpeditionUnit, Integer>> acumHash = new Hashtable<String, Pair<ExpeditionUnit,Integer>>();
+		int totalUnits = getTotalUnits();
 		while (toKill > 0){
 			for (Equipment equipment: inventory){
 				in: if (equipment.getItem() instanceof ExpeditionUnit){
-					int killUnits = Util.rand(1, toKill);
-					if (killUnits > equipment.getQuantity()){
-						killUnits = equipment.getQuantity();
-					}
+					/**
+					 * The chance to lost men from this unit depends on how much it represents of the total
+					 * expedition manpower and how much of this manpower will die.
+					 */
+                    int killUnits = 0;
+                    double chance = ((double) equipment.getQuantity() / (double)totalUnits) * ((double)toKill/(double)totalUnits);
+                    
+                    if (Util.chance((int)Math.round(100.0d*chance))){
+                    	killUnits = Util.rand(1, toKill);
+    					if (killUnits > equipment.getQuantity()){
+    						killUnits = equipment.getQuantity();
+    					}
+                    }
+                    
 					if (killUnits == 0)
 						break in;
 					String itemId = equipment.getItem().getFullID();
@@ -609,7 +620,7 @@ public class Expedition extends Player implements FoodConsumer{
 			i++;
 		}
 		
-		level.addMessage(killMessage +" die in the attack.");
+		level.addMessage(killMessage +" die.");
 		checkDeath();
 	}
 
