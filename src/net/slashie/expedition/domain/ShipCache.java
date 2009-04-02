@@ -84,7 +84,8 @@ public class ShipCache extends GoodsCache{
 	}
 	
 	public boolean canCarryWeight(int weight){
-		return getCarryCapacity() >= weight;
+		//return getCarryCapacity() >= weight;
+		return getCurrentWeight() + weight <= getCarryCapacity();
 	}
 	
 	@Override
