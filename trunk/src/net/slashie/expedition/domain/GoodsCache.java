@@ -1,6 +1,7 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
+import net.slashie.util.Pair;
+import net.slashie.utils.Util;
 
 public class GoodsCache extends AbstractFeature implements FoodConsumer{
 	private FoodConsumerDelegate foodConsumerDelegate; 
@@ -179,4 +182,41 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 	public boolean isInfiniteCapacity(){
 		return true;
 	}
+	
+	public void killUnits(int deaths) {
+		int toKill = deaths;
+		List<Equipment> inventory = getInventory();
+		Hashtable<String, Pair<ExpeditionUnit, Integer>> acumHash = new Hashtable<String, Pair<ExpeditionUnit,Integer>>();
+		while (toKill > 0){
+			int totalUnits = getTotalUnits();
+			for (Equipment equipment: inventory){
+				in: if (equipment.getItem() instanceof ExpeditionUnit){
+                    int killUnits = 0;
+                    double chance = ((double) equipment.getQuantity() / (double)totalUnits) * ((double)toKill/(double)totalUnits);
+                    if (Util.chance((int)Math.round(100.0d*chance))){
+                    	killUnits = Util.rand(1, toKill);
+    					if (killUnits > equipment.getQuantity()){
+    						killUnits = equipment.getQuantity();
+    					}
+                    }
+					if (killUnits == 0)
+						break in;
+					String itemId = equipment.getItem().getFullID();
+					Pair<ExpeditionUnit, Integer> currentlyKilled = acumHash.get(itemId);
+					if (currentlyKilled == null){
+						currentlyKilled = new Pair<ExpeditionUnit, Integer>((ExpeditionUnit)equipment.getItem(), killUnits);
+						acumHash.put(itemId, currentlyKilled);
+					} else {
+						currentlyKilled.setB(currentlyKilled.getB()+killUnits);
+					}
+					toKill -= killUnits;
+					reduceQuantityOf(equipment.getItem(), killUnits);
+				}
+			}
+			if (getTotalUnits() == 0)
+				break;
+		}
+		checkDeath();
+	}
+	
 }

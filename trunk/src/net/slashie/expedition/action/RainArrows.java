@@ -124,7 +124,7 @@ public class RainArrows extends RangedAction {
 			outcome = 0;
 		int deaths = outcome;
 		if (deaths > 0)
-			npe.killUnitsOnMeleeBattle(deaths);
+			npe.killUnits(deaths);
 		else
 			performer.getLevel().addMessage(" No one is killed.");
 		 return true;

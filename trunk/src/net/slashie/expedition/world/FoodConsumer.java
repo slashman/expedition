@@ -18,4 +18,7 @@ public interface FoodConsumer {
 
 	public void reduceQuantityOf(AbstractItem item, int killUnits);
 	
+	public void killUnits(int quantity);
+
+	public int getTotalUnits();
 }
