@@ -82,7 +82,7 @@ public class NonPrincipalExpedition extends Expedition{
 	};
 	
 	private List<Pair<String, Integer>> getPrizesFor(int initialPower) {
-		int waves = (int)Math.round((double)initialPower / 10.0d);
+		int waves = (int)Math.round((double)initialPower / 100.0d);
 		List<Pair<String,Integer>> ret = new ArrayList<Pair<String,Integer>>();
 		for (int i = 0; i < waves; i++){
 			Pair<String, Integer> prize = prizes[Util.rand(0, 3)];
