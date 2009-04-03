@@ -34,8 +34,8 @@ public class ExpeditionGame extends SworeGame {
 			if (dayShiftCount >= 200){
 				dayShiftCount = 0;
 				currentTime.add(Calendar.DATE, 1);
-				for (FoodConsumer foodConsumer: foodConsumers){
-					foodConsumer.consumeFood();
+				for (int i = 0; i < foodConsumers.size(); i++){
+					foodConsumers.get(i).consumeFood();
 				}
 			}
 		}
