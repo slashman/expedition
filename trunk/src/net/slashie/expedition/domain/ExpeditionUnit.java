@@ -95,12 +95,12 @@ public class ExpeditionUnit extends Vehicle{
 	}
 
 	public ExpeditionUnit(String classifierId, String description, String pluralDescription,
-			int weight, int speedModifier, int carryCapacity,
-			int range, int attack, int defense, int speed,
-			int movement, int resistance, int dailyFoodConsumption,
-			String special, String[] weaponTypes, String[] armorTypes) {
+			int weight, int carryCapacity,
+			int attack, int defense, 
+			int dailyFoodConsumption,
+			String[] weaponTypes, String[] armorTypes) {
 		super(classifierId, description, pluralDescription, weight, false,
-				false, speedModifier, carryCapacity);
+				false, 1, carryCapacity);
 		this.name = description;
 		this.range = range;
 		this.attack = attack;
@@ -122,7 +122,7 @@ public class ExpeditionUnit extends Vehicle{
 	
 	private void updateCompositeVariables(){
 		fullId = super.getFullID();
-		weight = super.getWeight();
+		unitWeight = super.getWeight();
 		menuDescription = "";
 		totalRange = 1;
 		totalAttack = attack;
@@ -134,7 +134,7 @@ public class ExpeditionUnit extends Vehicle{
 		if (weapon != null){
 			fullId += ","+weapon.getFullID();
 			menuDescription += weapon.getDescription()+" ";
-			weight += weapon.getWeight();
+			unitWeight += weapon.getWeight();
 			totalRange = range + weapon.getRange();
 			totalAttack += weapon.getAttack();
 			totalDefense += weapon.getDefense();
@@ -144,7 +144,7 @@ public class ExpeditionUnit extends Vehicle{
 		if (armor != null){
 			fullId += ";"+armor.getFullID();
 			//menuDescription += "("+armor.getShortDescription()+")";
-			weight += armor.getWeight();
+			unitWeight += armor.getWeight();
 			totalDefense += armor.getDefense();
 		}
 		
@@ -164,10 +164,10 @@ public class ExpeditionUnit extends Vehicle{
 		return fullId;
 	}
 	
-	private int weight;
+	private int unitWeight;
 	@Override
 	public int getWeight() {
-		return weight;
+		return unitWeight;
 	}
 	
 	private int totalRange;

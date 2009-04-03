@@ -24,43 +24,43 @@ public class ExpeditionDAO {
 	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
 		Store goodsStore = new Store();
 		goodsStore.setOwnerName("Goods Store");
-		goodsStore.addItem(ItemFactory.createItem("FOOD"), 15300, 1);
-		goodsStore.addItem(ItemFactory.createItem("RUM"), 160, 20);
-		goodsStore.addItem(ItemFactory.createItem("WOOD"), 550, 20);
-		goodsStore.addItem(ItemFactory.createItem("FRESHWATER"), 165, 2);
-		goodsStore.addItem(ItemFactory.createItem("FOOD_SAUERKRAUT"), 3200, 3);
+		goodsStore.addItem(ItemFactory.createItem("FOOD"), 15300, 1, 10);
+		goodsStore.addItem(ItemFactory.createItem("RUM"), 160, 20, 5);
+		goodsStore.addItem(ItemFactory.createItem("WOOD"), 550, 20, 1);
+		goodsStore.addItem(ItemFactory.createItem("FRESHWATER"), 165, 2, 1);
+		goodsStore.addItem(ItemFactory.createItem("FOOD_SAUERKRAUT"), 3200, 3, 10);
 		
 		//Weapons Store
 		Store weaponsStore = new Store();
 		weaponsStore.setOwnerName("Weapons Store");
-		weaponsStore.addItem(ItemFactory.createItem("SPEARS"), 550, 5);
-		weaponsStore.addItem(ItemFactory.createItem("SWORDS"), 130, 20);
-		weaponsStore.addItem(ItemFactory.createItem("BOWS"), 200, 30);
-		weaponsStore.addItem(ItemFactory.createItem("XBOWS"), 80, 50);
-		weaponsStore.addItem(ItemFactory.createItem("GUNS"), 12, 60);
-		weaponsStore.addItem(ItemFactory.createItem("ARROWS"), 1500, 2);
-		weaponsStore.addItem(ItemFactory.createItem("STUDDED_LEATHER"), 160, 30);
-		weaponsStore.addItem(ItemFactory.createItem("PLATE"), 30, 50);
+		weaponsStore.addItem(ItemFactory.createItem("SPEARS"), 550, 5, 1);
+		weaponsStore.addItem(ItemFactory.createItem("SWORDS"), 130, 10, 1);
+		weaponsStore.addItem(ItemFactory.createItem("BOWS"), 200, 6, 1);
+		weaponsStore.addItem(ItemFactory.createItem("XBOWS"), 80, 25, 1);
+		weaponsStore.addItem(ItemFactory.createItem("GUNS"), 12, 30, 1);
+		weaponsStore.addItem(ItemFactory.createItem("ARROWS"), 1500, 2, 1);
+		weaponsStore.addItem(ItemFactory.createItem("STUDDED_LEATHER"), 160, 30, 1);
+		weaponsStore.addItem(ItemFactory.createItem("PLATE"), 30, 50, 1);
 		
 		//Port
 		Store port = new Store();
 		port.setOwnerName("Port");
-		port.addItem(ItemFactory.createItem("CARRACK"), 3, 12000);
-		port.addItem(ItemFactory.createItem("CARAVEL"), 4, 14000);
-		port.addItem(ItemFactory.createItem("CAPTAIN"), 6, 200);
+		port.addItem(ItemFactory.createItem("CARRACK"), 3, 4000, 1);
+		port.addItem(ItemFactory.createItem("CARAVEL"), 4, 3000, 1);
+		port.addItem(ItemFactory.createItem("CAPTAIN"), 6, 300, 1);
 		
 		//Pub
 		Store pub = new Store();
 		pub.setOwnerName("Pub");
-		pub.addItem(ItemFactory.createItem("SAILOR"), 30, 130);
-		pub.addItem(ItemFactory.createItem("ROGUE"), 350, 12);
+		pub.addItem(ItemFactory.createItem("SAILOR"), 30, 60, 1);
+		pub.addItem(ItemFactory.createItem("ROGUE"), 350, 30, 1);
 		
 		//Guild
 		Store guild = new Store();
 		guild.setOwnerName("Guild");
-		guild.addItem(ItemFactory.createItem("MARINE"), 66, 30);
-		guild.addItem(ItemFactory.createItem("SOLDIER"), 130, 20);
-		guild.addItem(ItemFactory.createItem("ARCHER"), 85, 50);
+		guild.addItem(ItemFactory.createItem("MARINE"), 66, 70, 1);
+		guild.addItem(ItemFactory.createItem("SOLDIER"), 130, 100, 1);
+		guild.addItem(ItemFactory.createItem("ARCHER"), 85, 120, 1);
 		
 		return new AbstractCell[]{
 			//Overworld cells
@@ -192,58 +192,61 @@ public class ExpeditionDAO {
 	
 	public static ExpeditionItem[] getItemDefinitions(AppearanceFactory appFactory){
 		return new ExpeditionItem[]{
+				//weight, carryCapacity, attack, defense, dailyFoodConsumption
 			//Units
-			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 1,50,1,1,1,1,1,1,1,1,"",
+			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 20, 20, 1, 1, 1, 
 				new String[]{"SPEARS"},
 				new String[]{""}),
-			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  1,1,50,1,1,1,1,1,1,1,"",
+			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  25, 25, 2, 2, 1,
 					new String[]{"BOWS", "SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("MARINE", "Marine", "Marines", 1,1,30,1,1,1,1,1,1,1,"",
+			new ExpeditionUnit("MARINE", "Marine", "Marines", 30, 25, 3, 2, 2,
 					new String[]{"XBOWS","BOWS","SWORDS","SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers",1,1,30,1,1,1,1,1,1,1,"",
+			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", 30, 20, 3, 3, 2,
 					new String[]{"GUNS", "SWORDS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("ARCHER", "Archer","Archers",1,1,1,5,1,1,1,1,1,1,"",
+			new ExpeditionUnit("ARCHER", "Archer","Archers", 25, 20, 2, 2, 2,
 					new String[]{"XBOWS", "BOWS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 1,1,20,1,1,1,1,1,1,1,"",
+			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 30, 20, 1, 1, 3,
 					new String[]{"GUNS", "SWORDS", "SPEARS" },
 					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("EXPLORER", "Explorer","Explorers",1,1,60,1,1,1,1,1,1,1,"",
+			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", 30, 40, 2, 1, 3,
 					new String[]{"SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
 		
 			//Native Units
-			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 1,1,1,1,1,1,1,1,1,0,"",
+			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 20, 20, 2, 1, 1,
 					new String[]{""},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers",1,1,1,3,1,1,1,1,1,0,"",
+			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 20, 20, 2, 1, 1,
 					new String[]{""},
 					new String[]{""}),
 			
 			//Goods
-			new Food("FOOD", "Food", "Food", 1, 1),
+			new Food("FOOD", "Food", "Food", 3, 1),
 			new Food("RUM", "Rum", "Rum", 1, 2),
-			new Good("WOOD", "Wood", "Wood", 1, GoodType.TOOL),
-			new Food("FRESHWATER", "Freshwater", "Freshwater", 1,1),
+			new Good("WOOD", "Wood", "Wood", 10, GoodType.TOOL),
+			new Food("FRESHWATER", "Freshwater", "Freshwater", 20,1),
 			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 1, 1),
 			
 			//New Worlds Goods
-			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 1, 2),
-			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  1, 3),
-			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 5, 1),
-			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 1, 8),
-			
+			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 5, 15),
+			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  5, 7),
+			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 7, 6),
+			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 1, 3),
+
+			+asdas
+			aqui voy (Faltan las armas)
 			//Weapons
 			new Weapon("SPEARS", "Spear","Spears", 1, 1, 2, 1, 1),
 			new Weapon("SWORDS", "Sword", "Swords", 1, 1, 3, 0, 1),
 			new Weapon("BOWS", "Bow", "Bows", 1, 1, 2, 0, 5),
 			new Weapon("XBOWS", "Crossbow", "Crossbows", 1, 2, 3, 0, 4),
 			new Weapon("GUNS", "Harquebus", "Harquebuses", 1, 3, 5, 0, 2),
-			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 2, 1, 1, "LE"),
 			new Armor("PLATE", "Plate","Plate", 4, 4, 3, "PL"),
+			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 2, 1, 1, "LE"),
 			
 			new Good("ARROWS", "Arrow", "Arrows", 1, GoodType.WEAPON),
 			
