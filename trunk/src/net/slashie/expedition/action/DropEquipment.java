@@ -9,6 +9,7 @@ import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Player;
+import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 
@@ -17,10 +18,18 @@ public class DropEquipment extends Action{
 	@Override
 	public void execute() {
 		if (((OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition())).isLand()){
-			GoodsCache cache = new GoodsCache((ExpeditionGame)((Player)performer).getGame());
-			cache.setPosition(new Position(performer.getPosition()));
+			AbstractFeature feature = performer.getLevel().getFeatureAt(performer.getPosition());
+			GoodsCache cache = null;
+			boolean newCache = false;
+			if (feature != null && feature instanceof GoodsCache){
+				cache = (GoodsCache) feature;
+			} else {
+				cache = new GoodsCache((ExpeditionGame)((Player)performer).getGame());
+				cache.setPosition(new Position(performer.getPosition()));
+				newCache = true;
+			}
 			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(cache);
-			if (cache.getItems().size() > 0)
+			if (newCache && cache.getItems().size() > 0)
 				performer.getLevel().addFeature(cache);
 		} else {
 			//Drop things into the big sea
