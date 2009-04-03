@@ -219,10 +219,10 @@ public class ExpeditionDAO {
 					new String[]{"STUDDED_LEATHER"}),
 		
 			//Native Units
-			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 20, 20, 2, 1, 1,
+			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 20, 20, 2, 1, 0,
 					new String[]{""},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 20, 20, 2, 1, 1,
+			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 20, 20, 2, 1, 0,
 					new String[]{""},
 					new String[]{""}),
 			
