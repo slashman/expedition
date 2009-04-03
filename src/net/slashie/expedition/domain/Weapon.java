@@ -19,7 +19,7 @@ public class Weapon extends Good{
 	}
 
 	public Weapon(String classifierId, String description, String pluralDescription,
-			int weight, int burden, int attack, int defense, int range) {
+			int attack, int defense, int range, int weight) {
 		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON);
 		this.burden = burden;
 		this.attack = attack;

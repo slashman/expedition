@@ -7,6 +7,7 @@ import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.Store;
+import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Valuable;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
@@ -24,43 +25,44 @@ public class ExpeditionDAO {
 	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
 		Store goodsStore = new Store();
 		goodsStore.setOwnerName("Goods Store");
-		goodsStore.addItem(ItemFactory.createItem("FOOD"), 15300, 1, 10);
-		goodsStore.addItem(ItemFactory.createItem("RUM"), 160, 20, 5);
-		goodsStore.addItem(ItemFactory.createItem("WOOD"), 550, 20, 1);
-		goodsStore.addItem(ItemFactory.createItem("FRESHWATER"), 165, 2, 1);
-		goodsStore.addItem(ItemFactory.createItem("FOOD_SAUERKRAUT"), 3200, 3, 10);
+		goodsStore.addItem(15300, new StoreItemInfo("FOOD", 1, 10, "packs"));
+		goodsStore.addItem(160, new StoreItemInfo("RUM", 20, 5, "barrels"));
+		goodsStore.addItem(550, new StoreItemInfo("WOOD", 550));
+		goodsStore.addItem(165, new StoreItemInfo("FRESHWATER", 165, 2, "barrels"));
+		goodsStore.addItem(3200, new StoreItemInfo("FOOD_SAUERKRAUT", 3, 10, "barrels"));
 		
 		//Weapons Store
 		Store weaponsStore = new Store();
 		weaponsStore.setOwnerName("Weapons Store");
-		weaponsStore.addItem(ItemFactory.createItem("SPEARS"), 550, 5, 1);
-		weaponsStore.addItem(ItemFactory.createItem("SWORDS"), 130, 10, 1);
-		weaponsStore.addItem(ItemFactory.createItem("BOWS"), 200, 6, 1);
-		weaponsStore.addItem(ItemFactory.createItem("XBOWS"), 80, 25, 1);
-		weaponsStore.addItem(ItemFactory.createItem("GUNS"), 12, 30, 1);
-		weaponsStore.addItem(ItemFactory.createItem("ARROWS"), 1500, 2, 1);
-		weaponsStore.addItem(ItemFactory.createItem("STUDDED_LEATHER"), 160, 30, 1);
-		weaponsStore.addItem(ItemFactory.createItem("PLATE"), 30, 50, 1);
+		weaponsStore.addItem(550, new StoreItemInfo("SPEARS", 5));
+		weaponsStore.addItem(130, new StoreItemInfo("SWORDS", 10));
+		weaponsStore.addItem(200, new StoreItemInfo("BOWS", 6));
+		weaponsStore.addItem(180, new StoreItemInfo("XBOWS", 25));
+		weaponsStore.addItem(100, new StoreItemInfo("GUNS", 30));
+		weaponsStore.addItem(3200, new StoreItemInfo("ARROWS", 2));
+		weaponsStore.addItem(160, new StoreItemInfo("STUDDED_LEATHER",20));
+		weaponsStore.addItem(80, new StoreItemInfo("PLATE", 50));
 		
 		//Port
 		Store port = new Store();
 		port.setOwnerName("Port");
-		port.addItem(ItemFactory.createItem("CARRACK"), 3, 4000, 1);
-		port.addItem(ItemFactory.createItem("CARAVEL"), 4, 3000, 1);
-		port.addItem(ItemFactory.createItem("CAPTAIN"), 6, 300, 1);
+		port.addItem(10, new StoreItemInfo("CARRACK", 4000));
+		port.addItem(15, new StoreItemInfo("CARAVEL", 3000));
+		
+		port.addItem(12, new StoreItemInfo("CAPTAIN", 300));
 		
 		//Pub
 		Store pub = new Store();
 		pub.setOwnerName("Pub");
-		pub.addItem(ItemFactory.createItem("SAILOR"), 30, 60, 1);
-		pub.addItem(ItemFactory.createItem("ROGUE"), 350, 30, 1);
+		pub.addItem(100, new StoreItemInfo("SAILOR", 60));
+		pub.addItem(350, new StoreItemInfo("ROGUE", 30));
 		
 		//Guild
 		Store guild = new Store();
 		guild.setOwnerName("Guild");
-		guild.addItem(ItemFactory.createItem("MARINE"), 66, 70, 1);
-		guild.addItem(ItemFactory.createItem("SOLDIER"), 130, 100, 1);
-		guild.addItem(ItemFactory.createItem("ARCHER"), 85, 120, 1);
+		guild.addItem(70, new StoreItemInfo("MARINE", 70));
+		guild.addItem(130, new StoreItemInfo("SOLDIER", 100));
+		guild.addItem(85, new StoreItemInfo("ARCHER", 120));
 		
 		return new AbstractCell[]{
 			//Overworld cells
@@ -237,14 +239,12 @@ public class ExpeditionDAO {
 			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 7, 6),
 			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 1, 3),
 
-			+asdas
-			aqui voy (Faltan las armas)
 			//Weapons
-			new Weapon("SPEARS", "Spear","Spears", 1, 1, 2, 1, 1),
-			new Weapon("SWORDS", "Sword", "Swords", 1, 1, 3, 0, 1),
-			new Weapon("BOWS", "Bow", "Bows", 1, 1, 2, 0, 5),
-			new Weapon("XBOWS", "Crossbow", "Crossbows", 1, 2, 3, 0, 4),
-			new Weapon("GUNS", "Harquebus", "Harquebuses", 1, 3, 5, 0, 2),
+			new Weapon("SPEARS", "Spear","Spears", 1, 2, 1, 3),
+			new Weapon("SWORDS", "Sword", "Swords", 3, 1, 1, 5),
+			new Weapon("BOWS", "Bow", "Bows", 2, 0, 5, 3),
+			new Weapon("XBOWS", "Crossbow", "Crossbows", 4, 0, 4, 7),
+			new Weapon("GUNS", "Harquebus", "Harquebuses", 6, 0, 2, 6),
 			new Armor("PLATE", "Plate","Plate", 4, 4, 3, "PL"),
 			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 2, 1, 1, "LE"),
 			
