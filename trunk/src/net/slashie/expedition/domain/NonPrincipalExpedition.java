@@ -9,6 +9,7 @@ import java.util.List;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
@@ -55,7 +56,7 @@ public class NonPrincipalExpedition extends Expedition{
 	
 	public void checkDeath(){
 		if (getTotalUnits() <= 0){
-			GoodsCache cache = new GoodsCache(ExpeditionGame.getCurrentGame());
+			/*GoodsCache cache = new GoodsCache(ExpeditionGame.getCurrentGame());
 			cache.setPosition(new Position(getPosition()));
 			List<Pair<String, Integer>> prizeList = getPrizesFor(initialPower);
 			for (Pair<String,Integer> prize: prizeList){
@@ -69,11 +70,13 @@ public class NonPrincipalExpedition extends Expedition{
 				((GoodsCache)previousFeature).addAllGoods(cache);
 			} else {
 				getLevel().addFeature(cache);
-			}
+			}*/
+			((ExpeditionMacroLevel)level).addAllEquipment(this, getPosition());
 			die();
 		}
 	}
 
+	/*
 	private final static Pair[] prizes = new Pair[]{
 		new Pair<String, Integer>("GOLD_NUGGET",1),
 		new Pair<String, Integer>("GOLD_BRACELET",2),
@@ -90,4 +93,5 @@ public class NonPrincipalExpedition extends Expedition{
 		}
 		return ret;
 	}
+	*/
 }

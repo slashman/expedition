@@ -26,11 +26,17 @@ public class ExpeditionFactory {
 		ai.setRangedActions(rangedActions);
 		ai.setWaitPlayerRange(20);
 		ret.setSelector(ai);
+		
+		int expeditionPower = Util.rand(1, 4);
 
-		ret.addItem(ItemFactory.createItem("NATIVE_WARRIOR"), Util.rand(10, 70));
-		ret.addItem(ItemFactory.createItem("ARROWS"), Util.rand(30, 60));
-		ret.addItem(ItemFactory.createItem("NATIVE_ARCHER"), Util.rand(15, 45));
-
+		ret.addItem(ItemFactory.createItem("NATIVE_WARRIOR"), Util.rand(10, expeditionPower*10));
+		ret.addItem(ItemFactory.createItem("ARROWS"), Util.rand(0, expeditionPower*30));
+		ret.addItem(ItemFactory.createItem("NATIVE_ARCHER"), Util.rand(0, expeditionPower*10));
+		ret.addItem(ItemFactory.createItem("GOLD_NUGGET"), Util.rand(0, expeditionPower*5));
+		ret.addItem(ItemFactory.createItem("GOLD_BRACELET"), Util.rand(0, expeditionPower*7));
+		ret.addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, expeditionPower*10));
+		ret.addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(0, expeditionPower*15));
+		
 		ret.calculateInitialPower();
 		return ret;
 	}
