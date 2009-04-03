@@ -3,12 +3,14 @@ package net.slashie.expedition.world;
 import java.util.Hashtable;
 import java.util.List;
 
+import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.SeaPseudoCache;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.level.Dispatcher;
@@ -84,6 +86,26 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				newCache = true;
 			}
 			cache.addItem(item, quantity);
+			if (newCache && cache.getItems().size() > 0)
+				addFeature(cache);
+		} else {
+			//Drop things into the big sea
+		}
+	}
+
+	public void addAllEquipment(Expedition expedition, Position where) {
+		if (((OverworldExpeditionCell) getMapCell(where)).isLand()){
+			AbstractFeature feature = getFeatureAt(where);
+			GoodsCache cache = null;
+			boolean newCache = false;
+			if (feature != null && feature instanceof GoodsCache){
+				cache = (GoodsCache) feature;
+			} else {
+				cache = new GoodsCache(ExpeditionGame.getCurrentGame());
+				cache.setPosition(new Position(where));
+				newCache = true;
+			}
+			cache.addAllGoods(expedition);
 			if (newCache && cache.getItems().size() > 0)
 				addFeature(cache);
 		} else {
