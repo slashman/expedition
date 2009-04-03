@@ -13,6 +13,7 @@ import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
+import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -248,18 +249,20 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				prompt = "Ok... Do you need anything else?";
 				continue;
 			}
-			
 			if (quantity > choice.getQuantity()){
 				prompt = "I don't have that many "+item.getPluralDescription()+"... Do you need anything else?";
 				continue;
 			}
+			
+			StoreItemInfo storeItemInfo = store.getPriceFor(item);
+			quantity = quantity * storeItemInfo.getPack();
 			
 			if (!getExpedition().canCarryOffshore(item, quantity)){
 				prompt = "Your ships are full! Do you need anything else?";
 				continue;
 			}
 			
-			int gold = store.getPriceFor(item)*quantity;	
+			int gold = storeItemInfo.getPrice() * quantity;	
 			if (item instanceof ExpeditionUnit){
 				if (quantity > 1)
 					menuBox.setPrompt("Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");

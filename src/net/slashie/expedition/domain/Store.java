@@ -10,7 +10,8 @@ import net.slashie.serf.ui.Appearance;
 
 
 public class Store implements Serializable, Cloneable{
-	private Hashtable<String, Integer> prices = new Hashtable<String, Integer>();
+	
+	private Hashtable<String, StoreItemInfo> prices = new Hashtable<String, StoreItemInfo>();
 	private List<Equipment> inventory = new ArrayList<Equipment>();
 	private String text;
 	private String ownerName;
@@ -39,11 +40,11 @@ public class Store implements Serializable, Cloneable{
 		this.ownerAppearance = ownerAppearance;
 	}
 	
-	public int getPriceFor(ExpeditionItem item){
+	public StoreItemInfo getPriceFor(ExpeditionItem item){
 		return prices.get(item.getFullID());
 	}
 	
-	public void addItem(ExpeditionItem item, int quantity, Integer prize){
+	public void addItem(ExpeditionItem item, int quantity, int price, int pack){
 		Equipment existingEquipment = null;
 		for (Equipment equipment: inventory){
 			if (equipment.getItem().getFullID().equals(item.getFullID())){
@@ -56,7 +57,7 @@ public class Store implements Serializable, Cloneable{
 		} else {
 			existingEquipment.increaseQuantity(quantity);
 		}
-		prices.put(item.getFullID(), prize);
+		prices.put(item.getFullID(), new StoreItemInfo(item.getFullID(), price, pack));
 	}
 	
 	@Override
@@ -67,9 +68,9 @@ public class Store implements Serializable, Cloneable{
 			for (Equipment eq: getInventory()){
 				store.inventory.add(eq.clone());
 			}
-			store.prices = new Hashtable<String, Integer>();
+			store.prices = new Hashtable<String, StoreItemInfo>();
 			for (String key: prices.keySet()){
-				store.prices.put(key, prices.get(key));
+				store.prices.put(key, prices.get(key).clone());
 			}
 			return store;
 		} catch (CloneNotSupportedException e) {
