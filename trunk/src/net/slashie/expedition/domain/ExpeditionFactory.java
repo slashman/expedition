@@ -35,7 +35,7 @@ public class ExpeditionFactory {
 		ret.addItem(ItemFactory.createItem("GOLD_NUGGET"), Util.rand(0, expeditionPower*5));
 		ret.addItem(ItemFactory.createItem("GOLD_BRACELET"), Util.rand(0, expeditionPower*7));
 		ret.addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, expeditionPower*10));
-		ret.addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(0, expeditionPower*15));
+		ret.addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(0, expeditionPower*350));
 		
 		ret.calculateInitialPower();
 		return ret;

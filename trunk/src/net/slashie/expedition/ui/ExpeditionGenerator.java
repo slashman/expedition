@@ -38,7 +38,7 @@ public abstract class ExpeditionGenerator {
 		ret.setName("Colombus");
 		ret.setExpeditionary("Colombus");
 		ret.setExpeditionaryTitle("Explorer");
-		ret.setAccountedGold(5000);
+		ret.setAccountedGold(7000);
 		List<Equipment> startingShips = new ArrayList<Equipment>();
 		startingShips.add(new Equipment(ItemFactory.createItem("CARRACK"), 3));
 		ret.setCurrentVehicles(startingShips);
@@ -51,14 +51,17 @@ public abstract class ExpeditionGenerator {
 		ret.addItemOffshore(sailor, 30);
 		ret.addItemOffshore(captain, 3);
 		ret.addItemOffshore(explorer, 1);
-		//ret.addItemOffshore(ItemFactory.createItem("SPEARS"), 55);
+		ret.addItemOffshore(food, 100);
 		
+		
+		//ret.addItemOffshore(ItemFactory.createItem("SPEARS"), 55);
+		/*
 		for (int i = 0; i < 5000; i++){
 			ret.addItemOffshore(food, 100);
 			if (ret.getOffshoreCurrentlyCarrying()>20)
 				break;
 		}
-		
+		*/
 		
 		return ret;
 	}
