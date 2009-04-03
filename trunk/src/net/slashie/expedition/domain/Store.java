@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 
@@ -44,7 +45,8 @@ public class Store implements Serializable, Cloneable{
 		return prices.get(item.getFullID());
 	}
 	
-	public void addItem(ExpeditionItem item, int quantity, int price, int pack){
+	public void addItem(int quantity, StoreItemInfo info){
+		ExpeditionItem item = ItemFactory.createItem(info.getFullId());
 		Equipment existingEquipment = null;
 		for (Equipment equipment: inventory){
 			if (equipment.getItem().getFullID().equals(item.getFullID())){
@@ -57,8 +59,10 @@ public class Store implements Serializable, Cloneable{
 		} else {
 			existingEquipment.increaseQuantity(quantity);
 		}
-		prices.put(item.getFullID(), new StoreItemInfo(item.getFullID(), price, pack));
+		prices.put(item.getFullID(), info);
 	}
+	
+	
 	
 	@Override
 	public Store clone() {

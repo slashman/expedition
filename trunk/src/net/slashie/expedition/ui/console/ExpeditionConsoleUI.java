@@ -241,28 +241,31 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				break;
 			Equipment choice = itemChoice.getEquipment();
 			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			menuBox.setPrompt("How many "+item.getPluralDescription()+"?");
+			StoreItemInfo storeItemInfo = store.getPriceFor(item);
+			if (storeItemInfo.getPack() > 1)
+				menuBox.setPrompt("How many "+storeItemInfo.getPackDescription()+" of "+item.getPluralDescription()+"?");
+			else
+				menuBox.setPrompt("How many "+item.getPluralDescription()+"?");
 			menuBox.draw();
 			csi.refresh();
-			int quantity = readQuantity(27, 9, "                       ", 5);
-			if (quantity == 0){
+			int buyQuantity = readQuantity(27, 9, "                       ", 5);
+			if (buyQuantity == 0){
 				prompt = "Ok... Do you need anything else?";
 				continue;
 			}
-			if (quantity > choice.getQuantity()){
+			if (buyQuantity > choice.getQuantity()){
 				prompt = "I don't have that many "+item.getPluralDescription()+"... Do you need anything else?";
 				continue;
 			}
 			
-			StoreItemInfo storeItemInfo = store.getPriceFor(item);
-			quantity = quantity * storeItemInfo.getPack();
+			int quantity = buyQuantity * storeItemInfo.getPack();
 			
 			if (!getExpedition().canCarryOffshore(item, quantity)){
 				prompt = "Your ships are full! Do you need anything else?";
 				continue;
 			}
 			
-			int gold = storeItemInfo.getPrice() * quantity;	
+			int gold = storeItemInfo.getPrice() * buyQuantity;	
 			if (item instanceof ExpeditionUnit){
 				if (quantity > 1)
 					menuBox.setPrompt("Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
@@ -642,10 +645,19 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			String itemDescription = item.getItem().getMenuDescription();
 			int inventory = item.getQuantity();
 			int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
+			StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
 			if (item.getItem() instanceof ExpeditionUnit){
-				return itemDescription + ", "+store.getPriceFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {"+inventory+" Available}";
+				if (itemInfo.getPack() > 1){
+					return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
+				} else {
+					return itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
+				}
 			} else {
-				return itemDescription + " for "+store.getPriceFor((ExpeditionItem)item.getItem())+"$ (max "+stock+") {Stock:"+inventory+"}";
+				if (itemInfo.getPack() > 1){
+					return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
+				} else {
+					return itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
+				}
 			}
 		}
 	}
