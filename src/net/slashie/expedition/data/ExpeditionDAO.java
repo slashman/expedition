@@ -196,63 +196,63 @@ public class ExpeditionDAO {
 		return new ExpeditionItem[]{
 				//weight, carryCapacity, attack, defense, dailyFoodConsumption
 			//Units
-			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 20, 20, 1, 1, 1, 
+			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 200, 20, 1, 1, 1, 
 				new String[]{"SPEARS"},
 				new String[]{""}),
-			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  25, 25, 2, 2, 1,
+			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  250, 25, 2, 2, 1,
 					new String[]{"BOWS", "SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("MARINE", "Marine", "Marines", 30, 25, 3, 2, 2,
+			new ExpeditionUnit("MARINE", "Marine", "Marines", 300, 25, 3, 2, 2,
 					new String[]{"XBOWS","BOWS","SWORDS","SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", 30, 20, 3, 3, 2,
+			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", 300, 20, 3, 3, 2,
 					new String[]{"GUNS", "SWORDS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("ARCHER", "Archer","Archers", 25, 20, 2, 2, 2,
+			new ExpeditionUnit("ARCHER", "Archer","Archers", 250, 20, 2, 2, 2,
 					new String[]{"XBOWS", "BOWS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 30, 20, 1, 1, 3,
+			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 300, 20, 1, 1, 3,
 					new String[]{"GUNS", "SWORDS", "SPEARS" },
 					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", 30, 40, 2, 1, 3,
+			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", 300, 40, 2, 1, 3,
 					new String[]{"SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
 		
 			//Native Units
-			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 20, 20, 2, 1, 0,
+			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 200, 20, 2, 1, 0,
 					new String[]{""},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 20, 20, 2, 1, 0,
+			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 200, 20, 2, 1, 0,
 					new String[]{""},
 					new String[]{""}),
 			
 			//Goods
-			new Food("FOOD", "Food", "Food", 3, 1),
-			new Food("RUM", "Rum", "Rum", 1, 2),
+			new Food("FOOD", "Food", "Food", 1, 1),
+			new Food("RUM", "Rum", "Rum", 5, 2),
 			new Good("WOOD", "Wood", "Wood", 10, GoodType.TOOL),
-			new Food("FRESHWATER", "Freshwater", "Freshwater", 20,1),
-			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 1, 1),
+			new Food("FRESHWATER", "Freshwater", "Freshwater", 5,1),
+			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 3, 1),
 			
 			//New Worlds Goods
-			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 5, 15),
-			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  5, 7),
-			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 7, 6),
-			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 1, 3),
+			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 50, 15),
+			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  50, 7),
+			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 70, 6),
+			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 5, 1),
 
 			//Weapons
-			new Weapon("SPEARS", "Spear","Spears", 1, 2, 1, 3),
-			new Weapon("SWORDS", "Sword", "Swords", 3, 1, 1, 5),
-			new Weapon("BOWS", "Bow", "Bows", 2, 0, 5, 3),
-			new Weapon("XBOWS", "Crossbow", "Crossbows", 4, 0, 4, 7),
-			new Weapon("GUNS", "Harquebus", "Harquebuses", 6, 0, 2, 6),
-			new Armor("PLATE", "Plate","Plate", 4, 4, 3, "PL"),
-			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 2, 1, 1, "LE"),
+			new Weapon("SPEARS", "Spear","Spears", 1, 2, 1, 30),
+			new Weapon("SWORDS", "Sword", "Swords", 3, 1, 1, 50),
+			new Weapon("BOWS", "Bow", "Bows", 2, 0, 5, 30),
+			new Weapon("XBOWS", "Crossbow", "Crossbows", 4, 0, 4, 70),
+			new Weapon("GUNS", "Harquebus", "Harquebuses", 6, 0, 2, 60),
+			new Armor("PLATE", "Plate","Plate", 40, 4, 3, "PL"),
+			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 20, 1, 1, "LE"),
 			
-			new Good("ARROWS", "Arrow", "Arrows", 1, GoodType.WEAPON),
+			new Good("ARROWS", "Arrow", "Arrows", 5, GoodType.WEAPON),
 			
 			//Ships
-			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,3,2500),
-			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,4,2000),
+			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,3,25000),
+			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,4,20000),
 		};
 		
 	}
