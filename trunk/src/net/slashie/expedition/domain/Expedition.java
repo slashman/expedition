@@ -2,6 +2,8 @@ package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -560,69 +562,7 @@ public class Expedition extends Player implements FoodConsumer{
 		return foodConsumerDelegate.getDailyFoodConsumption();
 	}
 
-	public void killUnits(int deaths) {
-		int toKill = deaths;
-		List<Equipment> inventory = getInventory();
-		String killMessage = "";
-		Hashtable<String, Pair<ExpeditionUnit, Integer>> acumHash = new Hashtable<String, Pair<ExpeditionUnit,Integer>>();
-		int totalUnits = getTotalUnits();
-		while (toKill > 0){
-			for (Equipment equipment: inventory){
-				in: if (equipment.getItem() instanceof ExpeditionUnit){
-					/**
-					 * The chance to lost men from this unit depends on how much it represents of the total
-					 * expedition manpower and how much of this manpower will die.
-					 */
-                    int killUnits = 0;
-                    double chance = ((double) equipment.getQuantity() / (double)totalUnits) * ((double)toKill/(double)totalUnits);
-                    
-                    if (Util.chance((int)Math.round(100.0d*chance))){
-                    	killUnits = Util.rand(1, toKill);
-    					if (killUnits > equipment.getQuantity()){
-    						killUnits = equipment.getQuantity();
-    					}
-                    }
-                    
-					if (killUnits == 0)
-						break in;
-					String itemId = equipment.getItem().getFullID();
-					Pair<ExpeditionUnit, Integer> currentlyKilled = acumHash.get(itemId);
-					if (currentlyKilled == null){
-						currentlyKilled = new Pair<ExpeditionUnit, Integer>((ExpeditionUnit)equipment.getItem(), killUnits);
-						acumHash.put(itemId, currentlyKilled);
-					} else {
-						currentlyKilled.setB(currentlyKilled.getB()+killUnits);
-					}
-					toKill -= killUnits;
-					reduceQuantityOf(equipment.getItem(), killUnits);
-				}
-			}
-			if (getTotalUnits() == 0)
-				break;
-		}
-		Collection<Pair<ExpeditionUnit, Integer>> values = acumHash.values();
-		int i = 0;
-		for (Pair<ExpeditionUnit, Integer> killInfo: values){
-			if (killInfo.getB() == 0){
-				i++;
-				continue;
-			}
-			if (killInfo.getB() == 1)
-				killMessage += killInfo.getB()+" "+killInfo.getA().getDescription();
-			else
-				killMessage += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
-			if (i == values.size()-2)
-				killMessage += " and ";
-			else if (i == values.size()-1)
-				;
-			else if (values.size()>1)
-				killMessage += ", ";
-			i++;
-		}
-		
-		level.addMessage(killMessage +" die.");
-		checkDeath();
-	}
+	
 
 	public List<Equipment> getUnitsOverRange(int distance) {
 		List<Equipment> ret = new ArrayList<Equipment>();  
@@ -768,6 +708,30 @@ public class Expedition extends Player implements FoodConsumer{
 			}
 		}
 		return ret;
+	}
+	
+	public void killUnits(int quantity) {
+		Collection<Pair<ExpeditionUnit, Integer>> values = foodConsumerDelegate.killUnits(quantity);
+		String killMessage = "";
+		int i = 0;
+		for (Pair<ExpeditionUnit, Integer> killInfo: values){
+			if (killInfo.getB() == 0){
+				i++;
+				continue;
+			}
+			if (killInfo.getB() == 1)
+				killMessage += killInfo.getB()+" "+killInfo.getA().getDescription();
+			else
+				killMessage += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
+			if (i == values.size()-2)
+				killMessage += " and ";
+			else if (i == values.size()-1)
+				;
+			else if (values.size()>1)
+				killMessage += ", ";
+			i++;
+		}
+		level.addMessage(killMessage +" die.");
 	}
 
 }

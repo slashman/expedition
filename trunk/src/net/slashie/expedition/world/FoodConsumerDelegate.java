@@ -1,6 +1,11 @@
 package net.slashie.expedition.world;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Hashtable;
 import java.util.List;
 
 import net.slashie.expedition.domain.ExpeditionUnit;
@@ -8,6 +13,7 @@ import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.serf.game.Equipment;
+import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
 public class FoodConsumerDelegate implements Serializable{
@@ -41,7 +47,9 @@ public class FoodConsumerDelegate implements Serializable{
 			//Reduce expedition resistance
 			starveResistance --;
 			if (starveResistance <= 0){
-				killUnits((double)Util.rand(5, 40)/100.0d);
+				int unitsToKill = (int)Math.ceil((double) foodConsumer.getTotalUnits()*(double)Util.rand(5, 40)/100.0d);
+				if (unitsToKill > 0)
+					foodConsumer.killUnits(unitsToKill);
 			}
 		} else {
 			if (starveResistance < 5)
@@ -77,10 +85,61 @@ public class FoodConsumerDelegate implements Serializable{
 		}
 		return foodToSpend;
 	}
+	private Equipment chooseRandomEquipmentUsingWeights(List<Pair<Equipment,Double>> weights){
+		double pin = Util.rand(0, 100) / 100.0d;
+		for (Pair<Equipment,Double> weightedEquipment: weights){
+			if (pin < weightedEquipment.getB())
+				return weightedEquipment.getA();
+		}
+		return weights.get(weights.size()-1).getA();
+	}
 	
-	public void killUnits(double proportion){
-		int unitsToKill = (int)Math.ceil((double) foodConsumer.getTotalUnits()*proportion);
-		if (unitsToKill > 0)
-			foodConsumer.killUnits(unitsToKill);
+	private final static Comparator<Pair<Equipment,Double>> WEIGHTED_EQUIPMENT_COMPARATOR = new Comparator<Pair<Equipment,Double>> (){
+		public int compare(Pair<Equipment, Double> o1,
+				Pair<Equipment, Double> o2) {
+			return o1.getB().compareTo(o2.getB());
+		}
+	};
+	/**
+	 * Kills a number of unit from the Food Consumer
+	 * 
+	 * @param deaths The number of units to kill
+	 * @return A collection describing the number of individuals killed from each kind of unit
+	 */
+	public Collection<Pair<ExpeditionUnit, Integer>> killUnits(int deaths) {
+		List<Equipment> inventory = foodConsumer.getInventory();
+		Hashtable<String, Pair<ExpeditionUnit, Integer>> acumHash = new Hashtable<String, Pair<ExpeditionUnit,Integer>>();
+		int totalUnits = foodConsumer.getTotalUnits();
+		List<Pair<Equipment,Double>> weights = new ArrayList<Pair<Equipment,Double>>();
+
+		for (int i = 0; i < deaths; i++){
+			weights.clear();
+			for (Equipment equipment: inventory){
+				if (equipment.getItem() instanceof ExpeditionUnit){
+					weights.add(new Pair<Equipment, Double>(equipment, equipment.getQuantity()/(double)totalUnits));
+				}
+			}
+			Collections.sort(weights, WEIGHTED_EQUIPMENT_COMPARATOR);
+			double acum = 0;
+			for (Pair<Equipment,Double> weightedEquipment: weights){
+				weightedEquipment.setB(acum+weightedEquipment.getB());
+				acum = weightedEquipment.getB(); 
+			}
+			Equipment choosenToKill = chooseRandomEquipmentUsingWeights(weights);
+			String itemId = choosenToKill.getItem().getFullID();
+			Pair<ExpeditionUnit, Integer> currentlyKilled = acumHash.get(itemId);
+			if (currentlyKilled == null){
+				currentlyKilled = new Pair<ExpeditionUnit, Integer>((ExpeditionUnit)choosenToKill.getItem(), 1);
+				acumHash.put(itemId, currentlyKilled);
+			} else {
+				currentlyKilled.setB(currentlyKilled.getB()+1);
+			}
+			foodConsumer.reduceQuantityOf(choosenToKill.getItem(), 1);
+			if (foodConsumer.getTotalUnits() == 0)
+				break;
+			
+		}
+		foodConsumer.checkDeath();
+		return acumHash.values();
 	}
 }
