@@ -539,7 +539,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   		csi.print(xpos,24,  "[Space] to continue, Up and Down to browse");
   		int choice = 0;
   		while (true){
-  			csi.print(xpos,ypos+3,  "   (*) Units        ( ) Tools        ( ) Goods        ( ) Valuables     ", ConsoleSystemInterface.BLUE);
+  			csi.print(xpos,ypos+3,  "   ( ) Units        ( ) Tools        ( ) Goods        ( ) Valuables     ", ConsoleSystemInterface.BLUE);
   			csi.print(5+choice*17, ypos+3, "*", ConsoleSystemInterface.WHITE);
   			
   	  		List<Equipment> inventory = null;
