@@ -397,7 +397,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	 		//menuBox.draw();
 		}
 		
-		if (cache.getItems().size() == 0)
+		if (cache.destroyOnEmpty() && cache.getItems().size() == 0)
 			level.destroyFeature(cache);
 		Equipment.eqMode = false;
 		//Item.shopMode = false;

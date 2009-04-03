@@ -92,4 +92,9 @@ public class ShipCache extends GoodsCache{
 	public boolean isInfiniteCapacity() {
 		return false;
 	}
+	
+	@Override
+	public boolean destroyOnEmpty() {
+		return false;
+	}
 }

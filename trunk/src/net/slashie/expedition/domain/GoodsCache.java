@@ -186,5 +186,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 	public void killUnits(int deaths) {
 		foodConsumerDelegate.killUnits(deaths);
 	}
+
+	public boolean destroyOnEmpty() {
+		return true;
+	}
 	
 }
