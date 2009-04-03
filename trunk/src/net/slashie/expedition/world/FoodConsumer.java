@@ -4,6 +4,8 @@ import java.util.List;
 
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.level.AbstractLevel;
+import net.slashie.utils.Position;
 
 public interface FoodConsumer {
 	public void consumeFood();
@@ -21,4 +23,8 @@ public interface FoodConsumer {
 	public void killUnits(int quantity);
 
 	public int getTotalUnits();
+
+	public AbstractLevel getLevel();
+
+	public Position getPosition();
 }

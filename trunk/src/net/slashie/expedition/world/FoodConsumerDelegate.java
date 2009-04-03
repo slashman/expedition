@@ -135,6 +135,19 @@ public class FoodConsumerDelegate implements Serializable{
 				currentlyKilled.setB(currentlyKilled.getB()+1);
 			}
 			foodConsumer.reduceQuantityOf(choosenToKill.getItem(), 1);
+			
+			ExpeditionUnit unit = ((ExpeditionUnit)choosenToKill.getItem()); 
+			
+			if (unit.getWeapon() != null && foodConsumer.getLevel() instanceof ExpeditionMacroLevel && Util.chance(60)){
+				((ExpeditionMacroLevel)foodConsumer.getLevel()).addEquipment(unit.getWeapon(), 1, foodConsumer.getPosition());
+			}
+			
+			if (unit.getArmor() != null && foodConsumer.getLevel() instanceof ExpeditionMacroLevel && Util.chance(40)){
+				((ExpeditionMacroLevel)foodConsumer.getLevel()).addEquipment(unit.getArmor(), 1, foodConsumer.getPosition());
+			}
+				
+			
+			
 			if (foodConsumer.getTotalUnits() == 0)
 				break;
 			
