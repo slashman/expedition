@@ -59,6 +59,7 @@ public class BuildSettlement extends Action{
 
 		//Add the city
 		town.setPosition(new Position(performer.getPosition()));
+		expedition.addTown(town);
 		performer.getLevel().addFeature(town);
 	}
 
