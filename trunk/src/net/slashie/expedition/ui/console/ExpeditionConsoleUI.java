@@ -82,8 +82,11 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime(); 
 		csi.print(5, 1, gameTime.get(Calendar.YEAR)+"");
 		csi.print(5, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
-		csi.print(5, 3, getExpedition().getExpeditionary());
-		csi.print(5, 4, getExpedition().getExpeditionaryTitle());
+		csi.print(5, 3, getExpedition().getExpeditionaryTitle()+" "+getExpedition().getExpeditionary());
+		if (getExpedition().getTowns().size() == 1)
+			csi.print(5, 4, "1 town    ");
+		else
+			csi.print(5, 4, getExpedition().getTowns().size()+" towns");
 		csi.print(5, 5, getExpedition().getAccountedGold()+"$");
 		
 		// Box 2
@@ -282,7 +285,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	 			if (getExpedition().getAccountedGold() >= gold) {
 	 				getExpedition().reduceAccountedGold(gold);
 	 				getExpedition().addItemOffshore((ExpeditionItem) choice.getItem(), quantity);
-	 				choice.reduceQuantity(quantity);
+	 				choice.reduceQuantity(buyQuantity);
 	 				prompt = "Thank you! Do you need anything else?";
 					refresh();
 			 	} else {
@@ -648,15 +651,27 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
 			if (item.getItem() instanceof ExpeditionUnit){
 				if (itemInfo.getPack() > 1){
-					return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
+					if (stock < inventory)
+						return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
+					else
+						return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ {"+inventory+" Available}";
 				} else {
-					return itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
+					if (stock < inventory)
+						return itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
+					else
+						return itemDescription + ", "+itemInfo.getPrice()+"$ {"+inventory+" Available}";
 				}
 			} else {
 				if (itemInfo.getPack() > 1){
-					return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
+					if (stock < inventory)
+						return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
+					else
+						return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ {Stock:"+inventory+"}";
 				} else {
-					return itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
+					if (stock < inventory)
+						return itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
+					else
+						return itemDescription + " for "+itemInfo.getPrice()+"$ {Stock:"+inventory+"}";
 				}
 			}
 		}
@@ -696,7 +711,10 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			if (expedition != null){
 				if (item.getItem() instanceof Good){ 
 					stock = expedition.getCarryable((ExpeditionItem)item.getItem());
-					return itemDescription + " (Max "+stock+") {Available "+inventory+"}";
+					if (stock < inventory)
+						return itemDescription + " (Max "+stock+") {Available "+inventory+"}";
+					else
+						return itemDescription + " {Available "+inventory+"}";
 				} else {
 					return itemDescription + " {Available "+inventory+"}";
 				}
@@ -704,8 +722,12 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				stock = cache.getCarryable((ExpeditionItem)item.getItem());
 				if (stock == -1)
 					return itemDescription + " {On Expedition "+inventory+"}";
-				else 
-					return itemDescription + " (Max "+stock+") {On Expedition "+inventory+"}";
+				else {
+					if (stock < inventory)
+						return itemDescription + " (Max "+stock+") {On Expedition "+inventory+"}";
+					else
+						return itemDescription + " {On Expedition "+inventory+"}";
+				}
 			}
 		}
 	}
