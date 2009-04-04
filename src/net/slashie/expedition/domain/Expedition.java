@@ -131,6 +131,8 @@ public class Expedition extends Player implements FoodConsumer{
 	
 	private String expeditionary;
 	private String expeditionaryTitle;
+
+	private List<Town> towns = new ArrayList<Town>();
 	
 	public List<Equipment> getCurrentVehicles() {
 		return currentVehicles;
@@ -732,6 +734,14 @@ public class Expedition extends Player implements FoodConsumer{
 			i++;
 		}
 		level.addMessage(killMessage +" die.");
+	}
+
+	public void addTown(Town town) {
+		towns.add(town);
+	}
+	
+	public List<Town> getTowns(){
+		return towns;
 	}
 
 }
