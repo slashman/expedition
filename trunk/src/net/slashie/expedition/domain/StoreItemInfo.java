@@ -1,6 +1,8 @@
 package net.slashie.expedition.domain;
 
-public class StoreItemInfo implements Cloneable{
+import java.io.Serializable;
+
+public class StoreItemInfo implements Cloneable, Serializable{
 	private String fullId;
 	private int price;
 	private int pack;
