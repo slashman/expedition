@@ -27,7 +27,7 @@ public class ExpeditionDAO {
 		goodsStore.setOwnerName("Goods Store");
 		goodsStore.addItem(15300, new StoreItemInfo("FOOD", 1, 10, "packs"));
 		goodsStore.addItem(160, new StoreItemInfo("RUM", 20, 5, "barrels"));
-		goodsStore.addItem(550, new StoreItemInfo("WOOD", 550));
+		goodsStore.addItem(550, new StoreItemInfo("WOOD", 5));
 		goodsStore.addItem(165, new StoreItemInfo("FRESHWATER", 165, 2, "barrels"));
 		goodsStore.addItem(3200, new StoreItemInfo("FOOD_SAUERKRAUT", 3, 10, "barrels"));
 		
@@ -146,6 +146,7 @@ public class ExpeditionDAO {
 
 			//native Units
 			new CharAppearance("NATIVE_WARRIOR", '@', ConsoleSystemInterface.RED),
+			new CharAppearance("NATIVE_BRAVE", '@', ConsoleSystemInterface.PURPLE),
 			new CharAppearance("NATIVE_ARCHER", '@', ConsoleSystemInterface.DARK_RED),
 			
 			//Stores
@@ -196,33 +197,36 @@ public class ExpeditionDAO {
 		return new ExpeditionItem[]{
 				//weight, carryCapacity, attack, defense, dailyFoodConsumption
 			//Units
-			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 200, 20, 1, 1, 1, 
+			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 200, 200, 1, 1, 1, 
 				new String[]{"SPEARS"},
 				new String[]{""}),
-			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  250, 25, 2, 2, 1,
+			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  250, 250, 2, 2, 1,
 					new String[]{"BOWS", "SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("MARINE", "Marine", "Marines", 300, 25, 3, 2, 2,
+			new ExpeditionUnit("MARINE", "Marine", "Marines", 300, 250, 3, 2, 2,
 					new String[]{"XBOWS","BOWS","SWORDS","SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", 300, 20, 3, 3, 2,
+			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", 300, 200, 3, 3, 2,
 					new String[]{"GUNS", "SWORDS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("ARCHER", "Archer","Archers", 250, 20, 2, 2, 2,
+			new ExpeditionUnit("ARCHER", "Archer","Archers", 250, 200, 2, 2, 2,
 					new String[]{"XBOWS", "BOWS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 300, 20, 1, 1, 3,
+			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 300, 200, 1, 1, 3,
 					new String[]{"GUNS", "SWORDS", "SPEARS" },
 					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", 300, 40, 2, 1, 3,
+			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", 300, 400, 2, 1, 3,
 					new String[]{"SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
 		
 			//Native Units
-			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 200, 20, 2, 1, 0,
+			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 200, 200, 2, 1, 0,
 					new String[]{""},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 200, 20, 2, 1, 0,
+			new ExpeditionUnit("NATIVE_BRAVE", "Brave","Braves", 200, 200, 4, 2, 0,
+					new String[]{""},
+					new String[]{""}),
+			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 200, 200, 2, 1, 0,
 					new String[]{""},
 					new String[]{""}),
 			
@@ -234,9 +238,9 @@ public class ExpeditionDAO {
 			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 3, 1),
 			
 			//New Worlds Goods
-			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 50, 15),
-			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  50, 7),
-			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 70, 6),
+			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 50, 45),
+			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  50, 25),
+			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 70, 20),
 			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 5, 1),
 
 			//Weapons
