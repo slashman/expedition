@@ -5,6 +5,11 @@ import net.slashie.serf.level.AbstractFeature;
 
 public class ExpeditionFeature extends AbstractFeature{
 	@Override
+	public String getDescription() {
+		return "Invalid";
+	}
+	
+	@Override
 	public AbstractFeature featureDestroyed(Actor actor) {
 		// TODO Auto-generated method stub
 		return null;

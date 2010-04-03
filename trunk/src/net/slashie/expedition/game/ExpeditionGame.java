@@ -16,6 +16,7 @@ import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractLevel;
+import net.slashie.serf.level.LevelMetaData;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.CommandListener;
 import net.slashie.serf.ui.UserInterface;
@@ -60,8 +61,8 @@ public class ExpeditionGame extends SworeGame {
 	}
 
 	@Override
-	public AbstractLevel createLevel(String levelID) {
-		return LevelMaster.createLevel(levelID, getExpedition());
+	public AbstractLevel createLevel(LevelMetaData levelMetadata) {
+		return LevelMaster.createLevel(levelMetadata.getLevelID(), getExpedition());
 	}
 
 	@Override
@@ -97,8 +98,18 @@ public class ExpeditionGame extends SworeGame {
 	public void onGameStart(int gameType) {
 		currentGame = this;
 		ExpeditionDisplay.thus.showIntro(getExpedition());
+		loadMetadata();
 		loadLevel("SPAIN");
 		setGameTime(20,7,1492);
+	}
+	
+	private void loadMetadata() {
+		LevelMetaData md = null;
+		md = new LevelMetaData("SPAIN");
+		addMetaData("SPAIN", md);
+		md = new LevelMetaData("WORLD");
+		addMetaData("WORLD", md);
+		
 	}
 
 	private void setGameTime(int day, int month, int year) {

@@ -20,7 +20,7 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 
 	public ExpeditionItem(String classifierId, String description, String pluralDescription,
 			String appearanceId, int weight) {
-		super();
+		super(appearanceId);
 		this.classifierId = classifierId;
 		this.description = description;
 		this.appearanceId = appearanceId;
