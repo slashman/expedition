@@ -1,5 +1,6 @@
 package net.slashie.expedition.ui.console;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,6 +25,7 @@ import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.libjcsi.textcomponents.ListBox;
+import net.slashie.libjcsi.textcomponents.ListItem;
 import net.slashie.libjcsi.textcomponents.MenuBox;
 import net.slashie.libjcsi.textcomponents.MenuItem;
 import net.slashie.libjcsi.textcomponents.TextBox;
@@ -36,6 +38,7 @@ import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
+import net.slashie.serf.ui.consoleUI.EquipmentMenuItem;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 
@@ -115,8 +118,13 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		//This must be replaced on the next version of libjcsi
 		expeditionUnitsVector.clear();
 		expeditionUnitsVector.addAll(statsExpedition.getUnits());
-		Collections.sort(expeditionUnitsVector, expeditionUnitsComparator);
-		expeditionUnitBox.setElements(expeditionUnitsVector);
+		
+		Vector expeditionUnitItems = new Vector();
+		for (Equipment expeditionUnit: expeditionUnitsVector){
+			expeditionUnitItems.add(new EquipmentMenuItem(expeditionUnit));
+		}
+		Collections.sort(expeditionUnitItems, expeditionUnitsComparator);
+		expeditionUnitBox.setElements(expeditionUnitItems);
 	}
 	
 	private void drawAddornment(){
@@ -559,11 +567,12 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   	  		case 3:
   	  			inventory = getExpedition().getValuables();
   	  		}
-  	  		Collections.sort(inventory, inventoryItemsComparator);
+  	  		
   	  		Vector menuItems = new Vector();
   	  		for (Equipment item: inventory){
   	  			menuItems.add(new InventoryItem(item, getExpedition()));
   	  		}
+  	  		Collections.sort(menuItems, inventoryItemsComparator);
   	  		menuBox.setMenuItems(menuItems);
   	  		menuBox.draw();
   	  		csi.refresh();
@@ -594,28 +603,28 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		Equipment.eqMode = false;
 	}
 
-	private Comparator<Equipment> expeditionUnitsComparator = new Comparator<Equipment>(){
-		public int compare(Equipment o1, Equipment o2) {
+	private Comparator<EquipmentMenuItem> expeditionUnitsComparator = new Comparator<EquipmentMenuItem>(){
+		public int compare(EquipmentMenuItem o1, EquipmentMenuItem o2) {
 			return o1.getMenuColor() - o2.getMenuColor();
 		};
 	};
 	
-	private Comparator<Equipment> inventoryItemsComparator = new Comparator<Equipment>(){
-		public int compare(Equipment o1, Equipment o2) {
-			if (o1.getItem() instanceof ExpeditionUnit){
-				if (o2.getItem() instanceof ExpeditionUnit){
+	private Comparator<InventoryItem> inventoryItemsComparator = new Comparator<InventoryItem>(){
+		public int compare(InventoryItem o1, InventoryItem o2) {
+			if (o1.getEquipment().getItem() instanceof ExpeditionUnit){
+				if (o2.getEquipment().getItem() instanceof ExpeditionUnit){
 					return o1.getMenuColor() - o2.getMenuColor();
 				} else {
 					return -1;
 				}
-			} else if (o2.getItem() instanceof ExpeditionUnit){
-				if (o1.getItem() instanceof ExpeditionUnit){
+			} else if (o2.getEquipment().getItem() instanceof ExpeditionUnit){
+				if (o1.getEquipment().getItem() instanceof ExpeditionUnit){
 					return o1.getMenuColor() - o2.getMenuColor();
 				} else {
 					return 1;
 				}
 			} else {
-				return o1.getItem().getDescription().compareTo(o2.getItem().getDescription());
+				return o1.getEquipment().getItem().getDescription().compareTo(o2.getEquipment().getItem().getDescription());
 			}
 		};
 	};
@@ -645,7 +654,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		}
 		
 		public String getMenuDescription() {
-			String itemDescription = item.getItem().getMenuDescription();
+			String itemDescription = item.getItem().getDescription();
 			int inventory = item.getQuantity();
 			int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
 			StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
@@ -705,7 +714,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		}
 		
 		public String getMenuDescription() {
-			String itemDescription = item.getItem().getMenuDescription();
+			String itemDescription = item.getItem().getDescription();
 			int inventory = item.getQuantity();
 			int stock = 0;
 			if (expedition != null){
@@ -754,7 +763,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		}
 		
 		public String getMenuDescription() {
-			String itemDescription = item.getItem().getMenuDescription();
+			String itemDescription = item.getItem().getDescription();
 			int quantity = item.getQuantity();
 			ExpeditionItem eitem = (ExpeditionItem)item.getItem();
 			if (eitem instanceof ExpeditionUnit){
