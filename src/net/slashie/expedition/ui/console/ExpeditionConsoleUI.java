@@ -55,8 +55,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		VP_START = new Position(29,0);
 		VP_END = new Position (49,20);
 		PC_POS = new Position(39, 10);
-		xrange = 10;
-		yrange = 10;
+		xrange = 9;
+		yrange = 9;
 		
 		expeditionUnitBox = new ListBox(csi);
 		expeditionUnitBox.setPosition(53,7);
@@ -129,11 +129,11 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	
 	private void drawAddornment(){
 		int addornmentColor = ConsoleSystemInterface.TEAL;
-		csi.print(0, 0,  "    /------------------\\         /-----N-----\\         /--------------------\\   ", addornmentColor);
-		csi.print(0, 1,  "    |                  |        /             \\        |                    |   ", addornmentColor);
-		csi.print(0, 2,  "    |                  |       /               \\       |                    |   ", addornmentColor);
-		csi.print(0, 3,  "    |                  |\\-----/                 \\-----/|                    |   ", addornmentColor);
-		csi.print(0, 4,  "    |                  |...../                   \\.....|                    |   ", addornmentColor);
+		csi.print(0, 0,  "    /------------------\\     /---------N---------\\     /--------------------\\   ", addornmentColor);
+		csi.print(0, 1,  "    |                  |     |                   |     |                    |   ", addornmentColor);
+		csi.print(0, 2,  "    |                  |     |                   |     |                    |   ", addornmentColor);
+		csi.print(0, 3,  "    |                  |-----|                   |-----|                    |   ", addornmentColor);
+		csi.print(0, 4,  "    |                  |.....|                   |.....|                    |   ", addornmentColor);
 		csi.print(0, 5,  "    |                  |.....|                   |.....|                    |   ", addornmentColor);
 		csi.print(0, 6,  " /----~ EXPEDITION ~------\\..|                   |../-------~ EXPEDITION ~-----\\", addornmentColor);
 		csi.print(0, 7,  " |Ships                   |..|                   |..|                          |", addornmentColor);
@@ -145,11 +145,11 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		csi.print(0, 13, " |                        |..|                   |..|                          |", addornmentColor);
 		csi.print(0, 14, " |                        |..|                   |..|                          |", addornmentColor);
 		csi.print(0, 15, " |                        |..|                   |..|                          |", addornmentColor);
-		csi.print(0, 16, " |                        |..\\                   /..|                          |", addornmentColor);
-		csi.print(0, 17, " |                        |---\\                 /---|                          |", addornmentColor);
-		csi.print(0, 18, " |                        |    \\               /    |                          |", addornmentColor);
-		csi.print(0, 19, " |                        |     \\             /     |                          |", addornmentColor);
-		csi.print(0, 20, " \\------------------------/      \\-----S-----/      \\--------------------------/", addornmentColor);
+		csi.print(0, 16, " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 17, " |                        |--|                   |--|                          |", addornmentColor);
+		csi.print(0, 18, " |                        |  |                   |  |                          |", addornmentColor);
+		csi.print(0, 19, " |                        |  |                   |  |                          |", addornmentColor);
+		csi.print(0, 20, " \\------------------------/  \\---------S---------/  \\--------------------------/", addornmentColor);
 		 
 	}
 	
