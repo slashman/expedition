@@ -11,9 +11,9 @@ import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
 
 public class ShipCache extends GoodsCache{
-	private List<Equipment> vehicles;
+	private List<Vehicle> vehicles;
 	
-	public ShipCache(ExpeditionGame game, List<Equipment> vehicles) {
+	public ShipCache(ExpeditionGame game, List<Vehicle> vehicles) {
 		super(game);
 		this.vehicles = vehicles;
 		setAppearanceId("SHIP");
@@ -25,8 +25,8 @@ public class ShipCache extends GoodsCache{
 	
 	private int getCarryCapacity(){
 		int carryCapacity = 0;
-		for (Equipment equipment: vehicles){
-			carryCapacity += ((Vehicle)equipment.getItem()).getCarryCapacity() * equipment.getQuantity();
+		for (Vehicle equipment: vehicles){
+			carryCapacity += equipment.getCarryCapacity();
 		}
 		return carryCapacity;
 	}

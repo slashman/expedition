@@ -38,9 +38,11 @@ public abstract class ExpeditionGenerator {
 		ret.setName("Colombus");
 		ret.setExpeditionary("Colombus");
 		ret.setExpeditionaryTitle("Explorer");
-		ret.setAccountedGold(7000);
-		List<Equipment> startingShips = new ArrayList<Equipment>();
-		startingShips.add(new Equipment(ItemFactory.createItem("CARRACK"), 3));
+		ret.setAccountedGold(700000);
+		List<Vehicle> startingShips = new ArrayList<Vehicle>();
+		startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
+		startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
+		startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
 		ret.setCurrentVehicles(startingShips);
 		
 		ExpeditionItem food = ItemFactory.createItem("FOOD");

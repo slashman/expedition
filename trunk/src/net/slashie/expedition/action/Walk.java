@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ShipCache;
+import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -143,7 +144,7 @@ public class Walk extends Action{
 	        			ship.addAllGoods(expedition);
 	        			expedition.removeAllGoods();
 	        			expedition.setMovementMode(MovementMode.FOOT);
-        				expedition.setCurrentVehicles(new ArrayList<Equipment>());
+        				expedition.setCurrentVehicles(new ArrayList<Vehicle>());
 	        			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(ship);
 	        			ship.setPosition(new Position(expedition.getPosition()));
 	        			expedition.getLevel().addFeature(ship);

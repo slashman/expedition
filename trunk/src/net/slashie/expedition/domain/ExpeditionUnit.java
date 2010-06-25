@@ -100,7 +100,7 @@ public class ExpeditionUnit extends Vehicle{
 			int dailyFoodConsumption,
 			String[] weaponTypes, String[] armorTypes) {
 		super(classifierId, description, pluralDescription, weight, false,
-				false, 1, carryCapacity);
+				false, 1, carryCapacity, 1, true);
 		this.name = description;
 		this.range = range;
 		this.attack = attack;

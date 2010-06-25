@@ -93,7 +93,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		csi.print(5, 5, getExpedition().getAccountedGold()+"$");
 		
 		// Box 2
-		csi.print(12, 7, statsExpedition.getTotalShips()+" ships");
+		csi.print(12, 7, statsExpedition.getTotalShips()+" ships ("+statsExpedition.getShipHealth()+"%)");
 		csi.print(12, 8, statsExpedition.getOffshoreFoodDays()+" days");
 		csi.print(12, 9, statsExpedition.getPower()+(statsExpedition.isArmed()?"(Armed)":""));
 		if (statsExpedition.getMovementSpeed() != MovementSpeed.NORMAL){

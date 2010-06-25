@@ -11,7 +11,6 @@ import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Valuable;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
-import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionFeature;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -30,6 +29,8 @@ public class ExpeditionDAO {
 		goodsStore.addItem(550, new StoreItemInfo("WOOD", 5));
 		goodsStore.addItem(165, new StoreItemInfo("FRESHWATER", 165, 2, "barrels"));
 		goodsStore.addItem(3200, new StoreItemInfo("FOOD_SAUERKRAUT", 3, 10, "barrels"));
+		goodsStore.addItem(50, new StoreItemInfo("CARPENTER", 60));
+
 		
 		//Weapons Store
 		Store weaponsStore = new Store();
@@ -143,6 +144,7 @@ public class ExpeditionDAO {
 			new CharAppearance("ARCHER", '@', ConsoleSystemInterface.DARK_BLUE),			
 			new CharAppearance("CAPTAIN", '@', ConsoleSystemInterface.CYAN),
 			new CharAppearance("EXPLORER", '@', ConsoleSystemInterface.RED),
+			new CharAppearance("CARPENTER", '@', ConsoleSystemInterface.DARK_RED),
 
 			//native Units
 			new CharAppearance("NATIVE_WARRIOR", '@', ConsoleSystemInterface.RED),
@@ -218,6 +220,9 @@ public class ExpeditionDAO {
 			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", 300, 400, 2, 1, 3,
 					new String[]{"SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
+			new ExpeditionUnit("CARPENTER", "Carpenter","Carpenters", 250, 300, 1, 1, 1, 
+					new String[]{"SPEARS"},
+					new String[]{""}),
 		
 			//Native Units
 			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 200, 200, 2, 1, 0,
@@ -255,8 +260,8 @@ public class ExpeditionDAO {
 			new Good("ARROWS", "Arrow", "Arrows", 5, GoodType.WEAPON),
 			
 			//Ships
-			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,3,25000),
-			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,4,20000),
+			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,3,25000, 10, false),
+			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,4,20000, 15, false),
 		};
 		
 	}

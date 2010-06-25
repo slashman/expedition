@@ -28,6 +28,8 @@ import net.slashie.utils.Util;
 
 public class Expedition extends Player implements FoodConsumer{
 	
+	public static final int DEATH_BY_STARVATION = 1, DEATH_BY_DROWNING = 2;
+
 	private int deducedReckonWest;
 	
 	public void resetDeducedReckonWest(){
@@ -84,7 +86,7 @@ public class Expedition extends Player implements FoodConsumer{
 	}
 	
 	
-	private List<Equipment> currentVehicles;
+	private List<Vehicle> currentVehicles;
 	public enum MovementMode {
 		FOOT,
 		HORSE,
@@ -133,12 +135,14 @@ public class Expedition extends Player implements FoodConsumer{
 	private String expeditionaryTitle;
 
 	private List<Town> towns = new ArrayList<Town>();
+
+	private int deathCause;
 	
-	public List<Equipment> getCurrentVehicles() {
+	public List<Vehicle> getCurrentVehicles() {
 		return currentVehicles;
 	}
 
-	public void setCurrentVehicles(List<Equipment> currentVehicles) {
+	public void setCurrentVehicles(List<Vehicle> currentVehicles) {
 		this.currentVehicles = currentVehicles;
 	}
 
@@ -198,9 +202,9 @@ public class Expedition extends Player implements FoodConsumer{
 	private int getCarryCapacity(){
 		if (getMovementMode() != MovementMode.FOOT){
 			int carryCapacity = 0;
-			List<Equipment> inventory = getCurrentVehicles();
-			for (Equipment equipment: inventory){
-				carryCapacity += ((Vehicle)equipment.getItem()).getCarryCapacity() * equipment.getQuantity();
+			List<Vehicle> inventory = getCurrentVehicles();
+			for (Vehicle vehicle: inventory){
+				carryCapacity += vehicle.getCarryCapacity();
 			}
 			return carryCapacity;
 		} else {
@@ -316,6 +320,7 @@ public class Expedition extends Player implements FoodConsumer{
 	public void checkDeath(){
 		if (getTotalUnits() <= 0){
 			UserInterface.getUI().refresh();
+			deathCause = DEATH_BY_STARVATION;
 			informPlayerEvent (DEATH);
 		}
 	}
@@ -336,7 +341,16 @@ public class Expedition extends Player implements FoodConsumer{
 
 	
 	@Override
-	public void beforeItemAddition(AbstractItem item) {}
+	public void beforeItemsAddition(AbstractItem item, int quantity) {
+		if (item instanceof Vehicle){
+			if (!((Vehicle)item).isFakeVehicle()){
+				for (int i = 0; i < quantity; i++){
+					currentVehicles.add((Vehicle)((ExpeditionItem)item).clone());
+				}
+			}
+				
+		}
+	}
 
 	@Override
 	public boolean canCarry(AbstractItem item, int quantity) {
@@ -631,12 +645,7 @@ public class Expedition extends Player implements FoodConsumer{
 	}
 
 	public int getTotalShips() {
-		int ships = 0;
-		List<Equipment> inventory = getCurrentVehicles();
-		for (Equipment equipment: inventory){
-			ships += equipment.getQuantity();
-		}
-		return ships;
+		return getCurrentVehicles().size();
 	}
 
 	public boolean isArmed() {
@@ -721,9 +730,9 @@ public class Expedition extends Player implements FoodConsumer{
 				i++;
 				continue;
 			}
-			if (killInfo.getB() == 1)
-				killMessage += killInfo.getB()+" "+killInfo.getA().getDescription();
-			else
+			if (killInfo.getB() == 1){
+				killMessage += "A "+killInfo.getA().getDescription();
+			} else
 				killMessage += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
 			if (i == values.size()-2)
 				killMessage += " and ";
@@ -733,7 +742,10 @@ public class Expedition extends Player implements FoodConsumer{
 				killMessage += ", ";
 			i++;
 		}
-		level.addMessage(killMessage +" die.");
+		if (quantity == 1)
+			level.addMessage(killMessage +" dies.");
+		else
+			level.addMessage(killMessage +" die.");
 	}
 
 	public void addTown(Town town) {
@@ -742,6 +754,29 @@ public class Expedition extends Player implements FoodConsumer{
 	
 	public List<Town> getTowns(){
 		return towns;
+	}
+
+	
+	public void checkDrown() {
+		if (getTotalShips() <= 0){
+			UserInterface.getUI().refresh();
+			deathCause = DEATH_BY_DROWNING;
+			informPlayerEvent (DEATH);
+		}
+	}
+
+	public int getDeathCause() {
+		return deathCause;
+	}
+
+	public int getShipHealth() {
+		int sum = 0;
+		int sumMax = 0;
+		for (Vehicle vehicle: getCurrentVehicles()){
+			sum += vehicle.getResistance();
+			sumMax += vehicle.getMaxResistance();
+		}
+		return (int)(Math.round ( ((double)sum/(double)sumMax) *100.0d));
 	}
 
 }

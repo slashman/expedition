@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionGenerator;
@@ -13,6 +14,7 @@ import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.LevelMaster;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractLevel;
@@ -32,12 +34,33 @@ public class ExpeditionGame extends SworeGame {
 			
 		} else {
 			dayShiftCount += getExpedition().getLastActionTimeCost();
-			if (dayShiftCount >= 200){
+			if (dayShiftCount >= 200){ // Each day takes 200 turns
 				dayShiftCount = 0;
 				currentTime.add(Calendar.DATE, 1);
+				//Everybody eat
 				for (int i = 0; i < foodConsumers.size(); i++){
 					foodConsumers.get(i).consumeFood();
 				}
+				
+				Expedition expedition = getExpedition();
+				if (expedition.getMovementMode() == MovementMode.SHIP){
+					//Randomly damage ships
+					List<Vehicle> vehicles = expedition.getCurrentVehicles();
+					List<Vehicle> vehiclesToRemove = new ArrayList<Vehicle>();
+					for (Vehicle vehicle: vehicles){
+						vehicle.dailyWearOut(expedition.getLevel());
+						if (vehicle.isDestroyed()){
+							vehiclesToRemove.add(vehicle);
+						}
+					}
+					for (Vehicle vehicle: vehiclesToRemove){
+						expedition.getLevel().addMessage("You have lost a "+vehicle.getDescription()+" to the sea!");
+						vehicles.remove(vehicle);
+					}
+					
+					expedition.checkDrown();
+				}
+				
 			}
 		}
 		
@@ -72,6 +95,12 @@ public class ExpeditionGame extends SworeGame {
 
 	@Override
 	public String getDeathMessage() {
+		switch (getCurrentGame().getExpedition().getDeathCause()){
+		case Expedition.DEATH_BY_STARVATION:
+			return "Your expedition has perished by hunger..";
+		case Expedition.DEATH_BY_DROWNING:
+			return "Your expedition has drown in the seas..";
+		}
 		return "Your expedition has perished..";
 	}
 
