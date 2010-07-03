@@ -33,7 +33,6 @@ public class RepairShips extends Action{
 			return;
 		}
 		int availableWood = expedition.getItemCount("WOOD");
-		int usedWood = availableWood; // This gets reduced according to expenses
 		int maxRepairmen = availableWood / WOOD_PER_REPAIRMEN;
 		int remainingRepairmen = maxRepairmen;
 		int carpenters = expedition.getItemCount("CARPENTER");
@@ -53,10 +52,14 @@ public class RepairShips extends Action{
 			remainingRepairmen -= normalCrew;
 		}
 		
+	
 		int recoveryPower = carpenters * CARPENTER_MULTIPLIER + normalCrew;
 		
-		int recovery = (int)Math.round(recoveryPower*RECOVERY_INDEX); 
+		int recovery = (int)Math.round(recoveryPower*RECOVERY_INDEX);
+		int maxCarpenterRecovery = (int)Math.round((carpenters * CARPENTER_MULTIPLIER)*RECOVERY_INDEX);
+		
 		int remainingRecovery = recovery;
+		
 		// Select ships, starting from the most damaged ones, to repair
 		List<Vehicle> ships = expedition.getCurrentVehicles();
 		Collections.sort(ships, new Comparator<Vehicle>(){
@@ -75,12 +78,25 @@ public class RepairShips extends Action{
 			}
 		}
 		
-		// TODO: Use up wood, but how much of it???
-		TODO: Use up wood, but how much of it???
-		// If there's still recovery, it means we didnt use up all wood
-		if (remainingRecovery > 0){
-			
+		// Calculate wood cost, we need to know how many repairmen worked.
+		// Let's take all the used "recovery", and split between carpenters and other crew
+		// then sum and we have the data
+		
+		int usedRecovery = recovery - remainingRecovery;
+		
+		int carpenterRecovery = usedRecovery;
+		if (usedRecovery > maxCarpenterRecovery){
+			carpenterRecovery = maxCarpenterRecovery;
 		}
+		int crewRecovery = usedRecovery - carpenterRecovery;
+		
+		int usedCarpenters = (int)Math.round(carpenterRecovery / (CARPENTER_MULTIPLIER*RECOVERY_INDEX)); 
+		int usedCrew = (int)Math.round(crewRecovery / (RECOVERY_INDEX));
+		
+		int totalRepairmen = usedCarpenters+usedCrew;
+		
+		int usedWood = totalRepairmen * WOOD_PER_REPAIRMEN;
+		expedition.reduceQuantityOf("WOOD", usedWood);
 		
 	}
 
@@ -88,5 +104,4 @@ public class RepairShips extends Action{
 	public String getID() {
 		return "RepairShips";
 	}
-
 }
