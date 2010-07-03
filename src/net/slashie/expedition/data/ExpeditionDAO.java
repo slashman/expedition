@@ -90,7 +90,18 @@ public class ExpeditionDAO {
 			new ExpeditionCell("SPAIN_HOUSE", "Houses", true, true),
 			new ExpeditionCell("SPAIN_SHIP", "Ships", false, false, true),
 					
-			new ExpeditionCell("DEPARTURE", "Docks", "DEPARTURE")
+			new ExpeditionCell("DEPARTURE", "Docks", "DEPARTURE"),
+			
+			new ExpeditionCell("CASTLE_FLOOR", "Castle Floor"),
+			new ExpeditionCell("BLUE_CARPET", "Carpet"),
+			new ExpeditionCell("RED_CARPET", "Carpet"),
+			new ExpeditionCell("CASTLE_WALL", "Castle Wall", true, true),
+			new ExpeditionCell("SPAIN_BANNER", "Banner of Spain"),
+			new ExpeditionCell("CASTLE_WINDOW", "Castle Window", true, true),
+			new ExpeditionCell("THRONE", "Throne of Spain", true, true),
+			new ExpeditionCell("SPAIN_CREST", "The Spain Coat of Arms", true, true),
+			new ExpeditionCell("CASTLE_CURTAIN", "Curtain"),
+			
 		};
 	}
 	
@@ -135,6 +146,20 @@ public class ExpeditionDAO {
 			new CharAppearance("SPAIN_SHIP", 'v', ConsoleSystemInterface.RED),
 			new CharAppearance("SPAIN_DOCKS", '=', ConsoleSystemInterface.BROWN),
 		
+			
+			// Castle
+			new CharAppearance("CASTLE_FLOOR", '.', ConsoleSystemInterface.BROWN),
+			new CharAppearance("BLUE_CARPET", '=', ConsoleSystemInterface.BLUE),
+			new CharAppearance("RED_CARPET", '=', ConsoleSystemInterface.RED),
+			new CharAppearance("CASTLE_WALL", '#', ConsoleSystemInterface.PURPLE),
+			new CharAppearance("SPAIN_BANNER", '+', ConsoleSystemInterface.PURPLE),
+			new CharAppearance("CASTLE_WINDOW", '#', ConsoleSystemInterface.CYAN),
+			new CharAppearance("THRONE", 'T', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("SPAIN_CREST", 'C', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("CASTLE_CURTAIN", '+', ConsoleSystemInterface.RED),
+			
+			new CharAppearance("KING_FERDINAND", '@', ConsoleSystemInterface.TEAL),
+			new CharAppearance("QUEEN_ISABELLE", '@', ConsoleSystemInterface.LEMON),
 			
 			//Units
 			new CharAppearance("SAILOR", '@', ConsoleSystemInterface.BLUE),

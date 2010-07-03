@@ -136,6 +136,8 @@ public class ExpeditionGame extends SworeGame {
 		LevelMetaData md = null;
 		md = new LevelMetaData("SPAIN");
 		addMetaData("SPAIN", md);
+		md = new LevelMetaData("SPAIN_CASTLE");
+		addMetaData("SPAIN_CASTLE", md);
 		md = new LevelMetaData("WORLD");
 		addMetaData("WORLD", md);
 		

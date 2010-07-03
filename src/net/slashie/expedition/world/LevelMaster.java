@@ -2,6 +2,7 @@ package net.slashie.expedition.world;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.locations.Spain;
+import net.slashie.expedition.locations.SpainCastle;
 import net.slashie.expedition.locations.TestSea;
 import net.slashie.expedition.locations.World;
 import net.slashie.expedition.worldGen.ExpeditionStaticGenerator;
@@ -33,6 +34,22 @@ public class LevelMaster {
 			ret.getHelper().setSuperLevelId("WORLD");
 			ret.setID("SPAIN");
 			ret.setDock(true);
+			return ret;
+		} if (levelID.equals("SPAIN_CASTLE")){
+			ExpeditionMicroLevel ret = new ExpeditionMicroLevel();
+			// LoadLevel spain.xml
+			StaticPattern pattern = new SpainCastle();
+			StaticGenerator generator = new ExpeditionStaticGenerator();
+			pattern.setup(generator);
+			generator.createLevel(ret);
+			ret.setDescription(pattern.getDescription());
+			if (pattern.getUnleashers() != null){
+				ret.setUnleashers(pattern.getUnleashers());
+			}
+			ret.setLocation(new Pair<Integer,Integer>(38,-6));
+			ret.getHelper().setMusicKey("SPAIN");
+			ret.getHelper().setSuperLevelId("WORLD");
+			ret.setID("SPAIN_CASTLE");
 			return ret;
 		} else if (levelID.equals("WORLD")){
 			StaticPattern pattern = new World();
