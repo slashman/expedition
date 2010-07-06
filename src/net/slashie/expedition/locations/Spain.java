@@ -20,16 +20,16 @@ public class Spain extends StaticPattern {
 			".---...----------#######,,,,,,,,,,,,,,,,,,####-----##,,,..hhhhh,,#.....",
 			".---....-----#####,,,,,,,hhhhhhh,........,,,#-----###,,hhhhhhhh,,####..",
 			".---....---###,,,,hhh,,hhhhhhhhh,,hhhhhhh,,,#######,,,,hhhhhhhh,,,,,#..",
-			"..---...####,,,,hhhhh,,hhhhhhhh..,hhhhhhhh,,,,,,,,,,,,,,,,7hhhh,,,###..",
+			"..---...####,,,,hhhhh,,hhhhhhhh..,hhhhhhhh,,,,,S,,,,,,,,,,7hhhh,,,###..",
 			"..----###,,,,,hhhhhhh,,hhhhhh,.hhhhhhh,,,,,,#######,,,,hhhhhhhh,,##....",
 			"..---##,,,,hhhhhh3hhh,,hhh1h,,,h5hh,,,,,,,,,#-----##,,,hhhhhhhh###.....",
 			"...--#,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,hhh,,hh,#------#,,,,,,hhhhh,#......",
 			"...--#,,hhhhh,h4hhhhhh2hhh,,,hhhhhhhh,,,hhh,#------##,,,,,hhhhh,#......",
 			"....-#,,hhhhh,hhhhhhhhhhhhhh,,hhhhhh,,,,,hh,#------.####,,,,,,,,#......",
-			".----#,,hhhh,,hhhhhhhhhhhhhh,,hhhhhh,,hhhhhh#######....####,,####......",
+			".----#,,hhhh,,hhhhhhhhhhhhhh,,hhhhhh,,hhhhh,#######....####,,####......",
 			"..---#,,hhhh,,hhhhhhhhhhhhhh,,,hhhhh,,,,,hh,#------.......####.........",
 			"..---#,,,hhh,,hhhhhhhhhhhhhh,,,hhhhhhhh,,hh,#------....................",
-			".----###,,,,,,hhhhhhhhhhhhhh,,,,,,,,,,,S,,,,#------....................",
+			".----###,,,,,,hhhhhhhhhhhhhh,,,,,,,,,,,,,,,,#------....................",
 			"..-----##,,,,,hhhhhhhhhhhh,,,...,,,,,,,,,,,,=====6---..................",
 			"...-----###,,,,,,,,,,,,,,,,,,,,,,,###########----v-----................",
 			"..--------#########################----------------------..............",
@@ -56,7 +56,7 @@ public class Spain extends StaticPattern {
 		charMap.put("4", "PUB");
 		charMap.put("5", "GUILD");
 		charMap.put("6", "DEPARTURE EXIT WORLD");
-		charMap.put("7", "SPAIN_FLOOR EXIT SPAIN_CASTLE");
+		charMap.put("7", "CASTLE_GATE EXIT SPAIN_CASTLE");
 		charMap.put("S", "SPAIN_FLOOR EXIT _START");
 		charMap.put("E", "GRASS EXPEDITION NATIVE_EXPEDITION");
 

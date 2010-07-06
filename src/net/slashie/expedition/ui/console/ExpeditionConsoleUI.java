@@ -326,6 +326,21 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			return false;
 	}
 	
+	public void showBlockingMessage(String message) {
+		TextBox chatBox = new TextBox(csi);
+		chatBox.setHeight(8);
+		chatBox.setWidth(50);
+		chatBox.setPosition(15, 12);
+		chatBox.setBorder(true);
+		chatBox.setForeColor(ConsoleSystemInterface.WHITE);
+		chatBox.setBorderColor(ConsoleSystemInterface.RED);
+		chatBox.setText(message);
+		chatBox.setTitle("[Space] to continue");
+		chatBox.draw();
+		csi.refresh();
+		csi.waitKey(CharKey.SPACE);
+	}
+	
 	public boolean promptChat(String message){
 		return super.promptChat(message, 28,2,23,5);
 	}
