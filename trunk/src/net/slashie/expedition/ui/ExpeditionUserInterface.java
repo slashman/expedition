@@ -11,4 +11,5 @@ public interface ExpeditionUserInterface {
 	public void transferFromExpedition(GoodsCache ship);
 	public void transferFromExpedition(GoodsCache ship, int minUnits);
 
+	public void showBlockingMessage(String message);
 }

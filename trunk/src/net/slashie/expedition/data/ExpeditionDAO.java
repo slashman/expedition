@@ -92,6 +92,7 @@ public class ExpeditionDAO {
 					
 			new ExpeditionCell("DEPARTURE", "Docks", "DEPARTURE"),
 			
+			new ExpeditionCell("CASTLE_GATE", "Castle Gate"),
 			new ExpeditionCell("CASTLE_FLOOR", "Castle Floor"),
 			new ExpeditionCell("BLUE_CARPET", "Carpet"),
 			new ExpeditionCell("RED_CARPET", "Carpet"),
@@ -99,6 +100,9 @@ public class ExpeditionDAO {
 			new ExpeditionCell("SPAIN_BANNER", "Banner of Spain"),
 			new ExpeditionCell("CASTLE_WINDOW", "Castle Window", true, true),
 			new ExpeditionCell("THRONE", "Throne of Spain", true, true),
+			new ExpeditionCell("KING_FERDINAND", "Ferdinand II, King of Aragon", true, true),
+			new ExpeditionCell("QUEEN_ISABELLE", "Isabella, Queen of Castile and León", true, true),
+			
 			new ExpeditionCell("SPAIN_CREST", "The Spain Coat of Arms", true, true),
 			new ExpeditionCell("CASTLE_CURTAIN", "Curtain"),
 			
@@ -157,6 +161,7 @@ public class ExpeditionDAO {
 			new CharAppearance("THRONE", 'T', ConsoleSystemInterface.YELLOW),
 			new CharAppearance("SPAIN_CREST", 'C', ConsoleSystemInterface.YELLOW),
 			new CharAppearance("CASTLE_CURTAIN", '+', ConsoleSystemInterface.RED),
+			new CharAppearance("CASTLE_GATE", '>', ConsoleSystemInterface.BROWN),
 			
 			new CharAppearance("KING_FERDINAND", '@', ConsoleSystemInterface.TEAL),
 			new CharAppearance("QUEEN_ISABELLE", '@', ConsoleSystemInterface.LEMON),
