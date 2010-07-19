@@ -9,6 +9,7 @@ import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.Vehicle;
+import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.game.Equipment;
@@ -37,34 +38,11 @@ public abstract class ExpeditionGenerator {
 		ret.setAppearanceId("EXPEDITION");
 		ret.setName("Colombus");
 		ret.setExpeditionary("Colombus");
-		ret.setExpeditionaryTitle("Explorer");
-		ret.setAccountedGold(700000);
-		List<Vehicle> startingShips = new ArrayList<Vehicle>();
-		startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
-		startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
-		startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
-		ret.setCurrentVehicles(startingShips);
-		
-		ExpeditionItem food = ItemFactory.createItem("FOOD");
-		ExpeditionItem sailor = ItemFactory.createItem("SAILOR");
-		ExpeditionItem captain = ItemFactory.createItem("CAPTAIN");
+		ret.setExpeditionaryTitle("Commoner");
+		ret.setAccountedGold(200);
 		ExpeditionItem explorer = ItemFactory.createItem("EXPLORER");
-		
-		ret.addItemOffshore(sailor, 30);
-		ret.addItemOffshore(captain, 3);
-		ret.addItemOffshore(explorer, 1);
-		ret.addItemOffshore(food, 100);
-		
-		
-		//ret.addItemOffshore(ItemFactory.createItem("SPEARS"), 55);
-		/*
-		for (int i = 0; i < 5000; i++){
-			ret.addItemOffshore(food, 100);
-			if (ret.getOffshoreCurrentlyCarrying()>20)
-				break;
-		}
-		*/
-		
+		ret.addItem(explorer, 1);
+		ret.setMovementMode(MovementMode.FOOT);
 		return ret;
 	}
 

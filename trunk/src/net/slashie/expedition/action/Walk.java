@@ -30,10 +30,10 @@ public class Walk extends Action{
 		Expedition expedition = (Expedition) a;
 		
 		if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
-			if (expedition.getOffshoreCurrentlyCarrying() > 100){
+			/*if (expedition.getOffshoreCurrentlyCarrying() > 100){
 				invalidationMessage = "You are stranded! drop some items!";
 				return false;
-			}
+			}*/
 		} else {
 			if (expedition.getCurrentlyCarrying() > 100){
 				invalidationMessage = "You are stranded! drop some items!";
@@ -110,18 +110,25 @@ public class Walk extends Action{
 	        
 	        if (cell.getStepCommand() != null){
 	        	if (cell.getStepCommand().equals("DEPARTURE")){
-	        		if (((ExpeditionUserInterface)UserInterface.getUI()).depart()){
-	        			String superLevelId = expedition.getLocation().getSuperLevelId();
-	        			if (superLevelId == null){
-	        				expedition.getLevel().addMessage("Nowhere to go.");
-	        			} else {
-	        				expedition.setMovementMode(MovementMode.SHIP);
-	        				expedition.informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
-	        				//expedition.setCurrentVehicles(expedition.getShips());
-	        			}
+	        		if (expedition.getTotalShips() == 0) {
+        				expedition.getLevel().addMessage("You have no ships to board.");
+        				actionCancelled = true;
+		        		return;
+	        		} else {
+		        		if (((ExpeditionUserInterface)UserInterface.getUI()).depart()){
+		        			String superLevelId = expedition.getLocation().getSuperLevelId();
+		        			if (superLevelId == null){
+		        				expedition.getLevel().addMessage("Nowhere to go.");
+		        			} else {
+		        				expedition.setMovementMode(MovementMode.SHIP);
+		        				expedition.informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
+		        				//expedition.setCurrentVehicles(expedition.getShips());
+		        			}
+		        		} 
+		        		actionCancelled = true;
+		        		return;
+		        		
 	        		}
-	        		actionCancelled = true;
-	        		return;
 	        	}
 	        	
 	        }
