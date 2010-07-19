@@ -492,7 +492,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			
 			getExpedition().reduceQuantityOf(choice.getItem(), quantity);
 			
-			if (choice.getItem() instanceof ExpeditionUnit && getExpedition().getCurrentlyCarrying()>100){
+			if (choice.getItem() instanceof ExpeditionUnit && 
+					getExpedition().getCurrentlyCarrying()>100){
 				cacheBox.setPrompt("The expedition can't carry the goods!");
 				cacheBox.draw();
 				getExpedition().addItem(choice.getItem(), quantity);

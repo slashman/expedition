@@ -86,7 +86,8 @@ public class Expedition extends Player implements FoodConsumer{
 	}
 	
 	
-	private List<Vehicle> currentVehicles;
+	private List<Vehicle> currentVehicles = new ArrayList<Vehicle>();
+	
 	public enum MovementMode {
 		FOOT,
 		HORSE,
@@ -132,6 +133,24 @@ public class Expedition extends Player implements FoodConsumer{
 	private int accountedGold;
 	
 	private String expeditionary;
+
+	public enum Title {
+		//TODO: Implement this, probably using an "influence" parameter instead of number of towns
+		EXPLORER (1, 0,0,0),
+		VICEROY(2,30,0,0)
+		;
+		private int requiredTowns, requiredMissions, requiredForts;
+		private int rank;
+		
+		private Title(int rank, int requiredTowns, int requiredMissions, int requiredForts){
+			this.rank = rank;
+			this.requiredTowns = requiredTowns;
+			this.requiredMissions = requiredMissions;
+			this.requiredForts = requiredForts;
+		}
+		
+	}
+	
 	private String expeditionaryTitle;
 
 	private List<Town> towns = new ArrayList<Town>();
@@ -199,7 +218,7 @@ public class Expedition extends Player implements FoodConsumer{
 	}
 
 
-	private int getCarryCapacity(){
+	public int getCarryCapacity(){
 		if (getMovementMode() != MovementMode.FOOT){
 			int carryCapacity = 0;
 			List<Vehicle> inventory = getCurrentVehicles();
