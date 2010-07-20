@@ -1,21 +1,11 @@
 package net.slashie.expedition.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
-import net.slashie.expedition.domain.ExpeditionUnit;
-import net.slashie.expedition.domain.Good;
-import net.slashie.expedition.domain.GoodType;
-import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
-import net.slashie.serf.game.Equipment;
-import net.slashie.serf.game.Player;
-import net.slashie.serf.game.SworeGame;
-import net.slashie.serf.ui.AppearanceFactory;
+
 
 /**
  * Represents an object delegated with the task of generating an expedition
@@ -36,9 +26,8 @@ public abstract class ExpeditionGenerator {
 		Expedition ret = new Expedition(game);
 		ret.setGame(game);
 		ret.setAppearanceId("EXPEDITION");
-		ret.setName("Colombus");
-		ret.setExpeditionary("Colombus");
-		ret.setExpeditionaryTitle("Commoner");
+		ret.setName("Colón");
+		ret.setExpeditionary("Colón");
 		ret.setAccountedGold(200);
 		ExpeditionItem explorer = ItemFactory.createItem("EXPLORER");
 		ret.addItem(explorer, 1);

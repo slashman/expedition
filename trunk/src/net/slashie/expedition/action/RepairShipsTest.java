@@ -29,7 +29,7 @@ public class RepairShipsTest extends TestCase{
 		ret.setAppearanceId("EXPEDITION");
 		ret.setName("Colombus");
 		ret.setExpeditionary("Colombus");
-		ret.setExpeditionaryTitle("Explorer");
+		ret.getTitle().grantTitle(Expedition.Title.EXPLORER, "of Spain");
 		ret.setAccountedGold(700000);
 		List<Vehicle> startingShips = new ArrayList<Vehicle>();
 		startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));

@@ -27,6 +27,81 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class Expedition extends Player implements FoodConsumer{
+	public enum Title {
+		EXPLORER (1, "Explorador", 0, 0, 0, 0),
+		HIDALGO  (2, "Hidalgo",    0, 0, 1, 20000),
+		LORD     (3, "Señor",      0, 1, 2, 50000),
+		VIZCOUNT (4, "Vizconde",   1, 2, 5, 100000),
+		COUNT    (5, "Conde",      2, 5,10, 150000),
+		MARCHIS  (6, "Marqués",    5,10,30, 300000),
+		DUKE     (7, "Duque",     10,30,60, 500000),
+		VICEROY  (8, "Virrey",    30,60,90, 950000)
+		;
+		private int requiredCities, requiredTowns, requiredVillages;
+		private int rank;
+		private int prize;
+		private String description;
+		
+		private Title(int rank, String description, int requiredCities, int requiredTowns, int requiredVillages, int prize){
+			this.rank = rank;
+			this.description = description;
+			this.requiredTowns = requiredTowns;
+			this.requiredCities = requiredCities;
+			this.requiredVillages = requiredVillages;
+			this.prize = prize;
+		}
+		
+		public int getRank(){
+			return rank;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+		
+		public boolean attainsRank(Expedition e){
+			if (e.getTitle().getTitle().getRank() > getRank())
+				return false;
+			int cities = 0;
+			int towns = 0;
+			int villages = 0;
+			for (Town town: e.getTowns()){
+				if (town.isCity()) {
+					cities++;
+				} else if (town.isTown()){
+					towns++;
+				} else {  
+					villages++;
+				}
+			}
+			return cities >= requiredCities && towns >= requiredTowns && villages >= requiredVillages;
+		}
+
+		public String pickRealm(Expedition exp) {
+			if (this == VICEROY)
+				return "the New World"; 
+			for (Town town: exp.getTowns()){
+				if (requiredCities > 0) {
+					if (town.isCity())
+						return town.getName();
+					else 
+						continue;
+				} else if (requiredTowns > 0){
+					if ( town.isTown())
+						return town.getName();
+					else 
+						continue;
+				} else { 
+					return town.getName();
+				}
+			}
+			return "";
+		}
+
+		public int getPrize() {
+			return prize;
+		}
+	}
 	
 	public static final int DEATH_BY_STARVATION = 1, DEATH_BY_DROWNING = 2;
 
@@ -134,24 +209,40 @@ public class Expedition extends Player implements FoodConsumer{
 	
 	private String expeditionary;
 
-	public enum Title {
-		//TODO: Implement this, probably using an "influence" parameter instead of number of towns
-		EXPLORER (1, 0,0,0),
-		VICEROY(2,30,0,0)
-		;
-		private int requiredTowns, requiredMissions, requiredForts;
-		private int rank;
+	public static class Rank {
+		private Title title;
+		private String realm;
 		
-		private Title(int rank, int requiredTowns, int requiredMissions, int requiredForts){
-			this.rank = rank;
-			this.requiredTowns = requiredTowns;
-			this.requiredMissions = requiredMissions;
-			this.requiredForts = requiredForts;
+		public void grantTitle(Title title, String realm){
+			this.title = title;
+			this.realm = realm;
+		}
+		
+		public String getDescription (String name) {
+			if (title == null)
+				return name;
+			else
+				return title.getDescription() + " " + name;
+		}
+
+		public String getFullDescription (String name) {
+			if (title == null)
+				return name;
+			else
+				return title.getDescription() + " " + name + " of " + realm;
+		}
+		
+		public Title getTitle() {
+			return title;
+		}
+
+		public int getPrize() {
+			return title.getPrize();
 		}
 		
 	}
 	
-	private String expeditionaryTitle;
+	private Rank expeditionaryTitle = new Rank();
 
 	private List<Town> towns = new ArrayList<Town>();
 
@@ -201,16 +292,17 @@ public class Expedition extends Player implements FoodConsumer{
 		this.expeditionary = expeditionary;
 	}
 
-	public String getExpeditionaryTitle() {
+	public Rank getTitle() {
 		return expeditionaryTitle;
 	}
-
-	public void setExpeditionaryTitle(String expeditionaryTitle) {
-		this.expeditionaryTitle = expeditionaryTitle;
+	
+	public String getExpeditionaryTitle() {
+		if (expeditionaryTitle != null)
+			return expeditionaryTitle.getDescription(getExpeditionary());
+		else
+			return getExpeditionary();
 	}
 
-
-	
 	public int getCurrentlyCarrying(){
 		if (getCarryCapacity() == 0)
 			return 101;
