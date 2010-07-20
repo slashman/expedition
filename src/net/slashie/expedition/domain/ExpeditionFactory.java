@@ -18,7 +18,6 @@ public class ExpeditionFactory {
 		ret.setAppearanceId("HOSTILE_EXPEDITION");
 		ret.setName("natives");
 		ret.setExpeditionary("-");
-		ret.setExpeditionaryTitle("-");
 		
 		SimpleAI ai = new SimpleAI(game.getPlayer(), new NPWalk()) ;
 		ArrayList<RangedActionSpec> rangedActions = new ArrayList<RangedActionSpec>();

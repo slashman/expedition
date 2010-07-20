@@ -85,7 +85,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime(); 
 		csi.print(5, 1, gameTime.get(Calendar.YEAR)+"");
 		csi.print(5, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
-		csi.print(5, 3, getExpedition().getExpeditionaryTitle()+" "+getExpedition().getExpeditionary());
+		csi.print(5, 3, getExpedition().getExpeditionaryTitle());
 		if (getExpedition().getTowns().size() == 1)
 			csi.print(5, 4, "1 town    ");
 		else

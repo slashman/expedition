@@ -5,7 +5,10 @@ import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
+import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
+import net.slashie.expedition.domain.Expedition.Title;
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
@@ -84,8 +87,23 @@ public class SpainCastle extends StaticPattern {
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey. You are dismissed.");
 				stockExpedition(exp);
 			} else {
-				//TODO:Check the accomplishments
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We hope to hear from you soon. You are dismissed.");
+				boolean earnedTitle = false;
+				for (Title title: Expedition.Title.values()){
+					if (title.getRank() > exp.getTitle().getTitle().getRank()){
+						if (title.attainsRank(exp)){
+							earnedTitle = true;
+							exp.getTitle().grantTitle(title, title.pickRealm(exp));
+						}
+					}
+				}
+				if (earnedTitle) {
+					((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic Kings of the Kingdom of Spain, name you "+exp.getTitle().getFullDescription(exp.getExpeditionary())+"..");
+					((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Take "+exp.getTitle().getPrize()+" maravedíes from the royal treasure, and continue defending our flag in the new world.");					
+					((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey. You are dismissed.");
+					exp.setAccountedGold(exp.getAccountedGold()+exp.getTitle().getPrize());
+				} else {
+					((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We hope to hear from you soon. You are dismissed.");
+				}
 			}
 			
 			 
@@ -98,7 +116,7 @@ public class SpainCastle extends StaticPattern {
 		
 
 		private void stockExpedition(Expedition ret) {
-			ret.setExpeditionaryTitle("Explorer");
+			ret.getTitle().grantTitle(Expedition.Title.EXPLORER, "of Spain");
 			ret.setAccountedGold(12000);
 			List<Vehicle> startingShips = ret.getCurrentVehicles();
 			startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
@@ -108,7 +126,6 @@ public class SpainCastle extends StaticPattern {
 			ExpeditionItem food = ItemFactory.createItem("FOOD");
 			ExpeditionItem sailor = ItemFactory.createItem("SAILOR");
 			ExpeditionItem captain = ItemFactory.createItem("CAPTAIN");
-			
 			
 			ret.addItemOffshore(sailor, 30);
 			ret.addItemOffshore(captain, 3);
