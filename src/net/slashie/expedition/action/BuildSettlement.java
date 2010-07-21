@@ -42,11 +42,22 @@ public class BuildSettlement extends Action{
 			msg("You need at least 200 wood for the plaza and the first building.");
 			return;
 		}
+		
 		//Check units availability
 		if (expedition.getTotalUnits() < 101){
 			msg("You need at least 100 people to found the town.");
 			return;
 		}
+		
+		// Check distance from other settlements
+		List<Town> towns = expedition.getTowns();
+		for (Town town: towns){
+			if (Position.distance(town.getPosition(), expedition.getPosition()) < 100){
+				msg("This settlement is too close to "+town.getName());
+				return;
+			}
+		}
+		
 		
 		expedition.reduceGood("WOOD", 200);
 		

@@ -24,46 +24,48 @@ public class ExpeditionDAO {
 	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
 		Store goodsStore = new Store();
 		goodsStore.setOwnerName("Goods Store");
-		goodsStore.addItem(15300, new StoreItemInfo("FOOD", 1, 10, "packs"));
-		goodsStore.addItem(160, new StoreItemInfo("RUM", 20, 5, "barrels"));
-		goodsStore.addItem(550, new StoreItemInfo("WOOD", 5));
-		goodsStore.addItem(165, new StoreItemInfo("FRESHWATER", 165, 2, "barrels"));
-		goodsStore.addItem(3200, new StoreItemInfo("FOOD_SAUERKRAUT", 3, 10, "barrels"));
-		goodsStore.addItem(50, new StoreItemInfo("CARPENTER", 60));
+		goodsStore.addItem(80000, new StoreItemInfo("FOOD", 1, 10, "packs"));
+		goodsStore.addItem(500, new StoreItemInfo("RUM", 20, 5, "barrels"));
+		goodsStore.addItem(10000, new StoreItemInfo("WOOD", 5));
+		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", 165, 2, "barrels"));
+		goodsStore.addItem(20000, new StoreItemInfo("FOOD_SAUERKRAUT", 3, 10, "barrels"));
+		goodsStore.addItem(1000, new StoreItemInfo("CARPENTER", 60));
 
 		
 		//Weapons Store
 		Store weaponsStore = new Store();
-		weaponsStore.setOwnerName("Weapons Store");
-		weaponsStore.addItem(550, new StoreItemInfo("SPEARS", 5));
-		weaponsStore.addItem(130, new StoreItemInfo("SWORDS", 10));
-		weaponsStore.addItem(200, new StoreItemInfo("BOWS", 6));
-		weaponsStore.addItem(180, new StoreItemInfo("XBOWS", 25));
-		weaponsStore.addItem(100, new StoreItemInfo("GUNS", 30));
-		weaponsStore.addItem(3200, new StoreItemInfo("ARROWS", 2));
-		weaponsStore.addItem(160, new StoreItemInfo("STUDDED_LEATHER",20));
-		weaponsStore.addItem(80, new StoreItemInfo("PLATE", 50));
+		weaponsStore.setOwnerName("Armory");
+		weaponsStore.addItem(5000, new StoreItemInfo("SPEARS", 5));
+		weaponsStore.addItem(1000, new StoreItemInfo("SWORDS", 10));
+		weaponsStore.addItem(2000, new StoreItemInfo("BOWS", 6));
+		weaponsStore.addItem(1500, new StoreItemInfo("XBOWS", 25));
+		weaponsStore.addItem(1000, new StoreItemInfo("GUNS", 30));
+		weaponsStore.addItem(30000, new StoreItemInfo("ARROWS", 2));
+		weaponsStore.addItem(2000, new StoreItemInfo("STUDDED_LEATHER",20));
+		weaponsStore.addItem(1000, new StoreItemInfo("PLATE", 50));
 		
 		//Port
 		Store port = new Store();
-		port.setOwnerName("Port");
-		port.addItem(10, new StoreItemInfo("CARRACK", 4000));
-		port.addItem(15, new StoreItemInfo("CARAVEL", 3000));
+		port.setOwnerName("Harbor");
+		port.addItem(30, new StoreItemInfo("CARRACK", 8000));
+		port.addItem(20, new StoreItemInfo("CARAVEL", 6000));
 		
-		port.addItem(12, new StoreItemInfo("CAPTAIN", 300));
+		port.addItem(50, new StoreItemInfo("CAPTAIN", 300));
 		
 		//Pub
 		Store pub = new Store();
 		pub.setOwnerName("Pub");
-		pub.addItem(100, new StoreItemInfo("SAILOR", 60));
-		pub.addItem(350, new StoreItemInfo("ROGUE", 30));
+		pub.addItem(10000, new StoreItemInfo("SAILOR", 60));
+		pub.addItem(35000, new StoreItemInfo("ROGUE", 30));
+		pub.addItem(50000, new StoreItemInfo("COLONIST", 10));
+
 		
 		//Guild
 		Store guild = new Store();
 		guild.setOwnerName("Guild");
-		guild.addItem(70, new StoreItemInfo("MARINE", 70));
-		guild.addItem(130, new StoreItemInfo("SOLDIER", 100));
-		guild.addItem(85, new StoreItemInfo("ARCHER", 120));
+		guild.addItem(7000, new StoreItemInfo("MARINE", 70));
+		guild.addItem(5000, new StoreItemInfo("SOLDIER", 100));
+		guild.addItem(1500, new StoreItemInfo("ARCHER", 120));
 		
 		return new AbstractCell[]{
 			//Overworld cells
@@ -89,6 +91,8 @@ public class ExpeditionDAO {
 			new ExpeditionCell("SPAIN_WALL", "Stone Wall", true, false),
 			new ExpeditionCell("SPAIN_HOUSE", "Houses", true, true),
 			new ExpeditionCell("SPAIN_SHIP", "Ships", false, false, true),
+			new ExpeditionCell("SPAIN_COLUMN", "Column", true, true),
+			new ExpeditionCell("SPAIN_CASTLE", "Spain Castle", true, true),
 					
 			new ExpeditionCell("DEPARTURE", "Docks", "DEPARTURE"),
 			
@@ -112,11 +116,11 @@ public class ExpeditionDAO {
 	public static CharAppearance[] getCharAppearances(){
 		return new CharAppearance[]{
 			//Expeditions
-			new CharAppearance("EXPEDITION", '@', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("EXPEDITION", '@', ConsoleSystemInterface.RED),
 			new CharAppearance("SHIP_EXPEDITION", 'v', ConsoleSystemInterface.RED),
 			
 			//Non principal Expeditions
-			new CharAppearance("HOSTILE_EXPEDITION", '@', ConsoleSystemInterface.RED),
+			new CharAppearance("HOSTILE_EXPEDITION", '@', ConsoleSystemInterface.BLUE),
 			
 			//Overworld Terrain
 			new CharAppearance("GRASS", '.', ConsoleSystemInterface.GREEN),
@@ -149,7 +153,8 @@ public class ExpeditionDAO {
 			new CharAppearance("SPAIN_HOUSE", '#', ConsoleSystemInterface.TEAL),
 			new CharAppearance("SPAIN_SHIP", 'v', ConsoleSystemInterface.RED),
 			new CharAppearance("SPAIN_DOCKS", '=', ConsoleSystemInterface.BROWN),
-		
+			new CharAppearance("SPAIN_COLUMN", 'o', ConsoleSystemInterface.BROWN),
+			new CharAppearance("SPAIN_CASTLE", '#', ConsoleSystemInterface.BROWN),
 			
 			// Castle
 			new CharAppearance("CASTLE_FLOOR", '.', ConsoleSystemInterface.BROWN),
@@ -175,7 +180,9 @@ public class ExpeditionDAO {
 			new CharAppearance("CAPTAIN", '@', ConsoleSystemInterface.CYAN),
 			new CharAppearance("EXPLORER", '@', ConsoleSystemInterface.RED),
 			new CharAppearance("CARPENTER", '@', ConsoleSystemInterface.DARK_RED),
+			new CharAppearance("COLONIST", '@', ConsoleSystemInterface.YELLOW),
 
+			
 			//native Units
 			new CharAppearance("NATIVE_WARRIOR", '@', ConsoleSystemInterface.RED),
 			new CharAppearance("NATIVE_BRAVE", '@', ConsoleSystemInterface.PURPLE),
@@ -253,7 +260,9 @@ public class ExpeditionDAO {
 			new ExpeditionUnit("CARPENTER", "Carpenter","Carpenters", 250, 300, 1, 1, 1, 
 					new String[]{"SPEARS"},
 					new String[]{""}),
-		
+			new ExpeditionUnit("COLONIST",  "Colonist",  "Colonists",  200, 100, 1, 1, 1,
+					new String[]{"SPEARS"},
+					new String[]{""}),
 			//Native Units
 			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 200, 200, 2, 1, 0,
 					new String[]{""},

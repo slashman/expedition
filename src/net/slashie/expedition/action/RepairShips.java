@@ -8,6 +8,7 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.serf.action.Action;
+import net.slashie.serf.action.Actor;
 
 /**
  * Recovers resistance to the expedition ships
@@ -22,17 +23,43 @@ import net.slashie.serf.action.Action;
 public class RepairShips extends Action{
 
 	private static final double RECOVERY_INDEX = 0.1;
-	private static final int WOOD_PER_REPAIRMEN = 5;
+	private static final int WOOD_PER_REPAIRMEN = 1;
 	private static final int CARPENTER_MULTIPLIER = 10;
+	private boolean actionCancelled;
 
 	@Override
 	public void execute() {
 		Expedition expedition = (Expedition) performer;
 		if (expedition.getMovementMode() != MovementMode.SHIP){
-			expedition.getLevel().addMessage("What ship?");
+			expedition.getLevel().addMessage("You are not on a ship.");
+			actionCancelled = true;
 			return;
 		}
+		
+		boolean someShipDamaged = false;
+		List<Vehicle> ships = expedition.getCurrentVehicles();
+		for (Vehicle ship: ships){
+			int damage = ship.getMaxResistance() - ship.getResistance();
+			if (damage > 0){
+				someShipDamaged = true;
+				break;
+			}
+		}
+		
+		if (!someShipDamaged){
+			expedition.getLevel().addMessage("Your ships are in perfect shape.");
+			actionCancelled = true;
+			return;
+		}
+		
 		int availableWood = expedition.getItemCount("WOOD");
+		
+		if (availableWood == 0){
+			expedition.getLevel().addMessage("You need some wood to repair the ships");
+			actionCancelled = true;
+			return;
+		}
+			
 		int maxRepairmen = availableWood / WOOD_PER_REPAIRMEN;
 		int remainingRepairmen = maxRepairmen;
 		int carpenters = expedition.getItemCount("CARPENTER");
@@ -52,7 +79,6 @@ public class RepairShips extends Action{
 			remainingRepairmen -= normalCrew;
 		}
 		
-	
 		int recoveryPower = carpenters * CARPENTER_MULTIPLIER + normalCrew;
 		
 		int recovery = (int)Math.round(recoveryPower*RECOVERY_INDEX);
@@ -61,7 +87,7 @@ public class RepairShips extends Action{
 		int remainingRecovery = recovery;
 		
 		// Select ships, starting from the most damaged ones, to repair
-		List<Vehicle> ships = expedition.getCurrentVehicles();
+		
 		Collections.sort(ships, new Comparator<Vehicle>(){
 			public int compare(Vehicle o1, Vehicle o2) {
 				return o1.getResistance() - o2.getResistance();
@@ -98,10 +124,26 @@ public class RepairShips extends Action{
 		int usedWood = totalRepairmen * WOOD_PER_REPAIRMEN;
 		expedition.reduceQuantityOf("WOOD", usedWood);
 		
+		String message = "You repair your ships with ";
+		if (usedCarpenters > 0)
+			message += usedCarpenters+" carpenters and ";
+		message += usedCrew+" crew members, spending "+usedWood+" wood.";
+		expedition.getLevel().addMessage(message);
+
+		
 	}
 
 	@Override
 	public String getID() {
 		return "RepairShips";
+	}
+
+	@Override
+	public int getCost() {
+		if (actionCancelled){
+			actionCancelled = false;
+			return 0;
+		}
+		return 1000;
 	}
 }

@@ -59,7 +59,7 @@ public class Vehicle extends ExpeditionItem{
 	}
 	public void dailyWearOut(AbstractLevel l) {
 		if (Util.chance(5)){
-			l.addMessage("One of your "+getDescription()+" suffers damage!");
+			l.addMessage("A "+getDescription()+" suffers damage!");
 			resistance --;
 		}
 	}

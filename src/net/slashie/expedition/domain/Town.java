@@ -1,20 +1,29 @@
 package net.slashie.expedition.domain;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.ui.console.ExpeditionConsoleUI;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
+import net.slashie.utils.Util;
 
 public class Town extends GoodsCache{
 	private String name;
-	private int population;
+	private Expedition founderExpedition;
+	private Date foundedIn;
 	
 	public Town(ExpeditionGame game) {
 		super(game);
 		setAppearanceId("TOWN");
-
+		founderExpedition = game.getExpedition();
+		foundedIn = game.getGameTime().getTime();
 	}
 
 	public String getName() {
@@ -37,12 +46,17 @@ public class Town extends GoodsCache{
 	
 	@Override
 	public void onStep(Actor a) {
-		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
+		/*if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
 			switch (UserInterface.getUI().switchChat("What do you want to do?", "Nothing")){
 			case 0:
     			break;
     		}
-		}
+		}*/
+		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("The "+getTitle()+" of "+getName()+" XXX " +
+				"Founded on "+ DateFormat.getDateInstance(DateFormat.MEDIUM).format(foundedIn)+" by "+founderExpedition.getExpeditionaryTitle()+" XXX "+
+				"Current Population: "+getPopulation()
+				
+		);
 	}
 	
 	@Override
@@ -55,17 +69,39 @@ public class Town extends GoodsCache{
 		return false;
 	}
 
+	
+	public int getSize(){
+		return (getPopulation() / 1000)+1;
+	}
+
+	private int getPopulation() {
+		return getTotalUnits();
+	}
 
 	public boolean isTown() {
-		return population > 5 && population < 20;
+		return getSize() > 5 && getSize() < 20;
 	}
 
 	public boolean isCity() {
-		return population > 20;
+		return getSize() > 20;
 	}
-
-	public void setPopulation(int population) {
-		this.population = population;
+	
+	public void tryGrowing(){
+		//This is called each 30 days
+		if (Util.chance(95)){
+			int growth = (int)Math.round(getPopulation() * ((double)Util.rand(1, 5)/100.0d));
+			addItem(ItemFactory.createItem("COLONIST"), growth);
+		}
 	}
+	
+	public String getTitle(){
+		if (isCity())
+			return "city";
+		if (isTown())
+			return "town";
+		return "village";
+	}
+	
+	
 
 }

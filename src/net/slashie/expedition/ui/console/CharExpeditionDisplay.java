@@ -58,7 +58,7 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.print(20,13, "b. Resume Expedition", ConsoleSystemInterface.WHITE);
 		csi.print(20,14, "c. Quit", ConsoleSystemInterface.WHITE);
 		csi.print(18,21, ExpeditionGame.getVersion(), ConsoleSystemInterface.CYAN);
-		csi.print(18,22, "Santiago Zapata - 2009", ConsoleSystemInterface.CYAN);
+		csi.print(18,22, "Santiago Zapata - 2009-2010", ConsoleSystemInterface.CYAN);
 		
 		csi.refresh();
     	STMusicManagerNew.thus.playKey("TITLE");
@@ -83,22 +83,28 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 	public void showHelp() {
 		csi.saveBuffer();
 		csi.cls();
-
-		csi.print(6, 3, " -*-*- EXPEDITION -*-*-", ConsoleSystemInterface.BLUE);
-		csi.print(6, 5, " == Commands ==", ConsoleSystemInterface.CYAN);
-		csi.print(6, 6, "  /---\\     ", ConsoleSystemInterface.WHITE);
-		csi.print(6, 7, "  |789|  Move Around using the numpad or", ConsoleSystemInterface.WHITE);
-		csi.print(6, 8, "  |4 6|  The directional keys.", ConsoleSystemInterface.WHITE);
-		csi.print(6, 9, "  |123|", ConsoleSystemInterface.WHITE);
-		csi.print(6,10, "  \\---/", ConsoleSystemInterface.WHITE);
-		csi.print(6,11, "  ", ConsoleSystemInterface.WHITE);
-		csi.print(6,13, " == In the overworld ==", ConsoleSystemInterface.CYAN);
-		csi.print(6,14, "  ", ConsoleSystemInterface.WHITE);
-		csi.print(6,15, "  e: Create Equipment Caché", ConsoleSystemInterface.WHITE);
-		csi.print(6,16, "  b: Build Town", ConsoleSystemInterface.WHITE);
-		csi.print(6,17, "  r: Ranged Attack", ConsoleSystemInterface.WHITE);
-		csi.print(6,18, "  ", ConsoleSystemInterface.WHITE);
-		csi.print(6,19, "  Press Space to continue", ConsoleSystemInterface.WHITE);
+		csi.print(6, 1, " == Commands ==", ConsoleSystemInterface.CYAN);
+		csi.print(6, 3, "  /---\\     ", ConsoleSystemInterface.WHITE);
+		csi.print(6, 4, "  |789|  Move Around using the numpad or", ConsoleSystemInterface.WHITE);
+		csi.print(6, 5, "  |4 6|  The directional keys.", ConsoleSystemInterface.WHITE);
+		csi.print(6, 6, "  |123|", ConsoleSystemInterface.WHITE);
+		csi.print(6, 7, "  \\---/", ConsoleSystemInterface.WHITE);
+		csi.print(6, 8, "  ", ConsoleSystemInterface.WHITE);
+		csi.print(6, 9, " == In the overworld ==", ConsoleSystemInterface.CYAN);
+		csi.print(6,10, "  ", ConsoleSystemInterface.WHITE);
+		csi.print(6,11, "  a: Arm / Disarm expedition", ConsoleSystemInterface.WHITE);
+		csi.print(6,12, "  b: Build a Settlement", ConsoleSystemInterface.WHITE);
+		csi.print(6,13, "  d: Create Equipment Caché", ConsoleSystemInterface.WHITE);
+		csi.print(6,14, "  f: Fire Ranged Attack", ConsoleSystemInterface.WHITE);
+		csi.print(6,15, "  i: Show inventory", ConsoleSystemInterface.WHITE);
+		csi.print(6,15, "  l: Look around", ConsoleSystemInterface.WHITE);
+		csi.print(6,16, "  r: Repair damaged ships", ConsoleSystemInterface.WHITE);
+		csi.print(6,17, "  R: Reset dead' reckon counter", ConsoleSystemInterface.WHITE);
+		csi.print(6,18, "  S: Save Game", ConsoleSystemInterface.WHITE);
+		csi.print(6,19, "  Q: Quit", ConsoleSystemInterface.WHITE);
+		
+		csi.print(6,21, "  ", ConsoleSystemInterface.WHITE);
+		csi.print(6,22, "  Press Space to continue", ConsoleSystemInterface.CYAN);
 		csi.refresh();
 
 		csi.waitKey(CharKey.SPACE);

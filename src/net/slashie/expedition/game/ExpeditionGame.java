@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.ui.ExpeditionDisplay;
@@ -36,7 +37,11 @@ public class ExpeditionGame extends SworeGame {
 			dayShiftCount += getExpedition().getLastActionTimeCost();
 			if (dayShiftCount >= 200){ // Each day takes 200 turns
 				dayShiftCount = 0;
+				int month = currentTime.get(Calendar.MONTH);
 				currentTime.add(Calendar.DATE, 1);
+				if (currentTime.get(Calendar.MONTH) > month){
+					monthChange();
+				}
 				//Everybody eat
 				for (int i = 0; i < foodConsumers.size(); i++){
 					foodConsumers.get(i).consumeFood();
@@ -66,6 +71,14 @@ public class ExpeditionGame extends SworeGame {
 		
 	}
 	
+	private void monthChange() {
+		//getPlayer().getLevel().addMessage("Month change");
+		List<Town> towns = ((Expedition)getPlayer()).getTowns();
+		for (Town town: towns){
+			town.tryGrowing();
+		}
+	}
+
 	private List<FoodConsumer> foodConsumers = new ArrayList<FoodConsumer>();
 	public void addFoodConsumer(FoodConsumer foodConsumer){
 		foodConsumers.add(foodConsumer);
@@ -106,7 +119,7 @@ public class ExpeditionGame extends SworeGame {
 
 	@Override
 	public String getFirstMessage(Actor player) {
-		return "Welcome to Spain, "+getExpedition().getExpeditionary();
+		return "Welcome to Spain, "+getExpedition().getExpeditionary()+". Press F1 for help.";
 	}
 
 	@Override
@@ -181,7 +194,7 @@ public class ExpeditionGame extends SworeGame {
 	}
 	
 	public static String getVersion(){
-		return "v0.1.6 rev97";
+		return "v0.1.7 rev97";
 	}
 	
 	public Expedition getExpedition(){
