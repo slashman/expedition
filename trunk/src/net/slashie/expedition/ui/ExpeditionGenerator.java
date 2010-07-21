@@ -31,6 +31,7 @@ public abstract class ExpeditionGenerator {
 		ret.setAccountedGold(200);
 		ExpeditionItem explorer = ItemFactory.createItem("EXPLORER");
 		ret.addItem(explorer, 1);
+		
 		ret.setMovementMode(MovementMode.FOOT);
 		return ret;
 	}

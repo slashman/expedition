@@ -29,7 +29,8 @@ public class Walk extends Action{
 	public boolean canPerform(Actor a) {
 		Expedition expedition = (Expedition) a;
 		
-		if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
+		//if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
+		if (expedition.getLevel() instanceof ExpeditionMicroLevel ){
 			/*if (expedition.getOffshoreCurrentlyCarrying() > 100){
 				invalidationMessage = "You are stranded! drop some items!";
 				return false;

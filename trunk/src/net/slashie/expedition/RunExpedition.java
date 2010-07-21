@@ -20,6 +20,7 @@ import net.slashie.expedition.action.DropEquipment;
 import net.slashie.expedition.action.MeleeAttack;
 import net.slashie.expedition.action.NPRainArrows;
 import net.slashie.expedition.action.RainArrows;
+import net.slashie.expedition.action.RepairShips;
 import net.slashie.expedition.action.Use;
 import net.slashie.expedition.action.Walk;
 import net.slashie.expedition.action.navigation.ResetDeadReckon;
@@ -294,13 +295,15 @@ public class RunExpedition {
 		Action rainArrows = new RainArrows();
 		Action armExpedition = new ArmExpedition();
 		Action resetReckon = new ResetDeadReckon();
+		Action repairShips = new RepairShips();
 
 		UserAction[] userActions = new UserAction[] {
 		    new UserAction(dropEquipment, CharKey.d),
 		    new UserAction(buildSettlement, CharKey.b),
-		    new UserAction(rainArrows, CharKey.r),
+		    new UserAction(rainArrows, CharKey.f),
 		    new UserAction(armExpedition, CharKey.a),
-		    new UserAction(resetReckon, CharKey.r),
+		    new UserAction(resetReckon, CharKey.R),
+		    new UserAction(repairShips, CharKey.r),
 		};
 
 

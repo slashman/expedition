@@ -87,9 +87,9 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		csi.print(5, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
 		csi.print(5, 3, getExpedition().getExpeditionaryTitle());
 		if (getExpedition().getTowns().size() == 1)
-			csi.print(5, 4, "1 town    ");
+			csi.print(5, 4, "1 settlement ");
 		else
-			csi.print(5, 4, getExpedition().getTowns().size()+" towns");
+			csi.print(5, 4, getExpedition().getTowns().size()+" settlements");
 		csi.print(5, 5, getExpedition().getAccountedGold()+"$");
 		
 		// Box 2
@@ -124,6 +124,10 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			expeditionUnitItems.add(new EquipmentMenuItem(expeditionUnit));
 		}
 		Collections.sort(expeditionUnitItems, expeditionUnitsComparator);
+		for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
+			expeditionUnitItems.add(new VehicleMenuItem(expeditionVehicle));
+		}
+		
 		expeditionUnitBox.setElements(expeditionUnitItems);
 	}
 	
@@ -675,6 +679,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
 			StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
 			if (item.getItem() instanceof ExpeditionUnit){
+				if (stock < 0)
+					stock = 0;
 				if (itemInfo.getPack() > 1){
 					if (stock < inventory)
 						return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
@@ -687,6 +693,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 						return itemDescription + ", "+itemInfo.getPrice()+"$ {"+inventory+" Available}";
 				}
 			} else {
+				if (stock < 0)
+					stock = 0;
 				if (itemInfo.getPack() > 1){
 					if (stock < inventory)
 						return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";

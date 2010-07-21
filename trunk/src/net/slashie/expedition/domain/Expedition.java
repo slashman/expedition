@@ -453,14 +453,7 @@ public class Expedition extends Player implements FoodConsumer{
 	
 	@Override
 	public void beforeItemsAddition(AbstractItem item, int quantity) {
-		if (item instanceof Vehicle){
-			if (!((Vehicle)item).isFakeVehicle()){
-				for (int i = 0; i < quantity; i++){
-					currentVehicles.add((Vehicle)((ExpeditionItem)item).clone());
-				}
-			}
-				
-		}
+		
 	}
 
 	@Override
@@ -622,7 +615,14 @@ public class Expedition extends Player implements FoodConsumer{
 	public void addItemOffshore(ExpeditionItem what, int quantity){
 		MovementMode currentMovementMode = getMovementMode();
 		setMovementMode(MovementMode.SHIP);
-		addItem(what, quantity);
+		if (what instanceof Vehicle && !((Vehicle)what).isFakeVehicle()){
+			for (int i = 0; i < quantity; i++){
+				currentVehicles.add((Vehicle)((ExpeditionItem)what).clone());
+			}
+		} else {
+			addItem(what, quantity);
+		}
+		
 		setMovementMode(currentMovementMode);
 	}
 	
