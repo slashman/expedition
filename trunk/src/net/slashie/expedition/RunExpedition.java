@@ -59,6 +59,8 @@ import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.serf.ui.consoleUI.ConsoleUISelector;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
 import net.slashie.serf.ui.consoleUI.effects.CharEffectFactory;
+import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
+import net.slashie.serf.ui.oryxUI.effects.GFXEffectFactory;
 import net.slashie.utils.FileUtil;
 import net.slashie.utils.sound.midi.STMidiPlayer;
 
@@ -110,18 +112,17 @@ public class RunExpedition {
 				initializeFeatures();
 				switch (mode){
 				case SWING_GFX:
-					/*System.out.println("Initializing Swing GFX System Interface");
+					System.out.println("Initializing Swing GFX System Interface");
 					SwingSystemInterface si = new SwingSystemInterface();
-					System.out.println("Initializing Swing GFX User Interface");
-					UserInterface.setSingleton(new GFXUserInterface());
-					GFXCuts.initializeSingleton();
-					Display.thus = new GFXDisplay(si, UIconfiguration);
-					PlayerGenerator.thus = new GFXPlayerGenerator(si);
-					//PlayerGenerator.thus.initSpecialPlayers();
+					System.out.println("Initializing Oryx GFX User Interface");
+					UserInterface.setSingleton(new ExpeditionOryxUI());
+					ExpeditionDisplay.thus = new OryxExpeditionDisplay(si, UIconfiguration);
+					ExpeditionGenerator.thus = new OryxPlayerGenerator(si);
+					
 					EffectFactory.setSingleton(new GFXEffectFactory());
 					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(new GFXEffects().getEffects());
 					ui = UserInterface.getUI();
-					initializeUI(si);*/
+					initializeUI(si);
 					break;
 				case JCURSES_CONSOLE:
 					System.out.println("Initializing JCurses System Interface");
@@ -136,10 +137,9 @@ public class RunExpedition {
 		            }
 		            System.out.println("Initializing Console User Interface");
 					UserInterface.setSingleton(new ExpeditionConsoleUI(csi));
-					/*CharCuts.initializeSingleton();*/
 					ExpeditionDisplay.thus = new CharExpeditionDisplay(csi);
 					ExpeditionGenerator.thus = new CharPlayerGenerator(csi);
-					//PlayerGenerator.thus.initSpecialPlayers();
+					
 					EffectFactory.setSingleton(new CharEffectFactory());
 					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
 					ui = UserInterface.getUI();
