@@ -121,7 +121,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		
 		Vector expeditionUnitItems = new Vector();
 		for (Equipment expeditionUnit: expeditionUnitsVector){
-			expeditionUnitItems.add(new EquipmentMenuItem(expeditionUnit));
+			expeditionUnitItems.add(new UnitMenuItem(expeditionUnit));
 		}
 		Collections.sort(expeditionUnitItems, expeditionUnitsComparator);
 		for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
@@ -157,20 +157,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		 
 	}
 	
-	private String[] months = new String[]{
-		"Janvary",
-		"Febrvary",
-		"March",
-		"April",
-		"May",
-		"Jvne",
-		"Jvly",
-		"Avgvst",
-		"September",
-		"October",
-		"November",
-		"December"
-	};
+	
 
 	@Override
 	public String getQuitPrompt() {
@@ -623,8 +610,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		Equipment.eqMode = false;
 	}
 
-	private Comparator<EquipmentMenuItem> expeditionUnitsComparator = new Comparator<EquipmentMenuItem>(){
-		public int compare(EquipmentMenuItem o1, EquipmentMenuItem o2) {
+	private Comparator<UnitMenuItem> expeditionUnitsComparator = new Comparator<UnitMenuItem>(){
+		public int compare(UnitMenuItem o1, UnitMenuItem o2) {
 			return o1.getMenuColor() - o2.getMenuColor();
 		};
 	};
