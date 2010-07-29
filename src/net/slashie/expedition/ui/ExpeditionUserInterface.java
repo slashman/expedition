@@ -12,4 +12,19 @@ public interface ExpeditionUserInterface {
 	public void transferFromExpedition(GoodsCache ship, int minUnits);
 
 	public void showBlockingMessage(String message);
+	
+	static final String[] months = new String[]{
+			"Janvary",
+			"Febrvary",
+			"March",
+			"April",
+			"May",
+			"Jvne",
+			"Jvly",
+			"Avgvst",
+			"September",
+			"October",
+			"November",
+			"December"
+		};
 }
