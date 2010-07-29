@@ -7,7 +7,7 @@ import net.slashie.serf.action.Action;
 public class MagicAction extends Action{
 	@Override
 	public void execute() {
-		((Expedition)performer).addItem(ItemFactory.createItem("PLATE"), 10);
+		//((Expedition)performer).addItem(ItemFactory.createItem("PLATE"), 10);
 	}
 	
 	@Override
