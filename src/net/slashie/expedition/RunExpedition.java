@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Field;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -25,6 +26,7 @@ import net.slashie.expedition.action.Use;
 import net.slashie.expedition.action.Walk;
 import net.slashie.expedition.action.navigation.ResetDeadReckon;
 import net.slashie.expedition.data.ExpeditionDAO;
+import net.slashie.expedition.data.GFXAppearances;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.item.ItemFactory;
@@ -35,6 +37,10 @@ import net.slashie.expedition.ui.console.CharPlayerGenerator;
 import net.slashie.expedition.ui.console.ExpeditionConsoleUI;
 import net.slashie.expedition.ui.console.ExpeditionConsoleUISelector;
 import net.slashie.expedition.ui.console.effects.CharEffects;
+import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
+import net.slashie.expedition.ui.oryx.OryxExpeditionDisplay;
+import net.slashie.expedition.ui.oryx.OryxPlayerGenerator;
+import net.slashie.expedition.ui.oryx.effects.GFXEffects;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.libjcsi.jcurses.JCursesConsoleInterface;
@@ -59,6 +65,8 @@ import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.serf.ui.consoleUI.ConsoleUISelector;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
 import net.slashie.serf.ui.consoleUI.effects.CharEffectFactory;
+import net.slashie.serf.ui.oryxUI.GFXUISelector;
+import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.serf.ui.oryxUI.effects.GFXEffectFactory;
 import net.slashie.utils.FileUtil;
@@ -91,9 +99,9 @@ public class RunExpedition {
     			
     			switch (mode){
 				case SWING_GFX:
-					/*System.out.println("Initializing Graphics Appearances");
+					System.out.println("Initializing Graphics Appearances");
 					initializeGAppearances();
-					break;*/
+					break;
 				case JCURSES_CONSOLE:
 				case SWING_CONSOLE:
 					System.out.println("Initializing Char Appearances");
@@ -205,6 +213,8 @@ public class RunExpedition {
 	}
 	private static Properties configuration;
 	private static Properties UIconfiguration;
+	private static Properties keyConfig;
+	private static Properties keyBindings;
 	private static String uiFile;
 	
 	private static void readConfiguration(){
@@ -213,6 +223,16 @@ public class RunExpedition {
 	    	configuration.load(new FileInputStream("expedition.properties"));
 	    } catch (IOException e) {
 	    	System.out.println("Error loading configuration file, please confirm existence of expedition.properties");
+	    	System.exit(-1);
+	    }
+	    
+	    
+	    keyConfig = new Properties();
+	    try {
+	    	keyConfig.load(new FileInputStream("keys.properties"));
+	    	
+	    } catch (IOException e) {
+	    	System.out.println("Error loading configuration file, please confirm existence of keys.properties");
 	    	System.exit(-1);
 	    }
 	    
@@ -297,62 +317,101 @@ public class RunExpedition {
 		Action resetReckon = new ResetDeadReckon();
 		Action repairShips = new RepairShips();
 
-		UserAction[] userActions = new UserAction[] {
-		    new UserAction(dropEquipment, CharKey.d),
-		    new UserAction(buildSettlement, CharKey.b),
-		    new UserAction(rainArrows, CharKey.f),
-		    new UserAction(armExpedition, CharKey.a),
-		    new UserAction(resetReckon, CharKey.R),
-		    new UserAction(repairShips, CharKey.r),
-		};
-
-
+		keyBindings = new Properties();
+		keyBindings.put("DONOTHING1_KEY", readKeyString(keyConfig, "doNothing"));
+		keyBindings.put("DONOTHING2_KEY", readKeyString(keyConfig, "doNothing2"));
+		keyBindings.put("UP1_KEY", readKeyString(keyConfig, "up"));
+		keyBindings.put("UP2_KEY", readKeyString(keyConfig, "up2"));
+		keyBindings.put("LEFT1_KEY", readKeyString(keyConfig, "left"));
+		keyBindings.put("LEFT2_KEY", readKeyString(keyConfig, "left2"));
+		keyBindings.put("RIGHT1_KEY", readKeyString(keyConfig, "right"));
+		keyBindings.put("RIGHT2_KEY", readKeyString(keyConfig, "right2"));
+		keyBindings.put("DOWN1_KEY", readKeyString(keyConfig, "down"));
+		keyBindings.put("DOWN2_KEY", readKeyString(keyConfig, "down2"));
+		keyBindings.put("UPRIGHT1_KEY", readKeyString(keyConfig, "upRight"));
+		keyBindings.put("UPRIGHT2_KEY", readKeyString(keyConfig, "upRight2"));
+		keyBindings.put("UPLEFT1_KEY", readKeyString(keyConfig, "upLeft"));
+		keyBindings.put("UPLEFT2_KEY", readKeyString(keyConfig, "upLeft2"));
+		keyBindings.put("DOWNLEFT1_KEY", readKeyString(keyConfig, "downLeft"));
+		keyBindings.put("DOWNLEFT2_KEY", readKeyString(keyConfig, "downLeft2"));
+		keyBindings.put("DOWNRIGHT1_KEY", readKeyString(keyConfig, "downRight"));
+		keyBindings.put("DOWNRIGHT2_KEY", readKeyString(keyConfig, "downRight2"));
+		keyBindings.put("SELF1_KEY", readKeyString(keyConfig, "self"));
+		keyBindings.put("SELF2_KEY", readKeyString(keyConfig, "self2"));
 		
-
+		keyBindings.put("DROP_EQUIPMENT_KEY", readKeyString(keyConfig, "drop"));
+		keyBindings.put("BUILD_SETTLEMENT_KEY", readKeyString(keyConfig, "build"));
+		keyBindings.put("RAIN_ARROWS_KEY", readKeyString(keyConfig, "fire"));
+		keyBindings.put("ARM_EXPEDITION_KEY", readKeyString(keyConfig, "arm"));
+		keyBindings.put("RESET_RECKON_KEY", readKeyString(keyConfig, "reset"));
+		keyBindings.put("REPAIR_SHIPS_KEY", readKeyString(keyConfig, "repair"));
+		
+		keyBindings.put("QUIT_KEY", readKeyString(keyConfig, "PROMPTQUIT"));
+		keyBindings.put("HELP1_KEY", readKeyString(keyConfig, "HELP1"));
+		keyBindings.put("HELP2_KEY", readKeyString(keyConfig, "HELP2"));
+		keyBindings.put("LOOK_KEY", readKeyString(keyConfig, "LOOK"));
+		keyBindings.put("PROMPT_SAVE_KEY", readKeyString(keyConfig, "PROMPTSAVE"));
+		keyBindings.put("SHOW_INVENTORY_KEY", readKeyString(keyConfig, "SHOWINVEN"));
+		keyBindings.put("SWITCH_MUSIC_KEY", readKeyString(keyConfig, "SWITCHMUSIC"));
+		
+		UserAction[] userActions = new UserAction[] {
+			    new UserAction(dropEquipment, i(keyBindings.getProperty("DROP_EQUIPMENT_KEY"))),
+			    new UserAction(buildSettlement, i(keyBindings.getProperty("BUILD_SETTLEMENT_KEY"))),
+			    new UserAction(rainArrows, i(keyBindings.getProperty("RAIN_ARROWS_KEY"))),
+			    new UserAction(armExpedition, i(keyBindings.getProperty("ARM_EXPEDITION_KEY"))),
+			    new UserAction(resetReckon, i(keyBindings.getProperty("RESET_RECKON_KEY"))),
+			    new UserAction(repairShips, i(keyBindings.getProperty("REPAIR_SHIPS_KEY"))),
+			};
+		
 		UserCommand[] userCommands = new UserCommand[]{
-			new UserCommand(CommandListener.PROMPTQUIT, CharKey.Q),
-			new UserCommand(CommandListener.HELP, CharKey.F1),
-			new UserCommand(CommandListener.LOOK, CharKey.l),
-			new UserCommand(CommandListener.PROMPTSAVE, CharKey.S),
-			new UserCommand(CommandListener.HELP, CharKey.h),
-			new UserCommand(CommandListener.SHOWINVEN, CharKey.i),
-
-			//new UserCommand(CommandListener.SHOWSTATS, CharKey.c),
-			//new UserCommand(CommandListener.CHARDUMP, CharKey.C),
-			//new UserCommand(CommandListener.SHOWMESSAGEHISTORY, CharKey.m),
-			//new UserCommand(CommandListener.SHOWMAP, CharKey.O),
-			new UserCommand(CommandListener.SWITCHMUSIC, CharKey.T),
+			new UserCommand(CommandListener.PROMPTQUIT, i(keyBindings.getProperty("QUIT_KEY"))),
+			new UserCommand(CommandListener.HELP, i(keyBindings.getProperty("HELP1_KEY"))),
+			new UserCommand(CommandListener.LOOK, i(keyBindings.getProperty("LOOK_KEY"))),
+			new UserCommand(CommandListener.PROMPTSAVE, i(keyBindings.getProperty("PROMPT_SAVE_KEY"))),
+			new UserCommand(CommandListener.HELP, i(keyBindings.getProperty("HELP2_KEY"))),
+			new UserCommand(CommandListener.SHOWINVEN, i(keyBindings.getProperty("SHOW_INVENTORY_KEY"))),
+			new UserCommand(CommandListener.SWITCHMUSIC, i(keyBindings.getProperty("SWITCH_MUSIC_KEY"))),
 		};
+		
 		switch (mode){
 		case SWING_GFX:
-			/*((GFXUserInterface)ui).init((SwingSystemInterface)si, userCommands, UIconfiguration, target);
+			((ExpeditionOryxUI)ui).init((SwingSystemInterface)si, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2010", userCommands, UIconfiguration, null);
 			uiSelector = new GFXUISelector();
-			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, target, attack, (GFXUserInterface)ui);*/
+			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings);
 			break;
 		case JCURSES_CONSOLE: case SWING_CONSOLE:
 			((ExpeditionConsoleUI)ui).init((ConsoleSystemInterface)si, userCommands, null);
 			uiSelector = new ExpeditionConsoleUISelector();
-			((ConsoleUISelector)uiSelector).init((ConsoleSystemInterface)si, userActions, walkAction, null, meleeAction, (ConsoleUserInterface)ui);
+			((ConsoleUISelector)uiSelector).init((ConsoleSystemInterface)si, userActions, walkAction, null, meleeAction, (ConsoleUserInterface)ui, keyBindings);
 			break;
 		}
 	}
 	
+	
+	private static int i(String val){
+		return Integer.parseInt(val);
+	}
+	
 	public static void main(String args[]){
 		//mode = SWING_GFX;
-		mode = SWING_CONSOLE;
-		uiFile = "slash-barrett.ui";
+		//mode = SWING_CONSOLE;
+		uiFile = "expedition-oryx.ui";
 		if (args!= null && args.length > 0){
-			if (args[0].equalsIgnoreCase("sgfx")){
+			if (args[0].equalsIgnoreCase("gfx")){
 				mode = SWING_GFX;
 				if (args.length > 1)
 					uiFile = args[1];
 				else
-					uiFile = "slash-barrett.ui";
+					uiFile = "expedition-oryx.ui";
 			}
 			else if (args[0].equalsIgnoreCase("jc"))
 				mode = JCURSES_CONSOLE;
 			else if (args[0].equalsIgnoreCase("sc"))
 				mode = SWING_CONSOLE;
+		} else {
+			mode = SWING_GFX;
+			uiFile = "expedition-oryx.ui";
+
 		}
 		
 		init();
@@ -367,12 +426,38 @@ public class RunExpedition {
 		}
 	}
 
-	/*private static void initializeGAppearances(){
-		Appearance[] definitions = new GFXAppearances().getAppearances();
+	private static String readKeyString(Properties config, String keyName) {
+		return readKey(config, keyName)+"";
+	}
+
+	
+	private static int readKey(Properties config, String keyName) {
+		String fieldName = config.getProperty(keyName).trim();
+		if (fieldName == null)
+			throw new RuntimeException("Invalid key.cfg file, property not found: "+keyName);
+		try {
+			Field field = CharKey.class.getField(fieldName);
+			return field.getInt(CharKey.class);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error reading field : "+fieldName);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error reading field : "+fieldName);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error reading field : "+fieldName);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error reading field : "+fieldName);
+		}
+	}
+	private static void initializeGAppearances(){
+		Appearance[] definitions = GFXAppearances.getGFXAppearances();
 		for (int i=0; i<definitions.length; i++){
 			AppearanceFactory.getAppearanceFactory().addDefinition(definitions[i]);
 		}
-	}*/
+	}
 	
 	private static void initializeCAppearances(){
 		Appearance[] definitions = ExpeditionDAO.getCharAppearances();
