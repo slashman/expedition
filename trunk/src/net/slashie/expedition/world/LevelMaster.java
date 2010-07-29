@@ -47,7 +47,7 @@ public class LevelMaster {
 				ret.setUnleashers(pattern.getUnleashers());
 			}
 			ret.setLocation(new Pair<Integer,Integer>(38,-6));
-			ret.getHelper().setMusicKey("SPAIN");
+			ret.getHelper().setMusicKey("SPAIN_CASTLE");
 			ret.getHelper().setSuperLevelId("WORLD");
 			ret.setID("SPAIN_CASTLE");
 			return ret;
