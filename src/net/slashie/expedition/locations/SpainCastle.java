@@ -22,20 +22,21 @@ import net.slashie.utils.Position;
 
 public class SpainCastle extends StaticPattern {
 
+	
 	public SpainCastle () {
 		this.cellMap = new String [][]{{
-			"###########C###########",
-			"#cccccc..=F-I=..cccccc#",
+			"#cc#+#cc###C###cc#+#cc#",
+			"#........=F-I=........#",
 			"#........=---=........#",
-			"W.+......=---=......+.W",
+			"W........=---=........W",
 			"#........=---=........#",
+			"+........=---=........+",
 			"#........=---=........#",
+			"W........=---=........W",
 			"#........=---=........#",
-			"W.+......=---=......+.W",
+			"+........=---=........+",
 			"#........=---=........#",
-			"#........=---=........#",
-			"#........=---=........#",
-			"W.+......=---=......+.W",
+			"W........=---=........W",
 			"#........=---=........#",
 			"#........=---=........#",
 			"###########S###########",
@@ -81,10 +82,10 @@ public class SpainCastle extends StaticPattern {
 			if (!exp.getFlag("MET_WITH_KINGS")){
 				//First meeting with kings
 				exp.setFlag("MET_WITH_KINGS", true);
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic Kings of the Kingdom of Spain, have generously decided to grant you this audience. chosen you to support our enterprise into the west path into the Indias.");
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Should your journey be sucessful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of all the new lands.");
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We will give you 12000 maravedíes as well as two caravels and a carrack for your first exploratory voyage.");
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey, we await your safe return from the New World. You are dismissed.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic Kings of the Kingdom of Spain, have generously decided to grant you this audience. We have chosen you to support our enterprise into the west path into the Indias.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Should your journey be sucessful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We will grant you 12.000 royal maravedíes as well as two caravels and a carrack for your first exploratory voyage.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey, we await your safe return from the New World. XXX XXX You are dismissed.");
 				stockExpedition(exp);
 			} else {
 				boolean earnedTitle = false;
