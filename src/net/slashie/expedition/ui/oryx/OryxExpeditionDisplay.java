@@ -66,18 +66,22 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		try {
 			//BufferedImage BORDERS = ImageUtils.createImage(IMG_BORDERS);
 			int tileSize = PropertyFilters.inte(p.getProperty("TILE_SIZE"));
-			BufferedImage b1 = ImageUtils.crearImagen(IMG_BORDERS, 34,1,tileSize,tileSize);
-			BufferedImage b2 = ImageUtils.crearImagen(IMG_BORDERS, 1,1,tileSize,tileSize);
-			BufferedImage b3 = ImageUtils.crearImagen(IMG_BORDERS, 100, 1, tileSize,tileSize);
-			BufferedImage b4 = ImageUtils.crearImagen(IMG_BORDERS, 67,1,tileSize,tileSize);
+			
+			BufferedImage BORDER1 = ImageUtils.crearImagen(IMG_BORDERS, tileSize,0,tileSize,tileSize);
+			BufferedImage BORDER2 = ImageUtils.crearImagen(IMG_BORDERS, 0,0,tileSize,tileSize);
+			BufferedImage BORDER3 = ImageUtils.crearImagen(IMG_BORDERS, tileSize*3,0,tileSize,tileSize);
+			BufferedImage BORDER4 = ImageUtils.crearImagen(IMG_BORDERS, tileSize*2,0, tileSize,tileSize);
+			
 			addornedTextArea = new AddornedBorderTextArea(
-					b1,
-					b2,
-					b3,
-					b4,
-					new Color(187,161,80),
-					new Color(92,78,36),
-					tileSize, tileSize);
+					BORDER1,
+					BORDER2,
+					BORDER3,
+					BORDER4,
+					new Color(52,42,20),
+					new Color(164,138,68),
+					new Color(232,253,77),
+					tileSize,
+					6,9,12);
 			addornedTextArea.setVisible(false);
 			addornedTextArea.setEnabled(false);
 			addornedTextArea.setForeground(Color.WHITE);

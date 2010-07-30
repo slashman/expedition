@@ -88,7 +88,7 @@ public class ExpeditionDAO {
 			new ExpeditionCell("SPAIN_FLOOR", "Stone Floor"),
 			new ExpeditionCell("SPAIN_DOCKS", "Docks"),
 			new ExpeditionCell("SPAIN_WATER", "Ocean", false, false, true),
-			new ExpeditionCell("SPAIN_WALL", "Stone Wall", true, false),
+			new ExpeditionCell("SPAIN_WALL", "Stone Wall", true, true),
 			new ExpeditionCell("SPAIN_HOUSE", "Houses", true, true),
 			new ExpeditionCell("SPAIN_SHIP", "Ships", false, false, true),
 			new ExpeditionCell("SPAIN_COLUMN", "Column", true, true),
