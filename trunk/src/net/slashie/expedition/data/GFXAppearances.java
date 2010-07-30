@@ -16,19 +16,27 @@ public class GFXAppearances {
 		xpos--;
 		ypos--;
 		String filename = "res/expedition.gif";
+		String darkfilename = "res/expedition_d.gif";
 		BufferedImage bigImage = (BufferedImage) images.get(filename);
+		BufferedImage bigDarkImage = (BufferedImage) images.get(darkfilename);
 		if (bigImage == null){
 			try {
-				//bigImage = ImageUtils.crearImagen(filename, TRACKER);
 				bigImage = ImageUtils.createImage(filename);
 			} catch (Exception e){
 				SworeGame.crash("Error loading image "+filename, e);
 			}
 			images.put(filename, bigImage);
+			try {
+				bigDarkImage = ImageUtils.createImage(darkfilename);
+			} catch (Exception e){
+				SworeGame.crash("Error loading image "+darkfilename, e);
+			}
+			images.put(darkfilename, bigDarkImage);
 		}
 		try {
-			BufferedImage img = ImageUtils.crearImagen(bigImage, xpos*24, ypos*24, 24, 24);
-			GFXAppearance ret = new GFXAppearance(ID, img,0,0);
+			BufferedImage img = ImageUtils.crearImagen(bigImage,  xpos*24, ypos*24, 24, 24);
+			BufferedImage imgd = ImageUtils.crearImagen(bigDarkImage,  xpos*24, ypos*24, 24, 24);
+			GFXAppearance ret = new GFXAppearance(ID, img, imgd, 0,0);
 			return ret;
 		} catch (Exception e){
 			SworeGame.crash("Error loading image "+filename, e);
@@ -40,7 +48,7 @@ public class GFXAppearances {
 		
 		return new GFXAppearance[]{
 				//Expeditions
-				createAppearance("EXPEDITION", 7 ,10),
+				createAppearance("EXPEDITION", 9,12),
 				createAppearance("SHIP_EXPEDITION", 1 ,5),
 				
 				//Non principal Expeditions
