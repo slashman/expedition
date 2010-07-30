@@ -1,8 +1,12 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Properties;
 import java.util.Vector;
 
 import net.slashie.expedition.domain.Expedition;
@@ -18,11 +22,16 @@ import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.libjcsi.textcomponents.TextBox;
+import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.level.AbstractCell;
+import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
+import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.util.Pair;
+import net.slashie.utils.swing.BorderedMenuBox;
+import net.slashie.utils.swing.GFXMenuItem;
 
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
 
@@ -154,20 +163,40 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.print(line2, 4, locationDescription.getB());
 		si.print(line2, 5, getExpedition().getWeather()+", "+getExpedition().getTemperature()+"ºC");
 		
-		/*
+		
 		expeditionUnitsVector.clear();
 		expeditionUnitsVector.addAll(statsExpedition.getUnits());
 		
-		Vector expeditionUnitItems = new Vector();
+		List<GFXMenuItem> expeditionUnitItems = new ArrayList<GFXMenuItem>();
 		for (Equipment expeditionUnit: expeditionUnitsVector){
-			expeditionUnitItems.add(new UnitMenuItem(expeditionUnit));
+			expeditionUnitItems.add(new UnitGFXMenuItem(expeditionUnit));
 		}
-		Collections.sort(expeditionUnitItems, expeditionUnitsComparator);
 		for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
-			expeditionUnitItems.add(new VehicleMenuItem(expeditionVehicle));
+			expeditionUnitItems.add(new VehicleGFXMenuItem(expeditionVehicle));
 		}
 		
-		expeditionUnitBox.setElements(expeditionUnitItems);*/
+		unitsMenuBox.setMenuItems(expeditionUnitItems);
+		unitsMenuBox.draw();
+	}
+	
+	private Comparator<UnitMenuItem> expeditionUnitsComparator = new Comparator<UnitMenuItem>(){
+		public int compare(UnitMenuItem o1, UnitMenuItem o2) {
+			return o1.getMenuColor() - o2.getMenuColor();
+		};
+	};
+	
+	private Vector<Equipment> expeditionUnitsVector = new Vector<Equipment>();
+	BorderedMenuBox unitsMenuBox;
+	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
+		super.init(psi, title, gameCommands, UIProperties, target);
+		unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
+		unitsMenuBox.setGap(35);
+		unitsMenuBox.setPosition(62,8);
+		unitsMenuBox.setWidth(17);
+		unitsMenuBox.setItemsPerPage(9);
+  		
+		unitsMenuBox.setTitle("Expedition");
+		
 	}
 	
 }
