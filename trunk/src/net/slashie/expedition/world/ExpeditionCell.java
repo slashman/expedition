@@ -30,7 +30,7 @@ public class ExpeditionCell extends AbstractCell {
 	}
 	
 	public ExpeditionCell(String pID, String pShortDescription, Store store){
-		this(pID, pShortDescription);
+		this(pID, pShortDescription, false, true);
 		this.store = store;
 	}
 	

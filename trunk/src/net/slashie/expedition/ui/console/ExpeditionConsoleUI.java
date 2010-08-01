@@ -18,6 +18,7 @@ import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -172,7 +173,6 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 
 	@Override
 	public void onMusicOn() {
-		// TODO Auto-generated method stub
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
 		if (expeditionLevel.getMusicKey() != null)
 			STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
@@ -661,39 +661,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		}
 		
 		public String getMenuDescription() {
-			String itemDescription = item.getItem().getDescription();
-			int inventory = item.getQuantity();
-			int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
-			StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
-			if (item.getItem() instanceof ExpeditionUnit){
-				if (stock < 0)
-					stock = 0;
-				if (itemInfo.getPack() > 1){
-					if (stock < inventory)
-						return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
-					else
-						return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ {"+inventory+" Available}";
-				} else {
-					if (stock < inventory)
-						return itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
-					else
-						return itemDescription + ", "+itemInfo.getPrice()+"$ {"+inventory+" Available}";
-				}
-			} else {
-				if (stock < 0)
-					stock = 0;
-				if (itemInfo.getPack() > 1){
-					if (stock < inventory)
-						return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
-					else
-						return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ {Stock:"+inventory+"}";
-				} else {
-					if (stock < inventory)
-						return itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
-					else
-						return itemDescription + " for "+itemInfo.getPrice()+"$ {Stock:"+inventory+"}";
-				}
-			}
+			return CommonUI.getMenuStoreDescription(item, offShore, store);
 		}
 	}
 	
@@ -725,30 +693,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		}
 		
 		public String getMenuDescription() {
-			String itemDescription = item.getItem().getDescription();
-			int inventory = item.getQuantity();
-			int stock = 0;
-			if (expedition != null){
-				if (item.getItem() instanceof Good){ 
-					stock = expedition.getCarryable((ExpeditionItem)item.getItem());
-					if (stock < inventory)
-						return itemDescription + " (Max "+stock+") {Available "+inventory+"}";
-					else
-						return itemDescription + " {Available "+inventory+"}";
-				} else {
-					return itemDescription + " {Available "+inventory+"}";
-				}
-			} else {
-				stock = cache.getCarryable((ExpeditionItem)item.getItem());
-				if (stock == -1)
-					return itemDescription + " {On Expedition "+inventory+"}";
-				else {
-					if (stock < inventory)
-						return itemDescription + " (Max "+stock+") {On Expedition "+inventory+"}";
-					else
-						return itemDescription + " {On Expedition "+inventory+"}";
-				}
-			}
+			return CommonUI.getMenuCacheDescription(item,expedition,cache);
 		}
 	}
 	

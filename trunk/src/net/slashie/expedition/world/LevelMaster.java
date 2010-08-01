@@ -34,6 +34,7 @@ public class LevelMaster {
 			ret.getHelper().setSuperLevelId("WORLD");
 			ret.setID("SPAIN");
 			ret.setDock(true);
+			ret.setZoomIn(false);
 			return ret;
 		} if (levelID.equals("SPAIN_CASTLE")){
 			ExpeditionMicroLevel ret = new ExpeditionMicroLevel();
@@ -50,6 +51,7 @@ public class LevelMaster {
 			ret.getHelper().setMusicKey("SPAIN_CASTLE");
 			ret.getHelper().setSuperLevelId("WORLD");
 			ret.setID("SPAIN_CASTLE");
+			ret.setZoomIn(true);
 			return ret;
 		} else if (levelID.equals("WORLD")){
 			StaticPattern pattern = new World();

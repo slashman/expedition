@@ -22,13 +22,13 @@ public class UnitGFXMenuItem implements GFXMenuItem {
 	@Override
 	public String getMenuDescription() {
 		if (!(e.getItem() instanceof ExpeditionUnit)){
-			return e.getItem().getDescription() +" x"+e.getQuantity();
+			return " x"+e.getQuantity();
 		}
 
 		if (e.getQuantity() == 1){
- 			return ((ExpeditionUnit)e.getItem()).getMenuDescription();
+ 			return "";
  		} else {
- 			return ((ExpeditionUnit)e.getItem()).getMenuDescription() +" x"+e.getQuantity();
+ 			return " x"+e.getQuantity();
  		}
 	}
 

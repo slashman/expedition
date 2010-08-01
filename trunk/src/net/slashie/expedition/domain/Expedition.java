@@ -562,13 +562,17 @@ public class Expedition extends Player implements FoodConsumer{
 	}
 	
 	public Appearance getAppearance(){
-		switch (getMovementMode()){
-		case FOOT:
-			return super.getAppearance();
-		case SHIP:
-			return AppearanceFactory.getAppearanceFactory().getAppearance("SHIP_EXPEDITION");
-		case HORSE:
-			return AppearanceFactory.getAppearanceFactory().getAppearance("HORSE_EXPEDITION");
+		if (getLocation().isZoomIn()){
+			return AppearanceFactory.getAppearanceFactory().getAppearance("EXPLORER");
+		} else {
+			switch (getMovementMode()){
+			case FOOT:
+				return super.getAppearance();
+			case SHIP:
+				return AppearanceFactory.getAppearanceFactory().getAppearance("SHIP_EXPEDITION");
+			case HORSE:
+				return AppearanceFactory.getAppearanceFactory().getAppearance("HORSE_EXPEDITION");
+			}
 		}
 		return null;
 	}
