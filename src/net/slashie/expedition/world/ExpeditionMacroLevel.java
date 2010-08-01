@@ -113,5 +113,9 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 	}
 
+	@Override
+	public boolean isZoomIn() {
+		return false;
+	}
 
 }

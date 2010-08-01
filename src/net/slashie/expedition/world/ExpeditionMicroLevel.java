@@ -7,7 +7,7 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	private boolean dock;
 	private Pair<Integer, Integer> location;
 	
-	
+	private boolean isZoomIn;
 	
 	public void setDock(boolean dock) {
 		this.dock = dock;
@@ -50,6 +50,12 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	public String getWeather() {
 		// TODO Auto-generated method stub
 		return "Calm";
+	}
+	public boolean isZoomIn() {
+		return isZoomIn;
+	}
+	public void setZoomIn(boolean isZoomIn) {
+		this.isZoomIn = isZoomIn;
 	}
 	
 }

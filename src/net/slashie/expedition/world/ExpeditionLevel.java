@@ -15,4 +15,5 @@ public interface ExpeditionLevel{
 	public AbstractCell getMapCell(Position position);
 	public boolean isSpawnPointUsed(Position spawnPoint);
 	public void setSpawnPointUsed(Position spawnPoint);
+	public boolean isZoomIn();
 }

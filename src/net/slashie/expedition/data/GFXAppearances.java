@@ -131,6 +131,7 @@ public class GFXAppearances {
 				
 				createAppearance("SPEARS", 1 ,9),
 				createAppearance("SWORDS", 2 ,9),
+				createAppearance("XBOWS", 3 ,9),
 				createAppearance("BOWS", 3 ,9),
 				createAppearance("ARROWS", 4 ,9),
 				createAppearance("GUNS", 5 ,9),

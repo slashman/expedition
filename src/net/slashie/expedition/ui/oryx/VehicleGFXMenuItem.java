@@ -20,7 +20,7 @@ public class VehicleGFXMenuItem implements GFXMenuItem {
 
 	@Override
 	public String getMenuDescription() {
-		return v.getDescription()+"("+v.getResistance()+")";
+		return " "+v.getResistance();
 
 	}
 

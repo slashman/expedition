@@ -101,18 +101,18 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.setFont(FNT_TEXT);
 		si.drawImage(IMG_TITLE);
 		//si.drawImage(215,60,IMG_TITLE_NAME);
-		si.printAtPixel(220, 555, "Expedition v"+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
-		si.printAtPixel(285, 570, "Artwork by Christopher Barrett, 2010", Color.WHITE);
-		si.printAtPixel(220, 585, "Music by Dominik Markzuk and Anonymous MIDI Composers", Color.WHITE);
+		si.printAtPixel(60, 555, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
+		si.printAtPixel(60, 570, "Artwork by Oryx, 2010", Color.WHITE);
+		si.printAtPixel(60, 585, "Music by Dominik Markzuk and Anonymous MIDI Composers", Color.WHITE);
 		CharKey x = new CharKey(CharKey.NONE);
     	int choice = 0;
     	si.saveBuffer();
     	out: while (true) {
     		si.restore();
-    		si.drawImage(294, 354+choice*20, IMG_PICKER);
-    		si.printAtPixel(362,368, "a. Create Expedition", Color.WHITE);
-    		si.printAtPixel(344,388, "b. Resume Expedition", Color.WHITE);
-    		si.printAtPixel(350,408, "c. Quit", Color.WHITE);
+    		si.drawImage(260, 344+choice*26, IMG_PICKER);
+    		si.printAtPixel(290,368, "a. Create Expedition", Color.WHITE);
+    		si.printAtPixel(290,394, "b. Resume Expedition", Color.WHITE);
+    		si.printAtPixel(290,420, "c. Quit", Color.WHITE);
     		si.refresh();
 			while (x.code != CharKey.A && x.code != CharKey.a &&
 					x.code != CharKey.B && x.code != CharKey.b &&
@@ -127,20 +127,12 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				return 1;
 			case CharKey.C: case CharKey.c:
 				return 2;
-			case CharKey.D: case CharKey.d:
-				return 3;
-			case CharKey.E: case CharKey.e:
-				return 4;
-			case CharKey.F: case CharKey.f:
-				return 5;
-			case CharKey.G: case CharKey.g:
-				return 6;
 			case CharKey.UARROW:
 				if (choice > 0)
 					choice--;
 				break;
 			case CharKey.DARROW:
-				if (choice < 6)
+				if (choice < 2)
 					choice++;
 				break;
 			case CharKey.SPACE: case CharKey.ENTER:

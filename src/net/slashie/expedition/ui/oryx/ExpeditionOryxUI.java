@@ -3,38 +3,44 @@ package net.slashie.expedition.ui.oryx;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.ExpeditionItem;
+import net.slashie.expedition.domain.ExpeditionUnit;
+import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
+import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
-import net.slashie.expedition.ui.console.UnitMenuItem;
-import net.slashie.expedition.ui.console.VehicleMenuItem;
+import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
+import net.slashie.libjcsi.textcomponents.MenuItem;
 import net.slashie.libjcsi.textcomponents.TextBox;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.level.AbstractCell;
+import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserCommand;
+import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.GFXMenuItem;
+import net.slashie.utils.swing.MenuBox;
 
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
-
+	private Color ORANGE = new Color(255,127,39);
 	@Override
 	public void showDetailedInfo(Actor a) {
 		// TODO Auto-generated method stub
@@ -47,39 +53,68 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	@Override
-	public boolean promptChat(String message) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void showInventory() {
 		// TODO Auto-generated method stub
-		
+		showMessage("Inventory Screen not yet implemented.");
 	}
 
 	@Override
 	public int switchChat(String prompt, String... options) {
-		// TODO Auto-generated method stub
-		return 0;
+   		BorderedMenuBox selectionBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		selectionBox.setItemsPerPage(8);
+   		selectionBox.setBounds(80, 300, 600,250);
+  		Vector<GFXMenuItem> menuItems = new Vector<GFXMenuItem>();
+  		int i = 0;
+  		for (String option: options){
+  			menuItems.add(new SimpleGFXMenuItem(option,i));
+  			i++;
+  		}
+  		selectionBox.setMenuItems(menuItems);
+  		selectionBox.setTitle(prompt);
+  		selectionBox.setForeColor(ORANGE);
+  		selectionBox.draw();
+  		
+		while (true) {
+			si.refresh();
+			SimpleGFXMenuItem itemChoice = ((SimpleGFXMenuItem)selectionBox.getSelection());
+			if (itemChoice == null)
+				break;
+			return itemChoice.getValue();
+		}
+		return -1;	
 	}
 
 	@Override
 	public String inputBox(String prompt) {
-		// TODO Auto-generated method stub
-		return null;
+		return inputBox(prompt, 200, 40, 400, 200, 260, 120, 20);
 	}
+	
+	public String inputBox(String prompt, int x, int y, int w, int h, int xp, int yp, int length){
+		AddornedBorderPanel p = new AddornedBorderPanel(BORDER1,
+				BORDER2,
+				BORDER3,
+				BORDER4,
+				COLOR_BORDER_OUT,
+				COLOR_BORDER_IN,
+				COLOR_WINDOW_BACKGROUND,
+				tileSize,
+				6,9,12 );
 
-	@Override
-	public void processHelp() {
-		// TODO Auto-generated method stub
+		p.setBounds(x, y, w, h);
+		p.paintAt(si.getGraphics2D(), x, y);
+		si.setColor(ORANGE);
+		si.printAtPixel(x+tileSize, y+tileSize*2, prompt);
 		
+		String ret = si.input(xp,yp,ORANGE,length);
+		
+		return ret;
 	}
 
 	@Override
 	public void onMusicOn() {
-		// TODO Auto-generated method stub
-		
+		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
+		if (expeditionLevel.getMusicKey() != null)
+			STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
 	}
 
 	public boolean depart() {
@@ -90,29 +125,261 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	public void launchStore(Store store) {
-		// TODO Auto-generated method stub
-		
+    	List<Equipment> merchandise = store.getInventory();
+    	if (merchandise == null || merchandise.size() == 0){
+    		return;
+    	}
+   		Equipment.eqMode = true;
+   		//Item.shopMode = true;
+   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+  		menuBox.setItemsPerPage(6);
+  		menuBox.setBounds(80, 300, 600,250);
+  		int fontSize = si.getGraphics2D().getFont().getSize();
+  		
+  		Vector menuItems = new Vector();
+  		for (Equipment item: merchandise){
+  			menuItems.add(new StoreGFXMenuItem(item, store, getExpedition()));
+  		}
+  		
+  		menuBox.setMenuItems(menuItems);
+  		menuBox.draw();
+  		menuBox.setForeColor(ORANGE);
+  		
+  		//menuBox.setBorder(true);
+  		String prompt = "Welcome to the "+store.getOwnerName();
+
+		while (true) {
+			menuBox.setTitle(prompt);
+			si.refresh();
+			//menuBox.setTitle(who.getName()+" (Gold:"+player.getGold()+")");
+			StoreGFXMenuItem itemChoice = ((StoreGFXMenuItem)menuBox.getSelection());
+			if (itemChoice == null)
+				break;
+			Equipment choice = itemChoice.getEquipment();
+			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+			StoreItemInfo storeItemInfo = store.getPriceFor(item);
+			if (storeItemInfo.getPack() > 1)
+				menuBox.setTitle("How many "+storeItemInfo.getPackDescription()+" of "+item.getPluralDescription()+"?");
+			else
+				menuBox.setTitle("How many "+item.getPluralDescription()+"?");
+			menuBox.draw();
+			si.refresh();
+			int buyQuantity = readQuantity(80+tileSize+300, 308+fontSize, "                       ", 5);
+			if (buyQuantity == 0){
+				prompt = "Ok... Do you need anything else?";
+				continue;
+			}
+			if (buyQuantity > choice.getQuantity()){
+				prompt = "I don't have that many...";
+				continue;
+			}
+			
+			int quantity = buyQuantity * storeItemInfo.getPack();
+			
+			if (!getExpedition().canCarryOffshore(item, quantity)){
+				prompt = "Your ships are full!";
+				continue;
+			}
+			
+			int gold = storeItemInfo.getPrice() * buyQuantity;	
+			if (item instanceof ExpeditionUnit){
+				if (quantity > 1)
+					menuBox.setTitle("Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
+				else
+					menuBox.setTitle("Hire a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
+			} else {
+				if (quantity > 1)
+					menuBox.setTitle("Buy "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
+				else
+					menuBox.setTitle("Buy a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
+			}
+			menuBox.draw();
+	 		if (prompt())
+	 			if (getExpedition().getAccountedGold() >= gold) {
+	 				getExpedition().reduceAccountedGold(gold);
+	 				getExpedition().addItemOffshore((ExpeditionItem) choice.getItem(), quantity);
+	 				choice.reduceQuantity(buyQuantity);
+	 				prompt = "Thank you! Do you need anything else?";
+					refresh();
+			 	} else {
+			 		prompt = "You can't afford it! Do you need anything else?";
+			 	}
+			else {
+				prompt = "Ok, do you need anything else?";
+			}
+	 		//menuBox.draw();
+		}
+		Equipment.eqMode = false;
+		//Item.shopMode = false;
+		//si.restore();
 	}
 
 	public void showBlockingMessage(String message) {
-		showTextBox(message, 192, 288, 408, 168);
+		showTextBox(message, 140, 288, 520, 200);
 	}
 
-	public void transferFromCache(GoodsCache ship) {
-		// TODO Auto-generated method stub
+	public void transferFromCache(GoodsCache cache) {
+		List<Equipment> cacheEquipment = cache.getItems();
+		//List<Equipment> expeditionEquipment = getExpedition().getInventory();
+    	
+   		Equipment.eqMode = true;
+   		//Item.shopMode = true;
+   		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		cacheBox.setItemsPerPage(10);
+   		cacheBox.setBounds(80, 30, 600,500);
+  		Vector<GFXMenuItem> menuItems = new Vector<GFXMenuItem>();
+  		for (Equipment item: cacheEquipment){
+  			menuItems.add(new CacheGFXMenuItem(item, getExpedition()));
+  		}
+  		cacheBox.setMenuItems(menuItems);
+  		cacheBox.setTitle("Transfer from "+cache.getDescription()+" to Expedition");
+  		//cacheBox.setTitle("On Ship...");
+  		cacheBox.setForeColor(ORANGE);
+  		cacheBox.draw();
+  		
+  		//menuBox.setBorder(true);
+		while (true) {
+			si.refresh();
+			//menuBox.setTitle(who.getName()+" (Gold:"+player.getGold()+")");
+			CacheGFXMenuItem itemChoice = ((CacheGFXMenuItem)cacheBox.getSelection());
+			if (itemChoice == null){
+				if (cache instanceof ShipCache){
+					if (getExpedition().getTotalUnits() > 0)
+						break;
+					else {
+						cacheBox.setTitle("You must first disembark");
+						continue;
+					}
+				} else {
+					break;
+				}
+			}
+			Equipment choice = itemChoice.getEquipment();
+			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+			cacheBox.setTitle("How many "+item.getDescription()+" will you transfer?");
+			cacheBox.draw();
+			si.refresh();
+			int quantity = readQuantity(80+tileSize+350, 38+getFontSize(), "                       ", 5);
+			if (quantity == 0)
+				continue;
+			
+			if (!(choice.getItem() instanceof ExpeditionUnit) && getExpedition().getTotalUnits() == 0){
+				cacheBox.setTitle("Someone must receive the goods!");
+				cacheBox.draw();
+				continue;
+			}
+			
+			if (quantity > choice.getQuantity()){
+				cacheBox.setTitle("Not enough "+choice.getItem().getDescription());
+				cacheBox.draw();
+				continue;
+			}
+			
+			if (item instanceof Good && !getExpedition().canCarry(item, quantity)){
+				cacheBox.setTitle("Your expedition is full!");
+				cacheBox.draw();
+				continue;
+			}
+			choice.reduceQuantity(quantity);
+			getExpedition().addItem(choice.getItem(), quantity);
+			
+			if (choice.getQuantity() == 0){
+				cacheEquipment.remove(choice);
+			}
+			
+			cacheBox.setTitle(choice.getItem().getDescription()+" transfered.");
+			refresh();
+	 		//menuBox.draw();
+		}
 		
+		if (cache.destroyOnEmpty() && cache.getItems().size() == 0)
+			level.destroyFeature(cache);
+		Equipment.eqMode = false;
+		//Item.shopMode = false;
+		//si.restore();
 	}
 
 	public void transferFromExpedition(GoodsCache ship) {
-		// TODO Auto-generated method stub
-		
+		transferFromExpedition(ship, -1);
 	}
 
 	public void transferFromExpedition(GoodsCache ship, int minUnits) {
-		// TODO Auto-generated method stub
-		
+		List<Equipment> expeditionEquipment = getExpedition().getInventory();
+   		Equipment.eqMode = true;
+   		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		cacheBox.setItemsPerPage(10);
+   		cacheBox.setBounds(80, 30, 600,500);
+  		
+  		Vector menuItems = new Vector();
+  		for (Equipment item: expeditionEquipment){
+  			menuItems.add(new CacheGFXMenuItem(item, ship));
+  		}
+  		cacheBox.setMenuItems(menuItems);
+  		cacheBox.setTitle("Transfer from Expedition to "+ship.getDescription());
+  		//cacheBox.setTitle("On Ship...");
+  		cacheBox.setForeColor(ORANGE);
+  		cacheBox.draw();
+  		
+		while (true) {
+			si.refresh();
+			CacheGFXMenuItem itemChoice = ((CacheGFXMenuItem)cacheBox.getSelection());
+			if (itemChoice == null){
+				if (minUnits != -1){
+					if (ship.getTotalUnits() < minUnits){
+						cacheBox.setTitle("At least "+minUnits+" should be transfered");
+						continue;
+					}
+				}
+				break;
+			}
+			Equipment choice = itemChoice.getEquipment();
+			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+			cacheBox.setTitle("How many "+item.getDescription()+" will you transfer?");
+			cacheBox.draw();
+			si.refresh();
+			int quantity = readQuantity(80+tileSize+350, 38+getFontSize(), "                       ", 5);
+			
+			if (quantity == 0)
+				continue;
+			
+			if (quantity > choice.getQuantity()){
+				cacheBox.setTitle("Not enough "+choice.getItem().getDescription());
+				cacheBox.draw();
+				continue;
+			}
+			
+			if (item instanceof Good && !ship.canCarry(item, quantity)){
+				cacheBox.setTitle("Not enough room in the "+ship.getDescription());
+				cacheBox.draw();
+				continue;
+			}
+			
+			getExpedition().reduceQuantityOf(choice.getItem(), quantity);
+			
+			if (choice.getItem() instanceof ExpeditionUnit && 
+					getExpedition().getCurrentlyCarrying()>100){
+				cacheBox.setTitle("The expedition can't carry the goods!");
+				cacheBox.draw();
+				getExpedition().addItem(choice.getItem(), quantity);
+				continue;
+			}
+			
+			ship.addItem(choice.getItem(), quantity);
+			
+			if (choice.getQuantity() == 0){
+				menuItems.remove(choice);
+			}
+			cacheBox.setTitle(choice.getItem().getDescription()+" transfered into the "+ship.getDescription());
+			refresh();
+	 		//menuBox.draw();
+		}
+		Equipment.eqMode = false;		
 	}
 	
+	private int getFontSize() {
+		return si.getGraphics2D().getFont().getSize();
+	}
+
 	@Override
 	public void beforeRefresh() {
 		drawStatus();
@@ -179,24 +446,39 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		unitsMenuBox.draw();
 	}
 	
-	private Comparator<UnitMenuItem> expeditionUnitsComparator = new Comparator<UnitMenuItem>(){
-		public int compare(UnitMenuItem o1, UnitMenuItem o2) {
-			return o1.getMenuColor() - o2.getMenuColor();
-		};
-	};
-	
 	private Vector<Equipment> expeditionUnitsVector = new Vector<Equipment>();
-	BorderedMenuBox unitsMenuBox;
+	//BorderedMenuBox unitsMenuBox;
+	MenuBox unitsMenuBox;
 	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
 		super.init(psi, title, gameCommands, UIProperties, target);
-		unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
-		unitsMenuBox.setGap(35);
-		unitsMenuBox.setPosition(62,8);
+		//unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
+		unitsMenuBox = new MenuBox(si, null);
+		unitsMenuBox.setGap(26);
+		unitsMenuBox.setPosition(63,8);
 		unitsMenuBox.setWidth(17);
 		unitsMenuBox.setItemsPerPage(9);
-  		
-		unitsMenuBox.setTitle("Expedition");
+  		unitsMenuBox.setShowOptions(false);
+		//unitsMenuBox.setTitle("Expedition");
 		
+	}
+	
+	private int readQuantity(int x, int y, String spaces, int inputLength){
+		int quantity = -1;
+		while (quantity == -1){
+			si.print(x,y,spaces);
+			si.refresh();
+			String strInput = si.input(x,y,ORANGE,inputLength);
+			if (strInput == null)
+				continue;
+			strInput = strInput.trim();
+			try {
+				quantity = Integer.parseInt(strInput);
+			}catch (NumberFormatException e) {
+			}
+			if (quantity < 0)
+				quantity = -1;
+		}
+		return quantity;
 	}
 	
 }
