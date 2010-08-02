@@ -586,13 +586,13 @@ public class Expedition extends Player implements FoodConsumer{
 			return null;
 	}
 
-	public int getTemperature() {
+	public String getTemperature() {
 		if (getLevel() instanceof ExpeditionMicroLevel){
 			return ((ExpeditionLevel)getLevel()).getTemperature();
 		} else if (getLevel() instanceof ExpeditionMacroLevel){
 			return ((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).getTemperature();
 		} else
-			return 6;
+			return "Warm";
 	}
 
 	public void removeAllGoods() {

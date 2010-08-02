@@ -21,22 +21,23 @@ public class UnitGFXMenuItem implements GFXMenuItem {
 
 	@Override
 	public String getMenuDescription() {
+		return ((ExpeditionUnit)e.getItem()).getDescription();
+	}
+
+	@Override
+	public String getMenuDetail() {
 		if (!(e.getItem() instanceof ExpeditionUnit)){
 			return " x"+e.getQuantity();
 		}
 
 		if (e.getQuantity() == 1){
- 			return "";
+ 			return " x1";
  		} else {
  			return " x"+e.getQuantity();
  		}
+		
 	}
-
-	@Override
-	public String getMenuDetail() {
-		return "";
-	}
-
+	
 	private GFXAppearance getItemAppearance(){
 		return (GFXAppearance)e.getItem().getAppearance();
 	}

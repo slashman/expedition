@@ -40,8 +40,8 @@ public class OverworldExpeditionCell extends AbstractCell{
 		return "Sunny";
 	}
 	
-	public int getTemperature(){
-		return 18;
+	public String getTemperature(){
+		return "Warm";
 	}
 	
 	@Override

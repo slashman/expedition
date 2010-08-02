@@ -49,8 +49,8 @@ public class SpainCastle extends StaticPattern {
 		charMap.put("+", "SPAIN_BANNER");
 		charMap.put("W", "CASTLE_WINDOW");
 		charMap.put("S", "CASTLE_FLOOR EXIT SPAIN");
-		charMap.put("F", "KING_FERDINAND");
-		charMap.put("I", "QUEEN_ISABELLE");
+		charMap.put("F", "THRONE ITEM KING_FERDINAND");
+		charMap.put("I", "THRONE ITEM QUEEN_ISABELLE");
 		charMap.put("C", "SPAIN_CREST");
 		charMap.put("c", "CASTLE_CURTAIN");
 		unleashers = new Unleasher[]{new KingsChat()};
@@ -82,7 +82,7 @@ public class SpainCastle extends StaticPattern {
 			if (!exp.getFlag("MET_WITH_KINGS")){
 				//First meeting with kings
 				exp.setFlag("MET_WITH_KINGS", true);
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic Kings of the Kingdom of Spain, have generously decided to grant you this audience. We have chosen you to support our enterprise into the west path into the Indias.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic Kings of Spain, have generously decided to grant you this audience. We have chosen you to support our enterprise to find the west path into the Indias.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Should your journey be sucessful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We will grant you 12.000 royal maravedíes as well as two caravels and a carrack for your first exploratory voyage.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey, we await your safe return from the New World. XXX XXX You are dismissed.");

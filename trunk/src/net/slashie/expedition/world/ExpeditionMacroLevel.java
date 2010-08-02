@@ -43,9 +43,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return (int)Math.round((getPlayer().getPosition().y() - 1572)/-19.47d); 
 	}
 	
-	public int getTemperature() {
-		// TODO Auto-generated method stub
-		return 12;
+	public String getTemperature() {
+		return "Warm";
 	}
 	
 	public String getWeather() {
@@ -57,14 +56,21 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public Pair<String,String> getLocationDescription(){
 		Pair<Integer, Integer> location = getLocation();
 		
-		handyReusableObject.setA("LAT  (Sext)  "+Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
+		handyReusableObject.setA("LAT "+Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
 		//This is the real longitude calculation:
 		//handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
 		if (getExpedition().getDeducedReckonWest()>0)
-			handyReusableObject.setB("West (DReck) "+getExpedition().getDeducedReckonWest()+"nl");
+			handyReusableObject.setB("West "+getExpedition().getDeducedReckonWest()+"nl");
 		else
-			handyReusableObject.setB("East (DReck) "+(-getExpedition().getDeducedReckonWest())+"nl");
+			handyReusableObject.setB("East "+(-getExpedition().getDeducedReckonWest())+"nl");
 		return handyReusableObject;
+	}
+	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
+
+	public Pair<String,String> getLocationMeans(){
+		handyReusableObject2.setA("Sextant");
+		handyReusableObject2.setB("Ded'Reckon");
+		return handyReusableObject2;
 	}
 	
 	@Override

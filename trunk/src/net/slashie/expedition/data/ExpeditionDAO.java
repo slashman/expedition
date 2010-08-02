@@ -80,7 +80,7 @@ public class ExpeditionDAO {
 			//Inworld Cells
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
 			new ExpeditionCell("WEAPONS_STORE", "Weapons Store", weaponsStore),
-			new ExpeditionCell("PORT", "Port", port),
+			new ExpeditionCell("PORT", "Harbor", port),
 			new ExpeditionCell("PUB", "Pub", pub),
 			new ExpeditionCell("GUILD", "Guild", guild),
 			
@@ -96,7 +96,9 @@ public class ExpeditionDAO {
 					
 			new ExpeditionCell("DEPARTURE", "Docks", "DEPARTURE"),
 			
-			new ExpeditionCell("CASTLE_GATE", "Castle Gate"),
+			
+			new ExpeditionCell("CASTLE_GATE", "Castle Gate", "TRAVEL_CASTLE"),
+			
 			new ExpeditionCell("CASTLE_FLOOR", "Castle Floor"),
 			new ExpeditionCell("BLUE_CARPET", "Carpet"),
 			new ExpeditionCell("RED_CARPET", "Carpet"),
@@ -301,6 +303,12 @@ public class ExpeditionDAO {
 			//Ships
 			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,3,25000, 10, false),
 			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,4,20000, 15, false),
+			
+			//Special
+			new ExpeditionUnit("KING_FERDINAND", "Ferdinand II, King of Aragón","Kings", 250, 300, 1, 1, 1, new String[]{""},
+					new String[]{""}) ,
+			new ExpeditionUnit("QUEEN_ISABELLE", "Isabella, Queen of Castile and León","Queens", 250, 300, 1, 1, 1, new String[]{""},
+					new String[]{""})
 		};
 		
 	}

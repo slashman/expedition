@@ -130,6 +130,10 @@ public class Walk extends Action{
 		        		return;
 		        		
 	        		}
+	        	} else if (cell.getStepCommand().equals("TRAVEL_CASTLE")){
+	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("The Queen has arranged a charriot to take you to the Alcazar of Segovia");
+
+	        		
 	        	}
 	        	
 	        }

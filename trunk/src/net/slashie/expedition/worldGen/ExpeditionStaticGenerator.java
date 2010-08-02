@@ -2,8 +2,10 @@ package net.slashie.expedition.worldGen;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
+import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.NonPrincipalExpedition;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.level.FeatureFactory;
@@ -17,6 +19,9 @@ public class ExpeditionStaticGenerator extends StaticGenerator{
 			Expedition expedition = ExpeditionFactory.getExpedition(cmds[2]);
 			expedition.setPosition(where.x+x,where.y+y,where.z);
 			l.addActor(expedition);
-		} 
+		} else if (cmds[1].equals("ITEM")){
+			ExpeditionItem item = ItemFactory.createItem(cmds[2]);
+			l.addItem(Position.add(where, new Position(x,y)), item);
+		}
 	}
 }

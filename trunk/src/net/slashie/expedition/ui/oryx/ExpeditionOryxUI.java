@@ -215,6 +215,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	public void showBlockingMessage(String message) {
+		message = message.replaceAll("XXX", "\n");
 		showTextBox(message, 140, 288, 520, 200);
 	}
 
@@ -259,7 +260,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			cacheBox.setTitle("How many "+item.getDescription()+" will you transfer?");
 			cacheBox.draw();
 			si.refresh();
-			int quantity = readQuantity(80+tileSize+350, 38+getFontSize(), "                       ", 5);
+			int quantity = readQuantity(80+tileSize+420, 38+getFontSize(), "                       ", 5);
 			if (quantity == 0)
 				continue;
 			
@@ -337,7 +338,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			cacheBox.setTitle("How many "+item.getDescription()+" will you transfer?");
 			cacheBox.draw();
 			si.refresh();
-			int quantity = readQuantity(80+tileSize+350, 38+getFontSize(), "                       ", 5);
+			int quantity = readQuantity(80+tileSize+420, 38+getFontSize(), "                       ", 5);
 			
 			if (quantity == 0)
 				continue;
@@ -396,14 +397,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		// Box 1
 		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime(); 
-		si.print(5, 1, gameTime.get(Calendar.YEAR)+"");
-		si.print(5, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
-		si.print(5, 3, getExpedition().getExpeditionaryTitle());
+		si.print(2, 1, gameTime.get(Calendar.YEAR)+"");
+		si.print(2, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
+		si.print(2, 3, getExpedition().getExpeditionaryTitle());
 		if (getExpedition().getTowns().size() == 1)
-			si.print(5, 4, "1 settlement ");
+			si.print(2, 4, "1 colony ");
 		else
-			si.print(5, 4, getExpedition().getTowns().size()+" settlements");
-		si.print(5, 5, getExpedition().getAccountedGold()+"$");
+			si.print(2, 4, getExpedition().getTowns().size()+" colonies");
+		si.print(2, 5, getExpedition().getAccountedGold()+"$");
 		
 		
 		// Box 2
@@ -424,11 +425,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		//Box 3
 		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition());
 		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription();
+		Pair<String, String> locationMeans = getExpedition().getLocation().getLocationMeans();
 		si.print(line2, 1, getExpedition().getLocation().getDescription());
 		si.print(line2, 2, currentCell.getDescription());
-		si.print(line2, 3, locationDescription.getA());
-		si.print(line2, 4, locationDescription.getB());
-		si.print(line2, 5, getExpedition().getWeather()+", "+getExpedition().getTemperature()+"ºC");
+		si.print(line2, 3, locationMeans.getA());
+		si.print(line2+2, 4, locationDescription.getA());
+		si.print(line2, 5, locationMeans.getB());
+		si.print(line2+2, 6, locationDescription.getB());
+		si.print(line2, 7, getExpedition().getWeather()+", "+getExpedition().getTemperature());
 		
 		
 		expeditionUnitsVector.clear();
@@ -453,8 +457,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		super.init(psi, title, gameCommands, UIProperties, target);
 		//unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
 		unitsMenuBox = new MenuBox(si, null);
-		unitsMenuBox.setGap(26);
-		unitsMenuBox.setPosition(63,8);
+		unitsMenuBox.setGap(36);
+		unitsMenuBox.setPosition(62,8);
 		unitsMenuBox.setWidth(17);
 		unitsMenuBox.setItemsPerPage(9);
   		unitsMenuBox.setShowOptions(false);

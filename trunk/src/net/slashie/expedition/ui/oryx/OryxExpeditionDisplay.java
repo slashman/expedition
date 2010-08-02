@@ -19,6 +19,7 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.serf.game.SworeGame;
+import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.oryxUI.AddornedBorderTextArea;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
@@ -98,6 +99,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	public int showTitleScreen(){
 		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
 		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
+		STMusicManagerNew.thus.playKey("TITLE");
+		
 		si.setFont(FNT_TEXT);
 		si.drawImage(IMG_TITLE);
 		//si.drawImage(215,60,IMG_TITLE_NAME);
@@ -109,10 +112,10 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
     	si.saveBuffer();
     	out: while (true) {
     		si.restore();
-    		si.drawImage(260, 344+choice*26, IMG_PICKER);
-    		si.printAtPixel(290,368, "a. Create Expedition", Color.WHITE);
-    		si.printAtPixel(290,394, "b. Resume Expedition", Color.WHITE);
-    		si.printAtPixel(290,420, "c. Quit", Color.WHITE);
+    		si.drawImage(320, 404+choice*26, IMG_PICKER);
+    		si.printAtPixel(350,428, "a. Create Expedition", Color.WHITE);
+    		si.printAtPixel(350,454, "b. Resume Expedition", Color.WHITE);
+    		si.printAtPixel(350,480, "c. Quit", Color.WHITE);
     		si.refresh();
 			while (x.code != CharKey.A && x.code != CharKey.a &&
 					x.code != CharKey.B && x.code != CharKey.b &&

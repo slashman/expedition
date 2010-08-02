@@ -35,16 +35,24 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
 	public Pair<String,String> getLocationDescription(){
 		Pair<Integer, Integer> location = getLocation();
-		handyReusableObject.setA("LAT  (Land)  "+Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
+		handyReusableObject.setA("LAT  "+Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
 		//This is the real longitude calculation:
-		handyReusableObject.setB("LONG (Land)  "+Math.abs(location.getB()) + (location.getB() > 0?"ºE":"ºW"));
+		handyReusableObject.setB("LONG "+Math.abs(location.getB()) + (location.getB() > 0?"ºE":"ºW"));
 		//handyReusableObject.setB("West (Dead):   "+expeditionLevel.get);
 		return handyReusableObject;
 	}
+	
+	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
 
-	public int getTemperature() {
-		// TODO Auto-generated method stub
-		return 12;
+	public Pair<String,String> getLocationMeans(){
+		handyReusableObject2.setA("Land");
+		handyReusableObject2.setB("Land");
+		return handyReusableObject2;
+	}
+
+
+	public String getTemperature() {
+		return "Warm";
 	}
 	
 	public String getWeather() {
