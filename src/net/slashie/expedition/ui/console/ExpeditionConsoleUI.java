@@ -110,10 +110,11 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		//Box 3
 		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition());
 		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription();
+		Pair<String, String> locationMeans = getExpedition().getLocation().getLocationMeans();
 		csi.print(56, 1, getExpedition().getLocation().getDescription());
 		csi.print(56, 2, currentCell.getDescription());
-		csi.print(56, 3, locationDescription.getA());
-		csi.print(56, 4, locationDescription.getB());
+		csi.print(56, 3, locationDescription.getA()+" ("+locationMeans.getA()+")");
+		csi.print(56, 4, locationDescription.getB()+" ("+locationMeans.getB()+")");
 		csi.print(56, 5, getExpedition().getWeather()+", "+getExpedition().getTemperature()+"ºC");
 		
 		//This must be replaced on the next version of libjcsi

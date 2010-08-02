@@ -9,9 +9,10 @@ public interface ExpeditionLevel{
 	public String getMusicKey();
 	public String getSuperLevelId();
 	public String getWeather();
-	public int getTemperature();
+	public String getTemperature();
 	public String getDescription();
 	public Pair<String, String> getLocationDescription();
+	public Pair<String, String> getLocationMeans();
 	public AbstractCell getMapCell(Position position);
 	public boolean isSpawnPointUsed(Position spawnPoint);
 	public void setSpawnPointUsed(Position spawnPoint);

@@ -20,13 +20,13 @@ public class VehicleGFXMenuItem implements GFXMenuItem {
 
 	@Override
 	public String getMenuDescription() {
-		return " "+v.getResistance();
+		return v.getDescription();
 
 	}
 
 	@Override
 	public String getMenuDetail() {
-		return "";
+		return "Int: "+v.getResistance();
 	}
 
 	private GFXAppearance getItemAppearance(){
