@@ -16,7 +16,7 @@ public interface FoodConsumer {
 	
 	public int getDailyFoodConsumption();
 	
-	public int getFoodConsumptionMultiplier();
+	public double getFoodConsumptionMultiplier();
 
 	public void reduceQuantityOf(AbstractItem item, int killUnits);
 	

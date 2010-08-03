@@ -738,7 +738,7 @@ public class Expedition extends Player implements FoodConsumer{
 		accountedGold += valuables;
 	}
 	
-	public int getFoodConsumptionMultiplier() {
+	public double getFoodConsumptionMultiplier() {
 		/*switch (getMovementSpeed()){
 		case FAST:
 			return 1;
@@ -747,8 +747,11 @@ public class Expedition extends Player implements FoodConsumer{
 		case SLOW:
 			return 3;
 		}*/
+		if (getLevel() instanceof ExpeditionMacroLevel)
+			return ((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).getFoodConsumptionModifier();
+		else
+			return 1;
 
-		return 1;
 	}
 
 	public int getOffshoreFoodDays() {
@@ -874,9 +877,14 @@ public class Expedition extends Player implements FoodConsumer{
 	
 	public void checkDrown() {
 		if (getTotalShips() <= 0){
-			UserInterface.getUI().refresh();
-			deathCause = DEATH_BY_DROWNING;
-			informPlayerEvent (DEATH);
+			OverworldExpeditionCell cell = (OverworldExpeditionCell) level.getMapCell(getPosition());
+			if (cell.isRiver()){
+				setMovementMode(MovementMode.FOOT);
+			} else {
+				UserInterface.getUI().refresh();
+				deathCause = DEATH_BY_DROWNING;
+				informPlayerEvent (DEATH);
+			}
 		}
 	}
 
@@ -892,6 +900,31 @@ public class Expedition extends Player implements FoodConsumer{
 			sumMax += vehicle.getMaxResistance();
 		}
 		return (int)(Math.round ( ((double)sum/(double)sumMax) *100.0d));
+	}
+
+	public void wearOutShips(int chance) {
+		if (getMovementMode() == MovementMode.SHIP){
+			//Randomly damage ships
+			List<Vehicle> vehicles = getCurrentVehicles();
+			List<Vehicle> vehiclesToRemove = new ArrayList<Vehicle>();
+			for (Vehicle vehicle: vehicles){
+				vehicle.dailyWearOut(getLevel(),chance);
+				if (vehicle.isDestroyed()){
+					vehiclesToRemove.add(vehicle);
+				}
+			}
+			for (Vehicle vehicle: vehiclesToRemove){
+				OverworldExpeditionCell cell = (OverworldExpeditionCell) level.getMapCell(getPosition());
+				if (cell.isRiver()){
+					getLevel().addMessage("The "+vehicle.getDescription()+" breaks in the river.");
+				} else {
+					getLevel().addMessage("You have lost a "+vehicle.getDescription()+" to the sea!");
+				}
+				vehicles.remove(vehicle);
+			}
+			
+			checkDrown();
+		}		
 	}
 
 }

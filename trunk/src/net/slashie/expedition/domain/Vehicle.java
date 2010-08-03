@@ -57,8 +57,8 @@ public class Vehicle extends ExpeditionItem{
 	public void setResistance(int resistance) {
 		this.resistance = resistance;
 	}
-	public void dailyWearOut(AbstractLevel l) {
-		if (Util.chance(5)){
+	public void dailyWearOut(AbstractLevel l, int chance) {
+		if (Util.chance(chance)){
 			l.addMessage("A "+getDescription()+" suffers damage!");
 			resistance --;
 		}

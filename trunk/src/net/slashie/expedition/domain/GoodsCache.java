@@ -165,7 +165,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 		return getItems();
 	}
 	
-	public int getFoodConsumptionMultiplier() {
+	public double getFoodConsumptionMultiplier() {
 		return 1;
 	}
 	

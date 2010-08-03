@@ -38,7 +38,7 @@ public class FoodConsumerDelegate implements Serializable{
 				dailyFoodConsumption += unit.getDailyFoodConsumption() * equipment.getQuantity();
 			}
 		}
-		return dailyFoodConsumption * foodConsumer.getFoodConsumptionMultiplier();
+		return (int)Math.floor(dailyFoodConsumption * foodConsumer.getFoodConsumptionMultiplier());
 	}
 	
 	public void consumeFood(){

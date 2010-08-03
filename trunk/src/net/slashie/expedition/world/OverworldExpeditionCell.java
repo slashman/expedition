@@ -4,10 +4,12 @@ import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.AppearanceFactory;
 
 public class OverworldExpeditionCell extends AbstractCell{
-	private boolean isLand, isMountain;
-	private int speedModifier;
+	private boolean isLand, isMountain, isRiver;
+	private double foodConsumptionModifier;
 	
-	
+	public boolean isRiver() {
+		return isRiver;
+	}
 
 	public boolean isLand() {
 		return isLand;
@@ -19,19 +21,16 @@ public class OverworldExpeditionCell extends AbstractCell{
 		return isMountain;
 	}
 
-
-
-	public int getSpeedModifier() {
-		return speedModifier;
+	public double getFoodConsumptionModifier() {
+		return foodConsumptionModifier;
 	}
 
-
-
-	public OverworldExpeditionCell(String pid, String description, boolean isLand, boolean isMountain, int speedModifier) {
+	public OverworldExpeditionCell(String pid, String description, boolean isLand, boolean isMountain, boolean isRiver, double d) {
 		super(pid, description, description, AppearanceFactory.getAppearanceFactory().getAppearance(pid));
 		this.isLand = isLand;
 		this.isMountain = isMountain;
-		this.speedModifier = speedModifier;
+		this.isRiver = isRiver;
+		this.foodConsumptionModifier = d;
 	}
 
 
