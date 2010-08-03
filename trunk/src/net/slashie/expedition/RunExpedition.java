@@ -137,6 +137,7 @@ public class RunExpedition {
 					ConsoleSystemInterface csi = null;
 					try{
 						csi = new JCursesConsoleInterface();
+						csi.setAutoRefresh(false);
 					}
 		            catch (ExceptionInInitializerError eiie){
 		            	crash("Fatal Error Initializing JCurses", eiie);

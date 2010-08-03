@@ -136,11 +136,16 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	private void drawAddornment(){
 		int addornmentColor = ConsoleSystemInterface.TEAL;
 		csi.print(0, 0,  "    /------------------\\     /---------N---------\\     /--------------------\\   ", addornmentColor);
-		csi.print(0, 1,  "    |                  |     |                   |     |                    |   ", addornmentColor);
-		csi.print(0, 2,  "    |                  |     |                   |     |                    |   ", addornmentColor);
-		csi.print(0, 3,  "    |                  |-----|                   |-----|                    |   ", addornmentColor);
-		csi.print(0, 4,  "    |                  |.....|                   |.....|                    |   ", addornmentColor);
-		csi.print(0, 5,  "    |                  |.....|                   |.....|                    |   ", addornmentColor);
+		csi.print(0, 1,  "    |                  |     |", addornmentColor);
+		csi.print(49, 1, "|     |                    |   ", addornmentColor);
+		csi.print(0, 2,  "    |                  |     |",addornmentColor);
+		csi.print(49, 2, "|     |                    |   ", addornmentColor);
+		csi.print(0, 3,  "    |                  |-----|",addornmentColor);
+		csi.print(49, 3, "|-----|                    |   ", addornmentColor);
+		csi.print(0, 4,  "    |                  |.....|", addornmentColor);
+		csi.print(49, 4,"|.....|                    |   ", addornmentColor);
+		csi.print(0, 5,  "    |                  |.....|", addornmentColor);
+		csi.print(49, 5,  "|.....|                    |   ", addornmentColor);
 		csi.print(0, 6,  " /----~ EXPEDITION ~------\\..|                   |../-------~ EXPEDITION ~-----\\", addornmentColor);
 		csi.print(0, 7,  " |Ships                   |..|                   |..|                          |", addornmentColor);
 		csi.print(0, 8,  " |Food Days               |..|                   |..|                          |", addornmentColor);
