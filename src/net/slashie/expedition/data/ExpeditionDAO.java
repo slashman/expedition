@@ -69,13 +69,13 @@ public class ExpeditionDAO {
 		
 		return new AbstractCell[]{
 			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, false, 3),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, false, 3),
-			new OverworldExpeditionCell("WATER", "Ocean", false, false, 5),
-			new OverworldExpeditionCell("WATER2", "Water", false, false, 5),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, true, 1),
-			new OverworldExpeditionCell("FOREST", "Forest", true, false, 2),
-			new OverworldExpeditionCell("PORT_CITY", "Port City", false, false, 1),
+			new OverworldExpeditionCell("GRASS", "Grass", true, false, false, 1.2d),
+			new OverworldExpeditionCell("PLAINS", "Grass", true, false, false, 1.0d),
+			new OverworldExpeditionCell("WATER", "Ocean", false, false, false, 1.0d),
+			new OverworldExpeditionCell("WATER2", "Water", true, false, true, 1.0d),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, true, false, 1.5d),
+			new OverworldExpeditionCell("FOREST", "Forest", true, false, false, 1.2d),
+			new OverworldExpeditionCell("PORT_CITY", "Port City", false, false, false, 1.0d),
 			
 			//Inworld Cells
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
@@ -183,8 +183,7 @@ public class ExpeditionDAO {
 			new CharAppearance("EXPLORER", '@', ConsoleSystemInterface.RED),
 			new CharAppearance("CARPENTER", '@', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("COLONIST", '@', ConsoleSystemInterface.YELLOW),
-
-			
+		
 			//native Units
 			new CharAppearance("NATIVE_WARRIOR", '@', ConsoleSystemInterface.RED),
 			new CharAppearance("NATIVE_BRAVE", '@', ConsoleSystemInterface.PURPLE),
@@ -262,7 +261,7 @@ public class ExpeditionDAO {
 			new ExpeditionUnit("CARPENTER", "Carpenter","Carpenters", 250, 300, 1, 1, 1, 
 					new String[]{"SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("COLONIST",  "Colonist",  "Colonists",  200, 100, 1, 1, 1,
+			new ExpeditionUnit("COLONIST",  "Colonist",  "Colonists",  200, 300, 1, 1, 1,
 					new String[]{"SPEARS"},
 					new String[]{""}),
 			//Native Units

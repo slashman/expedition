@@ -150,7 +150,10 @@ public class Walk extends Action{
 	        
 	        switch(expedition.getMovementMode()){
 	        case SHIP:
-	        	if (cell.isLand()){
+	        	if (cell.isRiver()){
+	        		expedition.wearOutShips(30);
+	        	}
+	        	if (cell.isLand() && !cell.isRiver()){
 	        		if (UserInterface.getUI().promptChat("Do you want to land?  (Y/n)")){
 	        			GoodsCache ship = new ShipCache((ExpeditionGame)((Player)performer).getGame(), expedition.getCurrentVehicles());
 	        			ship.addAllGoods(expedition);

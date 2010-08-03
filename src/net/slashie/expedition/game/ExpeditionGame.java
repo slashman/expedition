@@ -47,24 +47,11 @@ public class ExpeditionGame extends SworeGame {
 					foodConsumers.get(i).consumeFood();
 				}
 				
+				
 				Expedition expedition = getExpedition();
-				if (expedition.getMovementMode() == MovementMode.SHIP){
-					//Randomly damage ships
-					List<Vehicle> vehicles = expedition.getCurrentVehicles();
-					List<Vehicle> vehiclesToRemove = new ArrayList<Vehicle>();
-					for (Vehicle vehicle: vehicles){
-						vehicle.dailyWearOut(expedition.getLevel());
-						if (vehicle.isDestroyed()){
-							vehiclesToRemove.add(vehicle);
-						}
-					}
-					for (Vehicle vehicle: vehiclesToRemove){
-						expedition.getLevel().addMessage("You have lost a "+vehicle.getDescription()+" to the sea!");
-						vehicles.remove(vehicle);
-					}
-					
-					expedition.checkDrown();
-				}
+				expedition.wearOutShips(5);
+				
+				
 				
 			}
 		}
