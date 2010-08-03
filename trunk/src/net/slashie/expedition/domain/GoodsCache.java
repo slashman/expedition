@@ -40,9 +40,11 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 	
 	public void addAllGoods(Expedition expedition){
 		for (Equipment equipment: expedition.getInventory()){
-			Equipment new_ = equipment.clone();
-			itemsHash.put(equipment.getItem().getFullID(), new_);
-			items.add(new_);
+			if (equipment.getQuantity() > 0) {
+				Equipment new_ = equipment.clone();
+				itemsHash.put(equipment.getItem().getFullID(), new_);
+				items.add(new_);
+			}
 		}
 	}
 	
