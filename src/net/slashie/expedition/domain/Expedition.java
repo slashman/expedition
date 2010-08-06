@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
@@ -186,7 +187,8 @@ public class Expedition extends Player implements FoodConsumer{
 	public enum MovementSpeed {
 		SLOW,
 		NORMAL,
-		FAST;
+		FAST,
+		NONE;
 		
 		public String getDescription(){
 			switch (this){
@@ -925,6 +927,29 @@ public class Expedition extends Player implements FoodConsumer{
 			
 			checkDrown();
 		}		
+	}
+
+	
+	private CardinalDirection heading = CardinalDirection.WEST;
+	
+	public SailingPoint getSailingPoint(){
+		if (getMovementMode() != MovementMode.SHIP)
+			return SailingPoint.NONE;
+		CardinalDirection windDirection = getLocation().getWindDirection();
+		if (windDirection == CardinalDirection.NULL){
+			return SailingPoint.STALLED;
+		}
+		int headingAngle = getHeading().getReferenceAngle();
+		int angularDifference = (int)Math.abs(180-(headingAngle > windDirection.getReferenceAngle() ? headingAngle - windDirection.getReferenceAngle() : windDirection.getReferenceAngle() - headingAngle));
+		return SailingPoint.resolvePoint(angularDifference);
+	}
+
+	public CardinalDirection getHeading() {
+		return heading;
+	}
+
+	public void setHeading(CardinalDirection heading) {
+		this.heading = heading;
 	}
 
 }

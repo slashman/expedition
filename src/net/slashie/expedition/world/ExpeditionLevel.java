@@ -17,4 +17,5 @@ public interface ExpeditionLevel{
 	public boolean isSpawnPointUsed(Position spawnPoint);
 	public void setSpawnPointUsed(Position spawnPoint);
 	public boolean isZoomIn();
+	public CardinalDirection getWindDirection();
 }

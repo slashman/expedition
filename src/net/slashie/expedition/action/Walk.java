@@ -2,8 +2,10 @@ package net.slashie.expedition.action;
 
 import java.util.ArrayList;
 
+import net.slashie.expedition.action.navigation.TurnShip;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.SailingPoint;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
@@ -96,8 +98,27 @@ public class Walk extends Action{
 			expedition.getLevel().addMessage("You stand alert.");
 			return;
 		}
-		
-        Position var = directionToVariation(targetDirection);
+		Position var = directionToVariation(targetDirection);
+		if (expedition.getMovementMode() == MovementMode.SHIP){
+			
+			//Don't walk, sail instead!
+			if (var.x() == 0){
+				if (expedition.getSailingPoint() == SailingPoint.BEATING){
+					if (Util.chance(60)) {
+						expedition.getLevel().addMessage("You are on irons!");
+						return;
+					}
+				}
+				var = expedition.getHeading().getVectors();
+			} else {
+				TurnShip turnShip = new TurnShip(var.x());
+				turnShip.setPerformer(performer);
+				turnShip.execute();
+				return;
+			}
+			
+		}
+        
         Position destinationPoint = Position.add(performer.getPosition(), var);
         
         AbstractCell absCell = performer.getLevel().getMapCell(destinationPoint);

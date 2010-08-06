@@ -26,8 +26,8 @@ public class SpainCastle extends StaticPattern {
 	public SpainCastle () {
 		this.cellMap = new String [][]{{
 			"#cc#+#cc###C###cc#+#cc#",
+			"#........=T-T=........#",
 			"#........=F-I=........#",
-			"#........=---=........#",
 			"W........=---=........W",
 			"#........=---=........#",
 			"+........=---=........+",
@@ -49,8 +49,9 @@ public class SpainCastle extends StaticPattern {
 		charMap.put("+", "SPAIN_BANNER");
 		charMap.put("W", "CASTLE_WINDOW");
 		charMap.put("S", "CASTLE_FLOOR EXIT SPAIN");
-		charMap.put("F", "THRONE ITEM KING_FERDINAND");
-		charMap.put("I", "THRONE ITEM QUEEN_ISABELLE");
+		charMap.put("T", "THRONE");
+		charMap.put("F", "RED_CARPET ITEM KING_FERDINAND");
+		charMap.put("I", "RED_CARPET ITEM QUEEN_ISABELLE");
 		charMap.put("C", "SPAIN_CREST");
 		charMap.put("c", "CASTLE_CURTAIN");
 		unleashers = new Unleasher[]{new KingsChat()};
