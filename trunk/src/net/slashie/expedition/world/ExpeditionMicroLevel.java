@@ -65,5 +65,9 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	public void setZoomIn(boolean isZoomIn) {
 		this.isZoomIn = isZoomIn;
 	}
-	
+
+	@Override
+	public CardinalDirection getWindDirection() {
+		return CardinalDirection.NULL;
+	}
 }

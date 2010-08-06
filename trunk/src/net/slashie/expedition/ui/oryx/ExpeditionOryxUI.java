@@ -16,6 +16,7 @@ import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
+import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -381,9 +382,19 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		return si.getGraphics2D().getFont().getSize();
 	}
 
+	
+	@Override
+	public void beforeDrawLevel() {
+		if (getExpedition().getMovementMode() == MovementMode.SHIP)
+			setFlipEnabled(false);
+		else
+			setFlipEnabled(true);
+	}
+	
 	@Override
 	public void beforeRefresh() {
 		drawStatus();
+
 	}
 
 	private Expedition getExpedition(){
@@ -397,42 +408,49 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		// Box 1
 		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime(); 
-		si.print(2, 1, gameTime.get(Calendar.YEAR)+"");
-		si.print(2, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
-		si.print(2, 3, getExpedition().getExpeditionaryTitle());
+		si.print(2, 1, getExpedition().getExpeditionaryTitle());
 		if (getExpedition().getTowns().size() == 1)
-			si.print(2, 4, "1 colony ");
+			si.print(2, 2, "1 colony ");
 		else
-			si.print(2, 4, getExpedition().getTowns().size()+" colonies");
-		si.print(2, 5, getExpedition().getAccountedGold()+"$");
+			si.print(2, 2, getExpedition().getTowns().size()+" colonies");
+		si.print(2, 3, getExpedition().getAccountedGold()+"$");
 		
 		
 		// Box 2
-		si.print(2, 7, statsExpedition.getTotalShips()+" ships ("+statsExpedition.getShipHealth()+"%)");
-		si.print(2, 8, statsExpedition.getOffshoreFoodDays()+" food days");
-		si.print(2, 9, statsExpedition.getPower()+(statsExpedition.isArmed()?" Power (Armed)":" Power"));
-		if (statsExpedition.getMovementSpeed() != MovementSpeed.NORMAL){
-			si.print(2, 10, statsExpedition.getMovementMode().getDescription()+"("+statsExpedition.getMovementSpeed().getDescription()+")");
-		} else {
-			si.print(2, 10, statsExpedition.getMovementMode().getDescription());
-		}
+		si.print(2, 5, statsExpedition.getOffshoreFoodDays()+" food days");
 		if (getExpedition().getLevel() instanceof ExpeditionMicroLevel)
-			si.print(2, 11, "Carrying "+statsExpedition.getOffshoreCurrentlyCarrying()+"%");
+			si.print(2, 6, "Carrying "+statsExpedition.getOffshoreCurrentlyCarrying()+"%");
 		else
-			si.print(2, 11, "Carrying "+statsExpedition.getCurrentlyCarrying()+"%");
+			si.print(2, 6, "Carrying "+statsExpedition.getCurrentlyCarrying()+"%");		
+		if (statsExpedition.getMovementSpeed() != MovementSpeed.NORMAL){
+			si.print(2, 7, statsExpedition.getMovementMode().getDescription()+"("+statsExpedition.getMovementSpeed().getDescription()+")");
+		} else {
+			si.print(2, 7, statsExpedition.getMovementMode().getDescription());
+		}
+		si.print(2, 8, statsExpedition.getTotalShips()+" ships ("+statsExpedition.getShipHealth()+"%)");
+		
+		si.print(2, 9, statsExpedition.getPower()+(statsExpedition.isArmed()?" Power (Armed)":" Power"));
+		
+
 		
 		int line2 = 63;
 		//Box 3
 		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition());
 		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription();
 		Pair<String, String> locationMeans = getExpedition().getLocation().getLocationMeans();
-		si.print(line2, 1, getExpedition().getLocation().getDescription());
-		si.print(line2, 2, currentCell.getDescription());
-		si.print(line2, 3, locationMeans.getA());
-		si.print(line2+2, 4, locationDescription.getA());
-		si.print(line2, 5, locationMeans.getB());
-		si.print(line2+2, 6, locationDescription.getB());
-		si.print(line2, 7, getExpedition().getWeather()+", "+getExpedition().getTemperature());
+		si.print(line2, 1, gameTime.get(Calendar.YEAR)+", "+ months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
+		si.print(line2, 2, getExpedition().getLocation().getDescription());
+		si.print(line2, 3, currentCell.getDescription());
+		si.print(line2, 4, getExpedition().getWeather()+", "+getExpedition().getTemperature());
+		
+		si.print(line2, 6, locationMeans.getA());
+		si.print(line2+2, 7, locationDescription.getA());
+		si.print(line2, 8, locationMeans.getB());
+		si.print(line2+2, 9, locationDescription.getB());
+		si.print(line2, 10, "Wind: "+getExpedition().getLocation().getWindDirection().getAbbreviation());
+		si.print(line2, 11, "Heading "+getExpedition().getHeading().getAbbreviation());
+		si.print(line2, 12, getExpedition().getSailingPoint().getDescription());
+		si.print(line2+2, 13, getExpedition().getSailingPoint().getSpeed().getDescription());
 		
 		
 		expeditionUnitsVector.clear();
@@ -458,7 +476,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		//unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
 		unitsMenuBox = new MenuBox(si, null);
 		unitsMenuBox.setGap(36);
-		unitsMenuBox.setPosition(62,8);
+		unitsMenuBox.setPosition(0,9);
 		unitsMenuBox.setWidth(17);
 		unitsMenuBox.setItemsPerPage(9);
   		unitsMenuBox.setShowOptions(false);

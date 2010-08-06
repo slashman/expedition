@@ -124,4 +124,27 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return false;
 	}
 
+	@Override
+	public CardinalDirection getWindDirection() {
+		CardinalDirection prevailingWind = getPrevailingWind();
+		return prevailingWind;
+	}
+
+	private CardinalDirection getPrevailingWind() {
+		int latitude = resolveYToLatitude();
+		if (latitude > 60)
+			return CardinalDirection.SOUTH;
+		if (latitude > 30)
+			return CardinalDirection.NORTHEAST;
+		if (latitude > 5)
+			return CardinalDirection.SOUTHWEST;
+		if (latitude > -5)
+			return CardinalDirection.WEST;
+		if (latitude > -30)
+			return CardinalDirection.NORTHWEST;
+		if (latitude > -60)
+			return CardinalDirection.SOUTHEAST;
+		else
+			return CardinalDirection.NORTH;
+	}
 }
