@@ -571,7 +571,7 @@ public class Expedition extends Player implements FoodConsumer{
 			case FOOT:
 				return super.getAppearance();
 			case SHIP:
-				return AppearanceFactory.getAppearanceFactory().getAppearance("SHIP_EXPEDITION");
+				return AppearanceFactory.getAppearanceFactory().getAppearance("SHIP_EXPEDITION_"+getHeading().getAbbreviation());
 			case HORSE:
 				return AppearanceFactory.getAppearanceFactory().getAppearance("HORSE_EXPEDITION");
 			}
@@ -952,4 +952,5 @@ public class Expedition extends Player implements FoodConsumer{
 		this.heading = heading;
 	}
 
+	
 }
