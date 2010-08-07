@@ -49,7 +49,16 @@ public class GFXAppearances {
 		return new GFXAppearance[]{
 				//Expeditions
 				createAppearance("EXPEDITION", 1,16),
-				createAppearance("SHIP_EXPEDITION", 1 ,15),
+				createAppearance("SHIP_EXPEDITION_N", 1 ,15),
+				createAppearance("SHIP_EXPEDITION_E", 2 ,15),
+				createAppearance("SHIP_EXPEDITION_S", 3 ,15),
+				createAppearance("SHIP_EXPEDITION_W", 4 ,15),
+				createAppearance("SHIP_EXPEDITION_NE", 5 ,15),
+				createAppearance("SHIP_EXPEDITION_SE", 6 ,15),
+				createAppearance("SHIP_EXPEDITION_SW", 7 ,15),
+				createAppearance("SHIP_EXPEDITION_NW", 8 ,15),
+				
+				
 				
 				//Non principal Expeditions
 				createAppearance("HOSTILE_EXPEDITION", 1 ,11),
