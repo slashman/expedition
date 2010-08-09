@@ -8,6 +8,10 @@ public enum SailingPoint {
 	BEAM_REACH ("Beam Reach", 80,109, MovementSpeed.NORMAL),
 	BROAD_REACH ("Broad Reach", 110, 159,MovementSpeed.SLOW),
 	RUNNING ("Running", 160, 180,MovementSpeed.SLOW),
+	
+	BARE_POLES ("Bare Poles",MovementSpeed.SLOW),
+	RUNNING_STORM ("Surfing",MovementSpeed.SLOW),
+	
 	NONE ("None"),
 	STALLED ("Stalled");
 	
@@ -18,6 +22,11 @@ public enum SailingPoint {
 		this.name = name;
 		this.from = from;
 		this.to = to;
+		this.speed = speed;
+	}
+	
+	private SailingPoint(String name, MovementSpeed speed) {
+		this.name = name;
 		this.speed = speed;
 	}
 	

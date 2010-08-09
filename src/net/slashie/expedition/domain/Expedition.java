@@ -941,7 +941,14 @@ public class Expedition extends Player implements FoodConsumer{
 		}
 		int headingAngle = getHeading().getReferenceAngle();
 		int angularDifference = (int)Math.abs(180-(headingAngle > windDirection.getReferenceAngle() ? headingAngle - windDirection.getReferenceAngle() : windDirection.getReferenceAngle() - headingAngle));
-		return SailingPoint.resolvePoint(angularDifference);
+		if (getLocation().hasStorm(getPosition())){
+			if (angularDifference == 0)
+				return SailingPoint.RUNNING_STORM;
+			else
+				return SailingPoint.BARE_POLES;
+		} else {
+			return SailingPoint.resolvePoint(angularDifference);
+		}
 	}
 
 	public CardinalDirection getHeading() {

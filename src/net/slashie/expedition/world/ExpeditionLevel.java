@@ -18,4 +18,6 @@ public interface ExpeditionLevel{
 	public void setSpawnPointUsed(Position spawnPoint);
 	public boolean isZoomIn();
 	public CardinalDirection getWindDirection();
+	public void elapseTime(int lastActionTimeCost);
+	public boolean hasStorm(Position destinationPoint);
 }

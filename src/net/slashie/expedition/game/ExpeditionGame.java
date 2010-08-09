@@ -35,6 +35,7 @@ public class ExpeditionGame extends SworeGame {
 			
 		} else {
 			dayShiftCount += getExpedition().getLastActionTimeCost();
+			getExpedition().getLocation().elapseTime(getExpedition().getLastActionTimeCost());
 			if (dayShiftCount >= 200){ // Each day takes 200 turns
 				dayShiftCount = 0;
 				int month = currentTime.get(Calendar.MONTH);

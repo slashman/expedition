@@ -69,13 +69,13 @@ public class ExpeditionDAO {
 		
 		return new AbstractCell[]{
 			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, false, false, 1.2d),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, false, false, 1.0d),
-			new OverworldExpeditionCell("WATER", "Ocean", false, false, false, 1.0d),
-			new OverworldExpeditionCell("WATER2", "Water", true, false, true, 1.0d),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, true, false, 1.5d),
-			new OverworldExpeditionCell("FOREST", "Forest", true, false, false, 1.2d),
-			new OverworldExpeditionCell("PORT_CITY", "Port City", false, false, false, 1.0d),
+			new OverworldExpeditionCell("GRASS", "Grass", true, false, false, 1.2d, false, false),
+			new OverworldExpeditionCell("PLAINS", "Grass", true, false, false, 1.0d, false, false),
+			new OverworldExpeditionCell("WATER", "Ocean", false, false, false, 1.0d, false, false),
+			new OverworldExpeditionCell("WATER2", "Water", true, false, true, 1.0d, false, false),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, true, false, 1.5d, false, true),
+			new OverworldExpeditionCell("FOREST", "Forest", true, false, false, 1.2d, false, true),
+			new OverworldExpeditionCell("PORT_CITY", "Port City", false, false, false, 1.0d, false, false),
 			
 			//Inworld Cells
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
@@ -120,6 +120,14 @@ public class ExpeditionDAO {
 			//Expeditions
 			new CharAppearance("EXPEDITION", '@', ConsoleSystemInterface.RED),
 			new CharAppearance("SHIP_EXPEDITION", 'v', ConsoleSystemInterface.RED),
+			new CharAppearance("SHIP_EXPEDITION_N", '^', ConsoleSystemInterface.RED),
+			new CharAppearance("SHIP_EXPEDITION_E", '>', ConsoleSystemInterface.RED),
+			new CharAppearance("SHIP_EXPEDITION_S", 'v', ConsoleSystemInterface.RED),
+			new CharAppearance("SHIP_EXPEDITION_W", '<', ConsoleSystemInterface.RED),
+			new CharAppearance("SHIP_EXPEDITION_NE", '7', ConsoleSystemInterface.RED),
+			new CharAppearance("SHIP_EXPEDITION_SE", 'J', ConsoleSystemInterface.RED),
+			new CharAppearance("SHIP_EXPEDITION_SW", 'L', ConsoleSystemInterface.RED),
+			new CharAppearance("SHIP_EXPEDITION_NW", 'F', ConsoleSystemInterface.RED),
 			
 			//Non principal Expeditions
 			new CharAppearance("HOSTILE_EXPEDITION", '@', ConsoleSystemInterface.BLUE),
@@ -132,7 +140,7 @@ public class ExpeditionDAO {
 			new CharAppearance("MOUNTAIN", '^', ConsoleSystemInterface.GREEN),
 			new CharAppearance("FOREST", '&', ConsoleSystemInterface.GREEN),
 			new CharAppearance("PORT_CITY", '#', ConsoleSystemInterface.BROWN),
-			
+			new CharAppearance("STORM", '*', ConsoleSystemInterface.GRAY),
 
 			
 			//Overworld Features

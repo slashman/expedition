@@ -1,5 +1,6 @@
 package net.slashie.expedition.world;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -7,16 +8,23 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.SeaPseudoCache;
+import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
+import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.level.Dispatcher;
+import net.slashie.serf.level.FeatureFactory;
+import net.slashie.serf.level.MapCellFactory;
+import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
+import net.slashie.utils.Util;
 
 public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
@@ -126,9 +134,88 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	@Override
 	public CardinalDirection getWindDirection() {
-		CardinalDirection prevailingWind = getPrevailingWind();
-		return prevailingWind;
+		if (currentWind == null || isTimeToChangeWind()){
+			CardinalDirection prevailingWind = getPrevailingWind();
+			currentWind = prevailingWind;
+			int rotateSign = Util.chance(50) ? 1 : -1;
+			int rotate = 0;
+			if (Util.chance(70)){
+				rotate = Util.rand(0, 2);
+			} else if (Util.chance(30)){
+				rotate = Util.rand(1, 4);
+			}
+			for (int i = 0; i < rotate; i++){
+				currentWind = currentWind.rotate(rotateSign);
+			}
+			isTimeToChangeWind = false;
+		}
+		return currentWind;
 	}
+	
+
+	@Override
+	public void elapseTime(int lastActionTimeCost) {
+		windChangeCounter += lastActionTimeCost;
+		stormBreedCounter += lastActionTimeCost;
+		stormChangeCounter += lastActionTimeCost;
+
+		if (windChangeCounter > 500){
+			isTimeToChangeWind = true;
+			windChangeCounter = 0;
+		}
+		if (stormBreedCounter > 50){
+			int chance = 0;
+			//if (getWeather() == RAINY){
+				chance = 80;
+			//}
+			if (getExpedition().getMovementMode() != MovementMode.SHIP){
+				chance = 10;
+			}
+			if (Util.chance(chance)){
+				Position pos = new Position(getExpedition().getPosition());
+				int signX = Util.chance(50) ? 1 : -1;
+				int signY = Util.chance(50) ? 1 : -1;
+				pos.x += Util.rand(9, 15) * signX;
+				pos.y += Util.rand(9, 15) * signY;
+				Storm storm = new Storm(pos);
+				storms.add(storm);
+				storm.seed(6, 18);
+				storm.grow();
+				stormBreedCounter = 0;
+			}
+		}
+		if (stormChangeCounter > 20){
+			List<Storm> removeList = new ArrayList<Storm>();
+			for (Storm storm: storms){
+				storm.evolve();
+				
+				if (storm.getMass() < 5){
+					removeList.add(storm);
+				}
+				storm.move(getWindDirection());
+			}
+			for (Storm storm: removeList){
+				storms.remove(storm);
+			}
+
+			stormChangeCounter = 0;
+			
+		}
+	}
+	
+	private List<Storm> storms = new ArrayList<Storm>();
+	
+	private int windChangeCounter;
+	private int stormBreedCounter;
+	private int stormChangeCounter;
+
+	private boolean isTimeToChangeWind;
+	
+	private boolean isTimeToChangeWind() {
+		return isTimeToChangeWind;
+	}
+
+	private CardinalDirection currentWind;
 
 	private CardinalDirection getPrevailingWind() {
 		int latitude = resolveYToLatitude();
@@ -146,5 +233,64 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			return CardinalDirection.SOUTHEAST;
 		else
 			return CardinalDirection.NORTH;
+	}
+	
+	@Override
+	public boolean hasStorm(Position position) {
+		for (Storm storm: storms){
+			if (storm.hasStormlet(position))
+				return true;
+		}
+
+		return false;
+	}
+
+	AbstractFeature stormletFeature = new StormletFeature();
+	@Override
+	public AbstractFeature getFeatureAt(Position position) {
+		if (hasStorm(position))
+			return stormletFeature;
+		return super.getFeatureAt(position);
+	}
+	
+	protected boolean remembers(int x, int y, int z){
+		return false;
+	}
+
+	
+	class StormletFeature extends AbstractFeature {
+		public StormletFeature() {
+			setAppearanceId("STORM");
+		}
+		
+		@Override
+		public String getClassifierID() {
+			return "Storm";
+		}
+
+		@Override
+		public String getDescription() {
+			return "Storm";
+		}
+		
+		@Override
+		public Appearance getAppearance() {
+			return super.getAppearance();
+		}
+		
+		@Override
+		public boolean isInvisible() {
+			return false;
+		}
+		
+		@Override
+		public boolean isVisible() {
+			return true;
+		}
+		
+		@Override
+		public boolean isOpaque() {
+			return true;
+		}
 	}
 }

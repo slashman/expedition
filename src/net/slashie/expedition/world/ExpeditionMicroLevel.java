@@ -2,6 +2,7 @@ package net.slashie.expedition.world;
 
 import net.slashie.expedition.level.BufferedExpeditionLevel;
 import net.slashie.util.Pair;
+import net.slashie.utils.Position;
 
 public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	private boolean dock;
@@ -70,4 +71,15 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	public CardinalDirection getWindDirection() {
 		return CardinalDirection.NULL;
 	}
+	
+	@Override
+	public void elapseTime(int lastActionTimeCost) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public boolean hasStorm(Position destinationPoint) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 }

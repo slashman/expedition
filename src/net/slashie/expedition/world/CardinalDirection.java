@@ -7,7 +7,7 @@ public enum CardinalDirection {
 	NORTHWEST("NW", 45, -1, -1),
 	WEST("W", 90, -1, 0),
 	SOUTHWEST("SW", 135, -1, 1),
-	SOUTH("S", 180, 0, 1),
+	SOUTH("S", 180, 0,  1),
 	SOUTHEAST("SE", 225, 1, 1),
 	EAST("E", 270, 1, 0),
 	NORTHEAST("NE",315, 1, -1),
