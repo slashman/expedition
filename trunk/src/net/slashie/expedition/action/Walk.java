@@ -99,6 +99,9 @@ public class Walk extends Action{
 			return;
 		}
 		Position var = directionToVariation(targetDirection);
+        
+        
+        
 		if (expedition.getMovementMode() == MovementMode.SHIP){
 			
 			//Don't walk, sail instead!
@@ -118,8 +121,19 @@ public class Walk extends Action{
 			}
 			
 		}
-        
-        Position destinationPoint = Position.add(performer.getPosition(), var);
+		Position destinationPoint = Position.add(performer.getPosition(), var);
+		
+		boolean storm = expedition.getLocation().hasStorm(destinationPoint) && expedition.getMovementMode() == MovementMode.SHIP; 
+        if (storm){
+			expedition.getLevel().addMessage("You are caught on a Storm!");
+			expedition.wearOutShips(20);
+			expedition.increaseDeducedReckonWest(Util.rand(-5, 5));
+			if (Util.chance(30)){
+				//Random movement caused by the storm
+				destinationPoint.x += Util.rand(-1, 1);
+				destinationPoint.y += Util.rand(-1, 1);
+			}
+        }
         
         AbstractCell absCell = performer.getLevel().getMapCell(destinationPoint);
         if (absCell instanceof ExpeditionCell){
@@ -213,6 +227,7 @@ public class Walk extends Action{
         	feature.onStep(expedition);
         	return;
         }
+        
         
 
         expedition.landOn(destinationPoint);

@@ -71,6 +71,7 @@ public class GFXAppearances {
 				createAppearance("MOUNTAIN", 4 ,2),
 				createAppearance("FOREST", 1 ,4),
 				createAppearance("PORT_CITY", 11 ,6),
+				createAppearance("STORM", 1, 17),
 				
 				//Overworld Features
 				createAppearance("SHIP", 1 ,5),
