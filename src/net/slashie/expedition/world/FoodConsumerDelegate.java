@@ -41,7 +41,10 @@ public class FoodConsumerDelegate implements Serializable{
 		return (int)Math.floor(dailyFoodConsumption * foodConsumer.getFoodConsumptionMultiplier());
 	}
 	
+	private boolean disabled = true;
 	public void consumeFood(){
+		if (disabled)
+			return;
 		int remainder = reduceFood(getDailyFoodConsumption());
 		if (remainder > 0){
 			//Reduce expedition resistance

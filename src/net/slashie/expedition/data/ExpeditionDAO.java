@@ -1,5 +1,8 @@
 package net.slashie.expedition.data;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
@@ -11,6 +14,7 @@ import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Valuable;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
+import net.slashie.expedition.world.Culture;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionFeature;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -324,5 +328,38 @@ public class ExpeditionDAO {
 		return new ExpeditionUnit[]{
 				
 		};
+	}
+
+	private static Map<String, Culture> culturesMap = new HashMap<String, Culture>(); 
+	static {
+		Culture[] cultures = new Culture[] { 
+			new Culture("MOUNT", "Fort Ancient", true),
+			new Culture("MISSI", "Missisipians", true),
+			new Culture("AZTEC", "Aztec", true),
+			new Culture("HUAST", "Huastec", true),
+			new Culture("MIXTE", "Mixtec", true),
+			new Culture("MAYA", "Maya", true),
+			new Culture("PURHE", "P'urhépecha", true),
+			new Culture("TOTON", "Totonac", true),
+			new Culture("ZAPOT", "Zapotec", true),
+			new Culture("CANAR", "Cañaris", true),
+			new Culture("CHACH", "Chachapoya", true),
+			new Culture("CHIMU", "Chimù", true),
+			new Culture("INCA", "Inca", true),
+			new Culture("MUISC", "Muisca", true),
+			new Culture("TAIRO", "Tairona", true),
+			new Culture("ARTIC", "Artic Mammal Hunters", false),
+			new Culture("HUNTE", "Hunters-Gatherers", false),
+			new Culture("FISHI", "Fishing people", false),
+			new Culture("BISON", "Bison Hunters", false),
+			new Culture("FARME", "Maiz Farmers", false)
+		};
+		for (Culture culture: cultures){
+			culturesMap.put(culture.getCode(), culture);
+		}
+	}
+
+	public static Culture getCulture(String string) {
+		return culturesMap.get(string);
 	}
 }
