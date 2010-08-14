@@ -171,6 +171,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			if (getExpedition().getMovementMode() != MovementMode.SHIP){
 				chance = 10;
 			}
+			chance = 0;
 			if (Util.chance(chance)){
 				Position pos = new Position(getExpedition().getPosition());
 				int signX = Util.chance(50) ? 1 : -1;

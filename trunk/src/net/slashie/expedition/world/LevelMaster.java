@@ -6,6 +6,7 @@ import net.slashie.expedition.locations.SpainCastle;
 import net.slashie.expedition.locations.TestSea;
 import net.slashie.expedition.locations.World;
 import net.slashie.expedition.worldGen.ExpeditionStaticGenerator;
+import net.slashie.expedition.worldGen.WorldGenerator;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.level.Dispatcher;
 import net.slashie.serf.levelGeneration.StaticGenerator;
@@ -59,12 +60,12 @@ public class LevelMaster {
 			/*ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
 			"world", 150,150,50,50, pattern.getCharMap(), new Pair<String, Position>("_START", new Position(3198,801)));*/
 			ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
-					"world", 3374,2939,50,50, pattern.getCharMap(), new Position(3236,834));
+					"data/world", 3374,2939,50,50, pattern.getCharMap(), new Position(3236,834));
 			ret.setDescription(pattern.getDescription());
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());
 			}
-
+			WorldGenerator.addNativeSettlements(ret);
 			ret.getHelper().setMusicKey("SEA");
 			ret.setID("WORLD");
 			return ret;

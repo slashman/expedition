@@ -17,10 +17,9 @@ public class ExpeditionWorldRaster {
 		worldCharmap.put("132,190,130", "&"); // Forest
 		worldCharmap.put("162,254,252", " "); // Medium Sea
 		worldCharmap.put("41,190,250", "#"); // River
-		worldCharmap.put("255,255,255", "E"); // 
-		worldCharmap.put("240,136,159", "F"); //
-		worldCharmap.put("255,26,26", "S"); //
+		worldCharmap.put("255,0,0", "S"); //
 	}
+
 	
 	public static void main(String[] args){
 		System.out.println("Expedition World Raster");
