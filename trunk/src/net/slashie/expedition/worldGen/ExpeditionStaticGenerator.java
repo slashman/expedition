@@ -15,11 +15,7 @@ import net.slashie.utils.Position;
 public class ExpeditionStaticGenerator extends StaticGenerator{
 	@Override
 	public void handleSpecialRenderCommand(AbstractLevel l, Position where, String[] cmds, int x, int y) {
-		if (cmds[1].equals("EXPEDITION")){
-			Expedition expedition = ExpeditionFactory.getExpedition(cmds[2]);
-			expedition.setPosition(where.x+x,where.y+y,where.z);
-			l.addActor(expedition);
-		} else if (cmds[1].equals("ITEM")){
+		if (cmds[1].equals("ITEM")){
 			ExpeditionItem item = ItemFactory.createItem(cmds[2]);
 			l.addItem(Position.add(where, new Position(x,y)), item);
 		}

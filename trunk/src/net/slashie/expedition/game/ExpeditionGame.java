@@ -60,7 +60,6 @@ public class ExpeditionGame extends SworeGame {
 	}
 	
 	private void monthChange() {
-		//getPlayer().getLevel().addMessage("Month change");
 		List<Town> towns = ((Expedition)getPlayer()).getTowns();
 		for (Town town: towns){
 			town.tryGrowing();

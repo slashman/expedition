@@ -15,9 +15,10 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Util;
 
 public class Town extends GoodsCache{
+	private static final String[] TOWN_ACTIONS = new String[] { "Do Nothing" };
 	private String name;
-	private Expedition founderExpedition;
-	private Date foundedIn;
+	protected Expedition founderExpedition;
+	protected Date foundedIn;
 	
 	public Town(ExpeditionGame game) {
 		super(game);
@@ -44,21 +45,29 @@ public class Town extends GoodsCache{
 		return "Town"+name;
 	}
 	
-	@Override
-	public void onStep(Actor a) {
-		/*if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
-			switch (UserInterface.getUI().switchChat("What do you want to do?", "Nothing")){
-			case 0:
-    			break;
-    		}
-		}*/
-		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("The "+getTitle()+" of "+getName()+" XXX " +
-				"Founded on "+ DateFormat.getDateInstance(DateFormat.MEDIUM).format(foundedIn)+" by "+founderExpedition.getExpeditionaryTitle()+" XXX "+
-				"Current Population: "+getPopulation()
-				
-		);
+	public String getLongDescription(){
+		return "The "+getTitle()+" of "+getName(); 
 	}
 	
+	@Override
+	public void onStep(Actor a) {
+		String description =  getLongDescription()+"XXX ";
+		if (foundedIn != null){
+			description += "Founded on "+ DateFormat.getDateInstance(DateFormat.MEDIUM).format(foundedIn)+" by "+founderExpedition.getExpeditionaryTitle()+" XXX ";
+		}
+		description += "Current Population: "+getPopulation();
+		townAction(UserInterface.getUI().switchChat(description, getTownActions()));
+	}
+	
+	protected void townAction(int switchChat) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	protected String[] getTownActions() {
+		return TOWN_ACTIONS;
+	}
+
 	@Override
 	public void consumeFood() {
 		//Do nothing, this must be handled differently

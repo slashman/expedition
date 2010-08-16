@@ -11,7 +11,7 @@ import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.util.Util;
 
 public class ExpeditionFactory {
-	public static Expedition getExpedition(String classifierId){
+	public static Expedition getExpedition(String classifierId, int expeditionPower){
 		ExpeditionGame game = ExpeditionGame.getCurrentGame();
 		NonPrincipalExpedition ret = new NonPrincipalExpedition(game, "hostileExpedition"+game.getLastExpeditionId());
 		ret.setGame(game);
@@ -26,7 +26,7 @@ public class ExpeditionFactory {
 		ai.setWaitPlayerRange(20);
 		ret.setSelector(ai);
 		
-		int expeditionPower = Util.rand(1, 4);
+		//int expeditionPower = Util.rand(1, 4);
 
 		ret.addItem(ItemFactory.createItem("NATIVE_WARRIOR"), Util.rand(10, expeditionPower*10));
 		ret.addItem(ItemFactory.createItem("NATIVE_BRAVE"), Util.rand(0, expeditionPower*5));

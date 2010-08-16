@@ -31,6 +31,17 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 	public GoodsCache() {
 	}
 
+	public int getItemCount(String string) {
+		int goodCount = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem().getFullID().equals(string)){
+				goodCount += equipment.getQuantity();
+			}
+		}
+		return goodCount;
+	}
+	
 	public List<Equipment> getItems() {
 		return items;
 	}
@@ -173,6 +184,18 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 		for (int i = 0; i < items.size(); i++){
 			Equipment equipment = (Equipment) items.get(i);
 			if (equipment.getItem().equals(item)){
+				equipment.reduceQuantity(quantity);
+				if (equipment.isEmpty())
+					items.remove(equipment);
+				return;
+			}
+		}
+	}
+	
+	public void reduceQuantityOf(String itemId, int quantity) {
+		for (int i = 0; i < items.size(); i++){
+			Equipment equipment = (Equipment) items.get(i);
+			if (equipment.getItem().getFullID().equals(itemId)){
 				equipment.reduceQuantity(quantity);
 				if (equipment.isEmpty())
 					items.remove(equipment);
