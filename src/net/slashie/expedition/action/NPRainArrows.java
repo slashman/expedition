@@ -41,6 +41,8 @@ public class NPRainArrows extends RangedAction {
 	
 	public boolean preEffectCheck(Actor target){
 		Expedition expedition = (Expedition)performer;
+		if (!(target instanceof Expedition))
+			return true;
 		Expedition targetExpedition = (Expedition)target;
 
 
@@ -56,9 +58,11 @@ public class NPRainArrows extends RangedAction {
 	@Override
 	public boolean actOverTarget(Actor target) {
 		Expedition expedition = (Expedition)performer;
+		
+		if (!(target instanceof Expedition))
+			return false;
 		Expedition targetExpedition = (Expedition)target;
-
-
+		
 		//Select the units with enough range
 		int distance = Position.distance(performer.getPosition(), targetExpedition.getPosition());
 		List<Equipment> units = expedition.getUnitsOverRange(distance);
