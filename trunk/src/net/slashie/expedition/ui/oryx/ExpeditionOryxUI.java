@@ -71,7 +71,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   			i++;
   		}
   		selectionBox.setMenuItems(menuItems);
-  		selectionBox.setTitle(prompt);
+  		selectionBox.setLegend(prompt);
   		selectionBox.setForeColor(ORANGE);
   		selectionBox.draw();
   		
@@ -145,12 +145,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		menuBox.setMenuItems(menuItems);
   		menuBox.draw();
   		menuBox.setForeColor(ORANGE);
-  		
+  		menuBox.setTitle(store.getOwnerName());
   		//menuBox.setBorder(true);
   		String prompt = "Welcome to the "+store.getOwnerName();
-
+  		
 		while (true) {
-			menuBox.setTitle(prompt);
+			menuBox.setLegend(prompt);
 			si.refresh();
 			//menuBox.setTitle(who.getName()+" (Gold:"+player.getGold()+")");
 			StoreGFXMenuItem itemChoice = ((StoreGFXMenuItem)menuBox.getSelection());
@@ -160,12 +160,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			ExpeditionItem item = (ExpeditionItem) choice.getItem();
 			StoreItemInfo storeItemInfo = store.getPriceFor(item);
 			if (storeItemInfo.getPack() > 1)
-				menuBox.setTitle("How many "+storeItemInfo.getPackDescription()+" of "+item.getPluralDescription()+"?");
+				menuBox.setLegend("How many "+storeItemInfo.getPackDescription()+" of "+item.getPluralDescription()+"?");
 			else
-				menuBox.setTitle("How many "+item.getPluralDescription()+"?");
+				menuBox.setLegend("How many "+item.getPluralDescription()+"?");
 			menuBox.draw();
 			si.refresh();
-			int buyQuantity = readQuantity(80+tileSize+300, 308+fontSize, "                       ", 5);
+			int buyQuantity = readQuantity(80+tileSize+300, 341+fontSize, "                       ", 5);
 			if (buyQuantity == 0){
 				prompt = "Ok... Do you need anything else?";
 				continue;
@@ -185,14 +185,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			int gold = storeItemInfo.getPrice() * buyQuantity;	
 			if (item instanceof ExpeditionUnit){
 				if (quantity > 1)
-					menuBox.setTitle("Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
+					menuBox.setLegend("Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
 				else
-					menuBox.setTitle("Hire a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
+					menuBox.setLegend("Hire a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
 			} else {
 				if (quantity > 1)
-					menuBox.setTitle("Buy "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
+					menuBox.setLegend("Buy "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
 				else
-					menuBox.setTitle("Buy a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
+					menuBox.setLegend("Buy a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
 			}
 			menuBox.draw();
 	 		if (prompt())
@@ -235,6 +235,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		}
   		cacheBox.setMenuItems(menuItems);
   		cacheBox.setTitle("Transfer from "+cache.getDescription()+" to Expedition");
+  		cacheBox.setLegend("Select the units to send aground");
   		//cacheBox.setTitle("On Ship...");
   		cacheBox.setForeColor(ORANGE);
   		cacheBox.draw();
@@ -249,7 +250,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 					if (getExpedition().getTotalUnits() > 0)
 						break;
 					else {
-						cacheBox.setTitle("You must first disembark");
+						cacheBox.setLegend("You must first disembark");
 						continue;
 					}
 				} else {
@@ -258,27 +259,27 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 			Equipment choice = itemChoice.getEquipment();
 			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			cacheBox.setTitle("How many "+item.getDescription()+" will you transfer?");
+			cacheBox.setLegend("How many "+item.getDescription()+" will you transfer?");
 			cacheBox.draw();
 			si.refresh();
-			int quantity = readQuantity(80+tileSize+420, 38+getFontSize(), "                       ", 5);
+			int quantity = readQuantity(80+tileSize+420, 71+getFontSize(), "                       ", 5);
 			if (quantity == 0)
 				continue;
 			
 			if (!(choice.getItem() instanceof ExpeditionUnit) && getExpedition().getTotalUnits() == 0){
-				cacheBox.setTitle("Someone must receive the goods!");
+				cacheBox.setLegend("Someone must receive the goods!");
 				cacheBox.draw();
 				continue;
 			}
 			
 			if (quantity > choice.getQuantity()){
-				cacheBox.setTitle("Not enough "+choice.getItem().getDescription());
+				cacheBox.setLegend("Not enough "+choice.getItem().getDescription());
 				cacheBox.draw();
 				continue;
 			}
 			
 			if (item instanceof Good && !getExpedition().canCarry(item, quantity)){
-				cacheBox.setTitle("Your expedition is full!");
+				cacheBox.setLegend("Your expedition is full!");
 				cacheBox.draw();
 				continue;
 			}
@@ -289,7 +290,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				cacheEquipment.remove(choice);
 			}
 			
-			cacheBox.setTitle(choice.getItem().getDescription()+" transfered.");
+			cacheBox.setLegend(choice.getItem().getDescription()+" transfered.");
 			refresh();
 	 		//menuBox.draw();
 		}
@@ -318,6 +319,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		}
   		cacheBox.setMenuItems(menuItems);
   		cacheBox.setTitle("Transfer from Expedition to "+ship.getDescription());
+  		cacheBox.setLegend("Select the units to load into the ships");
   		//cacheBox.setTitle("On Ship...");
   		cacheBox.setForeColor(ORANGE);
   		cacheBox.draw();
@@ -328,7 +330,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			if (itemChoice == null){
 				if (minUnits != -1){
 					if (ship.getTotalUnits() < minUnits){
-						cacheBox.setTitle("At least "+minUnits+" should be transfered");
+						cacheBox.setLegend("At least "+minUnits+" should be transfered");
 						continue;
 					}
 				}
@@ -336,22 +338,22 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 			Equipment choice = itemChoice.getEquipment();
 			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			cacheBox.setTitle("How many "+item.getDescription()+" will you transfer?");
+			cacheBox.setLegend("How many "+item.getDescription()+" will you transfer?");
 			cacheBox.draw();
 			si.refresh();
-			int quantity = readQuantity(80+tileSize+420, 38+getFontSize(), "                       ", 5);
+			int quantity = readQuantity(80+tileSize+420, 71+getFontSize(), "                       ", 5);
 			
 			if (quantity == 0)
 				continue;
 			
 			if (quantity > choice.getQuantity()){
-				cacheBox.setTitle("Not enough "+choice.getItem().getDescription());
+				cacheBox.setLegend("Not enough "+choice.getItem().getDescription());
 				cacheBox.draw();
 				continue;
 			}
 			
 			if (item instanceof Good && !ship.canCarry(item, quantity)){
-				cacheBox.setTitle("Not enough room in the "+ship.getDescription());
+				cacheBox.setLegend("Not enough room in the "+ship.getDescription());
 				cacheBox.draw();
 				continue;
 			}
@@ -360,7 +362,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			
 			if (choice.getItem() instanceof ExpeditionUnit && 
 					getExpedition().getCurrentlyCarrying()>100){
-				cacheBox.setTitle("The expedition can't carry the goods!");
+				cacheBox.setLegend("The expedition can't carry the goods!");
 				cacheBox.draw();
 				getExpedition().addItem(choice.getItem(), quantity);
 				continue;
@@ -371,7 +373,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			if (choice.getQuantity() == 0){
 				menuItems.remove(choice);
 			}
-			cacheBox.setTitle(choice.getItem().getDescription()+" transfered into the "+ship.getDescription());
+			cacheBox.setLegend(choice.getItem().getDescription()+" transfered into the "+ship.getDescription());
 			refresh();
 	 		//menuBox.draw();
 		}
