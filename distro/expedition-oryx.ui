@@ -24,7 +24,7 @@ POS_LEVELDESC_X = 20
 POS_LEVELDESC_Y = 40
 
 
-IMG_STATUSSCR_BGROUND = res/tempTitle.png
+IMG_STATUSSCR_BGROUND = res/title.png
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 
@@ -39,7 +39,7 @@ COLOR_BOLD = 163,165,74
 
 FNT_TITLE = res/avatar.ttf
 
-IMG_TITLE = res/tempTitle.png
+IMG_TITLE = res/title.png
 IMG_PROLOGUE = res/brownbg.png
 IMG_SAVED = res/brownbg.png
 IMG_FRAME = res/brownbg.png
