@@ -45,6 +45,17 @@ public class Walk extends Action{
 		}
 		
         Position var = directionToVariation(targetDirection);
+        
+        if (expedition.getMovementMode() == MovementMode.SHIP){
+			
+			//Don't walk, sail instead!
+			if (var.x() == 0){
+				var = expedition.getHeading().getVectors();
+			} else {
+				return true;
+			}
+		}
+        
         Position destinationPoint = Position.add(a.getPosition(), var);
         
     	Actor actor = expedition.getLevel().getActorAt(destinationPoint);
