@@ -77,6 +77,9 @@ public class GFXAppearances {
 				createAppearance("SHIP", 1 ,5),
 				createAppearance("GOODS_CACHE", 2 ,6),
 				createAppearance("TOWN", 11 ,6),
+				createAppearance("NATIVE_VILLAGE", 11 ,6),
+				createAppearance("NATIVE_TOWN", 11 ,6),
+				createAppearance("NATIVE_CITY", 11 ,6),
 
 				//Inworld terrain
 				createAppearance("SPAIN_WALL", 7 ,3),
@@ -120,6 +123,8 @@ public class GFXAppearances {
 				createAppearance("NATIVE_WARRIOR", 1 ,11),
 				createAppearance("NATIVE_BRAVE", 2 ,11),
 				createAppearance("NATIVE_ARCHER", 3 ,11),
+				createAppearance("NATIVE_COMMONER", 3 ,11),
+				createAppearance("NATIVE_LEADER", 3 ,11),
 				
 				createAppearance("GOODS_STORE", 1 ,6),
 				createAppearance("WEAPONS_STORE", 2 ,6),
