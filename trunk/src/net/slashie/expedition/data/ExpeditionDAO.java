@@ -1,6 +1,8 @@
 package net.slashie.expedition.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.slashie.expedition.domain.Armor;
@@ -22,6 +24,7 @@ import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
+import net.slashie.util.Pair;
 
 public class ExpeditionDAO {
 	
@@ -200,6 +203,12 @@ public class ExpeditionDAO {
 			new CharAppearance("NATIVE_WARRIOR", '@', ConsoleSystemInterface.RED),
 			new CharAppearance("NATIVE_BRAVE", '@', ConsoleSystemInterface.PURPLE),
 			new CharAppearance("NATIVE_ARCHER", '@', ConsoleSystemInterface.DARK_RED),
+			new CharAppearance("NATIVE_COMMONER", '@', ConsoleSystemInterface.BLUE),
+			new CharAppearance("NATIVE_LEADER", '@', ConsoleSystemInterface.CYAN),
+			new CharAppearance("NATIVE_VILLAGE", '^', ConsoleSystemInterface.DARK_RED),
+			new CharAppearance("NATIVE_TOWN", '^', ConsoleSystemInterface.RED),
+			new CharAppearance("NATIVE_CITY", '^', ConsoleSystemInterface.RED),
+
 			
 			//Stores
 			new CharAppearance("GOODS_STORE", '1', ConsoleSystemInterface.RED),
@@ -286,6 +295,12 @@ public class ExpeditionDAO {
 			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 200, 200, 2, 1, 0,
 					new String[]{""},
 					new String[]{""}),
+			new ExpeditionUnit("NATIVE_COMMONER", "Native","Natives", 200, 300, 1, 0, 0,
+					new String[]{""},
+					new String[]{""}),
+			new ExpeditionUnit("NATIVE_LEADER", "Shaman","Shamans", 200, 50, 1, 0, 0,
+					new String[]{""},
+					new String[]{""}),
 			
 			//Goods
 			new Food("FOOD", "Food", "Food", 1, 1),
@@ -333,26 +348,26 @@ public class ExpeditionDAO {
 	private static Map<String, Culture> culturesMap = new HashMap<String, Culture>(); 
 	static {
 		Culture[] cultures = new Culture[] { 
-			new Culture("MOUNT", "Fort Ancient", true),
-			new Culture("MISSI", "Missisipians", true),
-			new Culture("AZTEC", "Aztec", true),
-			new Culture("HUAST", "Huastec", true),
-			new Culture("MIXTE", "Mixtec", true),
-			new Culture("MAYA", "Maya", true),
-			new Culture("PURHE", "P'urhépecha", true),
-			new Culture("TOTON", "Totonac", true),
-			new Culture("ZAPOT", "Zapotec", true),
-			new Culture("CANAR", "Cañaris", true),
-			new Culture("CHACH", "Chachapoya", true),
-			new Culture("CHIMU", "Chimù", true),
-			new Culture("INCA", "Inca", true),
-			new Culture("MUISC", "Muisca", true),
-			new Culture("TAIRO", "Tairona", true),
-			new Culture("ARTIC", "Artic Mammal Hunters", false),
-			new Culture("HUNTE", "Hunters-Gatherers", false),
-			new Culture("FISHI", "Fishing people", false),
-			new Culture("BISON", "Bison Hunters", false),
-			new Culture("FARME", "Maiz Farmers", false)
+			new Culture("MOUNT", "Fort Ancient", true, 3, composeList("NATIVE_WARRIOR,50")), 
+			new Culture("MISSI", "Missisipians", true, 2, composeList("NATIVE_WARRIOR,30", "NATIVE_BRAVE, 10")),
+			new Culture("AZTEC", "Aztec", true, 3, composeList("NATIVE_WARRIOR,40", "NATIVE_BRAVE,20", "NATIVE_ARCHER,10")),
+			new Culture("HUAST", "Huastec", true, 2, composeList("NATIVE_WARRIOR,30", "NATIVE_BRAVE,10", "NATIVE_ARCHER,20")),
+			new Culture("MIXTE", "Mixtec", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("MAYA", "Maya", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,30")),
+			new Culture("PURHE", "P'urhépecha", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("TOTON", "Totonac", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("ZAPOT", "Zapotec", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("CANAR", "Cañaris", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("CHACH", "Chachapoya", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("CHIMU", "Chimú", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("INCA", "Inca", true, 3, composeList("NATIVE_WARRIOR,20", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("MUISC", "Muisca", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("TAIRO", "Tairona", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("ARTIC", "Artic Mammal Hunters", false, 1, composeList("NATIVE_WARRIOR,10")),
+			new Culture("HUNTE", "Hunters-Gatherers", false, 2, composeList("NATIVE_BRAVE,10", "NATIVE_ARCHER,10")),
+			new Culture("FISHI", "Fishing people", false, 3, composeList("NATIVE_WARRIOR,20")),
+			new Culture("BISON", "Bison Hunters", false, 3, composeList("NATIVE_WARRIOR,10","NATIVE_ARCHER,10")),
+			new Culture("FARME", "Maiz Farmers", false, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10"))
 		};
 		for (Culture culture: cultures){
 			culturesMap.put(culture.getCode(), culture);
@@ -361,5 +376,14 @@ public class ExpeditionDAO {
 
 	public static Culture getCulture(String string) {
 		return culturesMap.get(string);
+	}
+
+	private static List<Pair<Double, String>> composeList(String... pairs) {
+		List<Pair<Double,String>> ret = new ArrayList<Pair<Double,String>>();
+		for (String pairString: pairs){
+			String[] splitPair = pairString.split(",");
+			ret.add(new Pair<Double, String>(Double.parseDouble(splitPair[1])/100.0d, splitPair[0]));
+		}
+		return ret;
 	}
 }
