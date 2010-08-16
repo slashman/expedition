@@ -5,6 +5,7 @@ import java.util.List;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.NonPrincipalExpedition;
+import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
@@ -75,11 +76,11 @@ public class MeleeAttack extends Action {
 	
 	@Override
 	public boolean canPerform(Actor a) {
-		return a.getLevel() instanceof ExpeditionMacroLevel;
+		return a.getLevel() instanceof ExpeditionMacroLevel && ((Expedition)a).getMovementMode() != MovementMode.SHIP;
 	}
 	
 	@Override
 	public String getInvalidationMessage() {
-		return "You can't build a caché here!";
+		return "You can't attack!";
 	}
 }
