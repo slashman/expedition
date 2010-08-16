@@ -38,7 +38,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			//Creates an expedition once (Generated expeditions are recorded)
 			Position p = new Position(where.x+xoff,where.y+yoff,where.z);
 			if (!isSpawnPointUsed(p)){
-				Expedition expedition = ExpeditionFactory.getExpedition(cmds[2]);
+				Expedition expedition = ExpeditionFactory.getExpedition(cmds[2],2);
 				expedition.setPosition(where.x+xoff,where.y+yoff,where.z);
 				addActor(expedition);
 				setSpawnPointUsed(p);

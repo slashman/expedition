@@ -10,7 +10,9 @@ import net.slashie.expedition.data.ExpeditionDAO;
 import net.slashie.expedition.domain.NativeTown;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.Culture;
+import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
+import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.util.FileUtil;
 import net.slashie.util.Pair;
@@ -42,14 +44,14 @@ public class WorldGenerator {
 			for (Pair<Position,Culture> cultureCenter: cultureCenters){
 				int numberOfSettlements = 0;
 				int range = 15;
-				numberOfSettlements = Util.rand(1, 3);
+				numberOfSettlements = Util.rand(2, 4);
 				int fussible = 0;
 				for (int i = 0; i < numberOfSettlements; i++){
 					Position settlementPosition = new Position(
 							Util.rand(cultureCenter.getA().x-range, cultureCenter.getA().x+range),
 							Util.rand(cultureCenter.getA().y-range, cultureCenter.getA().y+range));
 					//Check if this is land
-					if (level.getMapCell(settlementPosition )== null || level.getMapCell(settlementPosition).isWater() || level.getFeatureAt(settlementPosition) != null){
+					if (level.getMapCell(settlementPosition )== null || !((OverworldExpeditionCell)level.getMapCell(settlementPosition)).isLand() || level.getFeatureAt(settlementPosition) != null){
 						fussible++;
 						if (fussible < 1000){
 							i--;
@@ -57,8 +59,9 @@ public class WorldGenerator {
 						}
 					} else {
 						//Place a settlement
-						NativeTown t = new NativeTown(ExpeditionGame.getCurrentGame());
-						t.setPosition(new Position(cultureCenter.getA()));
+						NativeTown t = new NativeTown(ExpeditionGame.getCurrentGame(), cultureCenter.getB(), cultureCenter.getB().getASize());
+						t.setPosition(new Position(settlementPosition));
+						t.setHostile(Util.chance(30*cultureCenter.getB().getAggresiveness()));
 						level.addFeature(t);
 					}
 				}
