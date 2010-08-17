@@ -69,7 +69,7 @@ public class GFXAppearances {
 				createAppearance("WATER", 1 ,1),
 				createAppearance("WATER2", 3 ,1),
 				createAppearance("MOUNTAIN", 4 ,2),
-				createAppearance("FOREST", 1 ,4),
+				createAppearance("FOREST", 2 ,17),
 				createAppearance("PORT_CITY", 11 ,6),
 				createAppearance("STORM", 1, 17),
 				

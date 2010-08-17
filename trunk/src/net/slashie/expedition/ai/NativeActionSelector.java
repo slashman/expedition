@@ -71,7 +71,7 @@ public class NativeActionSelector implements ActionSelector {
 					Expedition expedition = town.deployTroops(potentialPower);
 					expedition.setPosition(town.getPosition());
 					town.getLevel().addActor(expedition);
-					town.getLevel().addMessage("The "+town.getDescription()+" sends out an expedition! "+town);
+					town.getLevel().addMessage("The "+town.getDescription()+" sends out an expedition!");
 				}
 			}
 		}
