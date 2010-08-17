@@ -235,7 +235,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		}
   		cacheBox.setMenuItems(menuItems);
   		cacheBox.setTitle("Transfer from "+cache.getDescription()+" to Expedition");
-  		cacheBox.setLegend("Select the units to send aground");
+  		cacheBox.setLegend("Select the units or equipment");
   		//cacheBox.setTitle("On Ship...");
   		cacheBox.setForeColor(ORANGE);
   		cacheBox.draw();
