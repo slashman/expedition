@@ -1,6 +1,7 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.slashie.expedition.action.NPWalk;
 import net.slashie.expedition.ai.NativeActionSelector;
@@ -12,6 +13,7 @@ import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.action.NullSelector;
 import net.slashie.serf.ai.RangedActionSpec;
 import net.slashie.serf.ai.SimpleAI;
+import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.util.Pair;
@@ -37,6 +39,10 @@ public class NativeTown extends Town{
 	private boolean isDisabled;
 	private int turnsBeforeNextExpedition;
 	
+	public void resetTurnsBeforeNextExpedition(){
+		turnsBeforeNextExpedition = 0;
+	}
+	
 	public NativeTown(ExpeditionGame game, Culture culture, int size) {
 		super(game);
 		this.culture = culture;
@@ -54,6 +60,11 @@ public class NativeTown extends Town{
 		if (commoners > 0)
 			addItem(ItemFactory.createItem("NATIVE_COMMONER"), commoners);
 		addItem(ItemFactory.createItem("NATIVE_LEADER"), 1);
+		
+		addItem(ItemFactory.createItem("GOLD_NUGGET"), Util.rand(0, size*culture.getGoldModifier()*20));
+		addItem(ItemFactory.createItem("GOLD_BRACELET"), Util.rand(0, size*culture.getGoldModifier()*40));
+		addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, size*culture.getArtifactModifier()*30));
+		addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(100, size*culture.getAgricultureModifier()*100));
 	}
 	
 	@Override
@@ -178,5 +189,7 @@ public class NativeTown extends Town{
 	public void setDisabled(boolean isDisabled) {
 		this.isDisabled = isDisabled;
 	}
+
+
 	
 }
