@@ -176,6 +176,17 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 		return getItems();
 	}
 	
+	public List<Equipment> getUnits() {
+		List<Equipment> ret = new ArrayList<Equipment>();
+		List<Equipment> inventory = getItems();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof ExpeditionUnit){
+				ret.add(equipment);
+			}
+		}
+		return ret;
+	}
+	
 	public double getFoodConsumptionMultiplier() {
 		return 1;
 	}
@@ -208,8 +219,33 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 		return true;
 	}
 	
-	public void killUnits(int deaths) {
-		foodConsumerDelegate.killUnits(deaths);
+	public void killUnits(int quantity) {
+		Collection<Pair<ExpeditionUnit, Integer>> values = foodConsumerDelegate.killUnits(quantity);
+		if (wasSeen()){
+			String killMessage = "";
+			int i = 0;
+			for (Pair<ExpeditionUnit, Integer> killInfo: values){
+				if (killInfo.getB() == 0){
+					i++;
+					continue;
+				}
+				if (killInfo.getB() == 1){
+					killMessage += "A "+killInfo.getA().getDescription();
+				} else
+					killMessage += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
+				if (i == values.size()-2)
+					killMessage += " and ";
+				else if (i == values.size()-1)
+					;
+				else if (values.size()>1)
+					killMessage += ", ";
+				i++;
+			}
+			if (quantity == 1)
+				level.addMessage(killMessage +" dies.");
+			else
+				level.addMessage(killMessage +" die.");
+		}
 	}
 
 	public boolean destroyOnEmpty() {
