@@ -104,7 +104,7 @@ public class Expedition extends Player implements FoodConsumer{
 		}
 	}
 	
-	public static final int DEATH_BY_STARVATION = 1, DEATH_BY_DROWNING = 2;
+	public static final int DEATH_BY_STARVATION = 1, DEATH_BY_DROWNING = 2, DEATH_BY_SLAYING = 3;
 
 	private int deducedReckonWest;
 	
@@ -249,6 +249,8 @@ public class Expedition extends Player implements FoodConsumer{
 	private List<Town> towns = new ArrayList<Town>();
 
 	private int deathCause;
+
+	private boolean justAttacked = false;
 	
 	public List<Vehicle> getCurrentVehicles() {
 		return currentVehicles;
@@ -433,7 +435,10 @@ public class Expedition extends Player implements FoodConsumer{
 	public void checkDeath(){
 		if (getTotalUnits() <= 0){
 			UserInterface.getUI().refresh();
-			deathCause = DEATH_BY_STARVATION;
+			if (justAttacked )
+				deathCause = DEATH_BY_SLAYING;
+			else
+				deathCause = DEATH_BY_STARVATION;
 			informPlayerEvent (DEATH);
 		}
 	}
@@ -959,5 +964,14 @@ public class Expedition extends Player implements FoodConsumer{
 		this.heading = heading;
 	}
 
+	@Override
+	public void updateStatus() {
+		super.updateStatus();
+		justAttacked = false;
+	}
+
+	public void setJustAttacked(boolean justAttacked) {
+		this.justAttacked = justAttacked;
+	}
 	
 }

@@ -68,6 +68,7 @@ public class NPWalk extends Action {
         if (actor != null){
         	if (actor instanceof Expedition && !(actor instanceof NonPrincipalExpedition)){
         		Expedition targetExpedition = (Expedition) actor;
+        		targetExpedition.setJustAttacked(true);
    				//Attack!
    				expedition.getLevel().addMessage("The "+expedition.getDescription()+" attacks: ");
    				//Calculate how many of the expedition fighters will attack. 

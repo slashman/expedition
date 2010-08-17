@@ -100,6 +100,8 @@ public class ExpeditionGame extends SworeGame {
 			return "Your expedition has perished by hunger..";
 		case Expedition.DEATH_BY_DROWNING:
 			return "Your expedition has drown in the seas..";
+		case Expedition.DEATH_BY_SLAYING:
+			return "Your expedition has been slayed..";
 		}
 		return "Your expedition has perished..";
 	}
