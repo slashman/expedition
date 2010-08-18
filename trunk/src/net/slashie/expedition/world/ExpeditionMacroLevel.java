@@ -253,6 +253,17 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return super.getFeatureAt(position);
 	}
 	
+	@Override
+	public List<AbstractFeature> getFeaturesAt(Position p) {
+		List<AbstractFeature> ret = super.getFeaturesAt(p);
+		if (hasStorm(p)){
+			if (ret == null)
+				ret = new ArrayList<AbstractFeature>();
+			ret.add(stormletFeature);
+		}
+		return ret;
+	}
+	
 	protected boolean remembers(int x, int y, int z){
 		return false;
 	}
