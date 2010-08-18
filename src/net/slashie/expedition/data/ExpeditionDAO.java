@@ -76,13 +76,13 @@ public class ExpeditionDAO {
 		
 		return new AbstractCell[]{
 			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, false, false, 1.2d, false, false),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, false, false, 1.0d, false, false),
-			new OverworldExpeditionCell("WATER", "Ocean", false, false, false, 1.0d, false, false),
-			new OverworldExpeditionCell("WATER2", "Water", true, false, true, 1.0d, false, false),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, true, false, 1.5d, false, true),
-			new OverworldExpeditionCell("FOREST", "Forest", true, false, false, 1.2d, false, true),
-			new OverworldExpeditionCell("PORT_CITY", "Port City", false, false, false, 1.0d, false, false),
+			new OverworldExpeditionCell("GRASS", "Grass", true, false, false, 1.2d, false, false, false),
+			new OverworldExpeditionCell("PLAINS", "Grass", true, false, false, 1.0d, false, false,false),
+			new OverworldExpeditionCell("WATER", "Ocean", false, false, false, 1.0d, false, false,false),
+			new OverworldExpeditionCell("WATER2", "Water", true, false, true, 1.0d, false, false,false),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, true, false, 1.5d, false, false,true),
+			new OverworldExpeditionCell("FOREST", "Forest", true, false, false, 1.2d, false, true,true),
+			new OverworldExpeditionCell("PORT_CITY", "Port City", false, false, false, 1.0d, false, false,false),
 			
 			//Inworld Cells
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
