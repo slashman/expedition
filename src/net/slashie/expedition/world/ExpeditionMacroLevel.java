@@ -35,6 +35,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	}
 
 	private Pair<Integer,Integer> handyReusablePair = new Pair<Integer, Integer>(0,0);
+
+	private Weather weather = Weather.CLEAR;
 	
 
 	public Pair<Integer, Integer> getLocation() {
@@ -51,13 +53,18 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return (int)Math.round((getPlayer().getPosition().y() - 1572)/-19.47d); 
 	}
 	
-	public String getTemperature() {
+	private int temperature = 15;
+	private int getTemperature() {
+		//TODO: Based on terrain and location
+		return temperature;
+	}
+	
+	public String getTemperatureDescription(){
 		return "Warm";
 	}
 	
-	public String getWeather() {
-		// TODO Auto-generated method stub
-		return "Calm";
+	public Weather getWeather() {
+		return weather ;
 	}
 	
 	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
@@ -74,6 +81,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return handyReusableObject;
 	}
 	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
+
+	private int weatherChangeCounter;
 
 	public Pair<String,String> getLocationMeans(){
 		handyReusableObject2.setA("Sextant");
@@ -156,18 +165,46 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	@Override
 	public void elapseTime(int lastActionTimeCost) {
 		windChangeCounter += lastActionTimeCost;
-		stormBreedCounter += lastActionTimeCost;
+		stormBreedCounter -= lastActionTimeCost;
 		stormChangeCounter += lastActionTimeCost;
+		weatherChangeCounter -= lastActionTimeCost;
 
 		if (windChangeCounter > 500){
 			isTimeToChangeWind = true;
 			windChangeCounter = 0;
 		}
-		if (stormBreedCounter > 50){
+		
+		if (weatherChangeCounter < 0){
+			weatherChange();
+			weatherChangeCounter = Util.rand(200,400);
+		}
+		
+		
+		
+		if (stormBreedCounter < 0){
+			stormBreedCounter = 50;
+			//More storms on gale winds and hurricanes
 			int chance = 0;
-			//if (getWeather() == RAINY){
+			int nextStorm = 100;
+			switch (getWeather()){
+			case STORM:
 				chance = 80;
-			//}
+				nextStorm = 50;
+				break;
+			case GALE_WIND:
+				chance = 80;
+				nextStorm = 100;
+				break;
+			case HURRICANE:
+				chance = 100;
+				nextStorm = 25;
+				break;
+			default:
+				chance = 0;
+				nextStorm = 100;
+				break;
+			}
+			
 			if (getExpedition().getMovementMode() != MovementMode.SHIP){
 				chance /= 3.0d;
 			}
@@ -181,7 +218,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				storms.add(storm);
 				storm.seed(6, 18);
 				storm.grow();
-				stormBreedCounter = 0;
+				stormBreedCounter = nextStorm;
 			}
 		}
 		if (stormChangeCounter > 20){
@@ -199,10 +236,75 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			}
 
 			stormChangeCounter = 0;
-			
 		}
 	}
 	
+	private void weatherChange(){
+		Weather currentWeather = getWeather();
+		OverworldExpeditionCell currentCell = (OverworldExpeditionCell) getMapCell(getExpedition().getPosition());
+		
+		// Special weather transitions: Fog, Hurricane, Snow and Dust Storm
+		
+		// Fog
+		if (getTemperature() > 10){
+			// Hot fog
+			if (currentCell.isWater()){
+				// In the ocean, fog only rises if there's no wind
+				if (getWindDirection() == CardinalDirection.NULL) {
+					if (Util.chance(currentWeather.getTransitionChance(Weather.FOG))){
+						setWeather(Weather.FOG);
+						return;
+					}
+				}
+			} else {
+				// In land, fog rises when the terrain is wet and temperature rises
+				if (currentCell.isRiver() || currentCell.isMarsh()){
+					//Note that rain makes terrain wet, thus must have an higher chance
+					if (Util.chance(currentWeather.getTransitionChance(Weather.FOG))){
+						setWeather(Weather.FOG);
+						return;
+					}
+				}
+			}
+		} else {
+			// Cold fog
+			if (Util.chance(currentWeather.getTransitionChance(Weather.FOG))){
+				setWeather(Weather.FOG);
+				return;
+			}
+		}
+		
+		//Hurricane
+		if (currentCell.isSea()){
+			if (Util.chance(currentWeather.getTransitionChance(Weather.HURRICANE))){
+				setWeather(Weather.HURRICANE);
+				return;
+			}
+		}
+		
+		// Snow
+		if (getTemperature() < 0){
+			if (Util.chance(currentWeather.getTransitionChance(Weather.SNOW))){
+				setWeather(Weather.SNOW);
+				return;
+			}
+		}
+
+		// Dust Storm
+		if (currentCell.isDesert()){
+			if (Util.chance(currentWeather.getTransitionChance(Weather.DUST_STORM))){
+				setWeather(Weather.DUST_STORM);
+				return;
+			}
+		}
+		
+		// "Normal" weather chances
+		setWeather (currentWeather.nextWeather());
+		
+	}
+	
+
+
 	private List<Storm> storms = new ArrayList<Storm>();
 	
 	private int windChangeCounter;
@@ -303,5 +405,15 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		public boolean isOpaque() {
 			return true;
 		}
+	}
+
+
+	public void setWeather(Weather weather) {
+		Weather formerWeather = this.weather;
+		this.weather = weather;
+		if (formerWeather != weather){
+			addMessage(weather.getChangeMessage(formerWeather));
+		}
+		
 	}
 }

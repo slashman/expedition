@@ -52,13 +52,12 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	}
 
 
-	public String getTemperature() {
+	public String getTemperatureDescription() {
 		return "Warm";
 	}
 	
-	public String getWeather() {
-		// TODO Auto-generated method stub
-		return "Calm";
+	public Weather getWeather() {
+		return Weather.CLEAR;
 	}
 	public boolean isZoomIn() {
 		return isZoomIn;

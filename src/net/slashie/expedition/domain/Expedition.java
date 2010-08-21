@@ -498,7 +498,45 @@ public class Expedition extends Player implements FoodConsumer{
 
 	@Override
 	public int getSightRange() {
-		return 9;
+		int bonus = 0;
+		int malus = 0;
+		if (getItemCount("EXPLORER")>0)
+			bonus++;
+		if (getLocation() instanceof ExpeditionMacroLevel && ((OverworldExpeditionCell)getLocation().getMapCell(getPosition())).isMountain()){
+			bonus+=2	;
+		}
+		switch(getLocation().getWeather()){
+		case CLEAR:
+		case WINDY:
+			malus = 0;
+			break;
+		case CLOUDY:
+			malus = 1;
+			break;
+		case RAIN:
+		case SNOW:
+			malus = 2;
+			break;
+		case STORM:
+		case GALE_WIND:
+			malus = 3;
+			break;
+		case HURRICANE:
+			malus = 4;
+			break;
+		case FOG:
+		case DUST_STORM:
+			malus = 6;
+			break;
+		}
+		
+		int ret = 8 + bonus - malus;
+		if (ret >= 1 && ret <= 9)
+			return ret;
+		else if (ret < 1)
+			return 1;
+		else
+			return 9;
 	}
 
 	@Override
@@ -584,23 +622,6 @@ public class Expedition extends Player implements FoodConsumer{
 		return null;
 	}
 
-	public String getWeather() {
-		if (getLevel() instanceof ExpeditionMicroLevel){
-			return ((ExpeditionLevel)getLevel()).getWeather();
-		} else if (getLevel() instanceof ExpeditionMacroLevel){
-			return ((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).getWeather();
-		} else
-			return null;
-	}
-
-	public String getTemperature() {
-		if (getLevel() instanceof ExpeditionMicroLevel){
-			return ((ExpeditionLevel)getLevel()).getTemperature();
-		} else if (getLevel() instanceof ExpeditionMacroLevel){
-			return ((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).getTemperature();
-		} else
-			return "Warm";
-	}
 
 	public void removeAllGoods() {
 		removeAllItems();
