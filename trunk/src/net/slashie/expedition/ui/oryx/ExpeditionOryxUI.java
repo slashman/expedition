@@ -443,7 +443,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.print(line2, 1, gameTime.get(Calendar.YEAR)+", "+ months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
 		si.print(line2, 2, getExpedition().getLocation().getDescription());
 		si.print(line2, 3, currentCell.getDescription());
-		si.print(line2, 4, getExpedition().getWeather()+", "+getExpedition().getTemperature());
+		si.print(line2, 4, getExpedition().getLocation().getWeather().getDescription()+", "+getExpedition().getLocation().getTemperatureDescription());
 		
 		si.print(line2, 6, locationMeans.getA());
 		si.print(line2+2, 7, locationDescription.getA());

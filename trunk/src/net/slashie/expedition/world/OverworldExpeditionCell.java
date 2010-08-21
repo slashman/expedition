@@ -32,6 +32,7 @@ public class OverworldExpeditionCell extends AbstractCell{
 		this.isRiver = isRiver;
 		this.foodConsumptionModifier = d;
 		this.isWood = isWood;
+		setWater(!isLand);
 	}
 
 
@@ -51,6 +52,21 @@ public class OverworldExpeditionCell extends AbstractCell{
 
 	public boolean isWood() {
 		return isWood;
+	}
+
+	public boolean isMarsh() {
+		// TODO Implement marshes
+		return false;
+	}
+
+	public boolean isDesert() {
+		// TODO Implement deserts
+		return false;
+	}
+
+	public boolean isSea() {
+		// TODO Split rivers and seas
+		return isWater() && !isRiver();
 	}
 
 }
