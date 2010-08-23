@@ -1,6 +1,7 @@
 package net.slashie.expedition.world;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.SeaPseudoCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
@@ -53,14 +55,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return (int)Math.round((getPlayer().getPosition().y() - 1572)/-19.47d); 
 	}
 	
-	private int temperature = 15;
+	private int currentTemperature = 15;
 	private int getTemperature() {
-		//TODO: Based on terrain and location
-		return temperature;
+		return currentTemperature;
 	}
 	
 	public String getTemperatureDescription(){
-		return "Warm";
+		return TemperatureRules.getTemperatureDescription(getTemperature());
 	}
 	
 	public Weather getWeather() {
@@ -83,6 +84,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
 
 	private int weatherChangeCounter;
+
+	private int tempChangeCounter;
 
 	public Pair<String,String> getLocationMeans(){
 		handyReusableObject2.setA("Sextant");
@@ -168,6 +171,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		stormBreedCounter -= lastActionTimeCost;
 		stormChangeCounter += lastActionTimeCost;
 		weatherChangeCounter -= lastActionTimeCost;
+		tempChangeCounter -= lastActionTimeCost;
 
 		if (windChangeCounter > 500){
 			isTimeToChangeWind = true;
@@ -179,7 +183,11 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			weatherChangeCounter = Util.rand(200,400);
 		}
 		
-		
+		if (tempChangeCounter < 0){
+			currentTemperature = (int)Math.round(TemperatureRules.getRulingTemperature(resolveYToLatitude(), ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)+1));
+			currentTemperature += Util.rand(-5, 5);
+			tempChangeCounter = Util.rand(200,400);
+		}
 		
 		if (stormBreedCounter < 0){
 			stormBreedCounter = 50;
