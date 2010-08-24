@@ -20,6 +20,7 @@ import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.ui.oryx.CacheGFXMenuItem;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
@@ -494,6 +495,13 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				cacheBox.setPrompt("The expedition can't carry the goods!");
 				cacheBox.draw();
 				getExpedition().addItem(choice.getItem(), quantity);
+				if (choice.getQuantity() == 0){
+					menuItems = new Vector();
+					for (Equipment item2: getExpedition().getInventory()){
+			  			menuItems.add(new CacheGFXMenuItem(item2, ship));
+			  		}
+			  		cacheBox.setMenuItems(menuItems);				
+			  	}
 				continue;
 			}
 			
