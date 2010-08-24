@@ -319,7 +319,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		}
   		cacheBox.setMenuItems(menuItems);
   		cacheBox.setTitle("Transfer from Expedition to "+ship.getDescription());
-  		cacheBox.setLegend("Select the units to load into the ships");
+  		cacheBox.setLegend("Select the units to remove from the expedition");
   		//cacheBox.setTitle("On Ship...");
   		cacheBox.setForeColor(ORANGE);
   		cacheBox.draw();
@@ -365,6 +365,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				cacheBox.setLegend("The expedition can't carry the goods!");
 				cacheBox.draw();
 				getExpedition().addItem(choice.getItem(), quantity);
+				if (choice.getQuantity() == 0){
+					menuItems = new Vector();
+			  		for (Equipment item2: getExpedition().getInventory()){
+			  			menuItems.add(new CacheGFXMenuItem(item2, ship));
+			  		}
+			  		cacheBox.setMenuItems(menuItems);				
+			  	}
 				continue;
 			}
 			
