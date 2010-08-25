@@ -56,7 +56,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	}
 	
 	private int currentTemperature = 15;
-	private int getTemperature() {
+	public int getTemperature() {
 		return currentTemperature;
 	}
 	
@@ -147,11 +147,15 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	@Override
 	public CardinalDirection getWindDirection() {
 		if (currentWind == null || isTimeToChangeWind()){
-			CardinalDirection prevailingWind = getPrevailingWind();
+			CardinalDirection prevailingWind = getPrevailingWind(ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)-1);
 			currentWind = prevailingWind;
 			int rotateSign = Util.chance(50) ? 1 : -1;
 			int rotate = 0;
-			if (Util.chance(70)){
+			if (currentWind == CardinalDirection.NULL){
+				if (Util.chance(50)){
+					rotate = Util.rand(0, 2);
+				}  
+			} else if (Util.chance(70)){
 				rotate = Util.rand(0, 2);
 			} else if (Util.chance(30)){
 				rotate = Util.rand(1, 4);
@@ -184,7 +188,15 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 		
 		if (tempChangeCounter < 0){
-			currentTemperature = (int)Math.round(TemperatureRules.getRulingTemperature(resolveYToLatitude(), ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)+1));
+			OverworldExpeditionCell currentCell = (OverworldExpeditionCell) getMapCell(getExpedition().getPosition());
+			if (currentCell.isMountain()){
+				currentTemperature = 5;
+			} else {
+				currentTemperature = (int)Math.round(TemperatureRules.getRulingTemperature(resolveYToLatitude(), ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)+1));
+				if (currentCell.isSea()){
+					currentTemperature += 5;
+				}
+			}
 			currentTemperature += Util.rand(-5, 5);
 			tempChangeCounter = Util.rand(200,400);
 		}
@@ -327,18 +339,22 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	private CardinalDirection currentWind;
 
-	private CardinalDirection getPrevailingWind() {
+	private CardinalDirection getPrevailingWind(int month) {
+		int itcz = TemperatureRules.getITCZ(month) + Util.rand(-5, 5);
 		int latitude = resolveYToLatitude();
+		if (latitude >= itcz -4 && latitude <= itcz +4){
+			return CardinalDirection.NULL;
+		}
 		if (latitude > 60)
 			return CardinalDirection.SOUTH;
 		if (latitude > 30)
-			return CardinalDirection.NORTHEAST;
+			return CardinalDirection.NORTHEAST; 
 		if (latitude > 5)
-			return CardinalDirection.SOUTHWEST;
+			return CardinalDirection.SOUTHWEST; //
 		if (latitude > -5)
-			return CardinalDirection.WEST;
+			return CardinalDirection.WEST; //
 		if (latitude > -30)
-			return CardinalDirection.NORTHWEST;
+			return CardinalDirection.NORTHWEST; //
 		if (latitude > -60)
 			return CardinalDirection.SOUTHEAST;
 		else

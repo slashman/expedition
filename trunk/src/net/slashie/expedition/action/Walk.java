@@ -280,7 +280,7 @@ public class Walk extends Action{
 			switch (getExpedition().getMovementSpeed()){
 			case FAST:
 				return 20;
-			case NORMAL:
+			case NORMAL: case NONE:
 				return 30;
 			case SLOW:
 				return 50;
@@ -289,7 +289,7 @@ public class Walk extends Action{
 			switch (getExpedition().getMovementSpeed()){
 			case FAST:
 				return 10;
-			case NORMAL:
+			case NORMAL: case NONE:
 				return 20;
 			case SLOW:
 				return 30;

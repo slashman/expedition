@@ -15,6 +15,7 @@ import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.FoodConsumerDelegate;
 import net.slashie.expedition.world.OverworldExpeditionCell;
+import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
@@ -776,7 +777,9 @@ public class Expedition extends Player implements FoodConsumer{
 			return 3;
 		}*/
 		if (getLevel() instanceof ExpeditionMacroLevel)
-			return ((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).getFoodConsumptionModifier();
+			return
+				TemperatureRules.getTemperatureFoodModifier(getLocation().getTemperature()) *
+				((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).getFoodConsumptionModifier();
 		else
 			return 1;
 

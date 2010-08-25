@@ -59,4 +59,30 @@ public class TemperatureRules {
 		else 
 			return "Freezing";
 	}
+	
+	public static double getTemperatureFoodModifier(int temperatureC){
+		if (temperatureC > 25)
+			return 1.1;
+		else if (temperatureC > 20)
+			return 1.05;
+		else if (temperatureC > 15)
+			return 1.05;
+		else if (temperatureC > 15)
+			return 1;
+		else if (temperatureC > 10)
+			return 1;
+		else if (temperatureC > 5)
+			return 1;
+		else if (temperatureC > 0)
+			return 1.05;
+		else if (temperatureC > -5)
+			return 1.1;
+		else 
+			return 1.2;
+	}
+
+	private static int[] itczLats = new int[]{-30,-30,-15,-5,5,15,30,30,15,5,-5,-15}; 
+	public static int getITCZ(int month) {
+		return itczLats[month-1];
+	}
 }
