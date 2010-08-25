@@ -51,9 +51,10 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 		return handyReusableObject2;
 	}
 
+	private int temperature;
 
 	public String getTemperatureDescription() {
-		return "Warm";
+		return TemperatureRules.getTemperatureDescription(temperature);
 	}
 	
 	public Weather getWeather() {
@@ -79,6 +80,12 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	public boolean hasStorm(Position destinationPoint) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	public int getTemperature() {
+		return temperature;
+	}
+	public void setTemperature(int temperature) {
+		this.temperature = temperature;
 	}
 	
 }
