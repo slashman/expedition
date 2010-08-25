@@ -94,14 +94,14 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.print(6,10, "  ", ConsoleSystemInterface.WHITE);
 		csi.print(6,11, "  a: Arm / Disarm expedition", ConsoleSystemInterface.WHITE);
 		csi.print(6,12, "  b: Build a Settlement", ConsoleSystemInterface.WHITE);
-		csi.print(6,13, "  d: Create Equipment Caché", ConsoleSystemInterface.WHITE);
-		csi.print(6,14, "  f: Fire Ranged Attack", ConsoleSystemInterface.WHITE);
-		csi.print(6,15, "  i: Show inventory", ConsoleSystemInterface.WHITE);
+		csi.print(6,13, "  d: Drop equipment", ConsoleSystemInterface.WHITE);
+		csi.print(6,14, "  i: Show inventory", ConsoleSystemInterface.WHITE);
 		csi.print(6,15, "  l: Look around", ConsoleSystemInterface.WHITE);
 		csi.print(6,16, "  r: Repair damaged ships", ConsoleSystemInterface.WHITE);
 		csi.print(6,17, "  R: Reset dead' reckon counter", ConsoleSystemInterface.WHITE);
-		csi.print(6,18, "  S: Save Game", ConsoleSystemInterface.WHITE);
-		csi.print(6,19, "  Q: Quit", ConsoleSystemInterface.WHITE);
+		csi.print(6,18, "  w: Chop wood from forests", ConsoleSystemInterface.WHITE);
+		csi.print(6,19, "  S: Save Game", ConsoleSystemInterface.WHITE);
+		csi.print(6,20, "  Q: Quit", ConsoleSystemInterface.WHITE);
 		
 		csi.print(6,21, "  ", ConsoleSystemInterface.WHITE);
 		csi.print(6,22, "  Press Space to continue", ConsoleSystemInterface.CYAN);
