@@ -134,7 +134,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		//Item.shopMode = true;
    		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
   		menuBox.setItemsPerPage(6);
-  		menuBox.setBounds(80, 300, 600,250);
+  		menuBox.setBounds(160, 16, 624,480);
   		int fontSize = si.getGraphics2D().getFont().getSize();
   		
   		Vector menuItems = new Vector();
@@ -165,7 +165,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				menuBox.setLegend("How many "+item.getPluralDescription()+"?");
 			menuBox.draw();
 			si.refresh();
-			int buyQuantity = readQuantity(80+tileSize+300, 341+fontSize, "                       ", 5);
+			int buyQuantity = readQuantity(657, 86, "                       ", 5);
 			if (buyQuantity == 0){
 				prompt = "Ok... Do you need anything else?";
 				continue;
@@ -228,7 +228,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		//Item.shopMode = true;
    		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		cacheBox.setItemsPerPage(10);
-   		cacheBox.setBounds(80, 30, 600,500);
+   		cacheBox.setBounds(160, 16, 624,480);
   		Vector<GFXMenuItem> menuItems = new Vector<GFXMenuItem>();
   		for (Equipment item: cacheEquipment){
   			menuItems.add(new CacheGFXMenuItem(item, getExpedition()));
@@ -262,7 +262,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			cacheBox.setLegend("How many "+item.getDescription()+" will you transfer?");
 			cacheBox.draw();
 			si.refresh();
-			int quantity = readQuantity(80+tileSize+420, 71+getFontSize(), "                       ", 5);
+			int quantity = readQuantity(657, 86, "                       ", 5);
 			if (quantity == 0)
 				continue;
 			
@@ -311,7 +311,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		Equipment.eqMode = true;
    		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		cacheBox.setItemsPerPage(10);
-   		cacheBox.setBounds(80, 30, 600,500);
+   		cacheBox.setBounds(160, 16, 624,480);
   		
   		Vector menuItems = new Vector();
   		for (Equipment item: expeditionEquipment){
@@ -341,7 +341,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			cacheBox.setLegend("How many "+item.getDescription()+" will you transfer?");
 			cacheBox.draw();
 			si.refresh();
-			int quantity = readQuantity(80+tileSize+420, 71+getFontSize(), "                       ", 5);
+			int quantity = readQuantity(657, 86, "                       ", 5);
 			
 			if (quantity == 0)
 				continue;
