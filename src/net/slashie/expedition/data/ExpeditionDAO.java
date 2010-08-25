@@ -157,7 +157,6 @@ public class ExpeditionDAO {
 
 			
 			//Inworld terrain
-			new CharAppearance("SPAIN_WALL", '#', ConsoleSystemInterface.BROWN),
 			new CharAppearance("DEPARTURE", '#', ConsoleSystemInterface.BROWN),
 			new CharAppearance("CITY_GRASS", '.', ConsoleSystemInterface.BROWN),
 			new CharAppearance("CITY_SEA", '~', ConsoleSystemInterface.BROWN),

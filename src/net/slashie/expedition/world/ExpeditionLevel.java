@@ -10,6 +10,7 @@ public interface ExpeditionLevel{
 	public String getSuperLevelId();
 	public Weather getWeather();
 	public String getTemperatureDescription();
+	public int getTemperature();
 	public String getDescription();
 	public Pair<String, String> getLocationDescription();
 	public Pair<String, String> getLocationMeans();

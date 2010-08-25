@@ -1,5 +1,6 @@
 package net.slashie.expedition.world;
 
+import net.slashie.util.Util;
 import net.slashie.utils.Position;
 
 public enum CardinalDirection {
@@ -33,7 +34,14 @@ public enum CardinalDirection {
 	}
 
 	public CardinalDirection rotate(int direction) {
-		int angle = getReferenceAngle() + 45 * direction;
+		int referenceAngle = 0;
+		if (this.referenceAngle == null){
+			referenceAngle = 45 * Util.rand(0, 7);
+		} else {
+			referenceAngle = getReferenceAngle();
+		}
+		
+		int angle =  referenceAngle + 45 * direction;
 		if (angle < 0)
 			angle = 360 + angle;
 		return getCardinalDirection(angle);
