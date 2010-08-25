@@ -87,6 +87,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	private int tempChangeCounter;
 
+	private boolean isOnITZ;
+
 	public Pair<String,String> getLocationMeans(){
 		handyReusableObject2.setA("Sextant");
 		handyReusableObject2.setB("Ded'Reckon");
@@ -148,10 +150,14 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public CardinalDirection getWindDirection() {
 		if (currentWind == null || isTimeToChangeWind()){
 			CardinalDirection prevailingWind = getPrevailingWind(ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)-1);
+			
 			currentWind = prevailingWind;
 			int rotateSign = Util.chance(50) ? 1 : -1;
 			int rotate = 0;
+			isOnITZ = false;
 			if (currentWind == CardinalDirection.NULL){
+				// In the doldrums
+				isOnITZ = true;
 				if (Util.chance(50)){
 					rotate = Util.rand(0, 2);
 				}  
@@ -318,6 +324,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			}
 		}
 		
+		// Storms at the doldrums 
+		if (isOnITZ() && currentCell.isSea()){
+			if (Util.chance(currentWeather.getTransitionChance(Weather.DUST_STORM))){
+				setWeather(Weather.STORM);
+				return;
+			}
+		}
 		// "Normal" weather chances
 		setWeather (currentWeather.nextWeather());
 		
@@ -343,8 +356,10 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		int itcz = TemperatureRules.getITCZ(month) + Util.rand(-5, 5);
 		int latitude = resolveYToLatitude();
 		if (latitude >= itcz -4 && latitude <= itcz +4){
+			
 			return CardinalDirection.NULL;
 		}
+		
 		if (latitude > 60)
 			return CardinalDirection.SOUTH;
 		if (latitude > 30)
@@ -439,5 +454,9 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			addMessage(weather.getChangeMessage(formerWeather));
 		}
 		
+	}
+
+	public boolean isOnITZ() {
+		return isOnITZ;
 	}
 }
