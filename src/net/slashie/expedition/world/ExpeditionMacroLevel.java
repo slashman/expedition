@@ -8,22 +8,11 @@ import java.util.List;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
-import net.slashie.expedition.domain.SeaPseudoCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.level.ExpeditionLevelReader;
-import net.slashie.expedition.ui.ExpeditionUserInterface;
-import net.slashie.serf.action.Actor;
-import net.slashie.serf.game.Equipment;
-import net.slashie.serf.game.Player;
-import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
-import net.slashie.serf.level.Dispatcher;
-import net.slashie.serf.level.FeatureFactory;
-import net.slashie.serf.level.MapCellFactory;
 import net.slashie.serf.ui.Appearance;
-import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
@@ -161,6 +150,9 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				if (Util.chance(50)){
 					rotate = Util.rand(0, 2);
 				}  
+			} else if (Util.chance(5)) { //10
+				rotate = 0;
+				currentWind = CardinalDirection.NULL;
 			} else if (Util.chance(70)){
 				rotate = Util.rand(0, 2);
 			} else if (Util.chance(30)){

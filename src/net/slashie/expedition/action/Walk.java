@@ -11,6 +11,7 @@ import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -67,11 +68,6 @@ public class Walk extends Action{
         AbstractCell absCell = a.getLevel().getMapCell(destinationPoint);
         if (absCell instanceof ExpeditionCell){
 	        ExpeditionCell cell = (ExpeditionCell)absCell;
-	        if (cell == null){
-	        	invalidationMessage = "You can't walk there";
-	        	return false;
-	        }
-	        
 	        if (cell.isSolid() || cell.isWater()){
 	        	invalidationMessage = "You can't walk there";
 	        	return false;
@@ -114,16 +110,24 @@ public class Walk extends Action{
         
         
 		if (expedition.getMovementMode() == MovementMode.SHIP){
-			
+			boolean stalled = false;
 			//Don't walk, sail instead!
 			if (var.x() == 0){
 				if (expedition.getSailingPoint() == SailingPoint.BEATING){
 					if (Util.chance(60)) {
 						expedition.getLevel().addMessage("You are on irons!");
-						return;
+						stalled = true;
 					}
 				}
-				var = expedition.getHeading().getVectors();
+				if (expedition.getLocation().getWindDirection()== CardinalDirection.NULL){
+					expedition.getLevel().addMessage("No wind propels your ship!");
+					stalled = true;
+				}
+				if (stalled){
+					var = new Position(0,0);
+				} else {
+					var = expedition.getHeading().getVectors();
+				}
 			} else {
 				TurnShip turnShip = new TurnShip(var.x());
 				turnShip.setPerformer(performer);
