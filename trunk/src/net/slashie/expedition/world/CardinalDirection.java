@@ -12,7 +12,7 @@ public enum CardinalDirection {
 	SOUTHEAST("SE", 225, 1, 1),
 	EAST("E", 270, 1, 0),
 	NORTHEAST("NE",315, 1, -1),
-	NULL("-", null, null, null);
+	NULL( "-", null, 0, 0);
 	
 	private String abbreviation;
 	private Integer referenceAngle;
