@@ -8,7 +8,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.CardinalDirection;
+import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
@@ -20,7 +22,9 @@ import net.slashie.serf.action.Actor;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
+import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
+import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
@@ -133,7 +137,6 @@ public class Expedition extends Player implements FoodConsumer{
 		} else {
 			return MovementSpeed.NORMAL;
 		}
-		
 	}
 
 	/**
@@ -996,6 +999,123 @@ public class Expedition extends Player implements FoodConsumer{
 
 	public void setJustAttacked(boolean justAttacked) {
 		this.justAttacked = justAttacked;
+	}
+	
+	@Override
+	public void landOn(Position destinationPoint) throws ActionCancelException {
+		boolean storm = getLocation().hasStorm(destinationPoint) && getMovementMode() == MovementMode.SHIP; 
+        if (storm){
+			getLevel().addMessage("You are caught on a Storm!");
+			wearOutShips(20);
+			increaseDeducedReckonWest(Util.rand(-5, 5));
+			if (Util.chance(30)){
+				//Random movement caused by the storm
+				destinationPoint.x += Util.rand(-1, 1);
+				destinationPoint.y += Util.rand(-1, 1);
+			}
+        }
+        
+        AbstractCell absCell = getLevel().getMapCell(destinationPoint);
+        if (absCell instanceof ExpeditionCell){
+	        ExpeditionCell cell = (ExpeditionCell)absCell;
+	        if (cell.getStore() != null){
+	        	((ExpeditionUserInterface)UserInterface.getUI()).launchStore(cell.getStore());
+	        	throw new ActionCancelException();
+	        }
+	        
+	        if (cell.getStepCommand() != null){
+	        	if (cell.getStepCommand().equals("DEPARTURE")){
+	        		if (getTotalShips() == 0) {
+        				getLevel().addMessage("You have no ships to board.");
+        				throw new ActionCancelException();
+	        		} else {
+		        		if (((ExpeditionUserInterface)UserInterface.getUI()).depart()){
+		        			String superLevelId = getLocation().getSuperLevelId();
+		        			if (superLevelId == null){
+		        				getLevel().addMessage("Nowhere to go.");
+		        			} else {
+		        				setMovementMode(MovementMode.SHIP);
+		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
+		        				//expedition.setCurrentVehicles(expedition.getShips());
+		        			}
+		        		} 
+		        		throw new ActionCancelException();
+		        		
+	        		}
+	        	} else if (cell.getStepCommand().equals("TRAVEL_CASTLE")){
+	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("The Queen has arranged a charriot to take you to the Alcazar of Segovia");
+
+	        		
+	        	}
+	        	
+	        }
+        } else {
+	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
+	        if (!cell.isLand()&& !(getMovementMode() == MovementMode.SHIP)){
+	        	AbstractFeature feature = getLevel().getFeatureAt(destinationPoint);
+	            if (feature != null && feature.isSolid()){
+	            	feature.onStep(this);
+	            }
+	            throw new ActionCancelException();
+	        }
+	        
+	        switch(getMovementMode()){
+	        case SHIP:
+	        	if (cell.isRiver()){
+	        		wearOutShips(30);
+	        	}
+	        	if (cell.isLand() && !cell.isRiver()){
+	        		if (UserInterface.getUI().promptChat("Do you want to land?  (Y/n)")){
+	        			GoodsCache ship = new ShipCache((ExpeditionGame)getGame(), getCurrentVehicles());
+	        			ship.addAllGoods(this);
+	        			removeAllGoods();
+	        			setMovementMode(MovementMode.FOOT);
+        				setCurrentVehicles(new ArrayList<Vehicle>());
+	        			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(ship);
+	        			ship.setPosition(new Position(getPosition()));
+	        			getLevel().addFeature(ship);
+	        		} else {
+	        			throw new ActionCancelException();
+	        		}
+	        	}
+	        }
+	        /*
+	         * Dead Reckon Calculation
+	         *  @ latitude 0 (apply for all latitudes to simplify the model)
+				cells	592
+				longitude degrees	30
+				degrees / cell	0,050675676
+				mt / degree 111321  (http://books.google.com.co/books?id=wu7zHtd2LO4C&hl=en)
+				mt / cell	5641,266892
+				nautical leagues / mt	0,000179
+				nautical leagues / cell	1,009786774
+
+	         */
+	        
+	        if (Util.chance(95)) {
+	        	//Simulate the lack of precision
+	        	increaseDeducedReckonWest(getPosition().x()-destinationPoint.x());
+	        	//increaseDeducedReckonWest(-var.x());
+	        }
+        }
+        AbstractFeature feature = getLevel().getFeatureAt(destinationPoint);
+        if (feature != null && feature.isSolid()){
+        	feature.onStep(this);
+        	return;
+        }
+
+        super.landOn(destinationPoint);
+	}
+	
+	@Override
+	public void doNothing() {
+		try {
+			landOn(getPosition());
+		} catch (ActionCancelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		super.doNothing();
 	}
 	
 }
