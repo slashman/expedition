@@ -21,6 +21,7 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
+import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
@@ -102,7 +103,11 @@ public class Walk extends Action{
 		actionCancelled = false;
 		Expedition expedition = (Expedition) performer;
 		if (targetDirection == Action.SELF){
-			expedition.getLevel().addMessage("You stand alert.");
+			try {
+				expedition.landOn(expedition.getPosition());
+			} catch (ActionCancelException e) {
+				
+			}
 			return;
 		}
 		Position var = directionToVariation(targetDirection);
@@ -138,115 +143,12 @@ public class Walk extends Action{
 		}
 		Position destinationPoint = Position.add(performer.getPosition(), var);
 		
-		boolean storm = expedition.getLocation().hasStorm(destinationPoint) && expedition.getMovementMode() == MovementMode.SHIP; 
-        if (storm){
-			expedition.getLevel().addMessage("You are caught on a Storm!");
-			expedition.wearOutShips(20);
-			expedition.increaseDeducedReckonWest(Util.rand(-5, 5));
-			if (Util.chance(30)){
-				//Random movement caused by the storm
-				destinationPoint.x += Util.rand(-1, 1);
-				destinationPoint.y += Util.rand(-1, 1);
-			}
-        }
-        
-        AbstractCell absCell = performer.getLevel().getMapCell(destinationPoint);
-        if (absCell instanceof ExpeditionCell){
-	        ExpeditionCell cell = (ExpeditionCell)absCell;
-	        if (cell.getStore() != null){
-	        	((ExpeditionUserInterface)UserInterface.getUI()).launchStore(cell.getStore());
-	        	actionCancelled = true;
-	        	return;
-	        }
-	        
-	        if (cell.getStepCommand() != null){
-	        	if (cell.getStepCommand().equals("DEPARTURE")){
-	        		if (expedition.getTotalShips() == 0) {
-        				expedition.getLevel().addMessage("You have no ships to board.");
-        				actionCancelled = true;
-		        		return;
-	        		} else {
-		        		if (((ExpeditionUserInterface)UserInterface.getUI()).depart()){
-		        			String superLevelId = expedition.getLocation().getSuperLevelId();
-		        			if (superLevelId == null){
-		        				expedition.getLevel().addMessage("Nowhere to go.");
-		        			} else {
-		        				expedition.setMovementMode(MovementMode.SHIP);
-		        				expedition.informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
-		        				//expedition.setCurrentVehicles(expedition.getShips());
-		        			}
-		        		} 
-		        		actionCancelled = true;
-		        		return;
-		        		
-	        		}
-	        	} else if (cell.getStepCommand().equals("TRAVEL_CASTLE")){
-	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("The Queen has arranged a charriot to take you to the Alcazar of Segovia");
-
-	        		
-	        	}
-	        	
-	        }
-        } else {
-	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
-	        if (!cell.isLand()&& !(expedition.getMovementMode() == MovementMode.SHIP)){
-	        	AbstractFeature feature =expedition.getLevel().getFeatureAt(destinationPoint);
-	            if (feature != null && feature.isSolid()){
-	            	feature.onStep(expedition);
-	            }
-	            actionCancelled = true;
-	            return;
-	        }
-	        
-	        switch(expedition.getMovementMode()){
-	        case SHIP:
-	        	if (cell.isRiver()){
-	        		expedition.wearOutShips(30);
-	        	}
-	        	if (cell.isLand() && !cell.isRiver()){
-	        		if (UserInterface.getUI().promptChat("Do you want to land?  (Y/n)")){
-	        			GoodsCache ship = new ShipCache((ExpeditionGame)((Player)performer).getGame(), expedition.getCurrentVehicles());
-	        			ship.addAllGoods(expedition);
-	        			expedition.removeAllGoods();
-	        			expedition.setMovementMode(MovementMode.FOOT);
-        				expedition.setCurrentVehicles(new ArrayList<Vehicle>());
-	        			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(ship);
-	        			ship.setPosition(new Position(expedition.getPosition()));
-	        			expedition.getLevel().addFeature(ship);
-	        		} else {
-	        			actionCancelled = true;
-	        			return;
-	        		}
-	        	}
-	        }
-	        /*
-	         * Dead Reckon Calculation
-	         *  @ latitude 0 (apply for all latitudes to simplify the model)
-				cells	592
-				longitude degrees	30
-				degrees / cell	0,050675676
-				mt / degree 111321  (http://books.google.com.co/books?id=wu7zHtd2LO4C&hl=en)
-				mt / cell	5641,266892
-				nautical leagues / mt	0,000179
-				nautical leagues / cell	1,009786774
-
-	         */
-	        
-	        if (Util.chance(95)) {
-	        	//Simulate the lack of precision
-	        	expedition.increaseDeducedReckonWest(-var.x());
-	        }
-        }
-        AbstractFeature feature =expedition.getLevel().getFeatureAt(destinationPoint);
-        if (feature != null && feature.isSolid()){
-        	feature.onStep(expedition);
-        	return;
-        }
-        
-        
-
-        expedition.landOn(destinationPoint);
-        
+		try {
+			expedition.landOn(destinationPoint);
+		} catch (ActionCancelException e) {
+        	actionCancelled = true;
+		}
+		        
         //UserInterface.getUI().addMessage(new Message("Your expedition travels "+directionDescriptions[targetDirection], performer.getPosition()));
 	}
 	
