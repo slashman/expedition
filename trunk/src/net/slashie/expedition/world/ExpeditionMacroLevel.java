@@ -150,7 +150,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				if (Util.chance(50)){
 					rotate = Util.rand(0, 2);
 				}  
-			} else if (Util.chance(5)) { //10
+			} else if (!getWeather().isWindy() && Util.chance(15)) {
 				rotate = 0;
 				currentWind = CardinalDirection.NULL;
 			} else if (Util.chance(70)){

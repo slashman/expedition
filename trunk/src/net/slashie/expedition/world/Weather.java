@@ -109,5 +109,19 @@ public enum Weather {
 		}
 		return "Nothing happens";
 	}
+
+	public boolean isWindy() {
+		switch (this) {
+		case DUST_STORM:
+		case GALE_WIND:
+		case HURRICANE:
+		case RAIN:
+		case STORM:
+		case WINDY:
+			return true;
+		default:
+			return false;
+		}
+	}
 	
 }
