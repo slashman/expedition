@@ -1,20 +1,29 @@
 package net.slashie.expedition.domain;
 
+import net.slashie.utils.roll.Roll;
+
 public class ExpeditionUnit extends Vehicle{
 	
 	private String name;
-	private int range;
-	private int attack;
-	private int defense;
-	private int speed;
-	private int movement;
-	private int resistance;
+	private int movement; //TODO: Make this affect expedition speed?
+	private int resistance;  //TODO: Make this affect battle performance
 	private int dailyFoodConsumption;
+	private int baseHitChance;
+	private Roll baseAttack;
+	private Roll baseDefense;
+	
+	private int evadeChance;
+	private int hitChance;
+	private Roll compositeAttack;
+	private Roll compositeDefense;
+	private boolean isRangedAttack;
+	
 	private String[] weaponTypes;
 	private String[] armorTypes;
 	private String special;
 	private Weapon weapon;
 	private Armor armor;
+	private Vehicle vehicle;
 	
 	public void setArmor(Armor armor) {
 		this.armor = armor;
@@ -38,7 +47,15 @@ public class ExpeditionUnit extends Vehicle{
 	 * @return
 	 */
 	public int getPower(){
-		return getAttack()*3+getDefense()*2+getSpeed()+getRange();
+		return (getAttack().getMax()*3+getDefense().getMax()*2)*(isRangedAttack()?2:1);
+	}
+	
+	public Roll getAttack(){
+		return compositeAttack;
+	}
+	
+	public Roll getDefense(){
+		return compositeDefense;
 	}
 	
 	public int getDailyFoodConsumption() {
@@ -54,20 +71,6 @@ public class ExpeditionUnit extends Vehicle{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	
-
-	public void setRange(int range) {
-		this.range = range;
-	}
-
-	public int getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
 	}
 
 	public int getMovement() {
@@ -94,18 +97,24 @@ public class ExpeditionUnit extends Vehicle{
 		this.special = special;
 	}
 
-	public ExpeditionUnit(String classifierId, String description, String pluralDescription,
-			int weight, int carryCapacity,
-			int attack, int defense, 
+	public ExpeditionUnit(String classifierId, 
+			String description, 
+			String pluralDescription,
+			int weight, 
+			int carryCapacity,
+			Roll baseAttack, 
+			Roll baseDefense, 
+			int baseHitChance,
+			int evadeChance,
 			int dailyFoodConsumption,
 			String[] weaponTypes, String[] armorTypes) {
 		super(classifierId, description, pluralDescription, weight, false,
-				false, 1, carryCapacity, 1, true);
+				false, false, 1, carryCapacity, 1, true);
 		this.name = description;
-		this.range = range;
-		this.attack = attack;
-		this.defense = defense;
-		this.speed = speed;
+		this.baseAttack = baseAttack;
+		this.baseDefense = baseDefense;
+		this.baseHitChance = baseHitChance;
+		this.evadeChance = evadeChance;
 		this.movement = movement;
 		this.resistance = resistance;
 		this.dailyFoodConsumption = dailyFoodConsumption;
@@ -123,39 +132,52 @@ public class ExpeditionUnit extends Vehicle{
 	private void updateCompositeVariables(){
 		fullId = super.getFullID();
 		unitWeight = super.getWeight();
-		menuDescription = "";
-		totalRange = 1;
-		totalAttack = attack;
-		totalDefense = defense;
+		fullDescription = "";
+		compositeAttack = new Roll(baseAttack);
+		compositeDefense = new Roll(baseDefense);
 		if (armor != null){
-			menuDescription += "+"+armor.getDefense()+" ";
+			fullDescription += "+"+armor.getDefense().getMax()+" ";
 		}
 
 		if (weapon != null){
 			fullId += ","+weapon.getFullID();
-			menuDescription += weapon.getDescription()+" ";
+			fullDescription += weapon.getDescription()+" ";
 			unitWeight += weapon.getWeight();
-			totalRange = range + weapon.getRange();
-			totalAttack += weapon.getAttack();
-			totalDefense += weapon.getDefense();
+			if (weapon.isTool()){
+				compositeAttack = new Roll(weapon.getAttack());
+				hitChance = weapon.getHitChance();
+			} else {
+				compositeAttack.addModifierRoll(weapon.getAttack());
+				hitChance = (int) Math.round( (baseHitChance + weapon.getHitChance())/2.0d);
+			}
+			if (weapon.isRanged()){
+				isRangedAttack = true;
+			} else {
+				isRangedAttack = false;
+			}
+		} else {
+			hitChance = baseHitChance;
 		}
-		
-		menuDescription += getDescription();
+		fullDescriptionBase = fullDescription;
+		fullDescription += getDescription();
 		if (armor != null){
 			fullId += ";"+armor.getFullID();
 			//menuDescription += "("+armor.getShortDescription()+")";
 			unitWeight += armor.getWeight();
-			totalDefense += armor.getDefense();
+			compositeDefense = new Roll(armor.getDefense());
 		}
-		
-		
-		
+		if (vehicle != null && vehicle.isHorse()){
+			isMounted = true;
+		} else {
+			isMounted = false;
+		}
 	}
 	
-	private String menuDescription;
+	private String fullDescription;
+	
 	@Override
-	public String getMenuDescription() {
-		return menuDescription;
+	public String getFullDescription() {
+		return fullDescription;
 	}
 	
 	private String fullId;
@@ -165,29 +187,47 @@ public class ExpeditionUnit extends Vehicle{
 	}
 	
 	private int unitWeight;
+	private boolean isMounted;
+	private boolean isWounded;
+	private String fullDescriptionBase;
 	@Override
 	public int getWeight() {
 		return unitWeight;
 	}
 	
-	private int totalRange;
-	public int getRange() {
-		return totalRange;
-	}
-	
-	private int totalAttack;
-	public int getAttack() {
-		return totalAttack;
-	}
-
-	private int totalDefense;
-	public int getDefense() {
-		return totalDefense;
-	}
-	
-
 	public Armor getArmor() {
 		return armor;
 	}
 
+	
+	public int getHitChance() {
+		return hitChance;
+	}
+
+	public int getEvadeChance() {
+		return evadeChance;
+	}
+
+	public boolean isRangedAttack() {
+		return isRangedAttack;
+	}
+
+	public boolean isMounted() {
+		return isMounted;
+	}
+
+	public boolean isWounded() {
+		return isWounded;
+	}
+
+	public void setWounded(boolean isWounded) {
+		this.isWounded = isWounded;
+	}
+	
+	@Override
+	public String getPluralDescription() {
+		return fullDescriptionBase + super.getPluralDescription();
+	}
 }
+
+	

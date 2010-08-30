@@ -1,35 +1,51 @@
 package net.slashie.expedition.domain;
 
+import net.slashie.utils.roll.Roll;
+
 public class Weapon extends Good{
 	private int burden;
-	private int attack;
-	private int defense;
-	private int range;
+	private Roll attack;
+	private Roll defense;
+	private boolean isTool;
+	private int hitChance;
+	private boolean isRanged;
 	
 	public int getBurden() {
 		return burden;
 	}
 
-	public int getAttack() {
+	public Roll getAttack() {
 		return attack;
 	}
 
-	public int getDefense() {
+	public Roll getDefense() {
 		return defense;
 	}
 
 	public Weapon(String classifierId, String description, String pluralDescription,
-			int attack, int defense, int range, int weight) {
+			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight) {
 		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON);
 		this.burden = burden;
+		this.isTool = isTool;
 		this.attack = attack;
 		this.defense = defense;
-		this.range = range;
+		this.hitChance = hitChance;
+		this.isRanged = isRanged;
 				
 	}
 
-	public int getRange() {
-		return range;
+
+	
+	public boolean isTool() {
+		return isTool;
+	}
+
+	public int getHitChance() {
+		return hitChance;
+	}
+
+	public boolean isRanged() {
+		return isRanged;
 	}
 
 }

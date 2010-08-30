@@ -1,19 +1,12 @@
 package net.slashie.expedition.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.slashie.expedition.action.NPWalk;
+import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.ai.NativeActionSelector;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.world.Culture;
-import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
-import net.slashie.serf.action.NullSelector;
-import net.slashie.serf.ai.RangedActionSpec;
 import net.slashie.serf.ai.SimpleAI;
-import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.util.Pair;
@@ -136,11 +129,7 @@ public class NativeTown extends Town{
 		ret.setName("natives");
 		ret.setExpeditionary("-");
 		
-		SimpleAI ai = new SimpleAI(game.getPlayer(), new NPWalk()) ;
-		ArrayList<RangedActionSpec> rangedActions = new ArrayList<RangedActionSpec>();
-		rangedActions.add(new RangedActionSpec("NP_RAINARROWS", 3,80,"directionalmissile","rainArrows"));
-		ai.setRangedActions(rangedActions);
-		ai.setWaitPlayerRange(20);
+		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
 		ret.setSelector(ai);
 		int targetPopulation = expeditionPower*50 + Util.rand(-expeditionPower*20, expeditionPower * 20);
 		int specializedPopulation = 0;

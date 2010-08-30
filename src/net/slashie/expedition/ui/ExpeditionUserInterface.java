@@ -1,5 +1,6 @@
 package net.slashie.expedition.ui;
 
+import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Store;
 
@@ -29,4 +30,9 @@ public interface ExpeditionUserInterface {
 		};
 	
 
+	public void showBattleResults(
+			AssaultOutcome attackerRangedAttackOutcome,
+			AssaultOutcome defenderRangedAttackOutcome,
+			AssaultOutcome[] mountedAttackOutcome,
+			AssaultOutcome[] meleeAttackOutcome);
 }

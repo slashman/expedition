@@ -2,7 +2,7 @@ package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
 
-import net.slashie.expedition.action.NPWalk;
+import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.ai.RangedActionSpec;
@@ -19,11 +19,7 @@ public class ExpeditionFactory {
 		ret.setName("natives");
 		ret.setExpeditionary("-");
 		
-		SimpleAI ai = new SimpleAI(game.getPlayer(), new NPWalk()) ;
-		ArrayList<RangedActionSpec> rangedActions = new ArrayList<RangedActionSpec>();
-		rangedActions.add(new RangedActionSpec("NP_RAINARROWS", 3,80,"directionalmissile","rainArrows"));
-		ai.setRangedActions(rangedActions);
-		ai.setWaitPlayerRange(20);
+		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
 		ret.setSelector(ai);
 		
 		//int expeditionPower = Util.rand(1, 4);

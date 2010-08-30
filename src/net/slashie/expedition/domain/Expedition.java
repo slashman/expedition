@@ -32,7 +32,7 @@ import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
-public class Expedition extends Player implements FoodConsumer{
+public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	public enum Title {
 		EXPLORER (1, "Explorador", 0, 0, 0, 0),
 		HIDALGO  (2, "Hidalgo",    0, 0, 1, 20000),
@@ -727,7 +727,7 @@ public class Expedition extends Player implements FoodConsumer{
 
 	
 
-	public List<Equipment> getUnitsOverRange(int distance) {
+	/*public List<Equipment> getUnitsOverRange(int distance) {
 		List<Equipment> ret = new ArrayList<Equipment>();  
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
@@ -737,7 +737,7 @@ public class Expedition extends Player implements FoodConsumer{
 		}
 		return ret;
 	}
-
+	 */
 	public int getSumOfValuables() {
 		int currentValuable = 0;
 		List<Equipment> inventory = getInventory();
@@ -830,7 +830,7 @@ public class Expedition extends Player implements FoodConsumer{
 		return ret;
 	}
 
-	public int getMaxFiringRange() {
+/*	public int getMaxFiringRange() {
 		int maxRange = -1;
 		for (Equipment unit: getUnits()){
 			if (((ExpeditionUnit)unit.getItem()).getRange() > maxRange){
@@ -838,7 +838,7 @@ public class Expedition extends Player implements FoodConsumer{
 			}
 		}
 		return maxRange;
-	}
+	}*/
 
 	public List<Equipment> getTools() {
 		List<Equipment> ret = new ArrayList<Equipment>();  
@@ -1118,4 +1118,14 @@ public class Expedition extends Player implements FoodConsumer{
 		super.doNothing();
 	}
 	
+	@Override
+	public void addUnits(ExpeditionUnit unit, int quantity) {
+		addItem(unit, quantity);
+	}
+	
+	@Override
+	public void reduceUnits(ExpeditionUnit unit, int quantity) {
+		reduceQuantityOf(unit, quantity);
+		checkDeath();
+	}
 }
