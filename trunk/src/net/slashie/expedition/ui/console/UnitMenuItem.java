@@ -32,9 +32,9 @@ public class UnitMenuItem implements MenuItem, ListItem{
 		}
 
 		if (e.getQuantity() == 1){
- 			return ((ExpeditionUnit)e.getItem()).getMenuDescription();
+ 			return ((ExpeditionUnit)e.getItem()).getFullDescription();
  		} else {
- 			return ((ExpeditionUnit)e.getItem()).getMenuDescription() +" x"+e.getQuantity();
+ 			return ((ExpeditionUnit)e.getItem()).getFullDescription() +" x"+e.getQuantity();
  		}
  	}
 	
