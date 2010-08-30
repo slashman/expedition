@@ -92,7 +92,7 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 			return ConsoleSystemInterface.WHITE;
 	}
 
-	public String getMenuDescription() {
+	public String getFullDescription() {
 		return getDescription();
 	}
 	

@@ -11,7 +11,7 @@ import net.slashie.serf.game.Equipment;
 
 public class CommonUI {
 	public static String getMenuCacheDescription(Equipment item, Expedition expedition, GoodsCache cache){
-		String itemDescription = item.getItem().getDescription();
+		String itemDescription = ((ExpeditionItem)item.getItem()).getFullDescription();
 		int inventory = item.getQuantity();
 		int stock = 0;
 		if (expedition != null){

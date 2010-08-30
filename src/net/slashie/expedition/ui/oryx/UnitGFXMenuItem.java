@@ -21,7 +21,7 @@ public class UnitGFXMenuItem implements GFXMenuItem {
 
 	@Override
 	public String getMenuDescription() {
-		return ((ExpeditionUnit)e.getItem()).getDescription();
+		return ((ExpeditionUnit)e.getItem()).getFullDescription();
 	}
 
 	@Override
