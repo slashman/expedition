@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
+import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
@@ -227,7 +228,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		Equipment.eqMode = true;
    		//Item.shopMode = true;
    		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
-   		cacheBox.setItemsPerPage(10);
+   		cacheBox.setItemsPerPage(12);
    		cacheBox.setBounds(160, 16, 624,480);
   		Vector<GFXMenuItem> menuItems = new Vector<GFXMenuItem>();
   		for (Equipment item: cacheEquipment){
@@ -310,7 +311,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		List<Equipment> expeditionEquipment = getExpedition().getInventory();
    		Equipment.eqMode = true;
    		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
-   		cacheBox.setItemsPerPage(10);
+   		cacheBox.setItemsPerPage(12);
    		cacheBox.setBounds(160, 16, 624,480);
   		
   		Vector menuItems = new Vector();
@@ -512,4 +513,48 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		return quantity;
 	}
 	
+	@Override
+	public void showBattleResults(AssaultOutcome attackerRangedAttackOutcome,
+			AssaultOutcome defenderRangedAttackOutcome,
+			AssaultOutcome[] mountedAttackOutcome,
+			AssaultOutcome[] meleeAttackOutcome) {
+		String message = "BATTLE!!! XXX";
+		if (attackerRangedAttackOutcome.hasDeaths() || defenderRangedAttackOutcome.hasDeaths()){
+			message += " >> Ranged Phase << XXX";
+		}
+		if (attackerRangedAttackOutcome.hasDeaths()){
+			message += "  Attacker XXX";
+			message += "   "+attackerRangedAttackOutcome.getDeathsString()+"XXX";
+		}
+		if (defenderRangedAttackOutcome.hasDeaths()){
+			message += "  Defender XXX";
+			message += "   "+defenderRangedAttackOutcome.getDeathsString()+"XXX";
+		}
+		if (mountedAttackOutcome[0].hasDeaths() || mountedAttackOutcome[1].hasDeaths()){
+			message += " >> Charge Phase << XXX";
+		}
+		if (mountedAttackOutcome[0].hasDeaths()){
+			message += "  Attack XXX";
+			message += "   "+mountedAttackOutcome[0].getDeathsString()+"XXX";
+		}
+		if (mountedAttackOutcome[1].hasDeaths()){
+			message += "  Retaliation XXX";
+			message += "   "+mountedAttackOutcome[1].getDeathsString()+"XXX";
+		}
+		if (meleeAttackOutcome[0].hasDeaths() || meleeAttackOutcome[1].hasDeaths()){
+			message += " >> Melee Phase <<XXX";
+		}
+		if (meleeAttackOutcome[0].hasDeaths()){
+			message += "  Attack XXX";
+			message += "   "+meleeAttackOutcome[0].getDeathsString()+"XXX";
+		}
+		if (meleeAttackOutcome[1].hasDeaths()){
+			message += "  Retaliation XXX";
+			message += "   "+meleeAttackOutcome[1].getDeathsString()+"XXX";
+		}
+		message = message.replaceAll("XXX", "\n");
+		showTextBox(message, 140, 8, 520, 500);
+		
+		
+	}
 }

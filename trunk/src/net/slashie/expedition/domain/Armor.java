@@ -1,20 +1,22 @@
 package net.slashie.expedition.domain;
 
+import net.slashie.utils.roll.Roll;
+
 public class Armor extends Good {
 	private int burden;
-	private int defense;
+	private Roll defense;
 	private String shortDescription;
 	
 	public int getBurden() {
 		return burden;
 	}
 
-	public int getDefense() {
+	public Roll getDefense() {
 		return defense;
 	}
 	
 	public Armor(String classifierId, String description, String pluralDescription,
-			int weight, int burden, int defense, String shortDescription) {
+			int weight, int burden, Roll defense, String shortDescription) {
 		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON);
 		this.burden = burden;
 		this.defense = defense;

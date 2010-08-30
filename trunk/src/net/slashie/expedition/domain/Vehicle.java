@@ -13,6 +13,7 @@ public class Vehicle extends ExpeditionItem{
 	private int resistance;
 	private boolean fakeVehicle;
 	private int maxResistance;
+	private boolean isHorse;
 	
 	public boolean isMoveOnWater() {
 		return moveOnWater;
@@ -40,9 +41,10 @@ public class Vehicle extends ExpeditionItem{
 	}
 	public Vehicle(String classifierId, String description, String pluralDescription,
 			int weight, boolean moveOnWater,
-			boolean moveOnAir, int speedModifier, int carryCapacity, int resistance, boolean fakeVehicle) {
+			boolean moveOnAir, boolean isHorse, int speedModifier, int carryCapacity, int resistance, boolean fakeVehicle) {
 		super(classifierId, description,pluralDescription, classifierId, weight);
 		this.moveOnWater = moveOnWater;
+		this.isHorse = isHorse;
 		this.moveOnAir = moveOnAir;
 		this.speedModifier = speedModifier;
 		this.carryCapacity = carryCapacity;
@@ -78,6 +80,9 @@ public class Vehicle extends ExpeditionItem{
 		resistance += recovery;
 		if (resistance > maxResistance)
 			resistance = maxResistance;
+	}
+	public boolean isHorse() {
+		return isHorse;
 	}
 	
 	

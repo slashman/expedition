@@ -19,7 +19,7 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
-public class GoodsCache extends AbstractFeature implements FoodConsumer{
+public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitContainer{
 	private FoodConsumerDelegate foodConsumerDelegate; 
 	
 	public GoodsCache(ExpeditionGame game) {
@@ -252,4 +252,13 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer{
 		return true;
 	}
 	
+	@Override
+	public void addUnits(ExpeditionUnit unit, int quantity) {
+		addItem(unit, quantity);
+	}
+	
+	@Override
+	public void reduceUnits(ExpeditionUnit unit, int quantity) {
+		reduceQuantityOf(unit, quantity);
+	}
 }

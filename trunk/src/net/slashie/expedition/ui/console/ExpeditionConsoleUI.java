@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
+import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
@@ -769,5 +770,14 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		public int getValue(){
 			return value;
 		}
+	}
+	
+	@Override
+	public void showBattleResults(AssaultOutcome attackerRangedAttackOutcome,
+			AssaultOutcome defenderRangedAttackOutcome,
+			AssaultOutcome[] mountedAttackOutcome,
+			AssaultOutcome[] meleeAttackOutcome) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -20,8 +20,6 @@ import net.slashie.expedition.action.BuildSettlement;
 import net.slashie.expedition.action.ChopWoods;
 import net.slashie.expedition.action.DropEquipment;
 import net.slashie.expedition.action.MeleeAttack;
-import net.slashie.expedition.action.NPRainArrows;
-import net.slashie.expedition.action.RainArrows;
 import net.slashie.expedition.action.RepairShips;
 import net.slashie.expedition.action.Use;
 import net.slashie.expedition.action.Walk;
@@ -314,7 +312,6 @@ public class RunExpedition {
 		
 		Action dropEquipment = new DropEquipment();
 		Action buildSettlement = new BuildSettlement();
-		Action rainArrows = new RainArrows();
 		Action armExpedition = new ArmExpedition();
 		Action resetReckon = new ResetDeadReckon();
 		Action repairShips = new RepairShips();
@@ -361,7 +358,6 @@ public class RunExpedition {
 		UserAction[] userActions = new UserAction[] {
 			    new UserAction(dropEquipment, i(keyBindings.getProperty("DROP_EQUIPMENT_KEY"))),
 			    new UserAction(buildSettlement, i(keyBindings.getProperty("BUILD_SETTLEMENT_KEY"))),
-			    new UserAction(rainArrows, i(keyBindings.getProperty("RAIN_ARROWS_KEY"))),
 			    new UserAction(armExpedition, i(keyBindings.getProperty("ARM_EXPEDITION_KEY"))),
 			    new UserAction(resetReckon, i(keyBindings.getProperty("RESET_RECKON_KEY"))),
 			    new UserAction(repairShips, i(keyBindings.getProperty("REPAIR_SHIPS_KEY"))),
@@ -474,7 +470,6 @@ public class RunExpedition {
 	private static void initializeActions(){
 		ActionFactory af = ActionFactory.getActionFactory();
 		Action[] definitions = new Action[]{
-			new NPRainArrows()
 		};
 		for (int i = 0; i < definitions.length; i++)
 			af.addDefinition(definitions[i]);
