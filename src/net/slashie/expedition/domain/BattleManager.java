@@ -14,7 +14,7 @@ import net.slashie.utils.Util;
 
 public class BattleManager {
 
-	public static void battle(Expedition attacker, Actor defender) {
+	public static void battle(String battleName, Expedition attacker, Actor defender) {
 		List<Equipment> attackingUnitsFullGroup = attacker.getUnits();
 		List<Equipment> defendingUnitsFullGroup = null;
 		
@@ -32,8 +32,8 @@ public class BattleManager {
 				defender.getLevel().getDispatcher().removeActor(town);
 				defender.getLevel().getDispatcher().addActor(town, true);
 			}
-		} else if (defender instanceof NonPrincipalExpedition){
-			NonPrincipalExpedition npe = (NonPrincipalExpedition)defender;
+		} else if (defender instanceof Expedition){
+			Expedition npe = (Expedition)defender;
 			defendingUnitsFullGroup = npe.getUnits();
 		} else {
 			//Invalid Defender
@@ -44,6 +44,9 @@ public class BattleManager {
 		// Trim attacking and defending teams to 60, 20 ranged (if possible), 20 mounted (if possible) and the remaining.
 		List<Equipment> attackingUnits = selectSquad(attackingUnitsFullGroup);
 		List<Equipment> defendingUnits = selectSquad(defendingUnitsFullGroup);
+		
+		((ExpeditionUserInterface)UserInterface.getUI()).showBattleScene(battleName, attackingUnits, defendingUnits);
+
 
 		// Ranged phase: Ranged units from both teams attack
 		AssaultOutcome attackerRangedAttackOutcome =  rangedAttack(attackingUnits, defendingUnits, (UnitContainer)defender);
@@ -55,7 +58,7 @@ public class BattleManager {
 		// Melee phase: Attacker charges (Defender will attack back)
 		AssaultOutcome[] attackerMeleeAttackOutcome = meleeAttack(attackingUnits, attacker, defendingUnits, (UnitContainer)defender);
 
-		((ExpeditionUserInterface)UserInterface.getUI()).showBattleResults(attackerRangedAttackOutcome, defenderRangedAttackOutcome, attackerMountedAttackOutcome, attackerMeleeAttackOutcome);
+		((ExpeditionUserInterface)UserInterface.getUI()).showBattleResults(battleName, attackerRangedAttackOutcome, defenderRangedAttackOutcome, attackerMountedAttackOutcome, attackerMeleeAttackOutcome);
 		
 		//Calculate how many of the expedition fighters will attack. 
 		/*
@@ -200,9 +203,14 @@ public class BattleManager {
 		int remaining = 60;
 		int remainingRanged = 20;
 		int remainingMounted = 20;
+		List<String> usedUnitsFullIDs = new ArrayList<String>();
 		List<Equipment> squad = new ArrayList<Equipment>();
 		for (Equipment eq: fullGroup){
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
+			if (unit.isWounded())
+				continue;
+			if (usedUnitsFullIDs.contains(unit.getFullID()))
+				continue;
 			if (unit.isRangedAttack()){
 				int quantity = eq.getQuantity();
 				if (quantity > remainingRanged){
@@ -213,10 +221,15 @@ public class BattleManager {
 				squad.add(clone);
 				remainingRanged -= quantity;
 				remaining -= quantity;
+				usedUnitsFullIDs.add(eq.getItem().getFullID());
 			}
 		}
 		for (Equipment eq: fullGroup){
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
+			if (unit.isWounded())
+				continue;
+			if (usedUnitsFullIDs.contains(unit.getFullID()))
+				continue;
 			if (unit.isMounted()){
 				int quantity = eq.getQuantity();
 				if (quantity > remainingMounted){
@@ -227,10 +240,16 @@ public class BattleManager {
 				squad.add(clone);
 				remainingMounted -= quantity;
 				remaining -= quantity;
+				usedUnitsFullIDs.add(eq.getItem().getFullID());
+
 			}
 		}
 		for (Equipment eq: fullGroup){
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
+			if (unit.isWounded())
+				continue;
+			if (usedUnitsFullIDs.contains(unit.getFullID()))
+				continue;
 			if (!unit.isMounted() && !unit.isRangedAttack()){
 				int quantity = eq.getQuantity();
 				if (quantity > remaining){
@@ -240,6 +259,24 @@ public class BattleManager {
 				clone.setQuantity(quantity);
 				squad.add(clone);
 				remaining -= quantity;
+				usedUnitsFullIDs.add(eq.getItem().getFullID());
+
+			}
+		}
+		for (Equipment eq: fullGroup){
+			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
+			if (usedUnitsFullIDs.contains(unit.getFullID()))
+				continue;
+			if (!unit.isMounted() && !unit.isRangedAttack()){
+				int quantity = eq.getQuantity();
+				if (quantity > remaining){
+					quantity = remaining;
+				}
+				Equipment clone = eq.clone();
+				clone.setQuantity(quantity);
+				squad.add(clone);
+				remaining -= quantity;
+				usedUnitsFullIDs.add(eq.getItem().getFullID());
 			}
 		}
 		return squad;

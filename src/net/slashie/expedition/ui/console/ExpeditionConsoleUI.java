@@ -773,10 +773,18 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	}
 	
 	@Override
-	public void showBattleResults(AssaultOutcome attackerRangedAttackOutcome,
+	public void showBattleResults(String battleName, 
+			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void showBattleScene(String battleTitle,
+			List<Equipment> attackingUnits, List<Equipment> defendingUnits) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -20,6 +20,7 @@ public class ExpeditionFactory {
 		ret.setExpeditionary("-");
 		
 		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
+		ai.setBumpEnemy(true);
 		ret.setSelector(ai);
 		
 		//int expeditionPower = Util.rand(1, 4);

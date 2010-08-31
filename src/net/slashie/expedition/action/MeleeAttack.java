@@ -31,38 +31,24 @@ public class MeleeAttack extends Action {
         
     	Actor actor = expedition.getLevel().getActorAt(destinationPoint);
     	
-    	
+    	String battleName = "";
     	if (actor != null){
     		if (actor instanceof NativeTown){
     			NativeTown town = (NativeTown) actor;
     			if (town.getTotalUnits() > 0){
-    				actor.getLevel().addMessage("You attack the "+town.getDescription());
+    				battleName = "You attack the "+town.getDescription();
+    				
     			} else {
-    				actor.getLevel().addMessage("You raid the "+town.getDescription());
+    				battleName = "You raid the "+town.getDescription();
     			}
+    			actor.getLevel().addMessage(battleName);
     		} else if (actor instanceof NonPrincipalExpedition){
     			NonPrincipalExpedition npe = (NonPrincipalExpedition)actor;
-    			actor.getLevel().addMessage("You attack the "+npe.getDescription()+": ");
+    			battleName = "You attack the "+npe.getDescription();
+    			actor.getLevel().addMessage(battleName);
     		}
-    		BattleManager.battle(expedition, actor);
+    		BattleManager.battle(battleName, expedition, actor);
     	}
-	}
-
-	private List<Equipment> selectSquad(List<Equipment> attackingUnitsFullGroup) {
-		List<Equipment> ret = new ArrayList<Equipment>();
-		int acum = 0;
-		for (Equipment eq: attackingUnitsFullGroup){
-			if (acum > 50)
-				break;
-			if (acum + eq.getQuantity() > 50){
-				ret.add(new Equipment(eq.getItem(), 50-acum));
-				break;
-			} else {    				
-				ret.add(eq);
-				acum += eq.getQuantity();
-			}
-		}
-		return ret;
 	}
 
 	@Override

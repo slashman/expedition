@@ -1,8 +1,11 @@
 package net.slashie.expedition.ui;
 
+import java.util.List;
+
 import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Store;
+import net.slashie.serf.game.Equipment;
 
 public interface ExpeditionUserInterface {
 	public void launchStore(Store store);
@@ -30,9 +33,18 @@ public interface ExpeditionUserInterface {
 		};
 	
 
+	
+
+			
 	public void showBattleResults(
+			String battleTitle,
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome);
+	
+	public void showBattleScene(
+			String battleTitle, 
+			List<Equipment> attackingUnits,
+			List<Equipment> defendingUnits);
 }

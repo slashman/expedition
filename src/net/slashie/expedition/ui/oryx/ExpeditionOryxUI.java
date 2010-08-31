@@ -1,6 +1,9 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -34,15 +37,18 @@ import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
+import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.util.Pair;
+import net.slashie.utils.ImageUtils;
 import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.MenuBox;
 
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
-	private Color ORANGE = new Color(255,127,39);
+	private Color ORANGE = new Color(224,226,108);
+	private Image BATTLE_BACKGROUND;
 	@Override
 	public void showDetailedInfo(Actor a) {
 		// TODO Auto-generated method stub
@@ -491,6 +497,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		unitsMenuBox.setItemsPerPage(9);
   		unitsMenuBox.setShowOptions(false);
 		//unitsMenuBox.setTitle("Expedition");
+  		try {
+			BATTLE_BACKGROUND = ImageUtils.createImage(UIProperties.getProperty("BATTLE_BACKGROUND"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -514,46 +525,121 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	
 	@Override
-	public void showBattleResults(AssaultOutcome attackerRangedAttackOutcome,
+	public void showBattleScene(String battleTitle, List<Equipment> attackingUnits,
+			List<Equipment> defendingUnits) {
+		si.drawImage(168, 72, BATTLE_BACKGROUND);
+		int xBase = 192;
+		int yBase = 96; 
+		int gridX = 0;
+		int gridY = 0;
+		for (Equipment equipment: attackingUnits){
+			GFXAppearance appearance = (GFXAppearance) equipment.getItem().getAppearance();
+			for (int i = 0; i < equipment.getQuantity(); i++){
+				si.drawImage(xBase + gridX * 24, yBase + gridY*24, appearance.getImage());
+				gridY ++;
+				if (gridY > 12){
+					gridX++;
+					gridY = 0;
+				}
+			}
+		}
+		
+		gridX = 15;
+		gridY = 0;
+		for (Equipment equipment: defendingUnits){
+			GFXAppearance appearance = (GFXAppearance) equipment.getItem().getAppearance();
+			Image img = ImageUtils.vFlip((BufferedImage)appearance.getImage());
+			for (int i = 0; i < equipment.getQuantity(); i++){
+				si.drawImage(xBase + gridX * 24, yBase + gridY*24, img);
+				gridY ++;
+				if (gridY > 12){
+					gridX--;
+					gridY = 0;
+				}
+			}
+		}
+		si.refresh();
+		si.waitKey(CharKey.SPACE);
+	}
+	@Override
+	public void showBattleResults(String battleTitle, AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome) {
-		String message = "BATTLE!!! XXX";
-		if (attackerRangedAttackOutcome.hasDeaths() || defenderRangedAttackOutcome.hasDeaths()){
-			message += " >> Ranged Phase << XXX";
+		String message = battleTitle+" XXX";
+		
+		// Ranged Phase
+		if (attackerRangedAttackOutcome.hasEvents()){
+			message += "    >> Ranged Attack << XXX";
 		}
+		
 		if (attackerRangedAttackOutcome.hasDeaths()){
-			message += "  Attacker XXX";
-			message += "   "+attackerRangedAttackOutcome.getDeathsString()+"XXX";
+			message += attackerRangedAttackOutcome.getDeathsString()+"XXX";
 		}
+		if (attackerRangedAttackOutcome.hasWounds()){
+			message += attackerRangedAttackOutcome.getWoundsString()+"XXX";
+		}
+
+		if (defenderRangedAttackOutcome.hasEvents()){
+			message += "    >> Ranged Retaliation << XXX";
+		}
+		
 		if (defenderRangedAttackOutcome.hasDeaths()){
-			message += "  Defender XXX";
-			message += "   "+defenderRangedAttackOutcome.getDeathsString()+"XXX";
+			message += defenderRangedAttackOutcome.getDeathsString()+"XXX";
 		}
-		if (mountedAttackOutcome[0].hasDeaths() || mountedAttackOutcome[1].hasDeaths()){
-			message += " >> Charge Phase << XXX";
+		if (defenderRangedAttackOutcome.hasWounds()){
+			message += defenderRangedAttackOutcome.getWoundsString()+"XXX";
 		}
+		
+		
+		// Charge Phase
+		if (mountedAttackOutcome[0].hasEvents()){
+			message += "    >> Mounted charge outcome << XXX";
+		}
+		
 		if (mountedAttackOutcome[0].hasDeaths()){
-			message += "  Attack XXX";
-			message += "   "+mountedAttackOutcome[0].getDeathsString()+"XXX";
+			message += mountedAttackOutcome[0].getDeathsString()+"XXX";
 		}
+		if (mountedAttackOutcome[0].hasWounds()){
+			message += mountedAttackOutcome[0].getWoundsString()+"XXX";
+		}
+		
+		if (mountedAttackOutcome[1].hasEvents()){
+			message += "    >> Mounted charge losses << XXX";
+		}
+		
 		if (mountedAttackOutcome[1].hasDeaths()){
-			message += "  Retaliation XXX";
-			message += "   "+mountedAttackOutcome[1].getDeathsString()+"XXX";
+			message += mountedAttackOutcome[1].getDeathsString()+"XXX";
 		}
-		if (meleeAttackOutcome[0].hasDeaths() || meleeAttackOutcome[1].hasDeaths()){
-			message += " >> Melee Phase <<XXX";
+		if (mountedAttackOutcome[1].hasWounds()){
+			message += mountedAttackOutcome[1].getWoundsString()+"XXX";
 		}
+		
+		// Melee Phase
+		if (meleeAttackOutcome[0].hasEvents()){
+			message += "    >> Melee outcome << XXX";
+		}
+		
 		if (meleeAttackOutcome[0].hasDeaths()){
-			message += "  Attack XXX";
-			message += "   "+meleeAttackOutcome[0].getDeathsString()+"XXX";
+			message += meleeAttackOutcome[0].getDeathsString()+"XXX";
 		}
+		
+		if (meleeAttackOutcome[0].hasWounds()){
+			message += meleeAttackOutcome[0].getWoundsString()+"XXX";
+		}
+		
+		if (meleeAttackOutcome[1].hasEvents()){
+			message += "    >> Melee losses << XXX";
+		}
+		
 		if (meleeAttackOutcome[1].hasDeaths()){
-			message += "  Retaliation XXX";
-			message += "   "+meleeAttackOutcome[1].getDeathsString()+"XXX";
+			message += meleeAttackOutcome[1].getDeathsString()+"XXX";
+		}
+		if (meleeAttackOutcome[1].hasWounds()){
+			message += meleeAttackOutcome[1].getWoundsString()+"XXX";
 		}
 		message = message.replaceAll("XXX", "\n");
-		showTextBox(message, 140, 8, 520, 500);
+		showTextBox(message, 16, 16, 776, 576);
 		
 		
 	}
