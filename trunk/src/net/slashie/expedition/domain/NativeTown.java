@@ -130,6 +130,7 @@ public class NativeTown extends Town{
 		ret.setExpeditionary("-");
 		
 		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
+		ai.setBumpEnemy(true);
 		ret.setSelector(ai);
 		int targetPopulation = expeditionPower*50 + Util.rand(-expeditionPower*20, expeditionPower * 20);
 		int specializedPopulation = 0;

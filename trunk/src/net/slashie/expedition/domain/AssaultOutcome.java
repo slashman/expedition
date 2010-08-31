@@ -25,7 +25,7 @@ public class AssaultOutcome {
 	}
 
 	public void addWound(ExpeditionUnit unit) {
-		Pair<ExpeditionUnit, Integer> wound = deathsMap.get(unit);
+		Pair<ExpeditionUnit, Integer> wound = woundsMap.get(unit);
 		if (wound == null){
 			wound = new Pair<ExpeditionUnit, Integer> (unit, 0);
 			wounds.add(wound);
@@ -35,40 +35,57 @@ public class AssaultOutcome {
 	}
 
 	public String getDeathsString() {
-		String killMessage = "";
+		Pair<String,Integer> killResume = getUnitsString(deaths);
+		String killMessage = killResume.getA();
+		if (killResume.getB() > 1)
+			killMessage += " die.";
+		else if (killResume.getB() == 1)
+			killMessage +=" dies.";
+		return killMessage;
+	}
+	
+	public String getWoundsString() {
+		Pair<String,Integer> killResume = getUnitsString(wounds);
+		String killMessage = killResume.getA();
+		if (killResume.getB() > 1)
+			killMessage += " are wounded.";
+		else if (killResume.getB() == 1)
+			killMessage +=" is wounded.";
+		return killMessage;
+	}
+
+	private Pair<String, Integer> getUnitsString(
+			List<Pair<ExpeditionUnit, Integer>> list) {
 		int i = 0;
 		int deathCount = 0;
-		for (Pair<ExpeditionUnit, Integer> killInfo: deaths){
+		String unitsString = "";
+		for (Pair<ExpeditionUnit, Integer> killInfo: list){
 			if (killInfo.getB() == 0){
 				i++;
 				continue;
 			}
 			if (killInfo.getB() == 1){
-				killMessage += a(killInfo.getA().getFullDescription())+killInfo.getA().getFullDescription();
+				unitsString += a(killInfo.getA().getFullDescription())+killInfo.getA().getFullDescription();
 			} else
-				killMessage += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
-			if (i == deaths.size()-2)
-				killMessage += " and ";
-			else if (i == deaths.size()-1)
+				unitsString += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
+			if (i == list.size()-2)
+				unitsString += " and ";
+			else if (i == list.size()-1)
 				;
-			else if (deaths.size()>1)
-				killMessage += ", ";
+			else if (list.size()>1)
+				unitsString += ", ";
 			i++;
 			deathCount += killInfo.getB();
 		}
-		if (deathCount > 1)
-			killMessage += " die.";
-		else
-			killMessage +=" dies.";
-		return killMessage;
+		return new Pair<String, Integer>(unitsString, deathCount);
 	}
 
 	private String a(String fullDescription) {
-		if (fullDescription.startsWith("a") || 
-				fullDescription.startsWith("e") ||
-				fullDescription.startsWith("i") ||
-				fullDescription.startsWith("o") ||
-				fullDescription.startsWith("u")
+		if (fullDescription.startsWith("A") || 
+				fullDescription.startsWith("E") ||
+				fullDescription.startsWith("I") ||
+				fullDescription.startsWith("O") ||
+				fullDescription.startsWith("U")
 				)
 			return "An ";
 		else
@@ -77,5 +94,13 @@ public class AssaultOutcome {
 
 	public boolean hasDeaths() {
 		return deaths.size() > 0;
+	}
+	
+	public boolean hasWounds() {
+		return deaths.size() > 0;
+	}
+	
+	public boolean hasEvents (){
+		return hasDeaths() || hasWounds();
 	}
 }

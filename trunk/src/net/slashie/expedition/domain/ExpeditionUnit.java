@@ -103,7 +103,8 @@ public class ExpeditionUnit extends Vehicle{
 			int weight, 
 			int carryCapacity,
 			Roll baseAttack, 
-			Roll baseDefense, 
+			Roll baseDefense,
+			int resistance,
 			int baseHitChance,
 			int evadeChance,
 			int dailyFoodConsumption,
@@ -135,8 +136,14 @@ public class ExpeditionUnit extends Vehicle{
 		fullDescription = "";
 		compositeAttack = new Roll(baseAttack);
 		compositeDefense = new Roll(baseDefense);
+		
+		if (isWounded){
+			fullDescription += "Wounded ";
+		}
+		
 		if (armor != null){
-			fullDescription += "+"+armor.getDefense().getMax()+" ";
+			//fullDescription += "+"+armor.getDefense().getMax()+" ";
+			fullDescription += armor.getShortDescription()+" ";
 		}
 
 		if (weapon != null){
@@ -170,6 +177,9 @@ public class ExpeditionUnit extends Vehicle{
 			isMounted = true;
 		} else {
 			isMounted = false;
+		}
+		if (isWounded){
+			fullId += ",WOUNDED";
 		}
 	}
 	
@@ -222,6 +232,7 @@ public class ExpeditionUnit extends Vehicle{
 
 	public void setWounded(boolean isWounded) {
 		this.isWounded = isWounded;
+		updateCompositeVariables();
 	}
 	
 	@Override

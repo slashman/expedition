@@ -1,24 +1,8 @@
 package net.slashie.expedition.domain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-
 import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.item.ItemFactory;
-import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
-import net.slashie.libjcsi.ConsoleSystemInterface;
-import net.slashie.serf.game.Equipment;
-import net.slashie.serf.game.Player;
-import net.slashie.serf.level.AbstractFeature;
-import net.slashie.serf.ui.UserInterface;
-import net.slashie.serf.ui.consoleUI.CharAppearance;
-import net.slashie.util.Pair;
-import net.slashie.utils.Position;
-import net.slashie.utils.Util;
+
 
 public class NonPrincipalExpedition extends Expedition{
 	private String classifierId;

@@ -61,7 +61,7 @@ public class GFXAppearances {
 				
 				
 				//Non principal Expeditions
-				createAppearance("HOSTILE_EXPEDITION", 1 ,11),
+				createAppearance("HOSTILE_EXPEDITION", 6,16),
 				
 				//Overworld Terrain
 				createAppearance("GRASS", 3 ,3),
