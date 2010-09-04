@@ -36,6 +36,7 @@ public class LevelMaster {
 			ret.setID("SPAIN");
 			ret.setDock(true);
 			ret.setZoomIn(false);
+			ret.setTemperature(20);
 			return ret;
 		} if (levelID.equals("SPAIN_CASTLE")){
 			ExpeditionMicroLevel ret = new ExpeditionMicroLevel();
@@ -53,7 +54,7 @@ public class LevelMaster {
 			ret.getHelper().setSuperLevelId("WORLD");
 			ret.setID("SPAIN_CASTLE");
 			ret.setZoomIn(true);
-			ret.setTemperature(15);
+			ret.setTemperature(20);
 			return ret;
 		} else if (levelID.equals("WORLD")){
 			StaticPattern pattern = new World();
