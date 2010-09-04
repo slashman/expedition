@@ -48,6 +48,8 @@ import net.slashie.utils.swing.MenuBox;
 
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
 	private Color ORANGE = new Color(224,226,108);
+	private Color TITLES = new Color(224,226,108);
+
 	private Image BATTLE_BACKGROUND;
 	@Override
 	public void showDetailedInfo(Actor a) {
@@ -438,14 +440,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			si.print(2, 6, "Carrying "+statsExpedition.getOffshoreCurrentlyCarrying()+"%");
 		else
 			si.print(2, 6, "Carrying "+statsExpedition.getCurrentlyCarrying()+"%");		
-		if (statsExpedition.getMovementSpeed() != MovementSpeed.NORMAL){
-			si.print(2, 7, statsExpedition.getMovementMode().getDescription()+"("+statsExpedition.getMovementSpeed().getDescription()+")");
-		} else {
-			si.print(2, 7, statsExpedition.getMovementMode().getDescription());
-		}
-		si.print(2, 8, statsExpedition.getTotalShips()+" ships ("+statsExpedition.getShipHealth()+"%)");
 		
-		si.print(2, 9, statsExpedition.getPower()+(statsExpedition.isArmed()?" Power (Armed)":" Power"));
+		si.print(2, 7, statsExpedition.getPower()+(statsExpedition.isArmed()?" Power (Armed)":" Power"));
 		
 
 		
@@ -453,40 +449,57 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		//Box 3
 		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition());
 		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription();
-		Pair<String, String> locationMeans = getExpedition().getLocation().getLocationMeans();
+		Pair<String, String> locationLabels = getExpedition().getLocation().getLocationLabels();
+		//Pair<String, String> locationMeans = getExpedition().getLocation().getLocationMeans();
 		si.print(line2, 1, gameTime.get(Calendar.YEAR)+", "+ months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
 		si.print(line2, 2, getExpedition().getLocation().getDescription());
 		si.print(line2, 3, currentCell.getDescription());
-		si.print(line2, 4, getExpedition().getLocation().getWeather().getDescription()+", "+getExpedition().getLocation().getTemperatureDescription());
-		
-		si.print(line2, 6, locationMeans.getA());
-		si.print(line2+2, 7, locationDescription.getA());
-		si.print(line2, 8, locationMeans.getB());
-		si.print(line2+2, 9, locationDescription.getB());
-		si.print(line2, 10, "Wind: "+getExpedition().getLocation().getWindDirection().getAbbreviation());
-		si.print(line2, 11, "Heading "+getExpedition().getHeading().getAbbreviation());
-		si.print(line2, 12, getExpedition().getSailingPoint().getDescription());
-		si.print(line2+2, 13, getExpedition().getSailingPoint().getSpeed().getDescription());
+		si.print(line2, 4, getExpedition().getLocation().getWeather().getDescription());
+		si.print(line2, 5, getExpedition().getLocation().getTemperatureDescription());
+		si.print(line2, 6, locationLabels.getA(), TITLES);
+			si.print(line2+9, 6, locationDescription.getA());
+		si.print(line2, 7, locationLabels.getB(), TITLES);
+			si.print(line2+9, 7, locationDescription.getB());
+		si.print(line2, 8, "Wind", TITLES);
+			si.print(line2+9, 8, getExpedition().getLocation().getWindDirection().getAbbreviation());
+		si.print(line2, 9, "Heading", TITLES);
+			si.print(line2+9, 9, getExpedition().getHeading().getAbbreviation());
+		if (getExpedition().getMovementMode() == MovementMode.SHIP){
+			si.print(line2+2, 10, getExpedition().getSailingPoint().getDescription());
+		} else {
+			si.print(line2+2, 10, statsExpedition.getMovementMode().getDescription());
+		}
+		si.print(line2, 11, getExpedition().getMovementSpeed().getDescription());
+		si.print(line2, 12, statsExpedition.getTotalShips()+" ships ("+statsExpedition.getShipHealth()+"%)");
 		
 		
 		expeditionUnitsVector.clear();
 		expeditionUnitsVector.addAll(statsExpedition.getUnits());
 		
-		List<GFXMenuItem> expeditionUnitItems = new ArrayList<GFXMenuItem>();
+		expeditionUnitItems.clear();
 		for (Equipment expeditionUnit: expeditionUnitsVector){
 			expeditionUnitItems.add(new UnitGFXMenuItem(expeditionUnit));
 		}
+		
+		vehicleUnitItems.clear();
 		for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
-			expeditionUnitItems.add(new VehicleGFXMenuItem(expeditionVehicle));
+			vehicleUnitItems.add(new VehicleGFXMenuItem(expeditionVehicle));
 		}
 		
 		unitsMenuBox.setMenuItems(expeditionUnitItems);
 		unitsMenuBox.draw();
+		vehiclesMenuBox.setMenuItems(vehicleUnitItems);
+		vehiclesMenuBox.draw();
 	}
+	private List<GFXMenuItem> expeditionUnitItems = new ArrayList<GFXMenuItem>();
+	private List<GFXMenuItem> vehicleUnitItems = new ArrayList<GFXMenuItem>();
+
 	
 	private Vector<Equipment> expeditionUnitsVector = new Vector<Equipment>();
 	//BorderedMenuBox unitsMenuBox;
-	MenuBox unitsMenuBox;
+	private MenuBox unitsMenuBox;
+	private MenuBox vehiclesMenuBox;
+	
 	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
 		super.init(psi, title, gameCommands, UIProperties, target);
 		//unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
@@ -496,6 +509,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		unitsMenuBox.setWidth(17);
 		unitsMenuBox.setItemsPerPage(9);
   		unitsMenuBox.setShowOptions(false);
+  		
+  		vehiclesMenuBox = new MenuBox(si, null);
+  		vehiclesMenuBox.setGap(36);
+  		vehiclesMenuBox.setPosition(61,13);
+  		vehiclesMenuBox.setWidth(17);
+  		vehiclesMenuBox.setItemsPerPage(9);
+  		vehiclesMenuBox.setShowOptions(false);
+  		
 		//unitsMenuBox.setTitle("Expedition");
   		try {
 			BATTLE_BACKGROUND = ImageUtils.createImage(UIProperties.getProperty("BATTLE_BACKGROUND"));

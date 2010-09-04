@@ -33,22 +33,29 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 		return handyReusableObject;
 	}*/
 	
-	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
+	private Pair<String,String> handyReusableObject = new Pair<String, String>("","");
 	public Pair<String,String> getLocationDescription(){
-		Pair<Integer, Integer> location = getLocation();
+		/*Pair<Integer, Integer> location = getLocation();
 		handyReusableObject.setA("LAT  "+Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
-		//This is the real longitude calculation:
-		handyReusableObject.setB("LONG "+Math.abs(location.getB()) + (location.getB() > 0?"ºE":"ºW"));
-		//handyReusableObject.setB("West (Dead):   "+expeditionLevel.get);
+		handyReusableObject.setB("LONG "+Math.abs(location.getB()) + (location.getB() > 0?"ºE":"ºW"));*/
 		return handyReusableObject;
 	}
 	
-	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
+	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("","");
 
 	public Pair<String,String> getLocationMeans(){
-		handyReusableObject2.setA("Land");
-		handyReusableObject2.setB("Land");
+		/*handyReusableObject2.setA("Land");
+		handyReusableObject2.setB("Land");*/
 		return handyReusableObject2;
+	}
+	
+	private Pair<String,String> handyReusableObject3 = new Pair<String, String>("","");
+	
+	@Override
+	public Pair<String, String> getLocationLabels() {
+		/*handyReusableObject3.setA("Land");
+		handyReusableObject3.setB("Land");*/
+		return handyReusableObject3;
 	}
 
 	private int temperature;

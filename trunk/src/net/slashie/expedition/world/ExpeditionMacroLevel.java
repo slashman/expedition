@@ -61,13 +61,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public Pair<String,String> getLocationDescription(){
 		Pair<Integer, Integer> location = getLocation();
 		
-		handyReusableObject.setA("LAT "+Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
+		handyReusableObject.setA(Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
 		//This is the real longitude calculation:
 		//handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
 		if (getExpedition().getDeducedReckonWest()>0)
-			handyReusableObject.setB("West "+getExpedition().getDeducedReckonWest()+"nl");
+			handyReusableObject.setB(getExpedition().getDeducedReckonWest()+"nl");
 		else
-			handyReusableObject.setB("East "+(-getExpedition().getDeducedReckonWest())+"nl");
+			handyReusableObject.setB((-getExpedition().getDeducedReckonWest())+"nl");
 		return handyReusableObject;
 	}
 	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
@@ -82,6 +82,17 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		handyReusableObject2.setA("Sextant");
 		handyReusableObject2.setB("Ded'Reckon");
 		return handyReusableObject2;
+	}
+	
+	private Pair<String,String> handyReusableObject3 = new Pair<String, String>("H","H");
+	@Override
+	public Pair<String, String> getLocationLabels() {
+		handyReusableObject3.setA("LAT");
+		if (getExpedition().getDeducedReckonWest()>0)
+			handyReusableObject3.setB("West");
+		else
+			handyReusableObject3.setB("East");
+		return handyReusableObject3;
 	}
 	
 	@Override
@@ -139,7 +150,6 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public CardinalDirection getWindDirection() {
 		if (currentWind == null || isTimeToChangeWind()){
 			CardinalDirection prevailingWind = getPrevailingWind(ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)-1);
-			
 			currentWind = prevailingWind;
 			int rotateSign = Util.chance(50) ? 1 : -1;
 			int rotate = 0;
@@ -195,7 +205,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 					currentTemperature += 5;
 				}
 			}
-			currentTemperature += Util.rand(-5, 5);
+			currentTemperature += getWeather().getTemperatureModification();
+			
 			tempChangeCounter = Util.rand(200,400);
 		}
 		
