@@ -3,6 +3,8 @@ package net.slashie.expedition.world;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.slashie.expedition.game.ExpeditionGame;
+
 public class TemperatureRules {
 	private static Map<Integer, double[]> rulingTemperatures = new HashMap<Integer, double[]>();
 	static {
@@ -40,11 +42,11 @@ public class TemperatureRules {
 	}
 	
 	public static String getTemperatureDescription(int temperatureC){
-		if (temperatureC > 25)
+		if (temperatureC > 35)
 			return "Very Hot!";
-		else if (temperatureC > 20)
+		else if (temperatureC > 30)
 			return "Hot!";
-		else if (temperatureC > 15)
+		else if (temperatureC > 25)
 			return "Very Warm";
 		else if (temperatureC > 15)
 			return "Warm";
@@ -83,6 +85,10 @@ public class TemperatureRules {
 
 	private static int[] itczLats = new int[]{-30,-30,-15,-5,5,15,30,30,15,5,-5,-15}; 
 	public static int getITCZ(int month) {
-		return itczLats[month-1];
+		if (month < 0 || month  > 11 ){
+			System.out.println("Invalid Month! "+ExpeditionGame.getCurrentGame().getGameTime().toString());
+			return 0;
+		}
+		return itczLats[month];
 	}
 }

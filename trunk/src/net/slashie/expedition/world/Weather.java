@@ -123,5 +123,31 @@ public enum Weather {
 			return false;
 		}
 	}
+
+	public Integer getTemperatureModification() {
+		switch (this){
+		case CLEAR:
+			return 5;
+		case CLOUDY:
+			return -5;
+		case DUST_STORM:
+			return 0;
+		case FOG:
+			return -5;
+		case GALE_WIND:
+			return -10;
+		case HURRICANE:
+			return -10;
+		case RAIN:
+			return -10;
+		case SNOW:
+			return -10;
+		case STORM:
+			return -10;
+		case WINDY:
+			return 0;
+		}
+		return null;
+	}
 	
 }
