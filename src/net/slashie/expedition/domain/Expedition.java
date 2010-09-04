@@ -129,13 +129,19 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 
 	public MovementSpeed getMovementSpeed() {
 		if (getMovementMode() == MovementMode.SHIP){
-			if (hasFullShipCrew()){
-				return MovementSpeed.FAST;
-			} else {
-				return MovementSpeed.SLOW;
+			if (!hasFullShipCrew()){
+				return getSailingPoint().getSpeed().reduced();
+			} else if (getShipHealth() < 70){
+				return getSailingPoint().getSpeed().reduced();
+			}  else {
+				return getSailingPoint().getSpeed();
 			}
 		} else {
-			return MovementSpeed.NORMAL;
+			if (getFoodDays() == 0){
+				return MovementSpeed.SLOW;
+			} else {
+				return MovementSpeed.NORMAL;
+			}
 		}
 	}
 
@@ -189,22 +195,46 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	private MovementMode movementMode = MovementMode.FOOT;
 	
 	public enum MovementSpeed {
-		SLOW,
-		NORMAL,
-		FAST,
-		NONE;
+		VERY_SLOW ("Very Slow!", 80),
+		SLOW ("Slow", 40),
+		NORMAL ("", 20),
+		FAST ("Fast", 10),
+		VERY_FAST("Very Fast!", 5), 
+		NONE ("No movement", 160);
 		
-		public String getDescription(){
-			switch (this){
-			case SLOW:
-				return "Slow";
-			case NORMAL:
-				return "";
-			case FAST:
-				return "Fast";
-			}
-			return "None";
+		
+		private MovementSpeed(String description, int movementCost) {
+			this.description = description;
+			this.movementCost = movementCost;
 		}
+		
+		public MovementSpeed reduced() {
+			switch (this){
+			case VERY_SLOW: case NONE:
+				return NONE;
+			case SLOW: 
+				return VERY_SLOW;
+			case NORMAL:
+				return SLOW;
+			case FAST:
+				return NORMAL;
+			case VERY_FAST:
+				return FAST;
+			}
+			return null;
+		}
+
+		private String description;
+		private int movementCost;
+		
+		public String getDescription() {
+			return description;
+		}
+		public int getMovementCost() {
+			return movementCost;
+		}
+
+		
 		
 	}
 
@@ -950,7 +980,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			for (Vehicle vehicle: vehiclesToRemove){
 				OverworldExpeditionCell cell = (OverworldExpeditionCell) level.getMapCell(getPosition());
 				if (cell.isRiver()){
-					getLevel().addMessage("The "+vehicle.getDescription()+" breaks in the river.");
+					getLevel().addMessage("The "+vehicle.getDescription()+" breaks into the shallow water.");
 				} else {
 					getLevel().addMessage("You have lost a "+vehicle.getDescription()+" to the sea!");
 				}

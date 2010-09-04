@@ -181,27 +181,7 @@ public class Walk extends Action{
 			actionCancelled = false;
 			return 0;
 		}
-		switch (getExpedition().getMovementMode()){
-		case FOOT: case HORSE:
-			switch (getExpedition().getMovementSpeed()){
-			case FAST:
-				return 20;
-			case NORMAL: case NONE:
-				return 30;
-			case SLOW:
-				return 50;
-			}
-		case SHIP:
-			switch (getExpedition().getMovementSpeed()){
-			case FAST:
-				return 10;
-			case NORMAL: case NONE:
-				return 20;
-			case SLOW:
-				return 30;
-			}
-		}
-		return 30;
+		return getExpedition().getMovementSpeed().getMovementCost();
 	}
 	
 	
