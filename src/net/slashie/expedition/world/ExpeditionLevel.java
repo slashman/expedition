@@ -21,4 +21,5 @@ public interface ExpeditionLevel{
 	public CardinalDirection getWindDirection();
 	public void elapseTime(int lastActionTimeCost);
 	public boolean hasStorm(Position destinationPoint);
+	public Pair<String, String> getLocationLabels();
 }
