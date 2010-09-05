@@ -10,6 +10,7 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.UserInterface;
+import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
 public class BattleManager {
@@ -47,7 +48,6 @@ public class BattleManager {
 		
 		((ExpeditionUserInterface)UserInterface.getUI()).showBattleScene(battleName, attackingUnits, defendingUnits);
 
-
 		// Ranged phase: Ranged units from both teams attack
 		AssaultOutcome attackerRangedAttackOutcome =  rangedAttack(attackingUnits, defendingUnits, (UnitContainer)defender);
 		AssaultOutcome defenderRangedAttackOutcome = rangedAttack(defendingUnits, attackingUnits, attacker);
@@ -60,46 +60,54 @@ public class BattleManager {
 
 		((ExpeditionUserInterface)UserInterface.getUI()).showBattleResults(battleName, attackerRangedAttackOutcome, defenderRangedAttackOutcome, attackerMountedAttackOutcome, attackerMeleeAttackOutcome);
 		
-		//Calculate how many of the expedition fighters will attack. 
-		/*
-		int attackProportion = Util.rand(80, 100);
-		int defenseProportion = Util.rand(80, 100);
 		
-		//Calculate Damage
-		int damageCaused = 0;
-		for (Equipment unit_: attackingUnits){
-			ExpeditionUnit unit = (ExpeditionUnit)unit_.getItem();
-			damageCaused += (int)Math.round((double)unit.getAttack() * (double)unit_.getQuantity() * ((double)attackProportion/100.0d));
-		}
-
-		
-		//Calculate mitigation
-		int damageMitigated = 0;
-		for (Equipment unit_: defendingUnits){
-			ExpeditionUnit unit = (ExpeditionUnit)unit_.getItem();
-			damageMitigated += (int)Math.round((double)unit.getDefense() * (double)unit_.getQuantity() * ((double)defenseProportion/100.0d));
-		}
-		
-		//Calculate deaths 
-		int outcome = damageCaused - damageMitigated;
-		if (outcome < 0)
-			outcome = 0;
-		int deaths = outcome;
-		if (deaths > 0)
-			((FoodConsumer)actor).killUnits(deaths);
-		else
-			performer.getLevel().addMessage(" No one is killed.");
-			*/
 	}
 
-	private static AssaultOutcome[] meleeAttack(List<Equipment> attackingUnits, UnitContainer attackingExpedition,
+	private static void removeDeadAndWounded(AssaultOutcome assaultOutcome, List<Equipment> unitGroup) {
+		List<Pair<ExpeditionUnit, Integer>> deaths = assaultOutcome.getDeaths();
+		for (Pair<ExpeditionUnit, Integer> death: deaths){
+			for (Equipment eq: unitGroup){
+				if (eq.getItem().getFullID().equals(death.getA().getFullID())){
+					eq.reduceQuantity(death.getB());
+					break;
+				}
+			}
+		}
+		
+		List<Pair<ExpeditionUnit, Integer>> wounded = assaultOutcome.getDeaths();
+		for (Pair<ExpeditionUnit, Integer> wound: wounded){
+			for (Equipment eq: unitGroup){
+				if (eq.getItem().getFullID().equals(wound.getA().getFullID())){
+					eq.reduceQuantity(wound.getB());
+					break;
+				}
+			}
+		}
+		
+		for (int i = 0; i < unitGroup.size(); i++){
+			if (unitGroup.get(i).getQuantity() == 0){
+				unitGroup.remove(i);
+				i--;
+			}
+		}
+	}
+
+	private static AssaultOutcome[] meleeAttack(List<Equipment> attackingUnits, 
+			UnitContainer attackingExpedition,
 			List<Equipment> defendingUnits, UnitContainer defendingExpedition) {
 		AssaultOutcome[] ret = new AssaultOutcome[]{ new AssaultOutcome(), new AssaultOutcome() };
 		for (Equipment equipment: attackingUnits){
 			for (int i = 0; i < equipment.getQuantity(); i++){
 				Equipment randomTarget = pickRandomTargetFairly(defendingUnits);
+				if (randomTarget == null){
+					//Noone left to attack
+					return ret;
+				}
 				singleAttack(equipment, randomTarget, defendingExpedition, ret[0]);
 				singleAttack(randomTarget, equipment, attackingExpedition, ret[1]);
+				if (randomTarget.getQuantity() == 0){
+					defendingUnits.remove(randomTarget);
+				}
 			}
 		}
 		return ret;
@@ -115,6 +123,9 @@ public class BattleManager {
 					Equipment randomTarget = pickRandomTargetFairly(defendingUnits);
 					singleAttack(equipment, randomTarget, defendingExpedition, ret[0]);
 					singleAttack(randomTarget, equipment, attackingExpedition, ret[1]);
+					if (randomTarget.getQuantity() == 0){
+						defendingUnits.remove(randomTarget);
+					}
 				}
 			}
 		}
@@ -129,6 +140,9 @@ public class BattleManager {
 				for (int i = 0; i < equipment.getQuantity(); i++){
 					Equipment randomTarget = pickRandomTargetFairly(defendingUnits);
 					singleAttack(equipment, randomTarget, defendingExpedition, ret);
+					if (randomTarget.getQuantity() == 0){
+						defendingUnits.remove(randomTarget);
+					}
 				}
 			}
 		}
@@ -141,45 +155,39 @@ public class BattleManager {
 		if (Util.chance(attackingUnit.getHitChance())){
 			//Pick a random target from the enemies
 			if (!Util.chance(defendingUnit.getEvadeChance())){
+				
+				ExpeditionUnit targetUnit = (ExpeditionUnit) defendingEquipment.getItem(); 
 				int damage = attackingUnit.getAttack().roll();
-				damageUnits(1, defendingEquipment, defendingExpedition, damage, outcome);
+				int defense = targetUnit.getDefense().roll();
+				int realDamage = damage - defense;
+				if (realDamage <= 0){
+					// Shrug off
+				} else if (realDamage <= targetUnit.getResistance()) {
+					// Wound
+					if (targetUnit.isWounded()){
+						// Kill unit :(
+						defendingExpedition.reduceUnits(targetUnit, 1);
+						defendingEquipment.reduceQuantity(1);
+						outcome.addDeath(targetUnit);
+					} else {
+						// Add a wounded unit
+						defendingExpedition.reduceUnits(targetUnit, 1);
+						ExpeditionUnit woundedUnit = (ExpeditionUnit)targetUnit.clone();
+						woundedUnit.setWounded(true);
+						defendingExpedition.addUnits(woundedUnit, 1);
+						defendingEquipment.reduceQuantity(1);
+						outcome.addWound(targetUnit);
+					}
+				} else {
+					// Overkill  :(
+					defendingExpedition.reduceUnits(targetUnit, 1);
+					defendingEquipment.reduceQuantity(1);
+					outcome.addDeath(targetUnit);
+				}
 			}
 		}
 	}
 
-	private static void damageUnits(
-			int quantity, 
-			Equipment target,
-			UnitContainer targetExpedition,
-			int damage, AssaultOutcome outcome) {
-		ExpeditionUnit targetUnit = (ExpeditionUnit) target.getItem(); 
-		for (int i = 0; i < quantity; i++){
-			int defense = targetUnit.getDefense().roll();
-			int realDamage = damage - defense;
-			if (realDamage <= 0){
-				// Shrug off
-			} else if (realDamage <= targetUnit.getResistance()) {
-				// Wound
-				if (targetUnit.isWounded()){
-					// Kill unit :(
-					targetExpedition.reduceUnits(targetUnit, 1);
-					outcome.addDeath(targetUnit);
-				} else {
-					// Add a wounded unit
-					targetExpedition.reduceUnits(targetUnit, 1);
-					ExpeditionUnit woundedUnit = (ExpeditionUnit)targetUnit.clone();
-					woundedUnit.setWounded(true);
-					targetExpedition.addUnits(woundedUnit, 1);
-					outcome.addWound(targetUnit);
-				}
-			} else {
-				// Overkill  :(
-				targetExpedition.reduceUnits(targetUnit, 1);
-				outcome.addDeath(targetUnit);
-			}
-		}
-	}
-	
 	private static Equipment pickRandomTargetFairly
 		(List<Equipment> targetUnits) {
 		int count = 0;

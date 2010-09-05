@@ -57,7 +57,7 @@ public class AssaultOutcome {
 	private Pair<String, Integer> getUnitsString(
 			List<Pair<ExpeditionUnit, Integer>> list) {
 		int i = 0;
-		int deathCount = 0;
+		int unitCount = 0;
 		String unitsString = "";
 		for (Pair<ExpeditionUnit, Integer> killInfo: list){
 			if (killInfo.getB() == 0){
@@ -75,9 +75,9 @@ public class AssaultOutcome {
 			else if (list.size()>1)
 				unitsString += ", ";
 			i++;
-			deathCount += killInfo.getB();
+			unitCount += killInfo.getB();
 		}
-		return new Pair<String, Integer>(unitsString, deathCount);
+		return new Pair<String, Integer>(unitsString, unitCount);
 	}
 
 	private String a(String fullDescription) {
@@ -97,10 +97,19 @@ public class AssaultOutcome {
 	}
 	
 	public boolean hasWounds() {
-		return deaths.size() > 0;
+		return wounds.size() > 0;
 	}
 	
 	public boolean hasEvents (){
 		return hasDeaths() || hasWounds();
+	}
+
+	
+	public List<Pair<ExpeditionUnit, Integer>> getDeaths() {
+		return deaths;
+	}
+
+	public List<Pair<ExpeditionUnit, Integer>> getWounds() {
+		return wounds;
 	}
 }
