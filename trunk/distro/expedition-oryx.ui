@@ -25,7 +25,7 @@ POS_LEVELDESC_Y = 40
 
 
 IMG_STATUSSCR_BGROUND = res/title.png
-BATTLE_BACKGROUND = res/battleBG.png
+BATTLE_BACKGROUND = res/grass-battle.png
 IMG_ICON = res/expedition_icon.gif
 IMG_TITLE = res/title.png
 IMG_PROLOGUE = res/brownbg.png
