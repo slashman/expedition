@@ -65,7 +65,7 @@ public class Bump extends Action {
         		targetExpedition.setJustAttacked(true);
    				//Attack!
    				expedition.getLevel().addMessage("The "+expedition.getDescription()+" attack");
-   				BattleManager.battle("The "+expedition.getDescription()+" attacks: ", expedition, targetExpedition);
+   				BattleManager.battle("The "+expedition.getDescription()+" attack: ", expedition, targetExpedition);
    				return;
         	}
         } else {
