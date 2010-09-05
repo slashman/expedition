@@ -18,14 +18,13 @@ public class GFXEffects {
 	
 	 {
 		try {
-			IMG_EFFECTS = ImageUtils.createImage("res/crl_effects.gif");
+			IMG_EFFECTS = ImageUtils.createImage("res/ui.gif");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private GFXEffect [] effects = new GFXEffect[]{
-		new GFXDirectionalMissileEffect("rainArrows", load8(0,14), 10),
 	};
 
 	public GFXEffect[] getEffects() {
