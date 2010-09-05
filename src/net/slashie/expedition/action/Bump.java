@@ -20,6 +20,7 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
+import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
@@ -64,8 +65,9 @@ public class Bump extends Action {
         		Expedition targetExpedition = (Expedition) actor;
         		targetExpedition.setJustAttacked(true);
    				//Attack!
-   				expedition.getLevel().addMessage("The "+expedition.getDescription()+" attack");
-   				BattleManager.battle("The "+expedition.getDescription()+" attack: ", expedition, targetExpedition);
+        		String message = EnglishGrammar.a(expedition.getDescription())+" "+expedition.getDescription()+" attacks you";
+   				expedition.getLevel().addMessage(message);
+   				BattleManager.battle(message, expedition, targetExpedition);
    				return;
         	}
         } else {

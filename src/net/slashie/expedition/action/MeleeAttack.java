@@ -15,6 +15,7 @@ import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
@@ -44,7 +45,7 @@ public class MeleeAttack extends Action {
     			actor.getLevel().addMessage(battleName);
     		} else if (actor instanceof NonPrincipalExpedition){
     			NonPrincipalExpedition npe = (NonPrincipalExpedition)actor;
-    			battleName = "You attack the "+npe.getDescription();
+        		battleName = "You attack "+EnglishGrammar.a(npe.getDescription())+" "+npe.getDescription();
     			actor.getLevel().addMessage(battleName);
     		}
     		BattleManager.battle(battleName, expedition, actor);

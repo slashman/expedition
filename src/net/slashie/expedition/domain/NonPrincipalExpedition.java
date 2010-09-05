@@ -33,7 +33,7 @@ public class NonPrincipalExpedition extends Expedition{
 	
 	@Override
 	public String getDescription() {
-		return getTotalUnits()+" "+ getName();
+		return getName();
 	}
 
 	
