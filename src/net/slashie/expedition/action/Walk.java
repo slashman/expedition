@@ -107,27 +107,25 @@ public class Walk extends Action{
 		if (expedition.getMovementMode() == MovementMode.SHIP){
 			boolean stalled = false;
 			//Don't walk, sail instead!
-			if (var.x() == 0){
-				if (expedition.getSailingPoint() == SailingPoint.BEATING){
-					if (Util.chance(60)) {
-						expedition.getLevel().addMessage("You are on irons!");
-						stalled = true;
-					}
-				}
-				if (expedition.getLocation().getWindDirection()== CardinalDirection.NULL){
-					expedition.getLevel().addMessage("No wind propels your ship!");
-					stalled = true;
-				}
-				if (stalled){
-					var = new Position(0,0);
-				} else {
-					var = expedition.getHeading().getVectors();
-				}
-			} else {
+			if (var.x() != 0){
 				TurnShip turnShip = new TurnShip(var.x());
 				turnShip.setPerformer(performer);
 				turnShip.execute();
+			}
+			if (expedition.getSailingPoint() == SailingPoint.BEATING){
+				if (Util.chance(60)) {
+					expedition.getLevel().addMessage("You are on irons!");
+					stalled = true;
+				}
+			}
+			if (expedition.getLocation().getWindDirection()== CardinalDirection.NULL){
+				expedition.getLevel().addMessage("No wind propels your ship!");
+				stalled = true;
+			}
+			if (stalled){
 				var = new Position(0,0);
+			} else {
+				var = expedition.getHeading().getVectors();
 			}
 			
 		}
