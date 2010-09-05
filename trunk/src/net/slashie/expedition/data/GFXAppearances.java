@@ -63,6 +63,7 @@ public class GFXAppearances {
 				
 				//Non principal Expeditions
 				createAppearance("HOSTILE_EXPEDITION", 6,16),
+				createAppearance("BOAT_HOSTILE_EXPEDITION", 8,16),
 				
 				//Overworld Terrain
 				createAppearance("GRASS", 3 ,3),
@@ -89,6 +90,7 @@ public class GFXAppearances {
 				createAppearance("CITY_SEA", 1 ,2),
 				
 				createAppearance("SPAIN_GRASS", 4 ,3),
+				createAppearance("SPAIN_GRASS_BLOCKED", 4 ,3),
 				createAppearance("SPAIN_FLOOR", 7 ,4),
 				createAppearance("SPAIN_WATER", 1 ,2),
 				createAppearance("SPAIN_HOUSE", 11 ,6),
@@ -114,10 +116,10 @@ public class GFXAppearances {
 				createAppearance("SAILOR", 1 ,10),
 				createAppearance("ROGUE", 2 ,10),
 				createAppearance("MARINE", 3 ,10),
-				createAppearance("SOLDIER", 4 ,10),
+				createAppearance("SOLDIER", 6 ,10),
 				createAppearance("ARCHER", 5 ,10),
-				createAppearance("CAPTAIN", 6 ,10),
-				createAppearance("EXPLORER", 7 ,10),
+				createAppearance("CAPTAIN", 7 ,10),
+				createAppearance("EXPLORER", 8 ,10),
 				createAppearance("CARPENTER", 9 ,10),
 				createAppearance("COLONIST", 10 ,10),
 				

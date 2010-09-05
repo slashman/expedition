@@ -37,7 +37,7 @@ public interface ExpeditionUserInterface {
 
 			
 	public void showBattleResults(
-			String battleTitle,
+			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits, String battleTitle,
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,

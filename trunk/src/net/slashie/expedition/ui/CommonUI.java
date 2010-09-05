@@ -1,5 +1,7 @@
 package net.slashie.expedition.ui;
 
+import java.util.List;
+
 import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
@@ -74,12 +76,17 @@ public class CommonUI {
 		}
 	}
 
-	public static String getBattleResultsString(String battleName,
+	public static String getBattleResultsString(List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits, String battleName,
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome) {
 		String message = battleName+" XXX ";
+		
+		message += ExpeditionUnit.getUnitsStringFromEquipment(originalAttackingUnits).getA()+" XXX ";
+		message += "    ... engage with ... XXX ";
+		message += ExpeditionUnit.getUnitsStringFromEquipment(originalDefendingUnits).getA()+" XXX ";
+		message += "XXX ";
 		boolean nothingHappened = true;
 		// Ranged Phase
 		if (attackerRangedAttackOutcome.hasEvents()){

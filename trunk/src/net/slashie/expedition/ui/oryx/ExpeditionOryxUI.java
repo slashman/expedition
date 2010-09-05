@@ -228,7 +228,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	public boolean depart() {
-		if (promptChat("Do you want to leave the ports of "+player.getLevel().getDescription()+"? (Y/n)", 28, 2, 23, 5)){
+		if (promptChat("Do you want to leave the ports of Palos de la frontera? (Y/n)", 28, 2, 23, 5)){
 			return true;
 		} else
 			return false;
@@ -700,11 +700,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.waitKey(CharKey.SPACE);
 	}
 	@Override
-	public void showBattleResults(String battleTitle, AssaultOutcome attackerRangedAttackOutcome,
+	public void showBattleResults(
+			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits,
+			String battleTitle, AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome) {
-		String message = CommonUI.getBattleResultsString(battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
+		String message = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits, battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
 		message = message.replaceAll("XXX", "\n");
 		showTextBox(message, 16, 16, 776, 576);
 		

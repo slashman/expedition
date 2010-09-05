@@ -647,7 +647,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			switch (getMovementMode()){
 			case FOOT:
 				if (getCurrentCell() instanceof OverworldExpeditionCell && ((OverworldExpeditionCell) getCurrentCell()).isRiver()){
-					return AppearanceFactory.getAppearanceFactory().getAppearance("BOAT_EXPEDITION");
+					return AppearanceFactory.getAppearanceFactory().getAppearance("BOAT_"+super.getAppearance().getID());
 				} else {
 					return super.getAppearance();
 				}

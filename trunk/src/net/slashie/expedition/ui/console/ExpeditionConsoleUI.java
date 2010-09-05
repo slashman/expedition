@@ -357,7 +357,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	}
 	
 	public boolean depart(){
-		if (promptChat("Do you want to leave the ports of "+player.getLevel().getDescription()+"? (Y/n)", 28, 2, 23, 5)){
+		if (promptChat("Do you want to leave the ports of Palos de la frontera? (Y/n)", 28, 2, 23, 5)){
 			TextBox chatBox = new TextBox(csi);
 			chatBox.setHeight(3);
 			chatBox.setWidth(20);
@@ -787,6 +787,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			ExpeditionItem eitem = (ExpeditionItem)item.getItem();
 			if (eitem instanceof ExpeditionUnit){
 				ExpeditionUnit unit = (ExpeditionUnit) eitem;
+				itemDescription = unit.getFullDescription();
 				return quantity + " " + itemDescription + " ATK"+ unit.getAttack().getMax()+" DEF"+ unit.getDefense().getMax() +" {Weight: "+(eitem.getWeight() * quantity)+")";
 			} else {
 				return quantity + " " + itemDescription + " {Weight: "+(eitem.getWeight() * quantity)+")";
@@ -821,14 +822,16 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	}
 	
 	@Override
-	public void showBattleResults(String battleName, 
+	public void showBattleResults(
+			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits,
+			String battleName, 
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome) {
 		csi.saveBuffer();
-		String message = CommonUI.getBattleResultsString(battleName,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
-		showTextBox(message, 1, 0, 78, 20, CSIColor.YELLOW);
+		String message = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits,battleName,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
+		showTextBox(message, 1, 0, 78, 24, CSIColor.YELLOW);
 		csi.restore();
 
 		

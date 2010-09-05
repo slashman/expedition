@@ -1,5 +1,10 @@
 package net.slashie.expedition.domain;
 
+import java.util.List;
+
+import net.slashie.serf.game.Equipment;
+import net.slashie.serf.text.EnglishGrammar;
+import net.slashie.util.Pair;
 import net.slashie.utils.roll.Roll;
 
 public class ExpeditionUnit extends Vehicle{
@@ -242,6 +247,58 @@ public class ExpeditionUnit extends Vehicle{
 	
 	public String getBasicId(){
 		return super.getFullID();
+	}
+	
+	public static Pair<String, Integer> getUnitsString(
+			List<Pair<ExpeditionUnit, Integer>> list) {
+		int i = 0;
+		int unitCount = 0;
+		String unitsString = "";
+		for (Pair<ExpeditionUnit, Integer> killInfo: list){
+			if (killInfo.getB() == 0){
+				i++;
+				continue;
+			}
+			if (killInfo.getB() == 1){
+				unitsString += EnglishGrammar.a(killInfo.getA().getFullDescription())+" "+killInfo.getA().getFullDescription();
+			} else
+				unitsString += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
+			if (i == list.size()-2)
+				unitsString += " and ";
+			else if (i == list.size()-1)
+				;
+			else if (list.size()>1)
+				unitsString += ", ";
+			i++;
+			unitCount += killInfo.getB();
+		}
+		return new Pair<String, Integer>(unitsString, unitCount);
+	}
+
+	public static Pair<String, Integer> getUnitsStringFromEquipment (List<Equipment> list) {
+		int i = 0;
+		int unitCount = 0;
+		String unitsString = "";
+		for (Equipment killInfo: list){
+			if (killInfo.getQuantity() == 0){
+				i++;
+				continue;
+			}
+			if (killInfo.getQuantity() == 1){
+				String unitDescription = ((ExpeditionUnit)killInfo.getItem()).getFullDescription();
+				unitsString += EnglishGrammar.a(unitDescription)+" "+unitDescription;
+			} else
+				unitsString += killInfo.getQuantity()+" "+((ExpeditionUnit)killInfo.getItem()).getPluralDescription();
+			if (i == list.size()-2)
+				unitsString += " and ";
+			else if (i == list.size()-1)
+				;
+			else if (list.size()>1)
+				unitsString += ", ";
+			i++;
+			unitCount += killInfo.getQuantity();
+		}
+		return new Pair<String, Integer>(unitsString, unitCount);
 	}
 }
 
