@@ -1,28 +1,18 @@
 package net.slashie.expedition.action;
 
-import java.util.ArrayList;
-
 import net.slashie.expedition.action.navigation.TurnShip;
 import net.slashie.expedition.domain.Expedition;
-import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.SailingPoint;
-import net.slashie.expedition.domain.ShipCache;
-import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
-import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.game.Equipment;
-import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.ActionCancelException;
-import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
@@ -137,7 +127,7 @@ public class Walk extends Action{
 				TurnShip turnShip = new TurnShip(var.x());
 				turnShip.setPerformer(performer);
 				turnShip.execute();
-				return;
+				var = new Position(0,0);
 			}
 			
 		}
