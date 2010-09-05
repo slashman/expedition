@@ -239,6 +239,10 @@ public class ExpeditionUnit extends Vehicle{
 	public String getPluralDescription() {
 		return fullDescriptionBase + super.getPluralDescription();
 	}
+	
+	public String getBasicId(){
+		return super.getFullID();
+	}
 }
 
 	

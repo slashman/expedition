@@ -111,14 +111,14 @@ public class ExpeditionDAO {
 			new ExpeditionCell("BLUE_CARPET", "Carpet"),
 			new ExpeditionCell("RED_CARPET", "Carpet"),
 			new ExpeditionCell("CASTLE_WALL", "Castle Wall", true, true),
-			new ExpeditionCell("SPAIN_BANNER", "Banner of Spain"),
+			new ExpeditionCell("SPAIN_BANNER", "Banner of Spain", true,true),
 			new ExpeditionCell("CASTLE_WINDOW", "Castle Window", true, true),
 			new ExpeditionCell("THRONE", "Throne of Spain", true, true),
 			new ExpeditionCell("KING_FERDINAND", "Ferdinand II, King of Aragon", true, true),
 			new ExpeditionCell("QUEEN_ISABELLE", "Isabella, Queen of Castile and León", true, true),
 			
 			new ExpeditionCell("SPAIN_CREST", "The Spain Coat of Arms", true, true),
-			new ExpeditionCell("CASTLE_CURTAIN", "Curtain"),
+			new ExpeditionCell("CASTLE_CURTAIN", "Curtain", true,true),
 			
 		};
 	}
@@ -136,6 +136,7 @@ public class ExpeditionDAO {
 			new CharAppearance("SHIP_EXPEDITION_SE", 'J', ConsoleSystemInterface.RED),
 			new CharAppearance("SHIP_EXPEDITION_SW", 'L', ConsoleSystemInterface.RED),
 			new CharAppearance("SHIP_EXPEDITION_NW", 'F', ConsoleSystemInterface.RED),
+			new CharAppearance("BOAT_EXPEDITION", 'v', ConsoleSystemInterface.RED),
 			
 			//Non principal Expeditions
 			new CharAppearance("HOSTILE_EXPEDITION", '@', ConsoleSystemInterface.BLUE),
@@ -189,22 +190,22 @@ public class ExpeditionDAO {
 			new CharAppearance("QUEEN_ISABELLE", '@', ConsoleSystemInterface.LEMON),
 			
 			//Units
-			new CharAppearance("SAILOR", '@', ConsoleSystemInterface.BLUE),
-			new CharAppearance("ROGUE", '@', ConsoleSystemInterface.BROWN),
-			new CharAppearance("MARINE", '@', ConsoleSystemInterface.TEAL),
-			new CharAppearance("SOLDIER", '@', ConsoleSystemInterface.GREEN),
-			new CharAppearance("ARCHER", '@', ConsoleSystemInterface.DARK_BLUE),			
-			new CharAppearance("CAPTAIN", '@', ConsoleSystemInterface.CYAN),
-			new CharAppearance("EXPLORER", '@', ConsoleSystemInterface.RED),
-			new CharAppearance("CARPENTER", '@', ConsoleSystemInterface.DARK_RED),
-			new CharAppearance("COLONIST", '@', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("SAILOR", 's', ConsoleSystemInterface.BLUE),
+			new CharAppearance("ROGUE", 'r', ConsoleSystemInterface.BROWN),
+			new CharAppearance("MARINE", 'm', ConsoleSystemInterface.TEAL),
+			new CharAppearance("SOLDIER", 'S', ConsoleSystemInterface.GREEN),
+			new CharAppearance("ARCHER", 'a', ConsoleSystemInterface.DARK_BLUE),			
+			new CharAppearance("CAPTAIN", 'C', ConsoleSystemInterface.CYAN),
+			new CharAppearance("EXPLORER", 'e', ConsoleSystemInterface.RED),
+			new CharAppearance("CARPENTER", 'c', ConsoleSystemInterface.DARK_RED),
+			new CharAppearance("COLONIST", 'c', ConsoleSystemInterface.YELLOW),
 		
 			//native Units
-			new CharAppearance("NATIVE_WARRIOR", '@', ConsoleSystemInterface.RED),
-			new CharAppearance("NATIVE_BRAVE", '@', ConsoleSystemInterface.PURPLE),
-			new CharAppearance("NATIVE_ARCHER", '@', ConsoleSystemInterface.DARK_RED),
-			new CharAppearance("NATIVE_COMMONER", '@', ConsoleSystemInterface.BLUE),
-			new CharAppearance("NATIVE_LEADER", '@', ConsoleSystemInterface.CYAN),
+			new CharAppearance("NATIVE_WARRIOR", 'w', ConsoleSystemInterface.RED),
+			new CharAppearance("NATIVE_BRAVE", 'W', ConsoleSystemInterface.PURPLE),
+			new CharAppearance("NATIVE_ARCHER", 'a', ConsoleSystemInterface.DARK_RED),
+			new CharAppearance("NATIVE_COMMONER", 'c', ConsoleSystemInterface.BLUE),
+			new CharAppearance("NATIVE_LEADER", 'S', ConsoleSystemInterface.CYAN),
 			new CharAppearance("NATIVE_VILLAGE", '^', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("NATIVE_TOWN", '^', ConsoleSystemInterface.RED),
 			new CharAppearance("NATIVE_CITY", '^', ConsoleSystemInterface.RED),

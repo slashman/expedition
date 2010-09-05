@@ -154,9 +154,9 @@ public class NativeTown extends Town{
 			reduceQuantityOf("NATIVE_COMMONER", commoners);
 		}
 		 
-		ret.addItem(ItemFactory.createItem("ARROWS"), Util.rand(0, expeditionPower*30));
+		//ret.addItem(ItemFactory.createItem("ARROWS"), Util.rand(0, expeditionPower*30));
 		ret.addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, expeditionPower*10));
-		ret.addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(expeditionPower*100, expeditionPower*500));
+		//ret.addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(expeditionPower*100, expeditionPower*500));
 		
 		ret.calculateInitialPower();
 		

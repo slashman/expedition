@@ -1,5 +1,6 @@
 package net.slashie.expedition.ui;
 
+import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
@@ -71,6 +72,96 @@ public class CommonUI {
 					return itemDescription + " for "+itemInfo.getPrice()+"$ {Stock:"+inventory+"}";
 			}
 		}
+	}
+
+	public static String getBattleResultsString(String battleName,
+			AssaultOutcome attackerRangedAttackOutcome,
+			AssaultOutcome defenderRangedAttackOutcome,
+			AssaultOutcome[] mountedAttackOutcome,
+			AssaultOutcome[] meleeAttackOutcome) {
+		String message = battleName+" XXX ";
+		boolean nothingHappened = true;
+		// Ranged Phase
+		if (attackerRangedAttackOutcome.hasEvents()){
+			message += "    >> Ranged Attack << XXX ";
+			nothingHappened = false;
+		}
+		
+		if (attackerRangedAttackOutcome.hasDeaths()){
+			message += attackerRangedAttackOutcome.getDeathsString()+" XXX ";
+		}
+		if (attackerRangedAttackOutcome.hasWounds()){
+			message += attackerRangedAttackOutcome.getWoundsString()+" XXX ";
+		}
+
+		if (defenderRangedAttackOutcome.hasEvents()){
+			message += "    >> Ranged Retaliation << XXX ";
+			nothingHappened = false;
+		}
+		
+		if (defenderRangedAttackOutcome.hasDeaths()){
+			message += defenderRangedAttackOutcome.getDeathsString()+" XXX ";
+		}
+		if (defenderRangedAttackOutcome.hasWounds()){
+			message += defenderRangedAttackOutcome.getWoundsString()+" XXX ";
+		}
+		
+		
+		// Charge Phase
+		if (mountedAttackOutcome[0].hasEvents()){
+			message += "    >> Mounted charge outcome << XXX ";
+			nothingHappened = false;
+		}
+		
+		if (mountedAttackOutcome[0].hasDeaths()){
+			message += mountedAttackOutcome[0].getDeathsString()+" XXX ";
+		}
+		if (mountedAttackOutcome[0].hasWounds()){
+			message += mountedAttackOutcome[0].getWoundsString()+" XXX ";
+		}
+		
+		if (mountedAttackOutcome[1].hasEvents()){
+			message += "    >> Mounted charge losses << XXX " ;
+			nothingHappened = false;
+		}
+		
+		if (mountedAttackOutcome[1].hasDeaths()){
+			message += mountedAttackOutcome[1].getDeathsString()+" XXX ";
+		}
+		if (mountedAttackOutcome[1].hasWounds()){
+			message += mountedAttackOutcome[1].getWoundsString()+" XXX ";
+		}
+		
+		// Melee Phase
+		if (meleeAttackOutcome[0].hasEvents()){
+			message += "    >> Melee outcome << XXX ";
+			nothingHappened = false;
+		}
+		
+		if (meleeAttackOutcome[0].hasDeaths()){
+			message += meleeAttackOutcome[0].getDeathsString()+" XXX ";
+		}
+		
+		if (meleeAttackOutcome[0].hasWounds()){
+			message += meleeAttackOutcome[0].getWoundsString()+" XXX ";
+		}
+		
+		if (meleeAttackOutcome[1].hasEvents()){
+			message += "    >> Melee losses << XXX ";
+			nothingHappened = false;
+		}
+		
+		if (meleeAttackOutcome[1].hasDeaths()){
+			message += meleeAttackOutcome[1].getDeathsString()+" XXX ";
+		}
+		if (meleeAttackOutcome[1].hasWounds()){
+			message += meleeAttackOutcome[1].getWoundsString()+" XXX ";
+		}
+		
+		if (nothingHappened) {
+			message += "No losses for both sides XXX ";
+		}
+		return message;
 	}
 	
 }

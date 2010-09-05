@@ -57,6 +57,7 @@ public class GFXAppearances {
 				createAppearance("SHIP_EXPEDITION_SE", 6 ,15),
 				createAppearance("SHIP_EXPEDITION_SW", 7 ,15),
 				createAppearance("SHIP_EXPEDITION_NW", 8 ,15),
+				createAppearance("BOAT_EXPEDITION", 3, 16),
 				
 				
 				
@@ -75,10 +76,10 @@ public class GFXAppearances {
 				
 				//Overworld Features
 				createAppearance("SHIP", 1 ,5),
-				createAppearance("GOODS_CACHE", 2 ,6),
+				createAppearance("GOODS_CACHE", 9 ,6),
 				createAppearance("TOWN", 11 ,6),
-				createAppearance("NATIVE_VILLAGE", 11 ,6),
-				createAppearance("NATIVE_TOWN", 11 ,6),
+				createAppearance("NATIVE_VILLAGE", 10 ,6),
+				createAppearance("NATIVE_TOWN", 10 ,6),
 				createAppearance("NATIVE_CITY", 11 ,6),
 
 				//Inworld terrain

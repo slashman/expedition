@@ -646,7 +646,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		} else {
 			switch (getMovementMode()){
 			case FOOT:
-				return super.getAppearance();
+				if (getCurrentCell() instanceof OverworldExpeditionCell && ((OverworldExpeditionCell) getCurrentCell()).isRiver()){
+					return AppearanceFactory.getAppearanceFactory().getAppearance("BOAT_EXPEDITION");
+				} else {
+					return super.getAppearance();
+				}
 			case SHIP:
 				return AppearanceFactory.getAppearanceFactory().getAppearance("SHIP_EXPEDITION_"+getHeading().getAbbreviation());
 			case HORSE:
@@ -656,6 +660,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return null;
 	}
 
+
+	private AbstractCell getCurrentCell() {
+		return getLocation().getMapCell(getPosition());
+	}
 
 	public void removeAllGoods() {
 		removeAllItems();
@@ -1067,6 +1075,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		        				setMovementMode(MovementMode.SHIP);
 		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
 		        				//expedition.setCurrentVehicles(expedition.getShips());
+		        				destinationPoint = new Position(getPosition());
+		        				destinationPoint.x--;
+		        		        super.landOn(destinationPoint);
+				        		throw new ActionCancelException();
+
 		        			}
 		        		} 
 		        		throw new ActionCancelException();
