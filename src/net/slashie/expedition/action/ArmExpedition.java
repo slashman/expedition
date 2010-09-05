@@ -7,6 +7,7 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.Weapon;
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.serf.action.Action;
@@ -16,8 +17,9 @@ import net.slashie.serf.ui.UserInterface;
 public class ArmExpedition extends Action{
 	@Override
 	public void execute() {
+		boolean isPlayer = getExpedition() == ExpeditionGame.getCurrentGame().getPlayer(); 
 		if (!getExpedition().isArmed()){
-			if (!UserInterface.getUI().promptChat("Arm Expedition: Are you sure?"))
+			if ( isPlayer && !UserInterface.getUI().promptChat("Arm Expedition: Are you sure?"))
 				return;
 			
 			List<Equipment> units = getExpedition().getUnarmedUnits();
@@ -57,12 +59,12 @@ public class ArmExpedition extends Action{
 			}
 			getExpedition().setArmed(true);
 		} else {
-			if (!UserInterface.getUI().promptChat("Disarm Expedition: Are you sure?"))
+			if (isPlayer && !UserInterface.getUI().promptChat("Disarm Expedition: Are you sure?"))
 				return;
 			List<Equipment> units = getExpedition().getUnits();
 			for (Equipment unit: units){
 				ExpeditionUnit eUnit = ((ExpeditionUnit)unit.getItem()); 
-				boolean useOffShore = getExpedition().getLocation() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)getExpedition().getLocation()).isDock(); 
+				boolean useOffShore = isPlayer && getExpedition().getLocation() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)getExpedition().getLocation()).isDock(); 
 				if (eUnit.getWeapon() != null || eUnit.getArmor() != null){
 					int quantity = unit.getQuantity();
 					Weapon weapon = eUnit.getWeapon();

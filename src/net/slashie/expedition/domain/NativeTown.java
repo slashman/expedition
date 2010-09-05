@@ -1,10 +1,12 @@
 package net.slashie.expedition.domain;
 
+import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.ai.NativeActionSelector;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.world.Culture;
+import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.ai.SimpleAI;
 import net.slashie.serf.ui.Appearance;
@@ -126,7 +128,7 @@ public class NativeTown extends Town{
 		NonPrincipalExpedition ret = new NonPrincipalExpedition(game, "nativeExpedition"+game.getLastExpeditionId());
 		ret.setGame(game);
 		ret.setAppearanceId("HOSTILE_EXPEDITION");
-		ret.setName("natives");
+		ret.setName(getCulture().getName()+" group");
 		ret.setExpeditionary("-");
 		
 		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
@@ -145,8 +147,12 @@ public class NativeTown extends Town{
 					ret.addItem(ItemFactory.createItem(classD.getB()), wantedClassPopulation);
 					reduceQuantityOf(classD.getB(), wantedClassPopulation);
 				}
+				if (classD.getB().equals("NATIVE_ARCHER")){
+					ret.addItem(ItemFactory.createItem("BOWS"), wantedClassPopulation);
+				}
 			}
 			specializedPopulation += wantedClassPopulation;
+			
 		}
 		int commoners = targetPopulation - specializedPopulation - 1;
 		if (commoners > 0){
@@ -157,6 +163,10 @@ public class NativeTown extends Town{
 		//ret.addItem(ItemFactory.createItem("ARROWS"), Util.rand(0, expeditionPower*30));
 		ret.addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, expeditionPower*10));
 		//ret.addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(expeditionPower*100, expeditionPower*500));
+		
+		Action armExpedition = new ArmExpedition();
+		armExpedition.setPerformer(ret);
+		armExpedition.execute();
 		
 		ret.calculateInitialPower();
 		
