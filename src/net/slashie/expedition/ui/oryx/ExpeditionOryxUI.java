@@ -6,7 +6,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -21,15 +25,12 @@ import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
-import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.libjcsi.CharKey;
-import net.slashie.libjcsi.ConsoleSystemInterface;
-import net.slashie.libjcsi.textcomponents.MenuItem;
-import net.slashie.libjcsi.textcomponents.TextBox;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
@@ -64,10 +65,109 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 
 	@Override
 	public void showInventory() {
-		// TODO Auto-generated method stub
-		showMessage("Inventory Screen not yet implemented.");
+		Equipment.eqMode = true;
+		int xpos = 1, ypos = 0;
+   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		menuBox.setItemsPerPage(12);
+  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setTitle("Expedition Inventory");
+  		si.saveBuffer();
+  		int choice = 0;
+  		while (true){
+  			String legend = "";
+  			for (int i = 0; i < 4; i++){
+  				if (i == choice){
+  					legend += ">";
+  				}
+  				switch (i){
+  				case 0:
+  					legend += "Units";
+  					break;
+  				case 1:
+  					legend += "Tools";
+  					break;
+  				case 2:
+  					legend += "Goods";
+  					break;
+  				case 3:
+  					legend += "Valuables";
+  					break;
+  				}
+  				if (i == choice){
+  					legend += "<";
+  				}
+  				legend += "    ";
+  			}
+  			
+  			menuBox.setLegend(legend);
+  			
+  	  		List<Equipment> inventory = null;
+  	  		switch (choice){
+  	  		case 0:
+  	  			inventory = getExpedition().getUnits();
+  	  			break;
+  	  		case 1:
+  	  			inventory = getExpedition().getTools();
+  	  			break;
+  	  		case 2:
+  	  			inventory = getExpedition().getGoods();
+  	  			break;
+  	  		case 3:
+  	  			inventory = getExpedition().getValuables();
+  	  		}
+  	  		
+  	  		Vector menuItems = new Vector();
+  	  		for (Equipment item: inventory){
+  	  			menuItems.add(new InventoryGFXMenuItem(item));
+  	  		}
+  	  		Collections.sort(menuItems, inventoryItemsComparator);
+  	  		menuBox.setMenuItems(menuItems);
+  	  		menuBox.draw();
+  	  		
+	  		CharKey x = new CharKey(CharKey.NONE);
+			while (x.code != CharKey.SPACE && !x.isArrow())
+				x = si.inkey();
+			if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+				break;
+			}
+			if (x.isLeftArrow()){
+				choice--;
+				if (choice == -1)
+					choice = 0;
+			}
+			if (x.isRightArrow()){
+				choice++;
+				if (choice == 4)
+					choice = 3;
+			}
+	 		
+	 		//menuBox.getSelection();
+  		}
+  		si.restore();
+ 		si.refresh();
+ 		Equipment.eqMode = false;
 	}
 
+	private Comparator<InventoryGFXMenuItem> inventoryItemsComparator = new Comparator<InventoryGFXMenuItem>(){
+		public int compare(InventoryGFXMenuItem o1, InventoryGFXMenuItem o2) {
+			if (o1.getEquipment().getItem() instanceof ExpeditionUnit){
+				if (o2.getEquipment().getItem() instanceof ExpeditionUnit){
+					return o1.getEquipment().getItem().getFullID().compareTo(o2.getEquipment().getItem().getFullID());
+				} else {
+					return -1;
+				}
+			} else if (o2.getEquipment().getItem() instanceof ExpeditionUnit){
+				if (o1.getEquipment().getItem() instanceof ExpeditionUnit){
+					return o1.getEquipment().getItem().getFullID().compareTo(o2.getEquipment().getItem().getFullID());
+				} else {
+					return 1;
+				}
+			} else {
+				return o1.getEquipment().getItem().getDescription().compareTo(o2.getEquipment().getItem().getDescription());
+			}
+		};
+	};
+	
 	@Override
 	public int switchChat(String prompt, String... options) {
    		BorderedMenuBox selectionBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
@@ -425,13 +525,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// drawAddornment();
 		
 		// Box 1
-		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime(); 
-		si.print(2, 1, getExpedition().getExpeditionaryTitle());
+		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime();
+		si.print(2, 1, gameTime.get(Calendar.YEAR)+", "+ months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
+		si.print(2, 2, getExpedition().getExpeditionaryTitle());
 		if (getExpedition().getTowns().size() == 1)
-			si.print(2, 2, "1 colony ");
+			si.print(2, 3, "1 colony ");
 		else
-			si.print(2, 2, getExpedition().getTowns().size()+" colonies");
-		si.print(2, 3, getExpedition().getAccountedGold()+"$");
+			si.print(2, 3, getExpedition().getTowns().size()+" colonies");
+		si.print(2, 4, getExpedition().getAccountedGold()+"$");
 		
 		
 		// Box 2
@@ -451,34 +552,50 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription();
 		Pair<String, String> locationLabels = getExpedition().getLocation().getLocationLabels();
 		//Pair<String, String> locationMeans = getExpedition().getLocation().getLocationMeans();
-		si.print(line2, 1, gameTime.get(Calendar.YEAR)+", "+ months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
-		si.print(line2, 2, getExpedition().getLocation().getDescription());
-		si.print(line2, 3, currentCell.getDescription());
-		si.print(line2, 4, getExpedition().getLocation().getWeather().getDescription());
-		si.print(line2, 5, getExpedition().getLocation().getTemperatureDescription());
-		si.print(line2, 6, locationLabels.getA(), TITLES);
-			si.print(line2+9, 6, locationDescription.getA());
-		si.print(line2, 7, locationLabels.getB(), TITLES);
-			si.print(line2+9, 7, locationDescription.getB());
-		si.print(line2, 8, "Wind", TITLES);
-			si.print(line2+9, 8, getExpedition().getLocation().getWindDirection().getAbbreviation());
-		si.print(line2, 9, "Heading", TITLES);
-			si.print(line2+9, 9, getExpedition().getHeading().getAbbreviation());
+		
+		si.print(line2, 1, getExpedition().getLocation().getDescription());
+		si.print(line2, 2, currentCell.getDescription());
+		si.print(line2, 3, getExpedition().getLocation().getWeather().getDescription());
+		si.print(line2, 4, getExpedition().getLocation().getTemperatureDescription());
+		si.print(line2, 5, locationLabels.getA(), TITLES);
+			si.print(line2+9, 5, locationDescription.getA());
+		si.print(line2, 6, locationLabels.getB(), TITLES);
+			si.print(line2+9, 6, locationDescription.getB());
+		si.print(line2, 7, "Wind", TITLES);
+			si.print(line2+9, 7, getExpedition().getLocation().getWindDirection().getAbbreviation());
+		si.print(line2, 8, "Heading", TITLES);
+			si.print(line2+9, 8, getExpedition().getHeading().getAbbreviation());
 		if (getExpedition().getMovementMode() == MovementMode.SHIP){
-			si.print(line2+2, 10, getExpedition().getSailingPoint().getDescription());
+			si.print(line2+2, 9, getExpedition().getSailingPoint().getDescription());
 		} else {
-			si.print(line2+2, 10, statsExpedition.getMovementMode().getDescription());
+			si.print(line2+2, 9, statsExpedition.getMovementMode().getDescription());
 		}
-		si.print(line2, 11, getExpedition().getMovementSpeed().getDescription());
-		si.print(line2, 12, statsExpedition.getTotalShips()+" ships ("+statsExpedition.getShipHealth()+"%)");
+		si.print(line2, 10, getExpedition().getMovementSpeed().getDescription());
+		int totalShips = statsExpedition.getTotalShips();
+		if (totalShips > 0){
+			if (totalShips == 1){
+				si.print(line2, 11, "A ship ("+statsExpedition.getShipHealth()+"%)");
+			} else {
+				si.print(line2, 11, totalShips+" ships ("+statsExpedition.getShipHealth()+"%)");
+			}
+		}
 		
 		
 		expeditionUnitsVector.clear();
 		expeditionUnitsVector.addAll(statsExpedition.getUnits());
 		
 		expeditionUnitItems.clear();
+		resumedEquipments.clear();
 		for (Equipment expeditionUnit: expeditionUnitsVector){
-			expeditionUnitItems.add(new UnitGFXMenuItem(expeditionUnit));
+			String basicId = ((ExpeditionUnit)expeditionUnit.getItem()).getBasicId();
+			Equipment resumedEquipment = resumedEquipments.get(basicId) ;
+			if (resumedEquipment == null){
+				resumedEquipment = new Equipment(expeditionUnit.getItem(), expeditionUnit.getQuantity());
+				resumedEquipments.put(basicId, resumedEquipment);
+				expeditionUnitItems.add(new SimplifiedUnitGFXMenuItem(resumedEquipment));
+			} else {
+				resumedEquipment.setQuantity(resumedEquipment.getQuantity()+expeditionUnit.getQuantity());
+			}
 		}
 		
 		vehicleUnitItems.clear();
@@ -493,7 +610,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	private List<GFXMenuItem> expeditionUnitItems = new ArrayList<GFXMenuItem>();
 	private List<GFXMenuItem> vehicleUnitItems = new ArrayList<GFXMenuItem>();
-
+	private Map<String,Equipment> resumedEquipments = new HashMap<String, Equipment>();
 	
 	private Vector<Equipment> expeditionUnitsVector = new Vector<Equipment>();
 	//BorderedMenuBox unitsMenuBox;
@@ -505,16 +622,16 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		//unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
 		unitsMenuBox = new MenuBox(si, null);
 		unitsMenuBox.setGap(36);
-		unitsMenuBox.setPosition(0,9);
+		unitsMenuBox.setPosition(0,7);
 		unitsMenuBox.setWidth(17);
 		unitsMenuBox.setItemsPerPage(9);
   		unitsMenuBox.setShowOptions(false);
   		
   		vehiclesMenuBox = new MenuBox(si, null);
   		vehiclesMenuBox.setGap(36);
-  		vehiclesMenuBox.setPosition(61,13);
+  		vehiclesMenuBox.setPosition(61,11);
   		vehiclesMenuBox.setWidth(17);
-  		vehiclesMenuBox.setItemsPerPage(9);
+  		vehiclesMenuBox.setItemsPerPage(8);
   		vehiclesMenuBox.setShowOptions(false);
   		
 		//unitsMenuBox.setTitle("Expedition");
@@ -587,78 +704,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome) {
-		String message = battleTitle+" XXX";
-		
-		// Ranged Phase
-		if (attackerRangedAttackOutcome.hasEvents()){
-			message += "    >> Ranged Attack << XXX";
-		}
-		
-		if (attackerRangedAttackOutcome.hasDeaths()){
-			message += attackerRangedAttackOutcome.getDeathsString()+"XXX";
-		}
-		if (attackerRangedAttackOutcome.hasWounds()){
-			message += attackerRangedAttackOutcome.getWoundsString()+"XXX";
-		}
-
-		if (defenderRangedAttackOutcome.hasEvents()){
-			message += "    >> Ranged Retaliation << XXX";
-		}
-		
-		if (defenderRangedAttackOutcome.hasDeaths()){
-			message += defenderRangedAttackOutcome.getDeathsString()+"XXX";
-		}
-		if (defenderRangedAttackOutcome.hasWounds()){
-			message += defenderRangedAttackOutcome.getWoundsString()+"XXX";
-		}
-		
-		
-		// Charge Phase
-		if (mountedAttackOutcome[0].hasEvents()){
-			message += "    >> Mounted charge outcome << XXX";
-		}
-		
-		if (mountedAttackOutcome[0].hasDeaths()){
-			message += mountedAttackOutcome[0].getDeathsString()+"XXX";
-		}
-		if (mountedAttackOutcome[0].hasWounds()){
-			message += mountedAttackOutcome[0].getWoundsString()+"XXX";
-		}
-		
-		if (mountedAttackOutcome[1].hasEvents()){
-			message += "    >> Mounted charge losses << XXX";
-		}
-		
-		if (mountedAttackOutcome[1].hasDeaths()){
-			message += mountedAttackOutcome[1].getDeathsString()+"XXX";
-		}
-		if (mountedAttackOutcome[1].hasWounds()){
-			message += mountedAttackOutcome[1].getWoundsString()+"XXX";
-		}
-		
-		// Melee Phase
-		if (meleeAttackOutcome[0].hasEvents()){
-			message += "    >> Melee outcome << XXX";
-		}
-		
-		if (meleeAttackOutcome[0].hasDeaths()){
-			message += meleeAttackOutcome[0].getDeathsString()+"XXX";
-		}
-		
-		if (meleeAttackOutcome[0].hasWounds()){
-			message += meleeAttackOutcome[0].getWoundsString()+"XXX";
-		}
-		
-		if (meleeAttackOutcome[1].hasEvents()){
-			message += "    >> Melee losses << XXX";
-		}
-		
-		if (meleeAttackOutcome[1].hasDeaths()){
-			message += meleeAttackOutcome[1].getDeathsString()+"XXX";
-		}
-		if (meleeAttackOutcome[1].hasWounds()){
-			message += meleeAttackOutcome[1].getWoundsString()+"XXX";
-		}
+		String message = CommonUI.getBattleResultsString(battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
 		message = message.replaceAll("XXX", "\n");
 		showTextBox(message, 16, 16, 776, 576);
 		

@@ -1,10 +1,13 @@
 package net.slashie.expedition.ui.console;
 
-import java.util.ArrayList;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import net.slashie.expedition.domain.AssaultOutcome;
@@ -17,14 +20,14 @@ import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
-import net.slashie.expedition.domain.Expedition.MovementSpeed;
+import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.ui.oryx.CacheGFXMenuItem;
-import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
+import net.slashie.libjcsi.CSIColor;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.libjcsi.textcomponents.ListBox;
@@ -35,19 +38,20 @@ import net.slashie.libjcsi.textcomponents.TextBox;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
-import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
-import net.slashie.serf.ui.consoleUI.EquipmentMenuItem;
+import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.util.Pair;
+import net.slashie.utils.ImageUtils;
 import net.slashie.utils.Position;
 
 public class ExpeditionConsoleUI extends ConsoleUserInterface implements ExpeditionUserInterface{
 	private ConsoleSystemInterface csi;
 	private ListBox expeditionUnitBox;
+	private ListBox vehiclesBox;
 	
 	public ExpeditionConsoleUI (ConsoleSystemInterface csi){
 		this.csi = csi;
@@ -62,13 +66,18 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		yrange = 9;
 		
 		expeditionUnitBox = new ListBox(csi);
-		expeditionUnitBox.setPosition(53,7);
-		expeditionUnitBox.setWidth(25);
-		expeditionUnitBox.setHeight(12);
+		expeditionUnitBox.setPosition(3,8);
+		expeditionUnitBox.setWidth(22);
+		expeditionUnitBox.setHeight(10);
 		
-		idList.setPosition(2,13);
+		vehiclesBox = new ListBox(csi);
+		vehiclesBox.setPosition(54,12);
+		vehiclesBox.setWidth(24);
+		vehiclesBox.setHeight(7);
+		
+		/*idList.setPosition(2,13);
 		idList.setWidth(23);
-		idList.setHeight(6);
+		idList.setHeight(6);*/
 		
 	}
 	@Override
@@ -77,7 +86,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		
 	}
 
-	private Vector<Equipment> expeditionUnitsVector = new Vector<Equipment>();
+	private Vector expeditionUnitsVector = new Vector();
 	@Override
 	public void drawStatus() {
 		Expedition statsExpedition = getExpedition();
@@ -86,75 +95,113 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		drawAddornment();
 		// Box 1
 		Calendar gameTime = ((ExpeditionGame)player.getGame()).getGameTime(); 
-		csi.print(5, 1, gameTime.get(Calendar.YEAR)+"");
-		csi.print(5, 2, months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
-		csi.print(5, 3, getExpedition().getExpeditionaryTitle());
+		csi.print(3, 1, gameTime.get(Calendar.YEAR)+", " +months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE));
+		csi.print(3, 2, getExpedition().getExpeditionaryTitle());
 		if (getExpedition().getTowns().size() == 1)
-			csi.print(5, 4, "1 settlement ");
+			csi.print(3, 3, "1 colony ");
 		else
-			csi.print(5, 4, getExpedition().getTowns().size()+" settlements");
-		csi.print(5, 5, getExpedition().getAccountedGold()+"$");
+			csi.print(3, 3, getExpedition().getTowns().size()+" colonies");
+		csi.print(3, 4, getExpedition().getAccountedGold()+"$");
 		
-		// Box 2
-		csi.print(12, 7, statsExpedition.getTotalShips()+" ships ("+statsExpedition.getShipHealth()+"%)");
-		csi.print(12, 8, statsExpedition.getOffshoreFoodDays()+" days");
-		csi.print(12, 9, statsExpedition.getPower()+(statsExpedition.isArmed()?"(Armed)":""));
-		if (statsExpedition.getMovementSpeed() != MovementSpeed.NORMAL){
-			csi.print(12, 10, statsExpedition.getMovementMode().getDescription()+"("+statsExpedition.getMovementSpeed().getDescription()+")");
-		} else {
-			csi.print(12, 10, statsExpedition.getMovementMode().getDescription());
-		}
+		csi.print(3, 5, statsExpedition.getOffshoreFoodDays()+" food days");
 		if (getExpedition().getLevel() instanceof ExpeditionMicroLevel)
-			csi.print(12, 11, statsExpedition.getOffshoreCurrentlyCarrying()+"%");
+			csi.print(3, 6, "Carrying "+statsExpedition.getOffshoreCurrentlyCarrying()+"%");
 		else
-			csi.print(12, 11, statsExpedition.getCurrentlyCarrying()+"%");
+			csi.print(3, 6, "Carrying "+statsExpedition.getCurrentlyCarrying()+"%");
+		csi.print(3, 7, statsExpedition.getPower()+(statsExpedition.isArmed()?" Power (Armed)":" Power"));
 		
 		//Box 3
 		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition());
 		Pair<String, String> locationDescription = getExpedition().getLocation().getLocationDescription();
 		Pair<String, String> locationMeans = getExpedition().getLocation().getLocationMeans();
-		csi.print(56, 1, getExpedition().getLocation().getDescription());
-		csi.print(56, 2, currentCell.getDescription());
-		csi.print(56, 3, locationDescription.getA()+" ("+locationMeans.getA()+")");
-		csi.print(56, 4, locationDescription.getB()+" ("+locationMeans.getB()+")");
-		csi.print(56, 5, getExpedition().getLocation().getWeather().getDescription()+", "+getExpedition().getLocation().getTemperatureDescription());
-		
+		Pair<String, String> locationLabels = getExpedition().getLocation().getLocationLabels();
+		csi.print(54, 1, getExpedition().getLocation().getDescription());
+		csi.print(54, 2, currentCell.getDescription());
+		csi.print(54, 3, getExpedition().getLocation().getWeather().getDescription());
+		csi.print(54, 4, getExpedition().getLocation().getTemperatureDescription());
+		csi.print(54, 5, locationLabels.getA(), CSIColor.YELLOW);
+			csi.print(54+9, 5, locationDescription.getA());
+		csi.print(54, 6, locationLabels.getB(), CSIColor.YELLOW);
+			csi.print(54+9, 6, locationDescription.getB());
+		csi.print(54, 7, "Wind", CSIColor.YELLOW);
+			csi.print(54+9, 7, getExpedition().getLocation().getWindDirection().getAbbreviation());
+		csi.print(54, 8, "Heading", CSIColor.YELLOW);
+			csi.print(54+9, 8, getExpedition().getHeading().getAbbreviation());
+		if (getExpedition().getMovementMode() == MovementMode.SHIP){
+			csi.print(54+2, 9, getExpedition().getSailingPoint().getDescription());
+		} else {
+			csi.print(54+2, 9, statsExpedition.getMovementMode().getDescription());
+		}
+		csi.print(54, 10, getExpedition().getMovementSpeed().getDescription());
+		csi.print(54, 11, statsExpedition.getTotalShips()+" ships ("+statsExpedition.getShipHealth()+"%)");
 		//This must be replaced on the next version of libjcsi
+		
 		expeditionUnitsVector.clear();
-		expeditionUnitsVector.addAll(statsExpedition.getUnits());
-		
-		Vector expeditionUnitItems = new Vector();
-		for (Equipment expeditionUnit: expeditionUnitsVector){
-			expeditionUnitItems.add(new UnitMenuItem(expeditionUnit));
+		resumedEquipments.clear();
+		for (Equipment expeditionUnit: statsExpedition.getUnits()){
+			String basicId = ((ExpeditionUnit)expeditionUnit.getItem()).getBasicId();
+			Equipment resumedEquipment = resumedEquipments.get(basicId) ;
+			if (resumedEquipment == null){
+				resumedEquipment = new Equipment(expeditionUnit.getItem(), expeditionUnit.getQuantity());
+				resumedEquipments.put(basicId, resumedEquipment);
+				expeditionUnitsVector.add(new UnitMenuItem(resumedEquipment));
+			} else {
+				resumedEquipment.setQuantity(resumedEquipment.getQuantity()+expeditionUnit.getQuantity());
+			}
 		}
-		Collections.sort(expeditionUnitItems, expeditionUnitsComparator);
+		Collections.sort(expeditionUnitsVector, expeditionUnitsComparator);
+		expeditionUnitBox.setElements(expeditionUnitsVector);
+		
+		Vector vehicleItems = new Vector();
 		for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
-			expeditionUnitItems.add(new VehicleMenuItem(expeditionVehicle));
+			vehicleItems.add(new VehicleMenuItem(expeditionVehicle));
 		}
+		vehiclesBox.setElements(vehicleItems);
 		
-		expeditionUnitBox.setElements(expeditionUnitItems);
 	}
+	private Map<String,Equipment> resumedEquipments = new HashMap<String, Equipment>();
+
 	
-	private void drawAddornment(){
+	private void drawCumbersomeAddornment(){
 		int addornmentColor = ConsoleSystemInterface.TEAL;
 		csi.print(0, 0,  "    /------------------\\     /---------N---------\\     /--------------------\\   ", addornmentColor);
-		csi.print(0, 1,  "    |                  |     |", addornmentColor);
-		csi.print(49, 1, "|     |                    |   ", addornmentColor);
-		csi.print(0, 2,  "    |                  |     |",addornmentColor);
-		csi.print(49, 2, "|     |                    |   ", addornmentColor);
-		csi.print(0, 3,  "    |                  |-----|",addornmentColor);
-		csi.print(49, 3, "|-----|                    |   ", addornmentColor);
-		csi.print(0, 4,  "    |                  |.....|", addornmentColor);
-		csi.print(49, 4,"|.....|                    |   ", addornmentColor);
-		csi.print(0, 5,  "    |                  |.....|", addornmentColor);
-		csi.print(49, 5,  "|.....|                    |   ", addornmentColor);
-		csi.print(0, 6,  " /----~ EXPEDITION ~------\\..|                   |../-------~ EXPEDITION ~-----\\", addornmentColor);
-		csi.print(0, 7,  " |Ships                   |..|                   |..|                          |", addornmentColor);
-		csi.print(0, 8,  " |Food Days               |..|                   |..|                          |", addornmentColor);
-		csi.print(0, 9,  " |Power                   |..|                   |..|                          |", addornmentColor);
-		csi.print(0, 10, " |Movement                |..W                   E..|                          |", addornmentColor);
-		csi.print(0, 11, " |Carrying                |..|                   |..|                          |", addornmentColor);
-		csi.print(0, 12, " \\------------------------/..|                   |..|                          |", addornmentColor);
+		csi.print(0, 1,  "    |                  |     |", addornmentColor);csi.print(49, 1, "|     |                    |   ", addornmentColor);
+		csi.print(0, 2,  "    |                  |     |",addornmentColor);csi.print(49, 2, "|     |                    |   ", addornmentColor);
+		csi.print(0, 3,  "    |                  |-----|",addornmentColor);csi.print(49, 3, "|-----|                    |   ", addornmentColor);
+		csi.print(0, 4,  "    |                  |.....|", addornmentColor);csi.print(49, 4,"|.....|                    |   ", addornmentColor);
+		csi.print(0, 5,  "    |                  |.....|", addornmentColor); csi.print(49, 5,  "|.....|                    |   ", addornmentColor);
+		csi.print(0, 6,  "    |                  |.....|                   |.....|                    |   ", addornmentColor);
+		csi.print(0, 7,  " /--/                  \\--\\..|                   |.....|                    |   ", addornmentColor);
+		csi.print(0, 8,  " |                        |..|                   |.....|                    |   ", addornmentColor);
+		csi.print(0, 9,  " |                        |..|                   |.....|                    |   ", addornmentColor);
+		csi.print(0, 10, " |                        |..W                   E.....|                    |   ", addornmentColor);
+		csi.print(0, 11, " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 12, " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 13, " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 14, " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 15, " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 16, " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 17, " |                        |--|                   |--|                          |", addornmentColor);
+		csi.print(0, 18, " |                        |  |                   |  |                          |", addornmentColor);
+		csi.print(0, 19, " |                        |  |                   |  |                          |", addornmentColor);
+		csi.print(0, 20, " \\------------------------/  \\---------S---------/  \\--------------------------/", addornmentColor);
+		 
+	}
+	private void drawAddornment(){
+		int addornmentColor = ConsoleSystemInterface.TEAL;
+		csi.print(0, 0,  " /------------------------\\  /---------N---------\\  /--------------------------\\", addornmentColor);
+		csi.print(0, 1,  " |                        |  |                   |  |                          |", addornmentColor);
+		csi.print(0, 2,  " |                        |--|                   |--|                          |", addornmentColor);
+		csi.print(0, 3,  " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 4,  " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 5,  " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 6,  " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 7,  " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 8,  " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 9,  " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 10, " |                        |..W                   E..|                          |", addornmentColor);
+		csi.print(0, 11, " |                        |..|                   |..|                          |", addornmentColor);
+		csi.print(0, 12, " |                        |..|                   |..|                          |", addornmentColor);
 		csi.print(0, 13, " |                        |..|                   |..|                          |", addornmentColor);
 		csi.print(0, 14, " |                        |..|                   |..|                          |", addornmentColor);
 		csi.print(0, 15, " |                        |..|                   |..|                          |", addornmentColor);
@@ -193,6 +240,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	@Override
 	public void beforeRefresh() {
 		expeditionUnitBox.draw();
+		vehiclesBox.draw();
 	}
 	private int readQuantity(int x, int y, String spaces, int inputLength){
 		int quantity = -1;
@@ -739,7 +787,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			ExpeditionItem eitem = (ExpeditionItem)item.getItem();
 			if (eitem instanceof ExpeditionUnit){
 				ExpeditionUnit unit = (ExpeditionUnit) eitem;
-				return quantity + " " + itemDescription + " ATK"+ unit.getAttack()+" DEF"+ unit.getDefense() +" {Weight: "+(eitem.getWeight() * quantity)+")";
+				return quantity + " " + itemDescription + " ATK"+ unit.getAttack().getMax()+" DEF"+ unit.getDefense().getMax() +" {Weight: "+(eitem.getWeight() * quantity)+")";
 			} else {
 				return quantity + " " + itemDescription + " {Weight: "+(eitem.getWeight() * quantity)+")";
 			}
@@ -778,14 +826,55 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome) {
-		// TODO Auto-generated method stub
+		csi.saveBuffer();
+		String message = CommonUI.getBattleResultsString(battleName,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
+		showTextBox(message, 1, 0, 78, 20, CSIColor.YELLOW);
+		csi.restore();
+
 		
 	}
 	
 	@Override
 	public void showBattleScene(String battleTitle,
 			List<Equipment> attackingUnits, List<Equipment> defendingUnits) {
-		// TODO Auto-generated method stub
+		csi.saveBuffer();
+		int xBase = 31;
+		int yBase = 4; 
+		int gridX = 0;
+		int gridY = 0;
+		for (Equipment equipment: attackingUnits){
+			CharAppearance appearance = (CharAppearance) equipment.getItem().getAppearance();
+			for (int i = 0; i < equipment.getQuantity(); i++){
+				csi.print(xBase + gridX, yBase + gridY,  appearance.getChar(), appearance.getColor());
+				gridY ++;
+				if (gridY > 12){
+					gridX++;
+					gridY = 0;
+				}
+			}
+		}
 		
+		gridX = 16;
+		gridY = 0;
+		for (Equipment equipment: defendingUnits){
+			CharAppearance appearance = (CharAppearance) equipment.getItem().getAppearance();
+			for (int i = 0; i < equipment.getQuantity(); i++){
+				csi.print(xBase + gridX, yBase + gridY,  appearance.getChar(), appearance.getColor());
+				gridY ++;
+				if (gridY > 12){
+					gridX--;
+					gridY = 0;
+				}
+			}
+		}
+		csi.refresh();
+		csi.waitKey(CharKey.SPACE);
+		csi.restore();
 	}
+	
+	@Override
+	public boolean drawIdList() {
+		return false;
+	}
+	
 }
