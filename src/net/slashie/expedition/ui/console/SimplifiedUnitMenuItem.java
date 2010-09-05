@@ -7,10 +7,10 @@ import net.slashie.libjcsi.textcomponents.MenuItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 
-public class UnitMenuItem implements MenuItem, ListItem{
+public class SimplifiedUnitMenuItem implements MenuItem, ListItem{
 	protected Equipment e;
 	
-	public UnitMenuItem(Equipment e) {
+	public SimplifiedUnitMenuItem(Equipment e) {
 		this.e = e;
 	}
 	
@@ -32,9 +32,9 @@ public class UnitMenuItem implements MenuItem, ListItem{
 		}
 
 		if (e.getQuantity() == 1){
- 			return ((ExpeditionUnit)e.getItem()).getDescription();
+ 			return ((ExpeditionUnit)e.getItem()).getFullDescription();
  		} else {
- 			return ((ExpeditionUnit)e.getItem()).getDescription() +" x"+e.getQuantity();
+ 			return ((ExpeditionUnit)e.getItem()).getFullDescription() +" x"+e.getQuantity();
  		}
  	}
 	

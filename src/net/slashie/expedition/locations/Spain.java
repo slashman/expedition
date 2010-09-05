@@ -14,8 +14,8 @@ public class Spain extends StaticPattern {
 			"--------------------------------v--------,,###......h..................",
 			"---------------------------------------,,,,,,####......................",
 			"--------------------------v---------hhhhhhhhh,,,###........hh..........",
-			"---------------------------------v--hhh1h2h3h,h,,,####........,........",
-			"--------------------v--v---------6==,,,,,,,,,,,,,S,,,7..........h......",
+			"---------------------------------v--hhh1h2h3h,h,,,####X.......,........",
+			"--------------------v--v---------6==,,,,,,,,,,,,,S,,,7X.........h......",
 			"---------------------------,,,------,,h4hhh,hh5h,,,,######.............",
 			"----------------------===,,,,hhh,h,,,,,,,,,,,hhh,,h,,,,,,####..........",
 			"------------v---------,,,,,,,,,,,,,hhhh,,hh,,,hhh,h,,h,,,...###........",
@@ -113,6 +113,7 @@ public class Spain extends StaticPattern {
 		}};*/
 		
 		charMap.put(".", "SPAIN_GRASS");
+		charMap.put("X", "SPAIN_GRASS_BLOCKED");
 		charMap.put(",", "SPAIN_FLOOR");
 		charMap.put("-", "SPAIN_WATER");
 		charMap.put("#", "SPAIN_WALL");
@@ -136,7 +137,7 @@ public class Spain extends StaticPattern {
 
 	@Override
 	public String getDescription() {
-		return "Spain";
+		return "Palos, Andalusia";
 	}
 
 }

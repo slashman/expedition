@@ -149,7 +149,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	@Override
 	public CardinalDirection getWindDirection() {
 		if (currentWind == null || isTimeToChangeWind()){
-			CardinalDirection prevailingWind = getPrevailingWind(ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)-1);
+			CardinalDirection prevailingWind = getPrevailingWind(ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH));
 			currentWind = prevailingWind;
 			int rotateSign = Util.chance(50) ? 1 : -1;
 			int rotate = 0;
@@ -455,6 +455,10 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		this.weather = weather;
 		if (formerWeather != weather){
 			addMessage(weather.getChangeMessage(formerWeather));
+			if (weather.isWindy() && getWindDirection() == CardinalDirection.NULL){
+				isTimeToChangeWind = true;
+				getWindDirection();
+			}
 		}
 		
 	}

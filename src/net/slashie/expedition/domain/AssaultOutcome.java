@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.util.Pair;
 
 public class AssaultOutcome {
@@ -35,7 +36,7 @@ public class AssaultOutcome {
 	}
 
 	public String getDeathsString() {
-		Pair<String,Integer> killResume = getUnitsString(deaths);
+		Pair<String,Integer> killResume = ExpeditionUnit.getUnitsString(deaths);
 		String killMessage = killResume.getA();
 		if (killResume.getB() > 1)
 			killMessage += " die.";
@@ -45,7 +46,7 @@ public class AssaultOutcome {
 	}
 	
 	public String getWoundsString() {
-		Pair<String,Integer> killResume = getUnitsString(wounds);
+		Pair<String,Integer> killResume = ExpeditionUnit.getUnitsString(wounds);
 		String killMessage = killResume.getA();
 		if (killResume.getB() > 1)
 			killMessage += " are wounded.";
@@ -54,43 +55,7 @@ public class AssaultOutcome {
 		return killMessage;
 	}
 
-	private Pair<String, Integer> getUnitsString(
-			List<Pair<ExpeditionUnit, Integer>> list) {
-		int i = 0;
-		int unitCount = 0;
-		String unitsString = "";
-		for (Pair<ExpeditionUnit, Integer> killInfo: list){
-			if (killInfo.getB() == 0){
-				i++;
-				continue;
-			}
-			if (killInfo.getB() == 1){
-				unitsString += a(killInfo.getA().getFullDescription())+killInfo.getA().getFullDescription();
-			} else
-				unitsString += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
-			if (i == list.size()-2)
-				unitsString += " and ";
-			else if (i == list.size()-1)
-				;
-			else if (list.size()>1)
-				unitsString += ", ";
-			i++;
-			unitCount += killInfo.getB();
-		}
-		return new Pair<String, Integer>(unitsString, unitCount);
-	}
-
-	private String a(String fullDescription) {
-		if (fullDescription.startsWith("A") || 
-				fullDescription.startsWith("E") ||
-				fullDescription.startsWith("I") ||
-				fullDescription.startsWith("O") ||
-				fullDescription.startsWith("U")
-				)
-			return "An ";
-		else
-			return "A ";
-	}
+	
 
 	public boolean hasDeaths() {
 		return deaths.size() > 0;

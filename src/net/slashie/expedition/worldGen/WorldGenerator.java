@@ -38,7 +38,6 @@ public class WorldGenerator {
 				SworeGame.crash("Culture File Not Found");
 				return;
 			}
-			cultureCenters.add(new Pair<Position, Culture>(new Position(3236,834), ExpeditionDAO.getCulture("AZTEC")));
 			
 			//Create settlements around each culture center
 			for (Pair<Position,Culture> cultureCenter: cultureCenters){

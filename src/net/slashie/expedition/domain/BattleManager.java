@@ -1,6 +1,7 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.slashie.expedition.game.ExpeditionGame;
@@ -45,6 +46,8 @@ public class BattleManager {
 		// Trim attacking and defending teams to 60, 20 ranged (if possible), 20 mounted (if possible) and the remaining.
 		List<Equipment> attackingUnits = selectSquad(attackingUnitsFullGroup);
 		List<Equipment> defendingUnits = selectSquad(defendingUnitsFullGroup);
+		List<Equipment> originalAttackingUnits = cloneEquipmentList(attackingUnits);
+		List<Equipment> originalDefendingUnits = cloneEquipmentList(defendingUnits);
 		
 		((ExpeditionUserInterface)UserInterface.getUI()).showBattleScene(battleName, attackingUnits, defendingUnits);
 
@@ -58,38 +61,18 @@ public class BattleManager {
 		// Melee phase: Attacker charges (Defender will attack back)
 		AssaultOutcome[] attackerMeleeAttackOutcome = meleeAttack(attackingUnits, attacker, defendingUnits, (UnitContainer)defender);
 
-		((ExpeditionUserInterface)UserInterface.getUI()).showBattleResults(battleName, attackerRangedAttackOutcome, defenderRangedAttackOutcome, attackerMountedAttackOutcome, attackerMeleeAttackOutcome);
+		((ExpeditionUserInterface)UserInterface.getUI()).showBattleResults(originalAttackingUnits, originalDefendingUnits, battleName, attackerRangedAttackOutcome, defenderRangedAttackOutcome, attackerMountedAttackOutcome, attackerMeleeAttackOutcome);
 		
 		
 	}
 
-	private static void removeDeadAndWounded(AssaultOutcome assaultOutcome, List<Equipment> unitGroup) {
-		List<Pair<ExpeditionUnit, Integer>> deaths = assaultOutcome.getDeaths();
-		for (Pair<ExpeditionUnit, Integer> death: deaths){
-			for (Equipment eq: unitGroup){
-				if (eq.getItem().getFullID().equals(death.getA().getFullID())){
-					eq.reduceQuantity(death.getB());
-					break;
-				}
-			}
+	private static List<Equipment> cloneEquipmentList(
+			List<Equipment> originalList) {
+		List<Equipment> clonedList = new ArrayList<Equipment>();
+		for (Equipment e: originalList){
+			clonedList.add(new Equipment(e.getItem(), e.getQuantity()));
 		}
-		
-		List<Pair<ExpeditionUnit, Integer>> wounded = assaultOutcome.getDeaths();
-		for (Pair<ExpeditionUnit, Integer> wound: wounded){
-			for (Equipment eq: unitGroup){
-				if (eq.getItem().getFullID().equals(wound.getA().getFullID())){
-					eq.reduceQuantity(wound.getB());
-					break;
-				}
-			}
-		}
-		
-		for (int i = 0; i < unitGroup.size(); i++){
-			if (unitGroup.get(i).getQuantity() == 0){
-				unitGroup.remove(i);
-				i--;
-			}
-		}
+		return clonedList;
 	}
 
 	private static AssaultOutcome[] meleeAttack(List<Equipment> attackingUnits, 
@@ -121,6 +104,10 @@ public class BattleManager {
 			if ( !unit.isRangedAttack() && unit.isMounted()){
 				for (int i = 0; i < equipment.getQuantity(); i++){
 					Equipment randomTarget = pickRandomTargetFairly(defendingUnits);
+					if (randomTarget == null){
+						//Noone left to attack
+						return ret;
+					}
 					singleAttack(equipment, randomTarget, defendingExpedition, ret[0]);
 					singleAttack(randomTarget, equipment, attackingExpedition, ret[1]);
 					if (randomTarget.getQuantity() == 0){
@@ -139,6 +126,10 @@ public class BattleManager {
 			if ( unit.isRangedAttack()){
 				for (int i = 0; i < equipment.getQuantity(); i++){
 					Equipment randomTarget = pickRandomTargetFairly(defendingUnits);
+					if (randomTarget == null){
+						//Noone left to attack
+						return ret;
+					}
 					singleAttack(equipment, randomTarget, defendingExpedition, ret);
 					if (randomTarget.getQuantity() == 0){
 						defendingUnits.remove(randomTarget);
@@ -213,7 +204,11 @@ public class BattleManager {
 		int remainingMounted = 20;
 		List<String> usedUnitsFullIDs = new ArrayList<String>();
 		List<Equipment> squad = new ArrayList<Equipment>();
+		
+		// Ranged
 		for (Equipment eq: fullGroup){
+			if (remaining == 0)
+				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			if (unit.isWounded())
 				continue;
@@ -232,7 +227,10 @@ public class BattleManager {
 				usedUnitsFullIDs.add(eq.getItem().getFullID());
 			}
 		}
+		// Mounted
 		for (Equipment eq: fullGroup){
+			if (remaining == 0)
+				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			if (unit.isWounded())
 				continue;
@@ -249,10 +247,13 @@ public class BattleManager {
 				remainingMounted -= quantity;
 				remaining -= quantity;
 				usedUnitsFullIDs.add(eq.getItem().getFullID());
-
 			}
+			
 		}
+		// Not wounded 
 		for (Equipment eq: fullGroup){
+			if (remaining == 0)
+				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			if (unit.isWounded())
 				continue;
@@ -268,10 +269,12 @@ public class BattleManager {
 				squad.add(clone);
 				remaining -= quantity;
 				usedUnitsFullIDs.add(eq.getItem().getFullID());
-
 			}
 		}
+		// Remaining
 		for (Equipment eq: fullGroup){
+			if (remaining == 0)
+				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			if (usedUnitsFullIDs.contains(unit.getFullID()))
 				continue;

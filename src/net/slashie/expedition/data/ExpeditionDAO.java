@@ -93,6 +93,7 @@ public class ExpeditionDAO {
 			new ExpeditionCell("GUILD", "Guild", guild),
 			
 			new ExpeditionCell("SPAIN_GRASS", "Grass"),
+			new ExpeditionCell("SPAIN_GRASS_BLOCKED", "Grass", true, false),
 			new ExpeditionCell("SPAIN_FLOOR", "Stone Floor"),
 			new ExpeditionCell("SPAIN_DOCKS", "Docks"),
 			new ExpeditionCell("SPAIN_WATER", "Ocean", false, false, true),
@@ -140,6 +141,7 @@ public class ExpeditionDAO {
 			
 			//Non principal Expeditions
 			new CharAppearance("HOSTILE_EXPEDITION", '@', ConsoleSystemInterface.BLUE),
+			new CharAppearance("BOAT_HOSTILE_EXPEDITION", 'v', ConsoleSystemInterface.RED),
 			
 			//Overworld Terrain
 			new CharAppearance("GRASS", '.', ConsoleSystemInterface.GREEN),
@@ -165,6 +167,7 @@ public class ExpeditionDAO {
 			
 			
 			new CharAppearance("SPAIN_GRASS", '.', ConsoleSystemInterface.GREEN),
+			new CharAppearance("SPAIN_GRASS_BLOCKED", '.', ConsoleSystemInterface.GREEN),
 			new CharAppearance("SPAIN_FLOOR", '.', ConsoleSystemInterface.LIGHT_GRAY),
 			new CharAppearance("SPAIN_WATER", '~', ConsoleSystemInterface.DARK_BLUE),
 			new CharAppearance("SPAIN_WALL", '#', ConsoleSystemInterface.GRAY),
@@ -332,29 +335,29 @@ public class ExpeditionDAO {
 					new String[]{"SPEARS"},
 					new String[]{""}),
 			//Native Units
-			new ExpeditionUnit("NATIVE_WARRIOR", "Aztec Warrior","Aztec Warriors", 200, 200, 
+			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 200, 200, 
 					new Roll("1D3"),
 					new Roll("1D2"),
 					3,
 					80,15,
 					0,
-					new String[]{""},
+					new String[]{"SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_BRAVE", "Aztec Brave","Aztec Braves", 200, 200,
+			new ExpeditionUnit("NATIVE_BRAVE", "Brave","Braves", 200, 200,
 					new Roll("1D4"),
 					new Roll("1D2"),
 					4,
 					90,10,
 					0,
-					new String[]{""},
+					new String[]{"SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_ARCHER", "Plumed Archer","Plumed Archers", 200, 200,
+			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 200, 200,
 					new Roll("1D2"),
 					new Roll("1D1"),
 					2,
 					60,10,
 					0,
-					new String[]{""},
+					new String[]{"BOWS", "SPEARS"},
 					new String[]{""}),
 			new ExpeditionUnit("NATIVE_COMMONER", "Native","Natives", 200, 300, 
 					new Roll("1D1"),
