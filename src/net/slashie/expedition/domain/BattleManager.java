@@ -250,7 +250,7 @@ public class BattleManager {
 			}
 			
 		}
-		// Not wounded 
+		// On foot 
 		for (Equipment eq: fullGroup){
 			if (remaining == 0)
 				break;
@@ -271,14 +271,16 @@ public class BattleManager {
 				usedUnitsFullIDs.add(eq.getItem().getFullID());
 			}
 		}
-		// Remaining
+		
+		// Not wounded
 		for (Equipment eq: fullGroup){
 			if (remaining == 0)
 				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
+			if (unit.isWounded())
+				continue;
 			if (usedUnitsFullIDs.contains(unit.getFullID()))
 				continue;
-			if (!unit.isMounted() && !unit.isRangedAttack()){
 				int quantity = eq.getQuantity();
 				if (quantity > remaining){
 					quantity = remaining;
@@ -288,7 +290,25 @@ public class BattleManager {
 				squad.add(clone);
 				remaining -= quantity;
 				usedUnitsFullIDs.add(eq.getItem().getFullID());
+		}
+		
+		// Remaining
+		for (Equipment eq: fullGroup){
+			if (remaining == 0)
+				break;
+			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
+			if (usedUnitsFullIDs.contains(unit.getFullID()))
+				continue;
+			int quantity = eq.getQuantity();
+			if (quantity > remaining){
+				quantity = remaining;
 			}
+			Equipment clone = eq.clone();
+			clone.setQuantity(quantity);
+			squad.add(clone);
+			remaining -= quantity;
+			usedUnitsFullIDs.add(eq.getItem().getFullID());
+
 		}
 		return squad;
 	}

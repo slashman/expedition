@@ -357,7 +357,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	}
 	
 	public boolean depart(){
-		if (promptChat("Do you want to leave the ports of Palos de la frontera? (Y/n)", 28, 2, 23, 5)){
+		if (promptChat("Do you want to leave the ports of Palos de la frontera? (Y/n)", 27, 2, 24, 5)){
 			TextBox chatBox = new TextBox(csi);
 			chatBox.setHeight(3);
 			chatBox.setWidth(20);
@@ -389,7 +389,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	}
 	
 	public boolean promptChat(String message){
-		return super.promptChat(message, 28,2,23,5);
+		return super.promptChat(message, 27,2,24,5);
 	}
 
 	public void transferFromCache(GoodsCache cache) {

@@ -106,7 +106,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		//si.drawImage(215,60,IMG_TITLE_NAME);
 		si.printAtPixel(60, 555, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
 		si.printAtPixel(60, 570, "Artwork by Oryx, 2010", Color.WHITE);
-		si.printAtPixel(60, 585, "Music by Dominik Markzuk and Anonymous MIDI Composers", Color.WHITE);
+		si.printAtPixel(60, 585, "Music by Roguebards Mingos, Jice and Troyminator", Color.WHITE);
 		CharKey x = new CharKey(CharKey.NONE);
     	int choice = 0;
     	si.saveBuffer();

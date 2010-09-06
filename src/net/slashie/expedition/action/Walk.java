@@ -51,10 +51,10 @@ public class Walk extends Action{
         Position destinationPoint = Position.add(a.getPosition(), var);
         
     	Actor actor = expedition.getLevel().getActorAt(destinationPoint);
-    	if (actor != null){
+    	/*if (actor != null){
     		invalidationMessage = "You can't walk there";
     		return false;
-    	}
+    	}*/
     	
         AbstractCell absCell = a.getLevel().getMapCell(destinationPoint);
         if (absCell instanceof ExpeditionCell){

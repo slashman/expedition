@@ -24,7 +24,7 @@ public class CultureWriter {
 		this.charmap = charmap;
 	}
 
-	private String handlesinglepixel(int pixel) {
+	private String handlesinglepixel(int pixel, int xpixel, int ypixel) {
 		//int alpha = (pixel >> 24) & 0xff;
 		int red   = (pixel >> 16) & 0xff;
 		int green = (pixel >>  8) & 0xff;
@@ -34,7 +34,7 @@ public class CultureWriter {
 			return null;
 		String value = charmap.get(red+","+green+","+blue);
 		if (value == null){
-			System.err.println(red+","+green+","+blue+" not found.");
+			System.err.println(red+","+green+","+blue+" not found. ("+xpixel+","+ypixel+")");
 			System.exit(-1);
 		}
 		
@@ -62,7 +62,7 @@ public class CultureWriter {
 			
 			for (int xpixel = 0; xpixel < w; xpixel++) {
 				for (int ypixel = 0; ypixel < h; ypixel++) {
-					String culture = handlesinglepixel(pixels[ypixel * w + xpixel]);
+					String culture = handlesinglepixel(pixels[ypixel * w + xpixel],xpixel, ypixel);
 					if (culture != null){
 						ret.put(new Position(xpixel, ypixel), culture);
 					}
