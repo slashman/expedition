@@ -83,10 +83,10 @@ public class SpainCastle extends StaticPattern {
 			if (!exp.getFlag("MET_WITH_KINGS")){
 				//First meeting with kings
 				exp.setFlag("MET_WITH_KINGS", true);
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic Kings of Spain, have generously decided to grant you this audience. We have chosen you to support our enterprise to find the west path into the Indias.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic Kings of Spain, have generously decided to grant you this audience. We have aproved your expedition to find the west path into the Indias.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Should your journey be sucessful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We will grant you 12.000 royal maravedíes as well as two caravels and a carrack for your first exploratory voyage.");
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey, we await your safe return from the New World. XXX XXX You are dismissed.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We will grant you 6.000 royal maravedíes as well as equipment and men, and we will order every person in Spain to aid you in whatever they can.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey, we await your safe return. XXX You are dismissed.");
 				stockExpedition(exp);
 			} else {
 				boolean earnedTitle = false;
@@ -119,7 +119,7 @@ public class SpainCastle extends StaticPattern {
 
 		private void stockExpedition(Expedition ret) {
 			ret.getTitle().grantTitle(Expedition.Title.EXPLORER, "of Spain");
-			ret.setAccountedGold(12000);
+			ret.setAccountedGold(6000);
 			List<Vehicle> startingShips = ret.getCurrentVehicles();
 			startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
@@ -129,11 +129,9 @@ public class SpainCastle extends StaticPattern {
 			ExpeditionItem sailor = ItemFactory.createItem("SAILOR");
 			ExpeditionItem captain = ItemFactory.createItem("CAPTAIN");
 			
-			
-			
 			ret.addItemOffshore(sailor, 30);
 			ret.addItemOffshore(captain, 3);
-			ret.addItemOffshore(food, 100);
+			ret.addItemOffshore(food, 2000);
 			
 			
 		}

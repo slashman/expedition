@@ -90,7 +90,7 @@ public class RunExpedition {
 	private static void init(){
 		if (createNew){
 			System.out.println("Expedition "+ExpeditionGame.getVersion());
-			System.out.println("Slash ~ 2009");
+			System.out.println("Slash ~ 2009-2010");
 			System.out.println("Powered By Serf "+SworeGame.getVersion());
 			System.out.println("Reading configuration");
 	    	readConfiguration();
@@ -156,7 +156,7 @@ public class RunExpedition {
 				case SWING_CONSOLE:
 					System.out.println("Initializing Swing Console System Interface");
 					csi = null;
-					csi = new WSwingConsoleInterface("Expedition", false);
+					csi = new WSwingConsoleInterface("Expedition", configuration);
 					System.out.println("Initializing Console User Interface");
 					UserInterface.setSingleton(new ExpeditionConsoleUI(csi));
 					//CharCuts.initializeSingleton();

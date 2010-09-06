@@ -41,7 +41,7 @@ public class FoodConsumerDelegate implements Serializable{
 		return (int)Math.floor(dailyFoodConsumption * foodConsumer.getFoodConsumptionMultiplier());
 	}
 	
-	private boolean disabled = true;
+	private boolean disabled = false;
 	public void consumeFood(){
 		if (disabled)
 			return;

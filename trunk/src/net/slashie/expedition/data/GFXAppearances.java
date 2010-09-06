@@ -150,7 +150,7 @@ public class GFXAppearances {
 				createAppearance("SPEARS", 1 ,9),
 				createAppearance("SWORDS", 2 ,9),
 				createAppearance("XBOWS", 4 ,9),
-				createAppearance("BOWS", 1 ,18),
+				createAppearance("BOWS", 3 ,17),
 				createAppearance("ARROWS", 5 ,9),
 				createAppearance("GUNS", 6 ,9),
 				createAppearance("STUDDED_LEATHER", 7 ,9),

@@ -15,7 +15,7 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Util;
 
 public class Town extends GoodsCache{
-	private static final String[] TOWN_ACTIONS = new String[] { "Do Nothing" };
+	private static final String[] TOWN_ACTIONS = new String[] { "Leave" };
 	private String name;
 	protected Expedition founderExpedition;
 	protected Date foundedIn;
@@ -51,7 +51,7 @@ public class Town extends GoodsCache{
 	
 	@Override
 	public void onStep(Actor a) {
-		String description =  getLongDescription()+"XXX ";
+		String description =  getLongDescription()+" XXX ";
 		if (foundedIn != null){
 			description += "Founded on "+ DateFormat.getDateInstance(DateFormat.MEDIUM).format(foundedIn)+" by "+founderExpedition.getExpeditionaryTitle()+" XXX ";
 		}
@@ -60,8 +60,11 @@ public class Town extends GoodsCache{
 	}
 	
 	protected void townAction(int switchChat) {
-		// TODO Auto-generated method stub
-		
+		if (this instanceof NativeTown){
+			if (switchChat == 1){
+				((NativeTown)this).setHostile(true);
+			}
+		}
 	}
 
 	protected String[] getTownActions() {

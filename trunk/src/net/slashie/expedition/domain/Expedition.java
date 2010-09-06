@@ -129,13 +129,25 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 
 	public MovementSpeed getMovementSpeed() {
 		if (getMovementMode() == MovementMode.SHIP){
+			int reduction = 0;
+			int boost = 0;
 			if (!hasFullShipCrew()){
-				return getSailingPoint().getSpeed().reduced();
-			} else if (getShipHealth() < 70){
-				return getSailingPoint().getSpeed().reduced();
-			}  else {
-				return getSailingPoint().getSpeed();
+				reduction++;
+			} 
+			if (getShipHealth() < 70){
+				reduction++;
 			}
+			if (getLocation().getWeather().isWindy()){
+				boost++;
+			}  
+			MovementSpeed ret = getSailingPoint().getSpeed();
+			for (int i = 0; i < reduction; i++){
+				ret = ret.reduced();
+			}
+			for (int i = 0; i < boost; i++){
+				ret = ret.boost();
+			}
+			return ret;
 		} else {
 			if (getFoodDays() == 0){
 				return MovementSpeed.SLOW;
@@ -208,6 +220,22 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			this.movementCost = movementCost;
 		}
 		
+		public MovementSpeed boost() {
+			switch (this){
+			case NONE: 
+				return VERY_SLOW;
+			case VERY_SLOW: 
+				return SLOW;
+			case SLOW:
+				return NORMAL;
+			case NORMAL:
+				return FAST;
+			case FAST: case VERY_FAST:
+				return VERY_FAST;
+			}
+			return null;
+		}
+
 		public MovementSpeed reduced() {
 			switch (this){
 			case VERY_SLOW: case NONE:

@@ -18,16 +18,17 @@ public class NativeTown extends Town{
 	private static final String[] NATIVE_ACTIONS = new String [] {
 		"Leave",
 		//Peaceful
-		"Transact goods", 
+		/*"Transact goods", 
 		"Amaze the natives", 
 		"Raid the settlement",
 		"Demand tribute",
 		"Beg for help",
-		"Learn about enemies",
+		"Learn about enemies",*/
 		//War
-		"Offer Peace",
+		/*"Offer Peace",
 		"Capture natives",
-		"Recruit"
+		"Recruit"*/
+		"Attack!"
 	};
 	private Culture culture;
 	private boolean isHostile;
@@ -182,6 +183,7 @@ public class NativeTown extends Town{
 	public void onSeenByPlayer() {
 		if (isDisabled){
 			getLevel().addActor(this);
+			resurrect();
 			isDisabled = false;
 		}
 	}
