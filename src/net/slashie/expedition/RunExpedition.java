@@ -274,8 +274,9 @@ public class RunExpedition {
 		File[] saves = saveDirectory.listFiles(new SaveGameFilenameFilter() );
 		
 		int index = ExpeditionDisplay.thus.showSavedGames(saves);
-		if (index == -1)
-			title();
+		if (index == -1){
+			return;
+		}
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saves[index]));
 			currentGame = (ExpeditionGame) ois.readObject();
