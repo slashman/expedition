@@ -1115,7 +1115,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		        		
 	        		}
 	        	} else if (cell.getStepCommand().equals("TRAVEL_CASTLE")){
-	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("The Queen has arranged a charriot to take you to the Alcazar of Segovia");
+	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("A chariot takes you to the Alcazar of Segovia");
 
 	        		
 	        	}
