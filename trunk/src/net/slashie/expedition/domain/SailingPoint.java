@@ -3,11 +3,11 @@ package net.slashie.expedition.domain;
 import net.slashie.expedition.domain.Expedition.MovementSpeed;
 
 public enum SailingPoint {
-	BEATING ("Beating",0,44,MovementSpeed.VERY_SLOW),
-	CLOSE_REACH ("Close Reach",45,79,MovementSpeed.SLOW),
-	BEAM_REACH ("Beam Reach", 80,109, MovementSpeed.SLOW),
-	BROAD_REACH ("Broad Reach", 110, 159,MovementSpeed.NORMAL),
-	RUNNING ("Running", 160, 180,MovementSpeed.FAST),
+	BEATING 	("Beating",		0,	44,		MovementSpeed.VERY_SLOW),
+	CLOSE_REACH ("Close Reach",	45,	79,		MovementSpeed.SLOW),
+	BEAM_REACH 	("Beam Reach",	80,	109,	MovementSpeed.SLOW),
+	BROAD_REACH ("Broad Reach", 110,159,	MovementSpeed.NORMAL),
+	RUNNING 	("Running", 	160,180,	MovementSpeed.FAST),
 	
 	BARE_POLES ("Bare Poles",MovementSpeed.SLOW),
 	RUNNING_STORM ("Surfing",MovementSpeed.NORMAL),
