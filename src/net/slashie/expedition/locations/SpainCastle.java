@@ -1,5 +1,6 @@
 package net.slashie.expedition.locations;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import net.slashie.serf.levelGeneration.StaticPattern;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 
-public class SpainCastle extends StaticPattern {
+public class SpainCastle extends StaticPattern implements Serializable {
 
 	
 	public SpainCastle () {

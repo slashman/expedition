@@ -1,5 +1,6 @@
 package net.slashie.expedition.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Map;
 import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.util.Pair;
 
-public class AssaultOutcome {
+public class AssaultOutcome implements Serializable{
 	private List<Pair<ExpeditionUnit, Integer>> deaths = new ArrayList<Pair<ExpeditionUnit,Integer>>();
 	private Map<ExpeditionUnit, Pair<ExpeditionUnit, Integer>> deathsMap =new HashMap<ExpeditionUnit, Pair<ExpeditionUnit,Integer>>();
 	

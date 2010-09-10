@@ -1,5 +1,6 @@
 package net.slashie.expedition.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -273,7 +274,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	
 	private String expeditionary;
 
-	public static class Rank {
+	public static class Rank implements Serializable {
 		private Title title;
 		private String realm;
 		

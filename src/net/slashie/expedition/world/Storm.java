@@ -1,5 +1,6 @@
 package net.slashie.expedition.world;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.Map;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
-public class Storm {
+public class Storm implements Serializable{
 	private Position position;
 	private List<Position> stormlets = new ArrayList<Position>();
 	private Map<Position, Position> stormletsMap = new HashMap<Position, Position>();
