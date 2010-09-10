@@ -379,7 +379,7 @@ public class ExpeditionDAO {
 			//Goods
 			new Food("FOOD", "Food", "Food", 1, 1),
 			new Food("RUM", "Rum", "Rum", 5, 2),
-			new Good("WOOD", "Wood", "Wood", 10, GoodType.TOOL),
+			new Good("WOOD", "Wooden log", "Wooden logs", 10, GoodType.TOOL),
 			new Food("FRESHWATER", "Freshwater", "Freshwater", 5,1),
 			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 3, 1),
 			
@@ -395,8 +395,8 @@ public class ExpeditionDAO {
 			new Weapon("BOWS", "Bow", "Bows", new Roll("1D2"), new Roll("0"), false, 80, true, 30),
 			new Weapon("XBOWS", "Crossbow", "Crossbows", new Roll("2D2"), new Roll("0"), true, 95, true, 70),
 			new Weapon("GUNS", "Harquebus", "Harquebuses", new Roll("3D2"), new Roll("0"), true, 70, true, 60),
-			new Armor("PLATE", "Plate","Plate", 40, 4, new Roll("1D3"), "Plate"),
-			new Armor("STUDDED_LEATHER", "Studded Leather", "Studded Leather", 20, 1, new Roll("1"), "Leather"),
+			new Armor("PLATE", "Plate Mail","Plate Mails", 40, 4, new Roll("1D3"), "Plate"),
+			new Armor("STUDDED_LEATHER", "Studded Vest", "Studded Vests", 20, 1, new Roll("1"), "Leather"),
 			
 			new Good("ARROWS", "Arrow", "Arrows", 5, GoodType.WEAPON),
 			
