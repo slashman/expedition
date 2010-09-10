@@ -1,6 +1,6 @@
 package net.slashie.expedition.world;
 
-public class SettlementType {
+public class SettlementType implements java.io.Serializable{
 	private String name;
 	private int populationCost;
 	private int woodCost;

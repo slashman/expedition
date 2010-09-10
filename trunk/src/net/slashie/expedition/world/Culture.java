@@ -1,11 +1,12 @@
 package net.slashie.expedition.world;
 
+import java.io.Serializable;
 import java.util.List;
 
 import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
-public class Culture {
+public class Culture implements Serializable{
 	private String code;
 	private String name;
 	private boolean isCivilization;
