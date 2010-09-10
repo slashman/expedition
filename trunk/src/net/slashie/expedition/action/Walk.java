@@ -60,27 +60,27 @@ public class Walk extends Action{
         if (absCell instanceof ExpeditionCell){
 	        ExpeditionCell cell = (ExpeditionCell)absCell;
 	        if (cell.isSolid() || cell.isWater()){
-	        	invalidationMessage = "You can't walk there";
+	        	invalidationMessage = "You can't go there";
 	        	return false;
 	        }
         } else {
 	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
 	        
 	        if (cell == null){
-	        	invalidationMessage = "You can't walk there";
+	        	invalidationMessage = "You can't go there";
 	        	return false;
 	        }
 	        
 	        if (!cell.isLand()&& !(expedition.getMovementMode() == MovementMode.SHIP)){
 	        	AbstractFeature feature =expedition.getLevel().getFeatureAt(destinationPoint);
 	            if (feature == null || !feature.isSolid()){
-	            	invalidationMessage = "You can't walk there";
+	            	invalidationMessage = "You can't go there";
 		        	return false;
 	            }
 	        }
 	        
 	        if (cell.isSolid()){
-	        	invalidationMessage = "You can't walk there";
+	        	invalidationMessage = "You can't go there";
 	        	return false;
 	        }
         }
@@ -130,6 +130,14 @@ public class Walk extends Action{
 			
 		}
 		Position destinationPoint = Position.add(performer.getPosition(), var);
+
+		AbstractCell cell = performer.getLevel().getMapCell(destinationPoint);
+
+		if (cell == null){
+			expedition.getLevel().addMessage("You can't go there");
+			actionCancelled = true;
+        	return;
+        }
 		
 		try {
 			expedition.landOn(destinationPoint);
