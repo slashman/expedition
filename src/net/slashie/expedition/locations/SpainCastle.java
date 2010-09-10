@@ -84,7 +84,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			if (!exp.getFlag("MET_WITH_KINGS")){
 				//First meeting with kings
 				exp.setFlag("MET_WITH_KINGS", true);
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic Kings of Spain, have generously decided to grant you this audience. We have aproved your expedition to find the west path into the Indias.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic King and Queen of Spain, have generously decided to grant you this audience. We have aproved your expedition to find the west path into the Indias.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Should your journey be sucessful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We will grant you 6.000 royal maravedíes as well as equipment and men, and we will order every person in Spain to aid you in whatever they can.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey, we await your safe return. XXX You are dismissed.");
