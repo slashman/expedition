@@ -70,8 +70,10 @@ public class GFXAppearances {
 				createAppearance("PLAINS", 4 ,3),
 				createAppearance("WATER", 1 ,1),
 				createAppearance("WATER2", 3 ,1),
-				createAppearance("MOUNTAIN", 4 ,2),
+				createAppearance("MOUNTAIN", 5 ,17),
+				createAppearance("SNOWY_MOUNTAIN", 6 ,17),
 				createAppearance("FOREST", 2 ,17),
+				createAppearance("CHOPPED_FOREST", 4 ,17),
 				createAppearance("PORT_CITY", 11 ,6),
 				createAppearance("STORM", 1, 17),
 				

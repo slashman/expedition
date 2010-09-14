@@ -2,18 +2,29 @@ package net.slashie.expedition.world;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.serf.level.AbstractFeature;
+import net.slashie.serf.ui.Appearance;
+import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.utils.Util;
 
 public class Forest extends AbstractFeature{
+	private static final Appearance CHOPPED_FOREST = AppearanceFactory.getAppearanceFactory().getAppearance("CHOPPED_FOREST");
 	private int availableWood;
 	public Forest(int availableWood) {
 		super();
 		this.availableWood = availableWood;
 	}
+	
+	@Override
+	public Appearance getAppearance() {
+		if (getAvailableWood() <= 0)
+			return CHOPPED_FOREST;
+		else
+			return null;
+	}
 
 	@Override
 	public boolean isVisible() {
-		return false;
+		return getAvailableWood() <= 0;
 	}
 	
 	@Override

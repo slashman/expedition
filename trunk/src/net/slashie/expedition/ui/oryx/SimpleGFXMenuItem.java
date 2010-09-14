@@ -2,6 +2,7 @@ package net.slashie.expedition.ui.oryx;
 
 import java.awt.Image;
 
+import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.utils.swing.GFXMenuItem;
 
 public class SimpleGFXMenuItem implements GFXMenuItem {
@@ -28,6 +29,10 @@ public class SimpleGFXMenuItem implements GFXMenuItem {
 	
 	public int getValue() {
 		return value;
+	}
+	
+	public String getGroupClassifier() {
+		return "1";
 	}
 	
 }

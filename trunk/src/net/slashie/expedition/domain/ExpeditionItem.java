@@ -105,4 +105,15 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 		}
 	}
 
+	
+	public String getGroupClassifier() {
+		if (this instanceof ExpeditionUnit)
+			return "UNIT_"+((ExpeditionUnit)this).getBasicId();
+		else if (this instanceof Good){
+			return ((Good)this).getGoodType().toString();
+		} else {
+			return "NO_CLASSIFIER";
+		}
+	}
+
 }

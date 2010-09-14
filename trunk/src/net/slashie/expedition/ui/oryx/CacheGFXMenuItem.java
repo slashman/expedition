@@ -3,6 +3,7 @@ package net.slashie.expedition.ui.oryx;
 import java.awt.Image;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.serf.game.Equipment;
@@ -37,6 +38,9 @@ public class CacheGFXMenuItem implements GFXMenuItem {
 		return getItemAppearance().getImage();
 	}
 
+	public String getGroupClassifier() {
+		return ((ExpeditionItem)item.getItem()).getGroupClassifier();
+	}
 	
 	@Override
 	public String getMenuDetail() {

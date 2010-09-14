@@ -1,5 +1,7 @@
 package net.slashie.expedition.action;
 
+import java.util.List;
+
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.SeaPseudoCache;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -18,19 +20,11 @@ public class DropEquipment extends Action{
 	@Override
 	public void execute() {
 		if (((OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition())).isLand()){
-			AbstractFeature feature = performer.getLevel().getFeatureAt(performer.getPosition());
-			GoodsCache cache = null;
-			boolean newCache = false;
-			if (feature != null && feature instanceof GoodsCache){
-				cache = (GoodsCache) feature;
-			} else {
-				cache = new GoodsCache((ExpeditionGame)((Player)performer).getGame());
-				cache.setPosition(new Position(performer.getPosition()));
-				newCache = true;
-			}
+			GoodsCache cache = ((ExpeditionMacroLevel)performer.getLevel()).getOrCreateCache(performer.getPosition());
+			
 			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(cache);
-			if (newCache && cache.getItems().size() > 0)
-				performer.getLevel().addFeature(cache);
+			if (cache.getItems().size() == 0)
+				performer.getLevel().destroyFeature(cache);
 		} else {
 			//Drop things into the big sea
 			GoodsCache cache = new SeaPseudoCache((ExpeditionGame)((Player)performer).getGame());

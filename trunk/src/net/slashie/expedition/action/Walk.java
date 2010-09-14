@@ -1,8 +1,11 @@
 package net.slashie.expedition.action;
 
+import java.util.List;
+
 import net.slashie.expedition.action.navigation.TurnShip;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.SailingPoint;
+import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
@@ -71,12 +74,23 @@ public class Walk extends Action{
 	        	return false;
 	        }
 	        
-	        if (!cell.isLand()&& !(expedition.getMovementMode() == MovementMode.SHIP)){
-	        	AbstractFeature feature =expedition.getLevel().getFeatureAt(destinationPoint);
-	            if (feature == null || !feature.isSolid()){
-	            	invalidationMessage = "You can't go there";
-		        	return false;
-	            }
+	        if (!cell.isLand()){
+	        	if (expedition.getMovementMode() != MovementMode.SHIP){
+		        	//Trying to walk into the water
+		        	List<AbstractFeature> features =expedition.getLevel().getFeaturesAt(destinationPoint);
+		        	if (features != null){
+			        	for (AbstractFeature feature: features){
+			        		if (feature instanceof ShipCache){
+			        			break;
+			        		}
+				            invalidationMessage = "You can't go there";
+					        return false;
+			        	}
+		        	} else {
+		        		invalidationMessage = "You can't go there";
+		        		return false;
+		        	}
+	        	}
 	        }
 	        
 	        if (cell.isSolid()){

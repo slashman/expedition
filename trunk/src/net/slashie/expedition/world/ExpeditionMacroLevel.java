@@ -11,6 +11,7 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.util.Pair;
@@ -49,8 +50,11 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return currentTemperature;
 	}
 	
+	private int apparentTemperature = 0;
+	
+	
 	public String getTemperatureDescription(){
-		return TemperatureRules.getTemperatureDescription(getTemperature());
+		return TemperatureRules.getTemperatureDescription(apparentTemperature);
 	}
 	
 	public Weather getWeather() {
@@ -85,6 +89,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	}
 	
 	private Pair<String,String> handyReusableObject3 = new Pair<String, String>("H","H");
+
+	private boolean onMountains = false;
 	@Override
 	public Pair<String, String> getLocationLabels() {
 		handyReusableObject3.setA("LAT");
@@ -103,39 +109,50 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	
 	public void addEquipment(ExpeditionItem item, int quantity, Position where){
 		if (((OverworldExpeditionCell) getMapCell(where)).isLand()){
-			AbstractFeature feature = getFeatureAt(where);
-			GoodsCache cache = null;
-			boolean newCache = false;
-			if (feature != null && feature instanceof GoodsCache){
-				cache = (GoodsCache) feature;
-			} else {
-				cache = new GoodsCache(ExpeditionGame.getCurrentGame());
-				cache.setPosition(new Position(where));
-				newCache = true;
-			}
+			GoodsCache cache = getOrCreateCache(where);
 			cache.addItem(item, quantity);
-			if (newCache && cache.getItems().size() > 0)
-				addFeature(cache);
+			if (cache.getItems().size() == 0)
+				destroyFeature(cache);
 		} else {
 			//Drop things into the big sea
 		}
 	}
 
+	/**
+	 * Gets a cache at a locations or returns a new instance 
+	 * @param where
+	 * @return
+	 */
+	public GoodsCache getOrCreateCache(Position where){
+		List<AbstractFeature> features = getFeaturesAt(where);
+		GoodsCache cache = null;
+		boolean newCache = false;
+		if (features == null || features.size() == 0){
+			newCache = true;
+		} else {
+			for (AbstractFeature feature: features){
+				if (feature instanceof GoodsCache){
+					cache = (GoodsCache) feature;
+					newCache = false;
+					break;
+				} else {
+					newCache = true;
+				}
+			}
+		}
+		if (newCache){
+			cache = new GoodsCache((ExpeditionGame)(getExpedition().getGame()));
+			cache.setPosition(new Position(where));
+			addFeature(cache);
+		}
+		return cache;
+	}
 	public void addAllEquipment(Expedition expedition, Position where) {
 		if (((OverworldExpeditionCell) getMapCell(where)).isLand()){
-			AbstractFeature feature = getFeatureAt(where);
-			GoodsCache cache = null;
-			boolean newCache = false;
-			if (feature != null && feature instanceof GoodsCache){
-				cache = (GoodsCache) feature;
-			} else {
-				cache = new GoodsCache(ExpeditionGame.getCurrentGame());
-				cache.setPosition(new Position(where));
-				newCache = true;
-			}
+			GoodsCache cache = getOrCreateCache(where);
 			cache.addAllGoods(expedition);
-			if (newCache && cache.getItems().size() > 0)
-				addFeature(cache);
+			if (cache.getItems().size() == 0)
+				destroyFeature(cache);
 		} else {
 			//Drop things into the big sea
 		}
@@ -194,10 +211,16 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			weatherChange();
 			weatherChangeCounter = Util.rand(200,400);
 		}
-		
+		OverworldExpeditionCell currentCell = (OverworldExpeditionCell) getMapCell(getExpedition().getPosition());
+		if (currentCell.getHeightMod() > 1){
+			tempChangeCounter = -1;
+			onMountains  = true;
+		} else if (onMountains) {
+			tempChangeCounter = -1;
+			onMountains = false;
+		}
 		if (tempChangeCounter < 0){
-			OverworldExpeditionCell currentCell = (OverworldExpeditionCell) getMapCell(getExpedition().getPosition());
-			if (currentCell.isMountain()){
+			if (currentCell.getHeightMod() > 1){
 				currentTemperature = 5;
 			} else {
 				currentTemperature = (int)Math.round(TemperatureRules.getRulingTemperature(resolveYToLatitude(), ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)+1));
@@ -205,7 +228,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 					currentTemperature += 5;
 				}
 			}
-			currentTemperature += getWeather().getTemperatureModification();
+			apparentTemperature = currentTemperature + getWeather().getTemperatureModification(); 
 			
 			tempChangeCounter = Util.rand(200,400);
 		}
@@ -339,8 +362,6 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		
 	}
 	
-
-
 	private List<Storm> storms = new ArrayList<Storm>();
 	
 	private int windChangeCounter;
@@ -391,6 +412,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	AbstractFeature stormletFeature = new StormletFeature();
 	@Override
+	@Deprecated
 	public AbstractFeature getFeatureAt(Position position) {
 		if (hasStorm(position))
 			return stormletFeature;
@@ -403,7 +425,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		if (hasStorm(p)){
 			if (ret == null)
 				ret = new ArrayList<AbstractFeature>();
-			ret.add(stormletFeature);
+			if (!ret.contains(stormletFeature)){
+				ret.add(stormletFeature);
+			}
+		}else if (ret != null){
+			if (ret.contains(stormletFeature)){
+				ret.remove(stormletFeature);
+			}
 		}
 		return ret;
 	}
@@ -465,5 +493,9 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	public boolean isOnITZ() {
 		return isOnITZ;
+	}
+
+	public int getApparentTemperature() {
+		return apparentTemperature;
 	}
 }

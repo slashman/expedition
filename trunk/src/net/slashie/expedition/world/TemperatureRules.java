@@ -63,24 +63,21 @@ public class TemperatureRules {
 	}
 	
 	public static double getTemperatureFoodModifier(int temperatureC){
-		if (temperatureC > 25)
-			return 1.1;
-		else if (temperatureC > 20)
-			return 1.05;
-		else if (temperatureC > 15)
-			return 1.05;
-		else if (temperatureC > 15)
+		if (temperatureC > 5)
 			return 1;
-		else if (temperatureC > 10)
-			return 1;
-		else if (temperatureC > 5)
-			return 1;
-		else if (temperatureC > 0)
-			return 1.05;
 		else if (temperatureC > -5)
-			return 1.1;
-		else 
 			return 1.2;
+		else 
+			return 1.4;
+	}
+	
+	public static String getTemperatureFoodModifierString(int temperatureC){
+		if (temperatureC > 5)
+			return "";
+		else if (temperatureC > -5)
+			return "(Cold)";
+		else 
+			return "(Very Cold)";
 	}
 
 	private static int[] itczLats = new int[]{-30,-30,-15,-5,5,15,30,30,15,5,-5,-15}; 

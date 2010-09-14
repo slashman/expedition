@@ -170,7 +170,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	private boolean hasFullShipCrew() {
 		int ships = getTotalShips();
 		int requiredCaptains = ships;
-		int requiredSailors = ships * 10;
+		int requiredSailors = ships * 25;
 		
 		int captains = getItemCount("CAPTAIN");
 		int sailors = getItemCount("SAILOR");
@@ -179,6 +179,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	}
 
 	public Expedition(ExpeditionGame game) {
+		HANDLE_FEATURES = false;
 		setGame(game);
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		game.addFoodConsumer(this);
@@ -565,8 +566,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		int malus = 0;
 		if (getItemCount("EXPLORER")>0)
 			bonus++;
-		if (getLocation() instanceof ExpeditionMacroLevel && ((OverworldExpeditionCell)getLocation().getMapCell(getPosition())).isMountain()){
-			bonus+=2	;
+		if (getLocation() instanceof ExpeditionMacroLevel){
+			bonus += ((OverworldExpeditionCell)getLocation().getMapCell(getPosition())).getHeightMod(); 
 		}
 		switch(getLocation().getWeather()){
 		case CLEAR:
@@ -847,9 +848,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			return 3;
 		}*/
 		if (getLevel() instanceof ExpeditionMacroLevel)
-			return
-				TemperatureRules.getTemperatureFoodModifier(getLocation().getTemperature()) *
-				((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).getFoodConsumptionModifier();
+			return TemperatureRules.getTemperatureFoodModifier(getLocation().getTemperature());
 		else
 			return 1;
 
@@ -1068,6 +1067,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		this.justAttacked = justAttacked;
 	}
 	
+	List<AbstractFeature> reusableFeatureList = new ArrayList<AbstractFeature>();
 	@Override
 	public void landOn(Position destinationPoint) throws ActionCancelException {
 		boolean storm = getLocation().hasStorm(destinationPoint) && getMovementMode() == MovementMode.SHIP; 
@@ -1080,6 +1080,22 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				destinationPoint.x += Util.rand(-1, 1);
 				destinationPoint.y += Util.rand(-1, 1);
 			}
+        }
+        
+        List<AbstractFeature> features = getLevel().getFeaturesAt(destinationPoint);
+        if (features != null) {
+        	//Clone the collection to prevent coModification issues
+        	reusableFeatureList.clear();
+        	reusableFeatureList.addAll(features); 
+        	boolean solidFeature = false;
+			for (AbstractFeature feature: reusableFeatureList){
+	        	feature.onStep(this);
+	        	if (feature.isSolid())
+	        		solidFeature  = true;
+        	}
+        	if (solidFeature){
+        		return;
+        	}
         }
         
         AbstractCell absCell = getLevel().getMapCell(destinationPoint);
@@ -1123,13 +1139,14 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        }
         } else {
 	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
-	        if (!cell.isLand()&& !(getMovementMode() == MovementMode.SHIP)){
+	        /*if (!cell.isLand()&& !(getMovementMode() == MovementMode.SHIP)){
+	        	// Walking into the sea, just check for features (ships) to board
 	        	AbstractFeature feature = getLevel().getFeatureAt(destinationPoint);
 	            if (feature != null && feature.isSolid()){
 	            	feature.onStep(this);
 	            }
 	            throw new ActionCancelException();
-	        }
+	        }*/
 	        
 	        switch(getMovementMode()){
 	        case SHIP:
@@ -1170,11 +1187,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        	//increaseDeducedReckonWest(-var.x());
 	        }
         }
-        AbstractFeature feature = getLevel().getFeatureAt(destinationPoint);
-        if (feature != null && feature.isSolid()){
-        	feature.onStep(this);
-        	return;
-        }
+        
 
         super.landOn(destinationPoint);
 	}

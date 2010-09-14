@@ -32,13 +32,11 @@ public class ExpeditionDAO {
 	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
 		Store goodsStore = new Store();
 		goodsStore.setOwnerName("Goods Store");
-		goodsStore.addItem(80000, new StoreItemInfo("FOOD", 1, 10, "packs"));
-		goodsStore.addItem(500, new StoreItemInfo("RUM", 20, 5, "barrels"));
-		goodsStore.addItem(10000, new StoreItemInfo("WOOD", 5));
-		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", 165, 2, "barrels"));
-		goodsStore.addItem(20000, new StoreItemInfo("FOOD_SAUERKRAUT", 3, 10, "barrels"));
-		goodsStore.addItem(1000, new StoreItemInfo("CARPENTER", 60));
-
+		goodsStore.addItem(10000, new StoreItemInfo("FOOD", 200, 200, "half-tonnels"));
+		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", 20, 500, "tonnels"));
+		goodsStore.addItem(10000, new StoreItemInfo("FOOD_SAUERKRAUT", 400, 200, "half-tonnels"));
+		goodsStore.addItem(10000, new StoreItemInfo("WOOD", 100, 50, "packs"));
+		
 		
 		//Weapons Store
 		Store weaponsStore = new Store();
@@ -57,16 +55,15 @@ public class ExpeditionDAO {
 		port.setOwnerName("Harbor");
 		port.addItem(30, new StoreItemInfo("CARRACK", 8000));
 		port.addItem(20, new StoreItemInfo("CARAVEL", 6000));
-		
 		port.addItem(50, new StoreItemInfo("CAPTAIN", 300));
+		port.addItem(10000, new StoreItemInfo("SAILOR", 60));
+		port.addItem(50000, new StoreItemInfo("COLONIST", 10));
 		
 		//Pub
 		Store pub = new Store();
 		pub.setOwnerName("Pub");
-		pub.addItem(10000, new StoreItemInfo("SAILOR", 60));
 		pub.addItem(35000, new StoreItemInfo("ROGUE", 30));
-		pub.addItem(50000, new StoreItemInfo("COLONIST", 10));
-
+		pub.addItem(500, new StoreItemInfo("RUM", 600, 500, "tonnels"));
 		
 		//Guild
 		Store guild = new Store();
@@ -74,16 +71,18 @@ public class ExpeditionDAO {
 		guild.addItem(7000, new StoreItemInfo("MARINE", 70));
 		guild.addItem(5000, new StoreItemInfo("SOLDIER", 100));
 		guild.addItem(1500, new StoreItemInfo("ARCHER", 120));
+		guild.addItem(1000, new StoreItemInfo("CARPENTER", 60));
 		
 		return new AbstractCell[]{
 			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, false, false, 1.2d, false, false, false),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, false, false, 1.0d, false, false,false),
-			new OverworldExpeditionCell("WATER", "Ocean", false, false, false, 1.0d, false, false,false),
-			new OverworldExpeditionCell("WATER2", "Water", true, false, true, 1.0d, false, false,false),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, true, false, 1.5d, false, false,true),
-			new OverworldExpeditionCell("FOREST", "Forest", true, false, false, 1.2d, false, true,true),
-			new OverworldExpeditionCell("PORT_CITY", "Port City", false, false, false, 1.0d, false, false,false),
+			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false),
+			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false),
+			new OverworldExpeditionCell("WATER", "Ocean", false, 0, false, false, false,false),
+			new OverworldExpeditionCell("WATER2", "Water", true, 0, true, false, false,false),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,true),
+			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,true),
+			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true),
+			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false),
 			
 			//Inworld Cells
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
@@ -149,7 +148,9 @@ public class ExpeditionDAO {
 			new CharAppearance("WATER", '~', ConsoleSystemInterface.DARK_BLUE),
 			new CharAppearance("WATER2", '~', ConsoleSystemInterface.BLUE),
 			new CharAppearance("MOUNTAIN", '^', ConsoleSystemInterface.GREEN),
+			new CharAppearance("SNOWY_MOUNTAIN", '^', ConsoleSystemInterface.CYAN),
 			new CharAppearance("FOREST", '&', ConsoleSystemInterface.GREEN),
+			new CharAppearance("CHOPPED_FOREST", '&', ConsoleSystemInterface.BROWN),
 			new CharAppearance("PORT_CITY", '#', ConsoleSystemInterface.BROWN),
 			new CharAppearance("STORM", '*', ConsoleSystemInterface.GRAY),
 
@@ -254,6 +255,7 @@ public class ExpeditionDAO {
 		};
 	};
 	
+	private final static int UNIT_WEIGHT = 300;
 	public static ExpeditionFeature[] getFeatureDefinitions(AppearanceFactory appFactory){
 		return new ExpeditionFeature[0];
 	}
@@ -262,7 +264,7 @@ public class ExpeditionDAO {
 		return new ExpeditionItem[]{
 				//weight, carryCapacity, attack, defense, dailyFoodConsumption
 			//Units
-			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", 200, 200,
+			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", UNIT_WEIGHT, 200,
 					new Roll("1D1"),
 					new Roll("1D1"),
 					2,
@@ -270,31 +272,31 @@ public class ExpeditionDAO {
 					1,
 				new String[]{"SPEARS"},
 				new String[]{""}),
-			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  250, 250,
+			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  UNIT_WEIGHT, 250,
 					new Roll("1D2"),
 					new Roll("1D2"),
 					2,
 					85,15,
 					1,
-					new String[]{"BOWS", "SPEARS"},
+					new String[]{"SPEARS","BOWS"},
 					new String[]{""}),
-			new ExpeditionUnit("MARINE", "Marine", "Marines", 300, 250,
+			new ExpeditionUnit("MARINE", "Marine", "Marines", UNIT_WEIGHT, 250,
 					new Roll("1D3"),
 					new Roll("1D2"),
 					3,
 					90,5,
 					2,
-					new String[]{"XBOWS","BOWS","SWORDS","SPEARS"},
+					new String[]{"GUNS","XBOWS","SWORDS","SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", 300, 200,
+			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", UNIT_WEIGHT, 200,
 					new Roll("1D3"),
 					new Roll("1D3"),
 					4,
 					95,5,
 					2,
-					new String[]{"GUNS", "SWORDS", "SPEARS"},
-					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("ARCHER", "Archer","Archers", 250, 200,
+					new String[]{"SWORDS", "GUNS", "SPEARS"},
+					new String[]{"PLATE", "STUDDED_LEATHER"}),
+			new ExpeditionUnit("ARCHER", "Archer","Archers", UNIT_WEIGHT, 200,
 					new Roll("1D2"),
 					new Roll("1D2"),
 					2,
@@ -302,15 +304,15 @@ public class ExpeditionDAO {
 					2,
 					new String[]{"XBOWS", "BOWS", "SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("CAPTAIN", "Captain","Captains", 300, 200,
+			new ExpeditionUnit("CAPTAIN", "Captain","Captains", UNIT_WEIGHT, 200,
 					new Roll("1D1"),
 					new Roll("1D1"),
 					3,
 					50,5,
 					3,
 					new String[]{"GUNS", "SWORDS", "SPEARS" },
-					new String[]{"STUDDED_LEATHER", "PLATE"}),
-			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", 300, 400,
+					new String[]{"PLATE", "STUDDED_LEATHER"}),
+			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", UNIT_WEIGHT, 400,
 					new Roll("1D2"),
 					new Roll("1D1"),
 					4,
@@ -318,7 +320,7 @@ public class ExpeditionDAO {
 					3,
 					new String[]{"SPEARS"},
 					new String[]{"STUDDED_LEATHER"}),
-			new ExpeditionUnit("CARPENTER", "Carpenter","Carpenters", 250, 300, 
+			new ExpeditionUnit("CARPENTER", "Carpenter","Carpenters", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					3,
@@ -326,7 +328,7 @@ public class ExpeditionDAO {
 					1, 
 					new String[]{"SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("COLONIST",  "Colonist",  "Colonists",  200, 300, 
+			new ExpeditionUnit("COLONIST",  "Colonist",  "Colonists",  UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
@@ -335,7 +337,7 @@ public class ExpeditionDAO {
 					new String[]{"SPEARS"},
 					new String[]{""}),
 			//Native Units
-			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", 200, 200, 
+			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", UNIT_WEIGHT, 200, 
 					new Roll("1D3"),
 					new Roll("1D2"),
 					3,
@@ -343,7 +345,7 @@ public class ExpeditionDAO {
 					0,
 					new String[]{"SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_BRAVE", "Brave","Braves", 200, 200,
+			new ExpeditionUnit("NATIVE_BRAVE", "Brave","Braves", UNIT_WEIGHT, 200,
 					new Roll("1D4"),
 					new Roll("1D2"),
 					4,
@@ -351,7 +353,7 @@ public class ExpeditionDAO {
 					0,
 					new String[]{"SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", 200, 200,
+			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", UNIT_WEIGHT, 200,
 					new Roll("1D2"),
 					new Roll("1D1"),
 					2,
@@ -359,7 +361,7 @@ public class ExpeditionDAO {
 					0,
 					new String[]{"BOWS", "SPEARS"},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_COMMONER", "Native","Natives", 200, 300, 
+			new ExpeditionUnit("NATIVE_COMMONER", "Native","Natives", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
@@ -367,7 +369,7 @@ public class ExpeditionDAO {
 					0,
 					new String[]{""},
 					new String[]{""}),
-			new ExpeditionUnit("NATIVE_LEADER", "Shaman","Shamans", 200, 50, 
+			new ExpeditionUnit("NATIVE_LEADER", "Shaman","Shamans", UNIT_WEIGHT, 50, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
@@ -377,42 +379,42 @@ public class ExpeditionDAO {
 					new String[]{""}),
 			
 			//Goods
-			new Food("FOOD", "Food", "Food", 1, 1),
-			new Food("RUM", "Rum", "Rum", 5, 2),
+			new Food("FOOD", "Food", "Food", 3, 1),
+			new Food("RUM", "Rum", "Rum", 2, 2),
 			new Good("WOOD", "Wooden log", "Wooden logs", 10, GoodType.TOOL),
-			new Food("FRESHWATER", "Freshwater", "Freshwater", 5,1),
+			new Food("FRESHWATER", "Freshwater", "Freshwater", 2,1),
 			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 3, 1),
 			
 			//New Worlds Goods
-			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 50, 45),
-			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  50, 25),
-			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 70, 20),
-			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 5, 1),
+			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 5, 45),
+			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  5, 25),
+			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 10, 20),
+			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 3, 1),
 
 			//Weapons
-			new Weapon("SPEARS", "Spear","Spears", new Roll("1D1"), new Roll("1D1"), false, 80, false, 30),
-			new Weapon("SWORDS", "Sword", "Swords", new Roll("1D3"), new Roll("1D1"), false, 90, false, 50),
-			new Weapon("BOWS", "Bow", "Bows", new Roll("1D2"), new Roll("0"), false, 80, true, 30),
-			new Weapon("XBOWS", "Crossbow", "Crossbows", new Roll("2D2"), new Roll("0"), true, 95, true, 70),
-			new Weapon("GUNS", "Harquebus", "Harquebuses", new Roll("3D2"), new Roll("0"), true, 70, true, 60),
-			new Armor("PLATE", "Plate Mail","Plate Mails", 40, 4, new Roll("1D3"), "Plate"),
-			new Armor("STUDDED_LEATHER", "Studded Vest", "Studded Vests", 20, 1, new Roll("1"), "Leather"),
+			new Weapon("SPEARS", "Spear","Spears", new Roll("1D2"), new Roll("1D1"), false, 80, false, 8),
+			new Weapon("SWORDS", "Sword", "Swords", new Roll("2D3"), new Roll("1D1"), false, 90, false, 10),
+			new Weapon("BOWS", "Bow", "Bows", new Roll("1D3"), new Roll("0"), false, 80, true, 5),
+			new Weapon("XBOWS", "Crossbow", "Crossbows", new Roll("2D2"), new Roll("0"), true, 95, true, 10),
+			new Weapon("GUNS", "Harquebus", "Harquebuses", new Roll("3D2"), new Roll("0"), true, 70, true, 10),
+			new Armor("PLATE", "Breastplate","Breastplates", 20, 4, new Roll("1D4"), "Plate"),
+			new Armor("STUDDED_LEATHER", "Studded Vest", "Studded Vests", 10, 1, new Roll("1D2"), "Leather"),
 			
-			new Good("ARROWS", "Arrow", "Arrows", 5, GoodType.WEAPON),
+			new Good("ARROWS", "Arrow", "Arrows", 1, GoodType.WEAPON),
 			
 			//Ships
-			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,false,3,25000, 10, false),
-			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,false,4,20000, 15, false),
+			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,false,3,100000, 10, false),
+			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,false,4,60000, 15, false),
 			
 			//Special
-			new ExpeditionUnit("KING_FERDINAND", "Ferdinand II, King of Aragón","Kings", 250, 300, 
+			new ExpeditionUnit("KING_FERDINAND", "Ferdinand II, King of Aragón","Kings", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					2,
 					50,5, 
 					1, new String[]{""},
 					new String[]{""}) ,
-			new ExpeditionUnit("QUEEN_ISABELLE", "Isabella, Queen of Castile and León","Queens", 250, 300, 
+			new ExpeditionUnit("QUEEN_ISABELLE", "Isabella, Queen of Castile and León","Queens", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
