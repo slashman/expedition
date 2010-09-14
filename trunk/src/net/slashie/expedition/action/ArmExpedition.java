@@ -1,5 +1,7 @@
 package net.slashie.expedition.action;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import net.slashie.expedition.domain.Armor;
@@ -23,6 +25,11 @@ public class ArmExpedition extends Action{
 				return;
 			
 			List<Equipment> units = getExpedition().getUnarmedUnits();
+			Collections.sort(units, new Comparator<Equipment>() {
+				public int compare(Equipment arg0, Equipment arg1) {
+					return ((ExpeditionUnit)arg1.getItem()).getAttack().getMax() - ((ExpeditionUnit)arg0.getItem()).getAttack().getMax();
+				}
+			});
 			for (Equipment unit: units){
 				String[] preferredWeapons = ((ExpeditionUnit)unit.getItem()).getWeaponTypes();
 				for (String weaponType: preferredWeapons){
@@ -41,6 +48,11 @@ public class ArmExpedition extends Action{
 			}
 			
 			units = getExpedition().getUnarmoredUnits();
+			Collections.sort(units, new Comparator<Equipment>() {
+				public int compare(Equipment arg0, Equipment arg1) {
+					return ((ExpeditionUnit)arg1.getItem()).getDefense().getMax() - ((ExpeditionUnit)arg0.getItem()).getDefense().getMax();
+				}
+			});
 			for (Equipment unit: units){
 				String[] preferredArmors = ((ExpeditionUnit)unit.getItem()).getArmorTypes();
 				for (String armorType: preferredArmors){
