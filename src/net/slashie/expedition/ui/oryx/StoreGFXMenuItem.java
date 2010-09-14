@@ -3,6 +3,7 @@ package net.slashie.expedition.ui.oryx;
 import java.awt.Image;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.serf.game.Equipment;
@@ -35,5 +36,9 @@ public class StoreGFXMenuItem implements GFXMenuItem {
 	
 	public String getMenuDescription() {
 		return CommonUI.getMenuStoreDescription(item, offShore, store);
+	}
+	
+	public String getGroupClassifier() {
+		return ((ExpeditionItem)item.getItem()).getGroupClassifier();
 	}
 }

@@ -187,6 +187,40 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		return ret;
 	}
 	
+	public List<Equipment> getTools() {
+		List<Equipment> ret = new ArrayList<Equipment>();  
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor){
+				ret.add(equipment);
+			}
+		}
+		return ret;
+	}
+
+	public List<Equipment> getGoods() {
+		List<Equipment> ret = new ArrayList<Equipment>();  
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Good && !(equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor || equipment.getItem() instanceof Valuable)){
+				ret.add(equipment);
+			}
+		}
+		return ret;
+	}
+
+	public List<Equipment> getValuables() {
+		List<Equipment> ret = new ArrayList<Equipment>();  
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Valuable){
+				ret.add(equipment);
+			}
+		}
+		return ret;
+	}
+	
+	
 	public double getFoodConsumptionMultiplier() {
 		return 1;
 	}

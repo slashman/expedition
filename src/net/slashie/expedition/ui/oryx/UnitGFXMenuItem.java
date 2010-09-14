@@ -2,6 +2,7 @@ package net.slashie.expedition.ui.oryx;
 
 import java.awt.Image;
 
+import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
@@ -40,5 +41,9 @@ public class UnitGFXMenuItem implements GFXMenuItem {
 	
 	private GFXAppearance getItemAppearance(){
 		return (GFXAppearance)e.getItem().getAppearance();
+	}
+	
+	public String getGroupClassifier() {
+		return ((ExpeditionItem)e.getItem()).getGroupClassifier();
 	}
 }

@@ -50,7 +50,7 @@ public class WorldGenerator {
 							Util.rand(cultureCenter.getA().x-range, cultureCenter.getA().x+range),
 							Util.rand(cultureCenter.getA().y-range, cultureCenter.getA().y+range));
 					//Check if this is land
-					if (level.getMapCell(settlementPosition )== null || !((OverworldExpeditionCell)level.getMapCell(settlementPosition)).isLand() || level.getFeatureAt(settlementPosition) != null){
+					if (level.getMapCell(settlementPosition )== null || !((OverworldExpeditionCell)level.getMapCell(settlementPosition)).isLand() || level.getFeaturesAt(settlementPosition) != null){
 						fussible++;
 						if (fussible < 1000){
 							i--;

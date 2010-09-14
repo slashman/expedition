@@ -38,6 +38,9 @@ public class ShipCache extends GoodsCache{
 			if (!(equipment.getItem() instanceof Vehicle)){
 				currentlyCarrying += ((ExpeditionItem)equipment.getItem()).getWeight() * equipment.getQuantity();
 			}
+			if (equipment.getItem() instanceof ExpeditionUnit){
+				currentlyCarrying += ((ExpeditionItem)equipment.getItem()).getWeight() * equipment.getQuantity();
+			}
 		}
 		return currentlyCarrying;
 	}

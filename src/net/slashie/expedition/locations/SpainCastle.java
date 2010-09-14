@@ -20,6 +20,7 @@ import net.slashie.serf.level.Unleasher;
 import net.slashie.serf.levelGeneration.StaticPattern;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
+import net.slashie.utils.Util;
 
 public class SpainCastle extends StaticPattern implements Serializable {
 
@@ -130,9 +131,9 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			ExpeditionItem sailor = ItemFactory.createItem("SAILOR");
 			ExpeditionItem captain = ItemFactory.createItem("CAPTAIN");
 			
-			ret.addItemOffshore(sailor, 30);
+			ret.addItemOffshore(sailor, Util.rand(85,95));
 			ret.addItemOffshore(captain, 3);
-			ret.addItemOffshore(food, 2000);
+			ret.addItemOffshore(food, 20000);
 			
 			
 		}

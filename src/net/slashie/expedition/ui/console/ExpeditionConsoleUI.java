@@ -27,6 +27,7 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.ui.oryx.CacheGFXMenuItem;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
+import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.libjcsi.CSIColor;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
@@ -103,7 +104,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			csi.print(3, 3, getExpedition().getTowns().size()+" colonies");
 		csi.print(3, 4, getExpedition().getAccountedGold()+"$");
 		
-		csi.print(3, 5, statsExpedition.getOffshoreFoodDays()+" food days");
+		csi.print(3, 5, statsExpedition.getOffshoreFoodDays()+" food days "+TemperatureRules.getTemperatureFoodModifierString(getExpedition().getLocation().getTemperature()));
 		if (getExpedition().getLevel() instanceof ExpeditionMicroLevel)
 			csi.print(3, 6, "Carrying "+statsExpedition.getOffshoreCurrentlyCarrying()+"%");
 		else
@@ -409,7 +410,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   		cacheBox.setMenuItems(menuItems);
   		cacheBox.setPromptSize(2);
   		cacheBox.setBorder(true);
-  		cacheBox.setPrompt("Transfer from "+cache.getDescription()+" to Expedition");
+  		cacheBox.setPrompt("Transfer from "+cache.getDescription()+" to Expedition [Space to exit]");
   		//cacheBox.setTitle("On Ship...");
   		cacheBox.setForeColor(ConsoleSystemInterface.RED);
   		cacheBox.setBorderColor(ConsoleSystemInterface.TEAL);
@@ -498,7 +499,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   		cacheBox.setMenuItems(menuItems);
   		cacheBox.setPromptSize(2);
   		cacheBox.setBorder(true);
-  		cacheBox.setPrompt("Transfer from Expedition to "+ship.getDescription());
+  		cacheBox.setPrompt("Transfer from Expedition to "+ship.getDescription()+" [Space to exit]");
   		//cacheBox.setTitle("On Ship...");
   		cacheBox.setForeColor(ConsoleSystemInterface.RED);
   		cacheBox.setBorderColor(ConsoleSystemInterface.TEAL);

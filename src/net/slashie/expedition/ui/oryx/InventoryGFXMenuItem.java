@@ -47,4 +47,8 @@ public class InventoryGFXMenuItem implements GFXMenuItem {
 			return quantity + " " + itemDescription;
 		}
 	}
+	
+	public String getGroupClassifier() {
+		return ((ExpeditionItem)item.getItem()).getGroupClassifier();
+	}
 }

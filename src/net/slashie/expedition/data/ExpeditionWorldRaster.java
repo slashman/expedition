@@ -8,6 +8,7 @@ public class ExpeditionWorldRaster {
 	public static Hashtable<String, String> worldCharmap = new Hashtable<String, String>();
 
 	static {
+		worldCharmap.put("255,0,208", "$"); // Very high mountains
 		worldCharmap.put("132,130,77", "^"); // Very high mountains
 		worldCharmap.put("187,254,145", "."); // Grassland
 		worldCharmap.put("33,130,188", " "); // Deep Sea
