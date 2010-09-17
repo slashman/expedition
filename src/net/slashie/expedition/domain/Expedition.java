@@ -785,6 +785,12 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			}
 		}
 	}
+	
+	public void reduceAllItems(List<Equipment> items){
+		for (Equipment equipment: items){
+			reduceQuantityOf(equipment.getItem().getFullID(), equipment.getQuantity());
+		}
+	}
 
 	public void consumeFood() {
 		foodConsumerDelegate.consumeFood();
@@ -825,7 +831,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			Equipment equipment = inventory.get(i);
 			if (equipment.getItem() instanceof Good){
 				Good good = (Good)equipment.getItem();
-				if (good.getGoodType() == GoodType.VALUABLE){
+				if (good.getGoodType() == GoodType.ARTIFACT){
 					reduceQuantityOf(good, equipment.getQuantity());
 				}
 			}

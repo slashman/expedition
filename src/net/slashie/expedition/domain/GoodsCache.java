@@ -295,4 +295,36 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	public void reduceUnits(ExpeditionUnit unit, int quantity) {
 		reduceQuantityOf(unit, quantity);
 	}
+	
+	public int getGoodTypeCount(GoodType goodType) {
+		int acum = 0;
+		for (Equipment e: getGoods()){
+			Good g = (Good) e.getItem();
+			if (g.getGoodType() == goodType)
+				acum += e.getQuantity();
+		}
+		return acum;
+	}
+	
+	public List<Equipment> getGoods(GoodType goodType) {
+		List<Equipment> ret = new ArrayList<Equipment>();
+		for (Equipment e: getGoods()){
+			Good g = (Good) e.getItem();
+			if (g.getGoodType() == goodType)
+				ret.add(new Equipment(e.getItem(), e.getQuantity()));
+		}
+		return ret;
+	}
+
+	public void addAllItems(List<Equipment> items) {
+		for (Equipment equipment: items){
+			addItem(equipment.getItem(), equipment.getQuantity());
+		}
+	}
+	
+	public void reduceAllItems(List<Equipment> items){
+		for (Equipment equipment: items){
+			reduceQuantityOf(equipment.getItem().getFullID(), equipment.getQuantity());
+		}
+	}
 }
