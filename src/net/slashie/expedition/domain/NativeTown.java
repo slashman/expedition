@@ -1,7 +1,9 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.Bump;
@@ -38,6 +40,11 @@ public class NativeTown extends Town{
 	private boolean isHostile;
 	private boolean isDisabled;
 	private int turnsBeforeNextExpedition;
+	private Map<GoodType, Double> goodTypeModifiers = new HashMap<GoodType, Double>();
+	
+	public void setGoodTypeModifier(GoodType goodType, double modifier){
+		goodTypeModifiers.put(goodType, modifier);
+	}
 	
 	public void resetTurnsBeforeNextExpedition(){
 		turnsBeforeNextExpedition = 0;
@@ -65,6 +72,13 @@ public class NativeTown extends Town{
 		addItem(ItemFactory.createItem("GOLD_BRACELET"), Util.rand(0, size*culture.getGoldModifier()*40));
 		addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, size*culture.getArtifactModifier()*30));
 		addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(100, size*culture.getAgricultureModifier()*100));
+		
+		List<Pair<GoodType, Double>> goodTypeValuationModifiers = culture.getGoodTypeValuationModifiers();
+		for (Pair<GoodType, Double> goodTypeValuationModifier: goodTypeValuationModifiers){
+			double range = goodTypeValuationModifier.getB() * 0.2d;
+			double var = Util.rand(-range, range, 4);
+			setGoodTypeModifier(goodTypeValuationModifier.getA(), goodTypeValuationModifier.getB()+var);
+		}
 	}
 	
 	@Override
@@ -212,14 +226,14 @@ public class NativeTown extends Town{
 		int value = 0;
 		for (Equipment eqOffer: offer){
 			Good good = (Good) eqOffer.getItem();
-			value += valueItem(good);
+			value += evalItem(good);
 		}
 		List<Equipment> townOffer = new ArrayList<Equipment>();
 		List<Equipment> townGoods = getGoods(goodType);
 		for (Equipment townGood: townGoods){
 			Good good = (Good) townGood.getItem();
 			if (value > 0){
-				int goodValue = valueItem(good);
+				int goodValue = evalItem(good);
 				int maxQuantity = (int)Math.floor((double)value/(double)goodValue);
 				int quantity = townGood.getQuantity();
 				if (quantity > maxQuantity){
@@ -231,5 +245,13 @@ public class NativeTown extends Town{
 				break;
 		}
 		return townOffer;
+	}
+
+	private int evalItem(Good good) {
+		return (int)Math.round(good.getBaseValue()*getGoodTypeModifier(good.getGoodType()));
+	}
+
+	private double getGoodTypeModifier(GoodType goodType) {
+		return goodTypeModifiers.get(goodType);
 	}
 }

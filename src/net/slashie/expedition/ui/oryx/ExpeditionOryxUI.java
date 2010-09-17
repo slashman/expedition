@@ -488,7 +488,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	
 	public void transferFromExpedition(GoodsCache ship, int minUnits) {
-		List<Equipment> expeditionEquipment = getExpedition().getInventory();
    		Equipment.eqMode = true;
    		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		menuBox.setItemsPerPage(12);
@@ -1025,5 +1024,157 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String message = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits, battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
 		message = message.replaceAll("XXX", "\n");
 		showTextBox(message, 16, 16, 776, 576);
+	}
+	
+	@Override
+	/**
+	 * Shows the list of units and the message and prompts for confirmation
+	 */
+	public boolean promptUnitList(List<Equipment> unitList, String title, String prompt) {
+		Equipment.eqMode = true;
+   		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		cacheBox.setItemsPerPage(12);
+   		cacheBox.setBounds(160, 16, 624,480);
+  		
+  		Vector menuItems = new Vector();
+  		for (Equipment item: unitList){
+  			menuItems.add(new InventoryGFXMenuItem(item));
+  		}
+  		Collections.sort(menuItems, ITEMS_COMPARATOR);
+  		cacheBox.setMenuItems(menuItems);
+  		cacheBox.setTitle(title);
+  		cacheBox.setLegend(prompt);
+  		cacheBox.setTitleColor(TITLE_COLOR);
+  		cacheBox.setForeColor(TEXT_COLOR);
+  		cacheBox.draw();
+		return prompt();
+	}
+	
+	@Override
+	public List<Equipment> selectItemsFromExpedition(String prompt, String verb) {
+		Equipment.eqMode = true;
+		Map<String, Equipment> selectionMap = new HashMap<String, Equipment>();
+		List<Equipment> selection = new ArrayList<Equipment>();
+   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		menuBox.setItemsPerPage(12);
+  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setTitle("Expedition Equipment [Space to exit]");
+  		menuBox.setLegend(prompt);
+  		int typeChoice = 0;
+  		while (true){
+  			String legend = "";
+  			for (int i = 0; i < 4; i++){
+  				if (i == typeChoice){
+  					legend += ">";
+  				}
+  				switch (i){
+  				case 0:
+  					legend += "Units";
+  					break;
+  				case 1:
+  					legend += "Tools";
+  					break;
+  				case 2:
+  					legend += "Goods";
+  					break;
+  				case 3:
+  					legend += "Artifacts";
+  					break;
+  				}
+  				if (i == typeChoice){
+  					legend += "<";
+  				}
+  				legend += "    ";
+  			}
+  			
+  			menuBox.setLegend(legend);
+  			
+  	  		List<Equipment> inventory = null;
+  	  		switch (typeChoice){
+  	  		case 0:
+  	  			inventory = getExpedition().getUnits(true);
+  	  			break;
+  	  		case 1:
+  	  			inventory = getExpedition().getTools(true);
+  	  			break;
+  	  		case 2:
+  	  			inventory = getExpedition().getGoods(true);
+  	  			break;
+  	  		case 3:
+  	  			inventory = getExpedition().getValuables(true);
+  	  		}
+  	  		
+  	  		Vector menuItems = new Vector();
+  	  		for (Equipment item: inventory){
+  	  			menuItems.add(new InventoryGFXMenuItem(item));
+  	  		}
+  	  		Collections.sort(menuItems, ITEMS_COMPARATOR);
+  	  		menuBox.setMenuItems(menuItems);
+  	  		menuBox.draw();
+  	  		
+	  		CharKey x = new CharKey(CharKey.NONE);
+			while (x.code == CharKey.NONE)
+				x = si.inkey();
+			
+			if (x.isLeftArrow()){
+				typeChoice--;
+				if (typeChoice == -1)
+					typeChoice = 0;
+				continue;
+			}
+			if (x.isRightArrow()){
+				typeChoice++;
+				if (typeChoice == 4)
+					typeChoice = 3;
+				continue;
+			}
+			
+			InventoryGFXMenuItem itemChoice = ((InventoryGFXMenuItem)menuBox.getSelection(x));
+
+			if (itemChoice == null){
+				if (x.code != CharKey.SPACE){
+					continue;
+				}
+				break;
+			}
+			Equipment choice = itemChoice.getEquipment();
+			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+			menuBox.setLegend("How many "+item.getDescription()+" will you "+verb+"?");
+			menuBox.draw();
+			si.refresh();
+			int quantity = readQuantity(657, 86, "                       ", 5);
+			
+			if (quantity == 0)
+				continue;
+			
+			if (quantity > choice.getQuantity()){
+				menuBox.setLegend("Not enough "+choice.getItem().getDescription()+" [Press Space]");
+				menuBox.draw();
+				si.waitKey(CharKey.SPACE);
+				continue;
+			}
+			choice.reduceQuantity(quantity);
+			if (selectionMap.get(item.getFullID()) == null){
+				Equipment e = new Equipment(item, quantity);
+				selectionMap.put(item.getFullID(), e);
+				selection.add(e);
+			} else {
+				Equipment e = selectionMap.get(item.getFullID());
+				e.setQuantity(e.getQuantity()+quantity);
+			}
+			
+			if (choice.getQuantity() == 0){
+				menuItems.remove(choice);
+			}
+			menuBox.setLegend("You "+verb+" "+quantity+" "+choice.getItem().getDescription()+" [Press Space]");
+			menuBox.draw();
+			si.waitKey(CharKey.SPACE);
+			refresh();
+  		}
+  		
+		Equipment.eqMode = false;
+		si.restore();
+ 		si.refresh();
+ 		return selection;
 	}
 }

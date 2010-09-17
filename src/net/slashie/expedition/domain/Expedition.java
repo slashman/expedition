@@ -457,17 +457,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return power;
 	}
 	
-	public List<Equipment> getUnits(){
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof ExpeditionUnit){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}
-	
 	public int getTotalUnits(){
 		int acum = 0;
 		List<Equipment> units = getUnits();
@@ -912,39 +901,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return maxRange;
 	}*/
 
-	public List<Equipment> getTools() {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}
-
-	public List<Equipment> getGoods() {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good && !(equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor || equipment.getItem() instanceof Valuable)){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}
-
-	public List<Equipment> getValuables() {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Valuable){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}
-	
 	public void killUnits(int quantity) {
 		Collection<Pair<ExpeditionUnit, Integer>> values = foodConsumerDelegate.killUnits(quantity);
 		String killMessage = "";
@@ -1219,4 +1175,83 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		reduceQuantityOf(unit, quantity);
 		checkDeath();
 	}
+
+	public List<Equipment> getUnits(boolean clone) {
+		List<Equipment> ret = new ArrayList<Equipment>();  
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof ExpeditionUnit){
+				if (clone){
+					ret.add(new Equipment(equipment.getItem(), equipment.getQuantity()));
+				} else {
+					ret.add(equipment);
+				}
+			}
+		}
+		return ret;
+	}
+	
+	public List<Equipment> getUnits(){
+		return getUnits(false);
+	}
+
+	public List<Equipment> getTools() {
+		return getTools(false);
+	}
+	
+	public List<Equipment> getGoods() {
+		return getGoods(false);
+	}
+	
+	public List<Equipment> getValuables() {
+		return getValuables(false);
+	}
+
+	
+	public List<Equipment> getTools(boolean clone) {
+		List<Equipment> ret = new ArrayList<Equipment>();  
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor){
+				if (clone){
+					ret.add(new Equipment(equipment.getItem(), equipment.getQuantity()));
+				} else {
+					ret.add(equipment);
+				}
+				
+			}
+		}
+		return ret;
+	}
+
+	public List<Equipment> getGoods(boolean clone) {
+		List<Equipment> ret = new ArrayList<Equipment>();  
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Good && !(equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor || equipment.getItem() instanceof Valuable)){
+				if (clone){
+					ret.add(new Equipment(equipment.getItem(), equipment.getQuantity()));
+				} else {
+					ret.add(equipment);
+				}
+			}
+		}
+		return ret;
+	}
+
+	public List<Equipment> getValuables(boolean clone) {
+		List<Equipment> ret = new ArrayList<Equipment>();  
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Valuable){
+				if (clone){
+					ret.add(new Equipment(equipment.getItem(), equipment.getQuantity()));
+				} else {
+					ret.add(equipment);
+				}
+			}
+		}
+		return ret;
+	}
+	
 }

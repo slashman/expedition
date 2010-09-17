@@ -16,8 +16,8 @@ public class Armor extends Good {
 	}
 	
 	public Armor(String classifierId, String description, String pluralDescription,
-			int weight, int burden, Roll defense, String shortDescription) {
-		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON);
+			int weight, int burden, Roll defense, String shortDescription, int baseValue) {
+		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON, baseValue);
 		this.burden = burden;
 		this.defense = defense;
 		this.shortDescription = shortDescription;

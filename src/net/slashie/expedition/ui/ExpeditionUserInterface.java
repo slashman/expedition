@@ -47,4 +47,6 @@ public interface ExpeditionUserInterface {
 			String battleTitle, 
 			List<Equipment> attackingUnits,
 			List<Equipment> defendingUnits);
+	public List<Equipment> selectItemsFromExpedition(String prompt, String verb);
+	public boolean promptUnitList(List<Equipment> unitList, String title, String prompt);
 }
