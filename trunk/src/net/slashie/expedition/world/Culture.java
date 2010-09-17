@@ -3,6 +3,7 @@ package net.slashie.expedition.world;
 import java.io.Serializable;
 import java.util.List;
 
+import net.slashie.expedition.domain.GoodType;
 import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
@@ -12,9 +13,14 @@ public class Culture implements Serializable{
 	private boolean isCivilization;
 	private int aggresiveness;
 	private List<Pair<Double, String>> classDistribution;
+	private List<Pair<GoodType, Double>> goodTypeValuationModifiers;
+	public List<Pair<GoodType, Double>> getGoodTypeValuationModifiers() {
+		return goodTypeValuationModifiers;
+	}
+
 	private int goldModifier, artifactModifier, agricultureModifier;
 	
-	public Culture(String code, String name, boolean isCivilization, int aggresiveness, List<Pair<Double, String>> classDistribution, int goldModifier, int artifactModifier, int agricultureModifier) {
+	public Culture(String code, String name, boolean isCivilization, int aggresiveness, List<Pair<Double, String>> classDistribution, List<Pair<GoodType, Double>> goodTypeValuationModifiers, int goldModifier, int artifactModifier, int agricultureModifier) {
 		super();
 		this.code = code;
 		this.name = name;
@@ -24,6 +30,7 @@ public class Culture implements Serializable{
 		this.goldModifier = goldModifier;
 		this.artifactModifier = artifactModifier;
 		this.agricultureModifier = agricultureModifier;
+		this.goodTypeValuationModifiers = goodTypeValuationModifiers;
 	}
 	
 	public String getCode() {
@@ -62,6 +69,5 @@ public class Culture implements Serializable{
 		return agricultureModifier;
 	}
 
-
-	
+		
 }

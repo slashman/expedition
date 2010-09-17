@@ -881,4 +881,15 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		return false;
 	}
 	
+	@Override
+	public boolean promptUnitList(List<Equipment> unitList, String title,
+			String prompt) {
+		return false;
+	}
+	
+	@Override
+	public List<Equipment> selectItemsFromExpedition(String prompt, String verb) {
+		return null;
+	}
+	
 }

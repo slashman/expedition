@@ -76,18 +76,20 @@ public class Town extends GoodsCache{
 					int goodTypeChoice = UserInterface.getUI().switchChat("What goods are you looking for?", GoodType.getChoicesList());
 					GoodType goodType = GoodType.fromChoice(goodTypeChoice);
 					if (nativeTown.canTradeGoodType(goodType)){
-						List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?");
-						List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
-						if (townOffer.size() == 0){
-							showBlockingMessage("We can offer you nothing for that.");
-						} else {
-							if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "This is our offer, do you accept it?")){
-								expedition.reduceAllItems(offer);
-								expedition.addAllItems(townOffer);
-								nativeTown.reduceAllItems(townOffer);
-								nativeTown.addAllItems(offer);
+						List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer");
+						if (UserInterface.getUI().promptChat("Are you sure?")){
+							List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
+							if (townOffer.size() == 0){
+								showBlockingMessage("We can offer you nothing for that.");
 							} else {
-								showBlockingMessage("Some other time then..");
+								if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it? [Y/N]")){
+									expedition.reduceAllItems(offer);
+									expedition.addAllItems(townOffer);
+									nativeTown.reduceAllItems(townOffer);
+									nativeTown.addAllItems(offer);
+								} else {
+									showBlockingMessage("Some other time then..");
+								}
 							}
 						}
 					} else {
@@ -96,6 +98,7 @@ public class Town extends GoodsCache{
 				} else {
 					showBlockingMessage("The "+nativeTown.getDescription()+" refuses to trade with you.");
 				}
+				break;
 			case 2:
 				break;
 			}

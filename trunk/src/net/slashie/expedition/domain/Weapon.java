@@ -23,8 +23,8 @@ public class Weapon extends Good{
 	}
 
 	public Weapon(String classifierId, String description, String pluralDescription,
-			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight) {
-		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON);
+			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight, int baseValue) {
+		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON, baseValue);
 		this.burden = burden;
 		this.isTool = isTool;
 		this.attack = attack;

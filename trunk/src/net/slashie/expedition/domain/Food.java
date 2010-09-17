@@ -6,8 +6,8 @@ public class Food extends Good {
 		return unitsFedPerGood;
 	}
 	public Food(String classifierId, String description, String pluralDescription,
-			int weight, int unitsFedPerGood) {
-		super(classifierId, description, pluralDescription, weight, GoodType.FOOD);
+			int weight, int unitsFedPerGood, int baseValue) {
+		super(classifierId, description, pluralDescription, weight, GoodType.SUPPLIES, baseValue);
 		this.unitsFedPerGood = unitsFedPerGood;
 				
 	}

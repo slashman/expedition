@@ -5,9 +5,8 @@ public class Valuable extends Good{
 	public int getGoldValue() {
 		return goldValue;
 	}
-	public Valuable(String classifierId, String description, String pluralDescription,
-			int weight, int goldValue) {
-		super(classifierId, description, pluralDescription, weight, GoodType.VALUABLE);
+	public Valuable(String classifierId, String description, String pluralDescription,int weight, int goldValue) {
+		super(classifierId, description, pluralDescription, weight, GoodType.ARTIFACT, goldValue);
 		this.goldValue = goldValue;
 	}
 }
