@@ -1,5 +1,8 @@
 package net.slashie.expedition.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.ai.NativeActionSelector;
@@ -9,6 +12,7 @@ import net.slashie.expedition.world.Culture;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.ai.SimpleAI;
+import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.util.Pair;
@@ -16,11 +20,12 @@ import net.slashie.utils.Util;
 
 public class NativeTown extends Town{
 	private static final String[] NATIVE_ACTIONS = new String [] {
+		"Raid the settlement",
+		"Trade Goods",
 		"Leave",
 		//Peaceful
-		/*"Transact goods", 
+		/*
 		"Amaze the natives", 
-		"Raid the settlement",
 		"Demand tribute",
 		"Beg for help",
 		"Learn about enemies",*/
@@ -28,7 +33,6 @@ public class NativeTown extends Town{
 		/*"Offer Peace",
 		"Capture natives",
 		"Recruit"*/
-		"Attack!"
 	};
 	private Culture culture;
 	private boolean isHostile;
@@ -193,5 +197,39 @@ public class NativeTown extends Town{
 	}
 
 
-	
+	public boolean wantsToTradeWith(Expedition expedition) {
+		return !isHostile();
+	}
+
+	public boolean canTradeGoodType(GoodType goodType) {
+		int goodTypeCount = getGoodTypeCount(goodType);
+		return goodTypeCount > 0;
+	}
+
+	public List<Equipment> calculateOffer(
+			GoodType goodType,
+			List<Equipment> offer) {
+		int value = 0;
+		for (Equipment eqOffer: offer){
+			Good good = (Good) eqOffer.getItem();
+			value += valueItem(good);
+		}
+		List<Equipment> townOffer = new ArrayList<Equipment>();
+		List<Equipment> townGoods = getGoods(goodType);
+		for (Equipment townGood: townGoods){
+			Good good = (Good) townGood.getItem();
+			if (value > 0){
+				int goodValue = valueItem(good);
+				int maxQuantity = (int)Math.floor((double)value/(double)goodValue);
+				int quantity = townGood.getQuantity();
+				if (quantity > maxQuantity){
+					quantity = maxQuantity;
+				}
+				townOffer.add(new Equipment(good, quantity));
+				value -= goodValue * quantity;
+			} else
+				break;
+		}
+		return townOffer;
+	}
 }
