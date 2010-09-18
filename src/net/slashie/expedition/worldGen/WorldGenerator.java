@@ -60,7 +60,7 @@ public class WorldGenerator {
 						//Place a settlement
 						NativeTown t = new NativeTown(ExpeditionGame.getCurrentGame(), cultureCenter.getB(), cultureCenter.getB().getASize());
 						t.setPosition(new Position(settlementPosition));
-						t.setHostile(Util.chance(30*cultureCenter.getB().getAggresiveness()));
+						t.setUnfriendly(Util.chance(30*cultureCenter.getB().getAggresiveness()));
 						level.addFeature(t);
 					}
 				}

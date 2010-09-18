@@ -37,10 +37,10 @@ public class NativeTown extends Town{
 		"Recruit"*/
 	};
 	private Culture culture;
-	private boolean isHostile;
 	private boolean isDisabled;
 	private int turnsBeforeNextExpedition;
 	private Map<GoodType, Double> goodTypeModifiers = new HashMap<GoodType, Double>();
+	private boolean isUnfriendly;
 	
 	public void setGoodTypeModifier(GoodType goodType, double modifier){
 		goodTypeModifiers.put(goodType, modifier);
@@ -114,13 +114,6 @@ public class NativeTown extends Town{
 		return NATIVE_ACTIONS;
 	}
 
-	public boolean isHostile() {
-		return isHostile;
-	}
-
-	public void setHostile(boolean isHostile) {
-		this.isHostile = isHostile;
-	}
 	private static ActionSelector sharedSelector = new NativeActionSelector();
 	public ActionSelector getSelector() {
 		return sharedSelector;
@@ -212,7 +205,11 @@ public class NativeTown extends Town{
 
 
 	public boolean wantsToTradeWith(Expedition expedition) {
-		return !isHostile();
+		return !isUnfriendly();
+	}
+
+	public boolean isUnfriendly() {
+		return isUnfriendly;
 	}
 
 	public boolean canTradeGoodType(GoodType goodType) {
@@ -225,6 +222,8 @@ public class NativeTown extends Town{
 			List<Equipment> offer) {
 		int value = 0;
 		for (Equipment eqOffer: offer){
+			if (!(eqOffer.getItem() instanceof Good))
+				continue;
 			Good good = (Good) eqOffer.getItem();
 			value += evalItem(good);
 		}
@@ -253,5 +252,9 @@ public class NativeTown extends Town{
 
 	private double getGoodTypeModifier(GoodType goodType) {
 		return goodTypeModifiers.get(goodType);
+	}
+
+	public void setUnfriendly(boolean b) {
+		isUnfriendly = b;
 	}
 }

@@ -69,17 +69,27 @@ public class Town extends GoodsCache{
 			NativeTown nativeTown = (NativeTown) this;
 			switch (switchChat){
 			case 0:
-				nativeTown.setHostile(true);
+				nativeTown.setUnfriendly(true);
+				String battleName = "You raid the "+nativeTown.getDescription();
+	    		BattleManager.battle(battleName, expedition, nativeTown);
 				break;
 			case 1:
 				if (nativeTown.wantsToTradeWith(expedition)){
 					int goodTypeChoice = UserInterface.getUI().switchChat("What goods are you looking for?", GoodType.getChoicesList());
 					GoodType goodType = GoodType.fromChoice(goodTypeChoice);
+					if (goodType == null){
+						//Cancelled
+						break;
+					}
 					if (nativeTown.canTradeGoodType(goodType)){
 						List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer");
+						if (offer == null){
+							//Cancelled
+							break;
+						}
 						if (UserInterface.getUI().promptChat("Are you sure?")){
 							List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
-							if (townOffer.size() == 0){
+							if (townOffer == null || townOffer.size() == 0){
 								showBlockingMessage("We can offer you nothing for that.");
 							} else {
 								if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it? [Y/N]")){

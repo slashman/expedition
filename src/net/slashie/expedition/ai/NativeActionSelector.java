@@ -58,7 +58,7 @@ public class NativeActionSelector implements ActionSelector {
 		awareActorDelegate.setLevel(town.getLevel());
 		awareActorDelegate.setPosition(town.getPosition());
 		awareActorDelegate.setWasSeen(town.wasSeen());
-		if (town.isHostile()){
+		if (town.isUnfriendly()){
 			if (awareActorDelegate.isActorInLOS(town.getLevel().getPlayer())){
 				
 				int potentialPower = town.getPotentialPower(); 

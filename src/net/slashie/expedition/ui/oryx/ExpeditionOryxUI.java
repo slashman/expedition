@@ -1055,10 +1055,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Equipment.eqMode = true;
 		Map<String, Equipment> selectionMap = new HashMap<String, Equipment>();
 		List<Equipment> selection = new ArrayList<Equipment>();
+		List<Equipment> expeditionUnits = getExpedition().getUnits(true);
+		List<Equipment> expeditionTools = getExpedition().getTools(true);
+		List<Equipment> expeditionGoods = getExpedition().getGoods(true);
+		List<Equipment> expeditionValuables = getExpedition().getValuables(true);
    		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		menuBox.setItemsPerPage(12);
   		menuBox.setBounds(160, 16, 624,480);
-  		menuBox.setTitle("Expedition Equipment [Space to exit]");
+  		menuBox.setTitle(prompt+" [Space to exit]");
   		menuBox.setLegend(prompt);
   		int typeChoice = 0;
   		while (true){
@@ -1092,16 +1096,16 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  		List<Equipment> inventory = null;
   	  		switch (typeChoice){
   	  		case 0:
-  	  			inventory = getExpedition().getUnits(true);
+  	  			inventory = expeditionUnits;
   	  			break;
   	  		case 1:
-  	  			inventory = getExpedition().getTools(true);
+  	  			inventory = expeditionTools;
   	  			break;
   	  		case 2:
-  	  			inventory = getExpedition().getGoods(true);
+  	  			inventory = expeditionGoods;
   	  			break;
   	  		case 3:
-  	  			inventory = getExpedition().getValuables(true);
+  	  			inventory = expeditionValuables;
   	  		}
   	  		
   	  		Vector menuItems = new Vector();
