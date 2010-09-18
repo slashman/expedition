@@ -379,28 +379,28 @@ public class ExpeditionDAO {
 					new String[]{""}),
 			
 			//Goods
-			new Food("FOOD", "Food", "Food", 3, 1),
-			new Food("RUM", "Rum", "Rum", 2, 2),
-			new Good("WOOD", "Wooden log", "Wooden logs", 10, GoodType.TOOL),
-			new Food("FRESHWATER", "Freshwater", "Freshwater", 2,1),
-			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 3, 1),
+			new Food("FOOD", "Food", "Food", 3, 1, 1),
+			new Food("RUM", "Rum", "Rum", 2, 2, 5),
+			new Good("WOOD", "Wooden log", "Wooden logs", 10, GoodType.TOOL, 2),
+			new Food("FRESHWATER", "Freshwater", "Freshwater", 2,1, 1),
+			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 3, 1, 2),
 			
 			//New Worlds Goods
 			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 5, 45),
 			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  5, 25),
 			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 10, 20),
-			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 3, 1),
+			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 3, 1, 1),
 
 			//Weapons
-			new Weapon("SPEARS", "Spear","Spears", new Roll("1D2"), new Roll("1D1"), false, 80, false, 8),
-			new Weapon("SWORDS", "Sword", "Swords", new Roll("2D3"), new Roll("1D1"), false, 90, false, 10),
-			new Weapon("BOWS", "Bow", "Bows", new Roll("1D3"), new Roll("0"), false, 80, true, 5),
-			new Weapon("XBOWS", "Crossbow", "Crossbows", new Roll("2D2"), new Roll("0"), true, 95, true, 10),
-			new Weapon("GUNS", "Harquebus", "Harquebuses", new Roll("3D2"), new Roll("0"), true, 70, true, 10),
-			new Armor("PLATE", "Breastplate","Breastplates", 20, 4, new Roll("1D4"), "Plate"),
-			new Armor("STUDDED_LEATHER", "Studded Vest", "Studded Vests", 10, 1, new Roll("1D2"), "Leather"),
+			new Weapon("SPEARS", "Spear","Spears", new Roll("1D2"), new Roll("1D1"), false, 80, false, 8, 5),
+			new Weapon("SWORDS", "Sword", "Swords", new Roll("2D3"), new Roll("1D1"), false, 90, false, 10, 10),
+			new Weapon("BOWS", "Bow", "Bows", new Roll("1D3"), new Roll("0"), false, 80, true, 5, 6),
+			new Weapon("XBOWS", "Crossbow", "Crossbows", new Roll("2D2"), new Roll("0"), true, 95, true, 10, 25),
+			new Weapon("GUNS", "Harquebus", "Harquebuses", new Roll("3D2"), new Roll("0"), true, 70, true, 10, 30),
+			new Armor("PLATE", "Breastplate","Breastplates", 20, 4, new Roll("1D4"), "Plate", 50),
+			new Armor("STUDDED_LEATHER", "Studded Vest", "Studded Vests", 10, 1, new Roll("1D2"), "Leather", 20),
 			
-			new Good("ARROWS", "Arrow", "Arrows", 1, GoodType.WEAPON),
+			new Good("ARROWS", "Arrow", "Arrows", 1, GoodType.WEAPON, 2),
 			
 			//Ships
 			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,false,3,100000, 10, false),
@@ -430,30 +430,40 @@ public class ExpeditionDAO {
 				
 		};
 	}
+	
+	private final static GoodType GOOD_TYPES[] = new GoodType[] {
+		GoodType.SUPPLIES,
+		GoodType.ARTIFACT,
+		GoodType.TOOL,
+		GoodType.WEAPON
+	};
 
 	private static Map<String, Culture> culturesMap = new HashMap<String, Culture>(); 
 	static {
 		Culture[] cultures = new Culture[] { 
-			new Culture("MOUNT", "Fort Ancient", true, 3, composeList("NATIVE_WARRIOR,50"), 1, 3, 2), 
-			new Culture("MISSI", "Missisipians", true, 2, composeList("NATIVE_WARRIOR,30", "NATIVE_BRAVE, 10"), 1, 3, 3),
-			new Culture("AZTEC", "Aztec", true, 3, composeList("NATIVE_WARRIOR,40", "NATIVE_BRAVE,20", "NATIVE_ARCHER,10"), 3, 2, 2),
-			new Culture("HUAST", "Huastec", true, 2, composeList("NATIVE_WARRIOR,30", "NATIVE_BRAVE,10", "NATIVE_ARCHER,20"), 2, 1, 3),
-			new Culture("MIXTE", "Mixtec", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 2, 1, 2),
-			new Culture("MAYA", "Maya", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,30"), 2, 2, 3),
-			new Culture("PURHE", "P'urhépecha", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 1, 3, 1),
-			new Culture("TOTON", "Totonac", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 2, 1, 1),
-			new Culture("ZAPOT", "Zapotec", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 2, 2, 2),
-			new Culture("CANAR", "Cañaris", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 1, 3, 1),
-			new Culture("CHACH", "Chachapoya", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 2, 2, 3),
-			new Culture("CHIMU", "Chimú", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 1, 2, 3),
-			new Culture("INCA", "Inca", true, 3, composeList("NATIVE_WARRIOR,20", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 3, 1, 3),
-			new Culture("MUISC", "Muisca", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 1, 3, 3),
-			new Culture("TAIRO", "Tairona", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 1, 3, 3),
-			new Culture("ARTIC", "Artic Mammal Hunters", false, 1, composeList("NATIVE_WARRIOR,10"), 0, 0, 2),
-			new Culture("HUNTE", "Hunters-Gatherers", false, 2, composeList("NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), 0, 1, 2),
-			new Culture("FISHI", "Fishing people", false, 3, composeList("NATIVE_WARRIOR,20"), 0, 1, 1),
-			new Culture("BISON", "Bison Hunters", false, 3, composeList("NATIVE_WARRIOR,10","NATIVE_ARCHER,10"), 0, 0, 3),
-			new Culture("FARME", "Maiz Farmers", false, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10"), 0, 1, 3)
+			new Culture("MOUNT", "Fort Ancient", true, 3, 
+					composeList("NATIVE_WARRIOR,50"),
+					gtvm(1.0d,1.0d,1.0d,1.0d),
+					1, 3, 2), 
+			new Culture("MISSI", "Missisipians", true, 2, composeList("NATIVE_WARRIOR,30", "NATIVE_BRAVE, 10"), gtvm(1.5d,1.0d,1.0d,0.5d),1, 3, 3),
+			new Culture("AZTEC", "Aztec", true, 3, composeList("NATIVE_WARRIOR,40", "NATIVE_BRAVE,20", "NATIVE_ARCHER,10"), gtvm(0.5d,0.5d,1.0d,2.0d),3, 2, 2),
+			new Culture("HUAST", "Huastec", true, 2, composeList("NATIVE_WARRIOR,30", "NATIVE_BRAVE,10", "NATIVE_ARCHER,20"), gtvm(0.5d,1.0d,0.5d,2.0d),2, 1, 3),
+			new Culture("MIXTE", "Mixtec", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,0.5d,1.0d,1.5d),2, 1, 2),
+			new Culture("MAYA", "Maya", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,30"), gtvm(2.0d,2.0d,0.0d,1.0d),2, 2, 3),
+			new Culture("PURHE", "P'urhépecha", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(0.5d,0.0d,0.5d,3.0d),1, 3, 1),
+			new Culture("TOTON", "Totonac", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.5d,0.5d,1.0d),2, 1, 1),
+			new Culture("ZAPOT", "Zapotec", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.0d,1.0d,1.0d),2, 2, 2),
+			new Culture("CANAR", "Cañaris", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,2.0d,0.0d,1.0d),1, 3, 1),
+			new Culture("CHACH", "Chachapoya", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.5d,1.0d,0.5d),2, 2, 3),
+			new Culture("CHIMU", "Chimú", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.0d,1.0d,1.0d),1, 2, 3),
+			new Culture("INCA", "Inca", true, 3, composeList("NATIVE_WARRIOR,20", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(0.0d,2.0d,1.0d,1.0d),3, 1, 3),
+			new Culture("MUISC", "Muisca", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.0d,1.0d,1.0d),1, 3, 3),
+			new Culture("TAIRO", "Tairona", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.0d,1.0d,1.0d),1, 3, 3),
+			new Culture("ARTIC", "Artic Mammal Hunters", false, 1, composeList("NATIVE_WARRIOR,10"), gtvm(2.0d,1.0d,0.5d,0.5d),0, 0, 2),
+			new Culture("HUNTE", "Hunters-Gatherers", false, 2, composeList("NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,0.0d,2.0d,1.0d),0, 1, 2),
+			new Culture("FISHI", "Fishing people", false, 3, composeList("NATIVE_WARRIOR,20"), gtvm(3.0d,0.0d,1.0d,0.0d),0, 1, 1),
+			new Culture("BISON", "Bison Hunters", false, 3, composeList("NATIVE_WARRIOR,10","NATIVE_ARCHER,10"), gtvm(2.0d,0.0d,0.0d,3.0d),0, 0, 3),
+			new Culture("FARME", "Maiz Farmers", false, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10"), gtvm(0.0d,0.0d,3.0d,1.0d),0, 1, 3)
 		};
 		for (Culture culture: cultures){
 			culturesMap.put(culture.getCode(), culture);
@@ -462,6 +472,16 @@ public class ExpeditionDAO {
 
 	public static Culture getCulture(String string) {
 		return culturesMap.get(string);
+	}
+
+	private static List<Pair<GoodType, Double>> gtvm(double... d) {
+		List<Pair<GoodType, Double>> ret = new ArrayList<Pair<GoodType,Double>>();
+		int i = 0;
+		for (Double value: d){
+			ret.add(new Pair<GoodType, Double>(GOOD_TYPES[i], value));
+			i++;
+		}
+		return ret;
 	}
 
 	private static List<Pair<Double, String>> composeList(String... pairs) {
