@@ -10,8 +10,8 @@ import java.util.List;
 
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Food;
-import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodType;
+import net.slashie.expedition.domain.NonPrincipalExpedition;
 import net.slashie.serf.game.Equipment;
 import net.slashie.util.Pair;
 import net.slashie.utils.Util;
@@ -30,6 +30,8 @@ public class FoodConsumerDelegate implements Serializable{
 	}
 
 	public int getDailyFoodConsumption(){
+		if (foodConsumer instanceof NonPrincipalExpedition)
+			return 0;
 		int dailyFoodConsumption = 0;
 		List<Equipment> inventory = this.foodConsumer.getInventory();
 		for (Equipment equipment: inventory){

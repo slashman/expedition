@@ -17,9 +17,8 @@ public class ItemFactory {
 	public static ExpeditionItem createItem(String itemId){
 		ExpeditionItem ret = definitions.get(itemId);
 		if (ret == null){
-			//ExpeditionGame.crash("Item "+itemId+" not found");
-			/*
-			return null;*/
+			ExpeditionGame.crash("Item "+itemId+" not found");
+			//return null;
 		}
 		return ret.clone();
 	}
@@ -27,5 +26,13 @@ public class ItemFactory {
 	public static ExpeditionUnit createUnit(String fullID, String weaponType) {
 		
 		return null;
+	}
+
+	public static int getEuropeanPackPrize(String fullId) {
+		ExpeditionItem ret = definitions.get(fullId);
+		if (ret == null){
+			return 0;
+		}
+		return (int) Math.round(ret.getEuropeValue() * ret.getValuePack());
 	}
 }

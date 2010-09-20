@@ -1,35 +1,51 @@
 package net.slashie.expedition.domain;
 
 public enum GoodType {
+	ARMORY ("armory"),
+	LIVESTOCK ("livestock"),
+	PEOPLE ("people"),
 	SUPPLIES ("supplies"),
-	ARTIFACT ("artifacts"),
-	TOOL ("tools"),
-	WEAPON ("weapons");
+	TRADE_GOODS ("trade"), 
+	VEHICLE ("vehicles");
+	
 
 	GoodType(String description){
 		this.description = description;
 	}
 	private String description;
 	static String[] CHOICES_LIST = new String []{
-			"Supplies", "Artifacts", "Tools", "Weapons"
+			"Weapons", "Livestock", "People", "Supplies", "Trade Goods"
 	};
+	static GoodType[] GOOD_TYPES_LIST = new GoodType []{
+		PEOPLE,
+		SUPPLIES,
+		TRADE_GOODS,
+		ARMORY,
+		LIVESTOCK
+	};
+	
 	public static String[] getChoicesList() {
 		return CHOICES_LIST;
 	}
 	public static GoodType fromChoice(int goodTypeChoice) {
 		switch (goodTypeChoice){
 		case 0:
-			return SUPPLIES;
+			return ARMORY;
 		case 1:
-			return ARTIFACT;
+			return LIVESTOCK;
 		case 2:
-			return TOOL;
+			return PEOPLE;
 		case 3:
-			return WEAPON;
+			return SUPPLIES;
+		case 4:
+			return TRADE_GOODS;
 		}
 		return null;
 	}
 	public String getDescription() {
 		return description;
+	}
+	public static GoodType[] getGoodTypes() {
+		return GOOD_TYPES_LIST;
 	}
 }

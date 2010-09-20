@@ -13,6 +13,7 @@ public class Culture implements Serializable{
 	private boolean isCivilization;
 	private int aggresiveness;
 	private List<Pair<Double, String>> classDistribution;
+	private String[] items;
 	private List<Pair<GoodType, Double>> goodTypeValuationModifiers;
 	public List<Pair<GoodType, Double>> getGoodTypeValuationModifiers() {
 		return goodTypeValuationModifiers;
@@ -20,7 +21,11 @@ public class Culture implements Serializable{
 
 	private int goldModifier, artifactModifier, agricultureModifier;
 	
-	public Culture(String code, String name, boolean isCivilization, int aggresiveness, List<Pair<Double, String>> classDistribution, List<Pair<GoodType, Double>> goodTypeValuationModifiers, int goldModifier, int artifactModifier, int agricultureModifier) {
+	public Culture(String code, String name, boolean isCivilization, int aggresiveness, 
+			List<Pair<Double, String>> classDistribution, 
+			List<Pair<GoodType, Double>> goodTypeValuationModifiers,
+			String[] items,
+			int goldModifier, int artifactModifier, int agricultureModifier) {
 		super();
 		this.code = code;
 		this.name = name;
@@ -31,6 +36,7 @@ public class Culture implements Serializable{
 		this.artifactModifier = artifactModifier;
 		this.agricultureModifier = agricultureModifier;
 		this.goodTypeValuationModifiers = goodTypeValuationModifiers;
+		this.items = items;
 	}
 	
 	public String getCode() {
@@ -67,6 +73,10 @@ public class Culture implements Serializable{
 
 	public int getAgricultureModifier() {
 		return agricultureModifier;
+	}
+
+	public String[] getItems() {
+		return items;
 	}
 
 		

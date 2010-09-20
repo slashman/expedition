@@ -38,7 +38,7 @@ public class BuildSettlement extends Action{
 		}
 		
 		//Check resources availability (for the plaza)
-		if (expedition.getGoodCount("WOOD") < 200){
+		if (expedition.getItemCount("WOOD") < 200){
 			msg("You need at least 200 wood for the plaza and the first building.");
 			return;
 		}

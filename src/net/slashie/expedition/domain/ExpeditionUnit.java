@@ -113,9 +113,9 @@ public class ExpeditionUnit extends Vehicle{
 			int baseHitChance,
 			int evadeChance,
 			int dailyFoodConsumption,
-			String[] weaponTypes, String[] armorTypes) {
+			String[] weaponTypes, String[] armorTypes, int europeValue, int americaValue) {
 		super(classifierId, description, pluralDescription, weight, false,
-				false, false, 1, carryCapacity, 1, true);
+				false, false, 1, carryCapacity, 1, true, GoodType.PEOPLE, europeValue, americaValue);
 		this.name = description;
 		this.baseAttack = baseAttack;
 		this.baseDefense = baseDefense;

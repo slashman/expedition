@@ -66,19 +66,33 @@ public class NativeTown extends Town{
 		int commoners = targetPopulation - specializedPopulation - 1;
 		if (commoners > 0)
 			addItem(ItemFactory.createItem("NATIVE_COMMONER"), commoners);
-		addItem(ItemFactory.createItem("NATIVE_LEADER"), 1);
-		
-		addItem(ItemFactory.createItem("GOLD_NUGGET"), Util.rand(0, size*culture.getGoldModifier()*20));
-		addItem(ItemFactory.createItem("GOLD_BRACELET"), Util.rand(0, size*culture.getGoldModifier()*40));
-		addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, size*culture.getArtifactModifier()*30));
-		addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(100, size*culture.getAgricultureModifier()*100));
+		addItem(ItemFactory.createItem("NATIVE_SHAMAN"), 1);
 		
 		List<Pair<GoodType, Double>> goodTypeValuationModifiers = culture.getGoodTypeValuationModifiers();
 		for (Pair<GoodType, Double> goodTypeValuationModifier: goodTypeValuationModifiers){
-			double range = goodTypeValuationModifier.getB() * 0.2d;
-			double var = Util.rand(-range, range, 4);
+			double range = goodTypeValuationModifier.getB() * 0.1d;
+			double var = Util.rand(-range, range);
 			setGoodTypeModifier(goodTypeValuationModifier.getA(), goodTypeValuationModifier.getB()+var);
 		}
+		
+		//Add items
+		for (String item: culture.getItems()){
+			ExpeditionItem i = ItemFactory.createItem(item);
+			double value = i.getAmericaValue();
+			if (value == 0.0d)
+				continue;
+			double scarse = 1.0d / value; 
+			int items = (int)Math.round((double)targetPopulation*scarse); 
+			items += Util.rand(-items*0.1d, items*0.1d);
+			addItem(i, items);
+		}
+		/*addItem(ItemFactory.createItem("GOLD_NUGGET"), Util.rand(0, size*culture.getGoldModifier()*20));
+		addItem(ItemFactory.createItem("GOLD_BRACELET"), Util.rand(0, size*culture.getGoldModifier()*40));
+		addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, size*culture.getArtifactModifier()*30));
+		addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(100, size*culture.getAgricultureModifier()*100));
+		*/
+		
+		
 	}
 	
 	@Override
@@ -146,7 +160,7 @@ public class NativeTown extends Town{
 		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
 		ai.setBumpEnemy(true);
 		ret.setSelector(ai);
-		int targetPopulation = expeditionPower*50 + Util.rand(-expeditionPower*20, expeditionPower * 20);
+		int targetPopulation = expeditionPower*30 + Util.rand(-expeditionPower*20, expeditionPower * 20);
 		int specializedPopulation = 0;
 		for(Pair<Double, String> classD: culture.getClassDistribution()){
 			int wantedClassPopulation = (int) (classD.getA().doubleValue() * targetPopulation);
@@ -156,11 +170,12 @@ public class NativeTown extends Town{
 					wantedClassPopulation = availableClassPopulation;
 				}
 				if (wantedClassPopulation > 0){
-					ret.addItem(ItemFactory.createItem(classD.getB()), wantedClassPopulation);
+					ExpeditionUnit unit = (ExpeditionUnit)ItemFactory.createItem(classD.getB());
+					ret.addItem(unit, wantedClassPopulation);
 					reduceQuantityOf(classD.getB(), wantedClassPopulation);
-				}
-				if (classD.getB().equals("NATIVE_ARCHER")){
-					ret.addItem(ItemFactory.createItem("BOWS"), wantedClassPopulation);
+					if (unit.getWeaponTypes().length>0){
+						ret.addItem(ItemFactory.createItem(unit.getWeaponTypes()[0]), wantedClassPopulation);
+					}
 				}
 			}
 			specializedPopulation += wantedClassPopulation;
@@ -172,9 +187,6 @@ public class NativeTown extends Town{
 			reduceQuantityOf("NATIVE_COMMONER", commoners);
 		}
 		 
-		//ret.addItem(ItemFactory.createItem("ARROWS"), Util.rand(0, expeditionPower*30));
-		ret.addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, expeditionPower*10));
-		//ret.addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(expeditionPower*100, expeditionPower*500));
 		
 		Action armExpedition = new ArmExpedition();
 		armExpedition.setPerformer(ret);
@@ -222,18 +234,21 @@ public class NativeTown extends Town{
 			List<Equipment> offer) {
 		int value = 0;
 		for (Equipment eqOffer: offer){
-			if (!(eqOffer.getItem() instanceof Good))
-				continue;
-			Good good = (Good) eqOffer.getItem();
-			value += evalItem(good);
+			ExpeditionItem good = (ExpeditionItem) eqOffer.getItem();
+			value += evalItem(good) * eqOffer.getQuantity();
+			//System.out.println("Offer value is:" + value+" with "+good.getDescription());
 		}
 		List<Equipment> townOffer = new ArrayList<Equipment>();
 		List<Equipment> townGoods = getGoods(goodType);
 		for (Equipment townGood: townGoods){
-			Good good = (Good) townGood.getItem();
+			ExpeditionItem good = (ExpeditionItem) townGood.getItem();
 			if (value > 0){
-				int goodValue = evalItem(good);
+				double goodValue = evalItem(good);
+				if (goodValue == 0)
+					continue;
 				int maxQuantity = (int)Math.floor((double)value/(double)goodValue);
+				if (maxQuantity == 0)
+					continue;
 				int quantity = townGood.getQuantity();
 				if (quantity > maxQuantity){
 					quantity = maxQuantity;
@@ -246,8 +261,8 @@ public class NativeTown extends Town{
 		return townOffer;
 	}
 
-	private int evalItem(Good good) {
-		return (int)Math.round(good.getBaseValue()*getGoodTypeModifier(good.getGoodType()));
+	private int evalItem(ExpeditionItem good) {
+		return (int)Math.round(good.getAmericaValue()*getGoodTypeModifier(good.getGoodType()));
 	}
 
 	private double getGoodTypeModifier(GoodType goodType) {

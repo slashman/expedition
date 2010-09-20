@@ -18,7 +18,7 @@ import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
-import net.slashie.expedition.domain.Good;
+import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
@@ -79,51 +79,27 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		menuBox.setBounds(160, 16, 624,480);
   		menuBox.setTitle("Expedition Inventory [Space to exit]");
   		si.saveBuffer();
-  		int choice = 0;
+  		int typeChoice = 0;
   		while (true){
   			String legend = "";
-  			for (int i = 0; i < 4; i++){
-  				if (i == choice){
+  			GoodType[] goodTypes = GoodType.getGoodTypes();
+  			for (int i = 0; i < goodTypes.length; i++){
+  				if (i == typeChoice){
   					legend += ">";
   				}
-  				switch (i){
-  				case 0:
-  					legend += "Units";
-  					break;
-  				case 1:
-  					legend += "Tools";
-  					break;
-  				case 2:
-  					legend += "Goods";
-  					break;
-  				case 3:
-  					legend += "Valuables";
-  					break;
-  				}
-  				if (i == choice){
+  				legend += goodTypes[i].getDescription();
+  				if (i == typeChoice){
   					legend += "<";
   				}
   				legend += "    ";
   			}
-  			
   			menuBox.setLegend(legend);
-  			
-  	  		List<Equipment> inventory = null;
-  	  		switch (choice){
-  	  		case 0:
-  	  			inventory = getExpedition().getUnits();
-  	  			break;
-  	  		case 1:
-  	  			inventory = getExpedition().getTools();
-  	  			break;
-  	  		case 2:
-  	  			inventory = getExpedition().getGoods();
-  	  			break;
-  	  		case 3:
-  	  			inventory = getExpedition().getValuables();
+  			List<Equipment> inventory = null;
+  	  		if (typeChoice < goodTypes.length){
+  	  			inventory = getExpedition().getGoods(goodTypes[typeChoice]);
   	  		}
   	  		
-  	  		Vector menuItems = new Vector();
+  			Vector menuItems = new Vector();
   	  		for (Equipment item: inventory){
   	  			menuItems.add(new InventoryGFXMenuItem(item));
   	  		}
@@ -138,14 +114,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				break;
 			}
 			if (x.isLeftArrow()){
-				choice--;
-				if (choice == -1)
-					choice = 0;
+				typeChoice--;
+				if (typeChoice == -1)
+					typeChoice = 0;
 			}
 			if (x.isRightArrow()){
-				choice++;
-				if (choice == 4)
-					choice = 3;
+				typeChoice++;
+				if (typeChoice == goodTypes.length)
+					typeChoice = goodTypes.length-1;
 			}
 	 		
 	 		//menuBox.getSelection();
@@ -352,24 +328,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		int typeChoice = 0;
   		while (true){
   			String legend = "";
-  			for (int i = 0; i < 4; i++){
+  			GoodType[] goodTypes = GoodType.getGoodTypes();
+  			for (int i = 0; i < goodTypes.length; i++){
   				if (i == typeChoice){
   					legend += ">";
   				}
-  				switch (i){
-  				case 0:
-  					legend += "Units";
-  					break;
-  				case 1:
-  					legend += "Tools";
-  					break;
-  				case 2:
-  					legend += "Goods";
-  					break;
-  				case 3:
-  					legend += "Valuables";
-  					break;
-  				}
+  				legend += goodTypes[i].getDescription();
   				if (i == typeChoice){
   					legend += "<";
   				}
@@ -379,18 +343,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   			menuBox.setLegend(legend);
   			
   	  		List<Equipment> inventory = null;
-  	  		switch (typeChoice){
-  	  		case 0:
-  	  			inventory = cache.getUnits();
-  	  			break;
-  	  		case 1:
-  	  			inventory = cache.getTools();
-  	  			break;
-  	  		case 2:
-  	  			inventory = cache.getGoods();
-  	  			break;
-  	  		case 3:
-  	  			inventory = cache.getValuables();
+  	  		if (typeChoice < goodTypes.length){
+  	  			inventory = cache.getGoods(goodTypes[typeChoice]);
   	  		}
   	  		
   	  		Vector menuItems = new Vector();
@@ -413,8 +367,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 			if (x.isRightArrow()){
 				typeChoice++;
-				if (typeChoice == 4)
-					typeChoice = 3;
+				if (typeChoice == goodTypes.length)
+					typeChoice = goodTypes.length - 1;
 				continue;
 			}
 			
@@ -459,13 +413,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				continue;
 			}
 			
-			if (item instanceof Good && !getExpedition().canCarry(item, quantity)){
+			//if (item instanceof Good && !getExpedition().canCarry(item, quantity)){
+			if (item.getGoodType() != GoodType.PEOPLE && !getExpedition().canCarry(item, quantity)){
 				menuBox.setLegend("Your expedition is full! [Press Space]");
 				menuBox.draw();
 	  	  		si.waitKey(CharKey.SPACE);
 				continue;
 			}
-			choice.reduceQuantity(quantity);
+			cache.reduceQuantityOf(choice.getItem(), quantity);
 			getExpedition().addItem(choice.getItem(), quantity);
 			
 			if (choice.getQuantity() == 0){
@@ -497,24 +452,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		int typeChoice = 0;
   		while (true){
   			String legend = "";
-  			for (int i = 0; i < 4; i++){
+  			GoodType[] goodTypes = GoodType.getGoodTypes();
+  			for (int i = 0; i < goodTypes.length; i++){
   				if (i == typeChoice){
   					legend += ">";
   				}
-  				switch (i){
-  				case 0:
-  					legend += "Units";
-  					break;
-  				case 1:
-  					legend += "Tools";
-  					break;
-  				case 2:
-  					legend += "Goods";
-  					break;
-  				case 3:
-  					legend += "Valuables";
-  					break;
-  				}
+  				legend += goodTypes[i].getDescription();
   				if (i == typeChoice){
   					legend += "<";
   				}
@@ -523,20 +466,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   			
   			menuBox.setLegend(legend);
   			
-  	  		List<Equipment> inventory = null;
-  	  		switch (typeChoice){
-  	  		case 0:
-  	  			inventory = getExpedition().getUnits();
-  	  			break;
-  	  		case 1:
-  	  			inventory = getExpedition().getTools();
-  	  			break;
-  	  		case 2:
-  	  			inventory = getExpedition().getGoods();
-  	  			break;
-  	  		case 3:
-  	  			inventory = getExpedition().getValuables();
-  	  		}
+  			
+  			List<Equipment> inventory = null;
+  			if (typeChoice < goodTypes.length){
+  	  			inventory = getExpedition().getGoods(goodTypes[typeChoice]);
+  	  		}  	  		
   	  		
   	  		Vector menuItems = new Vector();
   	  		for (Equipment item: inventory){
@@ -558,8 +492,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 			if (x.isRightArrow()){
 				typeChoice++;
-				if (typeChoice == 4)
-					typeChoice = 3;
+				if (typeChoice == goodTypes.length)
+					typeChoice = goodTypes.length-1;
 				continue;
 			}
 			
@@ -596,7 +530,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				continue;
 			}
 			
-			if (item instanceof Good && !ship.canCarry(item, quantity)){
+			//if (item instanceof Good && !ship.canCarry(item, quantity)){
+			if (item.getGoodType() != GoodType.PEOPLE && !ship.canCarry(item, quantity)){
 				menuBox.setLegend("Not enough room in the "+ship.getDescription()+" [Press Space]");
 				menuBox.draw();
 				si.waitKey(CharKey.SPACE);
@@ -639,181 +574,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.restore();
  		si.refresh();
 	}
-	
-	public void transferFromCacheOld(GoodsCache cache) {
-		List<Equipment> cacheEquipment = cache.getItems();
-   		Equipment.eqMode = true;
-
-   		//Item.shopMode = true;
-   		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
-   		cacheBox.setItemsPerPage(12);
-   		cacheBox.setBounds(160, 16, 624,480);
-  		Vector<GFXMenuItem> menuItems = new Vector<GFXMenuItem>();
-  		for (Equipment item: cacheEquipment){
-  			menuItems.add(new CacheGFXMenuItem(item, getExpedition()));
-  		}
-  		Collections.sort(menuItems, ITEMS_COMPARATOR);
-  		cacheBox.setMenuItems(menuItems);
-  		
-  		//cacheBox.setTitle("On Ship...");
-  		cacheBox.setTitleColor(TITLE_COLOR);
-  		cacheBox.setForeColor(TEXT_COLOR);
-  		cacheBox.draw();
-  		
-  		//menuBox.setBorder(true);
-		while (true) {
-			si.refresh();
-			//menuBox.setTitle(who.getName()+" (Gold:"+player.getGold()+")");
-			CacheGFXMenuItem itemChoice = ((CacheGFXMenuItem)cacheBox.getSelection());
-			if (itemChoice == null){
-				if (cache instanceof ShipCache){
-					if (getExpedition().getTotalUnits() > 0)
-						break;
-					else {
-						cacheBox.setLegend("You must first disembark");
-						continue;
-					}
-				} else {
-					break;
-				}
-			}
-			Equipment choice = itemChoice.getEquipment();
-			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			cacheBox.setLegend("How many "+item.getDescription()+" will you transfer?");
-			cacheBox.draw();
-			si.refresh();
-			int quantity = readQuantity(657, 86, "                       ", 5);
-			if (quantity == 0)
-				continue;
-			
-			if (!(choice.getItem() instanceof ExpeditionUnit) && getExpedition().getTotalUnits() == 0){
-				cacheBox.setLegend("Someone must receive the goods!");
-				cacheBox.draw();
-				continue;
-			}
-			
-			if (quantity > choice.getQuantity()){
-				cacheBox.setLegend("Not enough "+choice.getItem().getDescription());
-				cacheBox.draw();
-				continue;
-			}
-			
-			if (item instanceof Good && !getExpedition().canCarry(item, quantity)){
-				cacheBox.setLegend("Your expedition is full!");
-				cacheBox.draw();
-				continue;
-			}
-			choice.reduceQuantity(quantity);
-			getExpedition().addItem(choice.getItem(), quantity);
-			
-			if (choice.getQuantity() == 0){
-				cacheEquipment.remove(choice);
-			}
-			
-			cacheBox.setLegend(choice.getItem().getDescription()+" transfered.");
-			refresh();
-	 		//menuBox.draw();
-		}
-		
-		if (cache.destroyOnEmpty() && cache.getItems().size() == 0)
-			level.destroyFeature(cache);
-		Equipment.eqMode = false;
-		//Item.shopMode = false;
-		//si.restore();
-	}
-
 	public void transferFromExpedition(GoodsCache ship) {
 		transferFromExpedition(ship, -1);
 	}
-
-	public void transferFromExpeditionOld(GoodsCache ship, int minUnits) {
-		List<Equipment> expeditionEquipment = getExpedition().getInventory();
-   		Equipment.eqMode = true;
-   		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
-   		cacheBox.setItemsPerPage(12);
-   		cacheBox.setBounds(160, 16, 624,480);
-  		
-  		Vector menuItems = new Vector();
-  		for (Equipment item: expeditionEquipment){
-  			menuItems.add(new CacheGFXMenuItem(item, ship));
-  		}
-  		Collections.sort(menuItems, ITEMS_COMPARATOR);
-  		cacheBox.setMenuItems(menuItems);
-  		cacheBox.setTitle("Transfer from Expedition to "+ship.getDescription()+" [Space to exit]");
-  		cacheBox.setLegend("Select the units to remove from the expedition");
-  		//cacheBox.setTitle("On Ship...");
-  		cacheBox.setTitleColor(TITLE_COLOR);
-  		cacheBox.setForeColor(TEXT_COLOR);
-  		cacheBox.draw();
-  		
-		while (true) {
-			si.refresh();
-			CacheGFXMenuItem itemChoice = ((CacheGFXMenuItem)cacheBox.getSelection());
-			if (itemChoice == null){
-				if (minUnits != -1){
-					if (ship.getTotalUnits() < minUnits){
-						cacheBox.setLegend("At least "+minUnits+" should be transfered");
-						continue;
-					}
-				}
-				break;
-			}
-			Equipment choice = itemChoice.getEquipment();
-			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			cacheBox.setLegend("How many "+item.getDescription()+" will you transfer?");
-			cacheBox.draw();
-			si.refresh();
-			int quantity = readQuantity(657, 86, "                       ", 5);
-			
-			if (quantity == 0)
-				continue;
-			
-			if (quantity > choice.getQuantity()){
-				cacheBox.setLegend("Not enough "+choice.getItem().getDescription());
-				cacheBox.draw();
-				continue;
-			}
-			
-			if (item instanceof Good && !ship.canCarry(item, quantity)){
-				cacheBox.setLegend("Not enough room in the "+ship.getDescription());
-				cacheBox.draw();
-				continue;
-			}
-			
-			getExpedition().reduceQuantityOf(choice.getItem(), quantity);
-			
-			if (choice.getItem() instanceof ExpeditionUnit && 
-					getExpedition().getCurrentlyCarrying()>100){
-				cacheBox.setLegend("The expedition can't carry the goods!");
-				cacheBox.draw();
-				getExpedition().addItem(choice.getItem(), quantity);
-				if (choice.getQuantity() == 0){
-					menuItems = new Vector();
-			  		for (Equipment item2: getExpedition().getInventory()){
-			  			menuItems.add(new CacheGFXMenuItem(item2, ship));
-			  		}
-			  		Collections.sort(menuItems, ITEMS_COMPARATOR);
-			  		cacheBox.setMenuItems(menuItems);				
-			  	}
-				continue;
-			}
-			
-			ship.addItem(choice.getItem(), quantity);
-			
-			if (choice.getQuantity() == 0){
-				menuItems.remove(choice);
-			}
-			cacheBox.setLegend(choice.getItem().getDescription()+" transfered into the "+ship.getDescription());
-			refresh();
-	 		//menuBox.draw();
-		}
-		Equipment.eqMode = false;		
-	}
-	
-	private int getFontSize() {
-		return si.getGraphics2D().getFont().getSize();
-	}
-
 	
 	@Override
 	public void beforeDrawLevel() {
@@ -896,7 +659,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		
 		expeditionUnitsVector.clear();
-		expeditionUnitsVector.addAll(statsExpedition.getUnits());
+		expeditionUnitsVector.addAll(statsExpedition.getGoods(GoodType.PEOPLE));
 		
 		expeditionUnitItems.clear();
 		resumedEquipments.clear();
@@ -1055,10 +818,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Equipment.eqMode = true;
 		Map<String, Equipment> selectionMap = new HashMap<String, Equipment>();
 		List<Equipment> selection = new ArrayList<Equipment>();
-		List<Equipment> expeditionUnits = getExpedition().getUnits(true);
-		List<Equipment> expeditionTools = getExpedition().getTools(true);
-		List<Equipment> expeditionGoods = getExpedition().getGoods(true);
-		List<Equipment> expeditionValuables = getExpedition().getValuables(true);
+		
+		Map<GoodType, List<Equipment>> expeditionGoodsMap = new HashMap<GoodType, List<Equipment>>();
+		GoodType[] goodTypes = GoodType.getGoodTypes();
+		for (GoodType goodType: goodTypes){
+			expeditionGoodsMap.put(goodType, getExpedition().getGoods(goodType, true));
+		}
+			
    		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		menuBox.setItemsPerPage(12);
   		menuBox.setBounds(160, 16, 624,480);
@@ -1067,45 +833,20 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		int typeChoice = 0;
   		while (true){
   			String legend = "";
-  			for (int i = 0; i < 4; i++){
+  			for (int i = 0; i < goodTypes.length; i++){
   				if (i == typeChoice){
   					legend += ">";
   				}
-  				switch (i){
-  				case 0:
-  					legend += "Units";
-  					break;
-  				case 1:
-  					legend += "Tools";
-  					break;
-  				case 2:
-  					legend += "Goods";
-  					break;
-  				case 3:
-  					legend += "Artifacts";
-  					break;
-  				}
+  				legend += goodTypes[i].getDescription();
   				if (i == typeChoice){
   					legend += "<";
   				}
   				legend += "    ";
   			}
-  			
   			menuBox.setLegend(legend);
-  			
-  	  		List<Equipment> inventory = null;
-  	  		switch (typeChoice){
-  	  		case 0:
-  	  			inventory = expeditionUnits;
-  	  			break;
-  	  		case 1:
-  	  			inventory = expeditionTools;
-  	  			break;
-  	  		case 2:
-  	  			inventory = expeditionGoods;
-  	  			break;
-  	  		case 3:
-  	  			inventory = expeditionValuables;
+  			List<Equipment> inventory = null;
+  	  		if (typeChoice < goodTypes.length){
+  	  			inventory = expeditionGoodsMap.get(goodTypes[typeChoice]);
   	  		}
   	  		
   	  		Vector menuItems = new Vector();

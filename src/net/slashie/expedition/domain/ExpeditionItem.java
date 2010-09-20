@@ -9,25 +9,38 @@ import net.slashie.serf.ui.consoleUI.CharAppearance;
 public class ExpeditionItem extends AbstractItem implements Cloneable{
 	private String classifierId;
 	private String description;
+	private GoodType goodType;
+	private int europeValue;
+	private int americaValue;
 	private transient Appearance appearance;
 	private String appearanceId;
 	private int weight;
 	private String pluralDescription;
+	// Determines by how many individual units are the europe and america values calculated
+	private int valuePack = 1;
 	
 	public int getWeight() {
 		return weight;
 	}
 
 	public ExpeditionItem(String classifierId, String description, String pluralDescription,
-			String appearanceId, int weight) {
+			String appearanceId, int weight, GoodType goodType, int europeValue, int americaValue) {
 		super(appearanceId);
 		this.classifierId = classifierId;
 		this.description = description;
 		this.appearanceId = appearanceId;
 		this.weight = weight;
 		this.pluralDescription = pluralDescription;
+		this.goodType = goodType;
+		this.europeValue = europeValue;
+		this.americaValue = americaValue;
+	}
+	
+	public GoodType getGoodType() {
+		return goodType;
 	}
 
+	
 	
 	public void setDescription(String description) {
 		this.description = description;
@@ -107,13 +120,27 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 
 	
 	public String getGroupClassifier() {
-		if (this instanceof ExpeditionUnit)
+		if (getGoodType() == GoodType.PEOPLE)
 			return "UNIT_"+((ExpeditionUnit)this).getBasicId();
-		else if (this instanceof Good){
-			return ((Good)this).getGoodType().toString();
-		} else {
-			return "NO_CLASSIFIER";
+		else {
+			return getGoodType().toString();
 		}
+	}
+
+	public double getEuropeValue() {
+		return (double)europeValue / (double)valuePack;
+	}
+
+	public double getAmericaValue() {
+		return (double)americaValue / (double)valuePack;
+	}
+
+	public int getValuePack() {
+		return valuePack;
+	}
+
+	public void setValuePack(int valuePack) {
+		this.valuePack = valuePack;
 	}
 
 }

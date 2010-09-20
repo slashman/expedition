@@ -125,7 +125,7 @@ public class Spain extends StaticPattern {
 		charMap.put("1", "GOODS_STORE");
 		charMap.put("2", "WEAPONS_STORE");
 		charMap.put("3", "PORT");
-		charMap.put("4", "PUB");
+		charMap.put("4", "MERCHANT");
 		charMap.put("5", "GUILD");
 		charMap.put("6", "DEPARTURE EXIT WORLD");
 		charMap.put("7", "CASTLE_GATE EXIT SPAIN_CASTLE");

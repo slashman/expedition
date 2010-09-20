@@ -2,6 +2,8 @@ package net.slashie.expedition.domain;
 
 import java.io.Serializable;
 
+import net.slashie.expedition.item.ItemFactory;
+
 public class StoreItemInfo implements Cloneable, Serializable{
 	private String fullId;
 	private int price;
@@ -19,17 +21,17 @@ public class StoreItemInfo implements Cloneable, Serializable{
 	public int getPack() {
 		return pack;
 	}
-	public StoreItemInfo(String fullId, int price) {
+	public StoreItemInfo(String fullId) {
 		super();
 		this.fullId = fullId;
-		this.price = price;
+		this.price = ItemFactory.getEuropeanPackPrize(fullId);
 		this.pack = 1;
 	}
 	
-	public StoreItemInfo(String fullId, int price, int pack, String packDescription) {
+	public StoreItemInfo(String fullId, int pack, String packDescription) {
 		super();
 		this.fullId = fullId;
-		this.price = price;
+		this.price = ItemFactory.getEuropeanPackPrize(fullId);
 		this.pack = pack;
 		this.packDescription = packDescription;
 	}
