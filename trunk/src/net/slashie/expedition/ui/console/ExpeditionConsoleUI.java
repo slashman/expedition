@@ -14,7 +14,7 @@ import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
-import net.slashie.expedition.domain.Good;
+import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
@@ -139,7 +139,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		
 		expeditionUnitsVector.clear();
 		resumedEquipments.clear();
-		for (Equipment expeditionUnit: statsExpedition.getUnits()){
+		for (Equipment expeditionUnit: statsExpedition.getGoods(GoodType.PEOPLE)){
 			String basicId = ((ExpeditionUnit)expeditionUnit.getItem()).getBasicId();
 			Equipment resumedEquipment = resumedEquipments.get(basicId) ;
 			if (resumedEquipment == null){
@@ -454,7 +454,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				continue;
 			}
 			
-			if (item instanceof Good && !getExpedition().canCarry(item, quantity)){
+			if (item.getGoodType() != GoodType.PEOPLE && !getExpedition().canCarry(item, quantity)){
 				cacheBox.setPrompt("Your expedition is full!");
 				cacheBox.draw();
 				continue;
@@ -532,7 +532,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				continue;
 			}
 			
-			if (item instanceof Good && !ship.canCarry(item, quantity)){
+			if (item.getGoodType() != GoodType.PEOPLE && !ship.canCarry(item, quantity)){
 				cacheBox.setPrompt("Not enough room in the "+ship.getDescription());
 				cacheBox.draw();
 				continue;
@@ -621,22 +621,26 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   		csi.print(xpos,24,  "[Space] to continue, Up and Down to browse");
   		int choice = 0;
   		while (true){
-  			csi.print(xpos,ypos+3,  "   ( ) Units        ( ) Tools        ( ) Goods        ( ) Valuables     ", ConsoleSystemInterface.BLUE);
-  			csi.print(5+choice*17, ypos+3, "*", ConsoleSystemInterface.WHITE);
+  			csi.print(xpos,ypos+3,  "( ) Units      ( ) Supplies   ( ) Armory     ( ) TradeGoods ( ) Livestock", ConsoleSystemInterface.BLUE);
+  			csi.print(1+choice*15, ypos+3, "*", ConsoleSystemInterface.WHITE);
   			
   	  		List<Equipment> inventory = null;
   	  		switch (choice){
   	  		case 0:
-  	  			inventory = getExpedition().getUnits();
+  	  			inventory = getExpedition().getGoods(GoodType.PEOPLE);
   	  			break;
   	  		case 1:
-  	  			inventory = getExpedition().getTools();
+  	  			inventory = getExpedition().getGoods(GoodType.SUPPLIES);
   	  			break;
   	  		case 2:
-  	  			inventory = getExpedition().getGoods();
+  	  			inventory = getExpedition().getGoods(GoodType.ARMORY);
   	  			break;
   	  		case 3:
-  	  			inventory = getExpedition().getValuables();
+  	  			inventory = getExpedition().getGoods(GoodType.TRADE_GOODS);
+  	  			break;
+  	  		case 4:
+	  			inventory = getExpedition().getGoods(GoodType.LIVESTOCK);
+	  			break;
   	  		}
   	  		
   	  		Vector menuItems = new Vector();
@@ -661,8 +665,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			}
 			if (x.isRightArrow()){
 				choice++;
-				if (choice == 4)
-					choice = 3;
+				if (choice == 5)
+					choice = 4;
 			}
 	 		
 	 		//menuBox.getSelection();

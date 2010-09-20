@@ -2,7 +2,7 @@ package net.slashie.expedition.domain;
 
 import net.slashie.utils.roll.Roll;
 
-public class Weapon extends Good{
+public class Weapon extends ExpeditionItem{
 	private int burden;
 	private Roll attack;
 	private Roll defense;
@@ -23,8 +23,8 @@ public class Weapon extends Good{
 	}
 
 	public Weapon(String classifierId, String description, String pluralDescription,
-			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight, int baseValue) {
-		super(classifierId, description, pluralDescription, weight, GoodType.WEAPON, baseValue);
+			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight, int europeValue, int americaValue) {
+		super(classifierId, description, pluralDescription, classifierId, weight, GoodType.ARMORY, europeValue, americaValue);
 		this.burden = burden;
 		this.isTool = isTool;
 		this.attack = attack;

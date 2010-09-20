@@ -6,7 +6,7 @@ import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
-import net.slashie.expedition.domain.Good;
+import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
@@ -18,7 +18,7 @@ public class CommonUI {
 		int inventory = item.getQuantity();
 		int stock = 0;
 		if (expedition != null){
-			if (item.getItem() instanceof Good){ 
+			if (((ExpeditionItem)item.getItem()).getGoodType() != GoodType.PEOPLE){ 
 				stock = expedition.getCarryable((ExpeditionItem)item.getItem());
 				if (stock < inventory)
 					return itemDescription + " (Max "+stock+") {Available "+inventory+"}";

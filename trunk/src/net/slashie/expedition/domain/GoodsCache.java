@@ -175,7 +175,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	public List<Equipment> getInventory() {
 		return getItems();
 	}
-	
+	/*
 	public List<Equipment> getUnits() {
 		List<Equipment> ret = new ArrayList<Equipment>();
 		List<Equipment> inventory = getItems();
@@ -196,19 +196,19 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 			}
 		}
 		return ret;
-	}
-
+	}*/
+/*
 	public List<Equipment> getGoods() {
 		List<Equipment> ret = new ArrayList<Equipment>();  
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good && !(equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor || equipment.getItem() instanceof Valuable)){
+			if (equipment.getItem() instanceof Good && !(equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor || equipment.getItem() instanceof Trade)){
 				ret.add(equipment);
 			}
 		}
 		return ret;
-	}
-
+	}*/
+/*
 	public List<Equipment> getValuables() {
 		List<Equipment> ret = new ArrayList<Equipment>();  
 		List<Equipment> inventory = getInventory();
@@ -219,6 +219,8 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		}
 		return ret;
 	}
+	*/
+	
 	
 	
 	public double getFoodConsumptionMultiplier() {
@@ -298,8 +300,8 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	public int getGoodTypeCount(GoodType goodType) {
 		int acum = 0;
-		for (Equipment e: getGoods()){
-			Good g = (Good) e.getItem();
+		for (Equipment e: getInventory()){
+			ExpeditionItem g = (ExpeditionItem) e.getItem();
 			if (g.getGoodType() == goodType)
 				acum += e.getQuantity();
 		}
@@ -308,8 +310,8 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	public List<Equipment> getGoods(GoodType goodType) {
 		List<Equipment> ret = new ArrayList<Equipment>();
-		for (Equipment e: getGoods()){
-			Good g = (Good) e.getItem();
+		for (Equipment e: getInventory()){
+			ExpeditionItem g = (ExpeditionItem) e.getItem();
 			if (g.getGoodType() == goodType)
 				ret.add(new Equipment(e.getItem(), e.getQuantity()));
 		}

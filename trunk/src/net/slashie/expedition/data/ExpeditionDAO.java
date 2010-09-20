@@ -9,11 +9,9 @@ import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Food;
-import net.slashie.expedition.domain.Good;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
-import net.slashie.expedition.domain.Valuable;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
 import net.slashie.expedition.world.Culture;
@@ -28,50 +26,55 @@ import net.slashie.util.Pair;
 import net.slashie.utils.roll.Roll;
 
 public class ExpeditionDAO {
+	final static int FOOD_PACK = 200;
+	final static int LIQUID_PACK = 500;
+	final static int WOOD_PACK = 50;
 	
 	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
+		
 		Store goodsStore = new Store();
 		goodsStore.setOwnerName("Goods Store");
-		goodsStore.addItem(10000, new StoreItemInfo("FOOD", 200, 200, "half-tonnels"));
-		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", 20, 500, "tonnels"));
-		goodsStore.addItem(10000, new StoreItemInfo("FOOD_SAUERKRAUT", 400, 200, "half-tonnels"));
-		goodsStore.addItem(10000, new StoreItemInfo("WOOD", 100, 50, "packs"));
-		
+		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", FOOD_PACK, "half-tonnels"));
+		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", LIQUID_PACK, "tonnels"));
+		goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", FOOD_PACK, "half-tonnels"));
+		goodsStore.addItem(500, new StoreItemInfo("RUM", LIQUID_PACK, "tonnels"));
+		goodsStore.addItem(10000, new StoreItemInfo("WOOD", WOOD_PACK, "packs"));
 		
 		//Weapons Store
 		Store weaponsStore = new Store();
 		weaponsStore.setOwnerName("Armory");
-		weaponsStore.addItem(5000, new StoreItemInfo("SPEARS", 5));
-		weaponsStore.addItem(1000, new StoreItemInfo("SWORDS", 10));
-		weaponsStore.addItem(2000, new StoreItemInfo("BOWS", 6));
-		weaponsStore.addItem(1500, new StoreItemInfo("XBOWS", 25));
-		weaponsStore.addItem(1000, new StoreItemInfo("GUNS", 30));
-		weaponsStore.addItem(30000, new StoreItemInfo("ARROWS", 2));
-		weaponsStore.addItem(2000, new StoreItemInfo("STUDDED_LEATHER",20));
-		weaponsStore.addItem(1000, new StoreItemInfo("PLATE", 50));
+		weaponsStore.addItem(5000, new StoreItemInfo("STEEL_SPEAR"));
+		weaponsStore.addItem(1000, new StoreItemInfo("STEEL_SWORD"));
+		weaponsStore.addItem(2000, new StoreItemInfo("COMPOSITE_BOW"));
+		weaponsStore.addItem(1500, new StoreItemInfo("WOODEN_CROSSBOW"));
+		weaponsStore.addItem(1000, new StoreItemInfo("HARQUEBUS"));
+		weaponsStore.addItem(2000, new StoreItemInfo("STUDDED_VEST"));
+		weaponsStore.addItem(1000, new StoreItemInfo("BREASTPLATE"));
 		
 		//Port
 		Store port = new Store();
 		port.setOwnerName("Harbor");
-		port.addItem(30, new StoreItemInfo("CARRACK", 8000));
-		port.addItem(20, new StoreItemInfo("CARAVEL", 6000));
-		port.addItem(50, new StoreItemInfo("CAPTAIN", 300));
-		port.addItem(10000, new StoreItemInfo("SAILOR", 60));
-		port.addItem(50000, new StoreItemInfo("COLONIST", 10));
-		
+		port.addItem(30, new StoreItemInfo("CARRACK"));
+		port.addItem(20, new StoreItemInfo("CARAVEL"));
+		port.addItem(50, new StoreItemInfo("CAPTAIN"));
+		port.addItem(10000, new StoreItemInfo("SAILOR"));
+		port.addItem(50000, new StoreItemInfo("COLONIST"));
+		port.addItem(35000, new StoreItemInfo("ROGUE"));
+	
 		//Pub
-		Store pub = new Store();
-		pub.setOwnerName("Pub");
-		pub.addItem(35000, new StoreItemInfo("ROGUE", 30));
-		pub.addItem(500, new StoreItemInfo("RUM", 600, 500, "tonnels"));
+		Store merchant = new Store();
+		merchant.setOwnerName("Trade Company");
+		merchant.addItem(10000, new StoreItemInfo("COTTON"));
+		merchant.addItem(10000, new StoreItemInfo("SUGAR"));
+		merchant.addItem(10000, new StoreItemInfo("CLOTH"));
 		
 		//Guild
 		Store guild = new Store();
 		guild.setOwnerName("Guild");
-		guild.addItem(7000, new StoreItemInfo("MARINE", 70));
-		guild.addItem(5000, new StoreItemInfo("SOLDIER", 100));
-		guild.addItem(1500, new StoreItemInfo("ARCHER", 120));
-		guild.addItem(1000, new StoreItemInfo("CARPENTER", 60));
+		guild.addItem(7000, new StoreItemInfo("MARINE"));
+		guild.addItem(5000, new StoreItemInfo("SOLDIER"));
+		guild.addItem(1500, new StoreItemInfo("ARCHER"));
+		guild.addItem(1000, new StoreItemInfo("CARPENTER"));
 		
 		return new AbstractCell[]{
 			//Overworld cells
@@ -88,7 +91,7 @@ public class ExpeditionDAO {
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
 			new ExpeditionCell("WEAPONS_STORE", "Weapons Store", weaponsStore),
 			new ExpeditionCell("PORT", "Harbor", port),
-			new ExpeditionCell("PUB", "Pub", pub),
+			new ExpeditionCell("MERCHANT", "Trade Company", merchant),
 			new ExpeditionCell("GUILD", "Guild", guild),
 			
 			new ExpeditionCell("SPAIN_GRASS", "Grass"),
@@ -200,16 +203,19 @@ public class ExpeditionDAO {
 			new CharAppearance("SOLDIER", 'S', ConsoleSystemInterface.GREEN),
 			new CharAppearance("ARCHER", 'a', ConsoleSystemInterface.DARK_BLUE),			
 			new CharAppearance("CAPTAIN", 'C', ConsoleSystemInterface.CYAN),
-			new CharAppearance("EXPLORER", 'e', ConsoleSystemInterface.RED),
+			new CharAppearance("EXPLORER", 'e', ConsoleSystemInterface.BLUE),
 			new CharAppearance("CARPENTER", 'c', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("COLONIST", 'c', ConsoleSystemInterface.YELLOW),
-		
-			//native Units
+			
+			new CharAppearance("EAGLE_WARRIOR", 'w', ConsoleSystemInterface.GREEN),
+			new CharAppearance("JAGUAR_WARRIOR", 'w', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("QUETZAL_ARCHER", 'a', ConsoleSystemInterface.LEMON),
 			new CharAppearance("NATIVE_WARRIOR", 'w', ConsoleSystemInterface.RED),
-			new CharAppearance("NATIVE_BRAVE", 'W', ConsoleSystemInterface.PURPLE),
 			new CharAppearance("NATIVE_ARCHER", 'a', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("NATIVE_COMMONER", 'c', ConsoleSystemInterface.BLUE),
-			new CharAppearance("NATIVE_LEADER", 'S', ConsoleSystemInterface.CYAN),
+			new CharAppearance("NATIVE_SHAMAN", 'S', ConsoleSystemInterface.CYAN),
+			
+			
 			new CharAppearance("NATIVE_VILLAGE", '^', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("NATIVE_TOWN", '^', ConsoleSystemInterface.RED),
 			new CharAppearance("NATIVE_CITY", '^', ConsoleSystemInterface.RED),
@@ -219,33 +225,63 @@ public class ExpeditionDAO {
 			new CharAppearance("GOODS_STORE", '1', ConsoleSystemInterface.RED),
 			new CharAppearance("WEAPONS_STORE", '2', ConsoleSystemInterface.RED),
 			new CharAppearance("PORT", '3', ConsoleSystemInterface.RED),
-			new CharAppearance("PUB", '4', ConsoleSystemInterface.RED),
+			new CharAppearance("MERCHANT", '4', ConsoleSystemInterface.RED),
 			new CharAppearance("GUILD", '5', ConsoleSystemInterface.RED),
 			
 			
 			//Goods
-			new CharAppearance("FOOD", '%', ConsoleSystemInterface.BROWN),
+			new CharAppearance("BISCUIT", '%', ConsoleSystemInterface.BROWN),
+			new CharAppearance("BREAD", '%', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("DRIED_MEAT", '%', ConsoleSystemInterface.BROWN),
+			new CharAppearance("WHEAT_FOODER", '%', ConsoleSystemInterface.BROWN),
+			new CharAppearance("BEANS", '%', ConsoleSystemInterface.BROWN),
+			new CharAppearance("MAIZE", '%', ConsoleSystemInterface.GREEN),
+			new CharAppearance("POTATOES", '%', ConsoleSystemInterface.BROWN),
+			new CharAppearance("TOMATOES", '%', ConsoleSystemInterface.RED),
+			new CharAppearance("FISH", '%', ConsoleSystemInterface.CYAN),
+
+			
 			new CharAppearance("RUM", '%', ConsoleSystemInterface.BROWN),
 			new CharAppearance("WOOD", '=', ConsoleSystemInterface.BROWN),
 			new CharAppearance("FRESHWATER", '%', ConsoleSystemInterface.CYAN),
-			new CharAppearance("FOOD_SAUERKRAUT", '%', ConsoleSystemInterface.GREEN),
-			
-			new CharAppearance("GOLD_NUGGET", '*', ConsoleSystemInterface.YELLOW),
-			new CharAppearance("GOLD_BRACELET", '}', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("SAUERKRAUT", '%', ConsoleSystemInterface.GREEN),
 			new CharAppearance("DEAD_NATIVE", '@', ConsoleSystemInterface.GRAY),
-			new CharAppearance("NATIVE_ARTIFACT", 'p', ConsoleSystemInterface.BROWN),
-			new CharAppearance("NATIVE_FOOD", '%', ConsoleSystemInterface.GREEN),
+			
+			new CharAppearance("COTTON", '$', ConsoleSystemInterface.GRAY),
+			new CharAppearance("SUGAR", '$', ConsoleSystemInterface.GREEN),
+			new CharAppearance("CLOTH", '$', ConsoleSystemInterface.GRAY),
+			new CharAppearance("COCA", '$', ConsoleSystemInterface.GREEN),
+			new CharAppearance("COCOA", '$', ConsoleSystemInterface.BROWN),
+			new CharAppearance("CHILI_PEPPER", '$', ConsoleSystemInterface.RED),
+			new CharAppearance("PINEAPPLE", '$', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("STRAWBERRIES", '$', ConsoleSystemInterface.RED),
+			new CharAppearance("TOBACCO", '$', ConsoleSystemInterface.BROWN),
+			new CharAppearance("COATS", '$', ConsoleSystemInterface.GRAY),
+			new CharAppearance("FURS", '$', ConsoleSystemInterface.GRAY),
+			new CharAppearance("GOLD_ARTIFACTS", '$', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("NATIVE_ARTIFACTS", '$', ConsoleSystemInterface.BROWN),
 
 			
 			//Weapons
-			new CharAppearance("SPEARS", '/', ConsoleSystemInterface.BROWN),
-			new CharAppearance("SWORDS", '\\', ConsoleSystemInterface.LIGHT_GRAY),
-			new CharAppearance("BOWS", ')', ConsoleSystemInterface.BROWN),
-			new CharAppearance("ARROWS", '/', ConsoleSystemInterface.GRAY),
-			new CharAppearance("XBOWS", '}', ConsoleSystemInterface.BROWN),
-			new CharAppearance("GUNS", '>', ConsoleSystemInterface.LIGHT_GRAY),
-			new CharAppearance("STUDDED_LEATHER", ']', ConsoleSystemInterface.BROWN),
-			new CharAppearance("PLATE", ']', ConsoleSystemInterface.LIGHT_GRAY),
+			new CharAppearance("STEEL_SPEAR", '/', ConsoleSystemInterface.BROWN),
+			new CharAppearance("STEEL_SWORD", '\\', ConsoleSystemInterface.LIGHT_GRAY),
+			new CharAppearance("COMPOSITE_BOW", ')', ConsoleSystemInterface.BROWN),
+			new CharAppearance("WOODEN_CROSSBOW", '}', ConsoleSystemInterface.BROWN),
+			new CharAppearance("HARQUEBUS", '>', ConsoleSystemInterface.LIGHT_GRAY),
+			new CharAppearance("STUDDED_VEST", ']', ConsoleSystemInterface.BROWN),
+			new CharAppearance("BREASTPLATE", ']', ConsoleSystemInterface.LIGHT_GRAY),
+			new CharAppearance("PLUMED_BOW", ')', ConsoleSystemInterface.BROWN),
+			new CharAppearance("SIMPLE_BOW", ')', ConsoleSystemInterface.BROWN),
+			new CharAppearance("OBSIDIAN_SWORD", '\\', ConsoleSystemInterface.LIGHT_GRAY),
+			new CharAppearance("WOODEN_MACE", '\\', ConsoleSystemInterface.BROWN),
+
+			// Livestock
+			new CharAppearance("ATTACK_DOG", 'd', ConsoleSystemInterface.BROWN),
+			new CharAppearance("COW", 'c', ConsoleSystemInterface.BROWN),
+			new CharAppearance("HORSE", 'h', ConsoleSystemInterface.BROWN),
+			new CharAppearance("PIGS", 'p', ConsoleSystemInterface.BROWN),
+			new CharAppearance("LLAMA", 'l', ConsoleSystemInterface.BROWN),
+
 			
 			//Ships
 			new CharAppearance("CARRACK", 'V', ConsoleSystemInterface.BROWN),
@@ -262,80 +298,79 @@ public class ExpeditionDAO {
 	
 	public static ExpeditionItem[] getItemDefinitions(AppearanceFactory appFactory){
 		return new ExpeditionItem[]{
-				//weight, carryCapacity, attack, defense, dailyFoodConsumption
-			//Units
+			//People
 			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", UNIT_WEIGHT, 200,
 					new Roll("1D1"),
 					new Roll("1D1"),
 					2,
 					70,10,
 					1,
-				new String[]{"SPEARS"},
-				new String[]{""}),
+				new String[]{"STEEL_SPEAR"},
+				new String[]{""}, 60, 50),
 			new ExpeditionUnit("ROGUE",  "Rogue",  "Rogues",  UNIT_WEIGHT, 250,
 					new Roll("1D2"),
 					new Roll("1D2"),
 					2,
 					85,15,
 					1,
-					new String[]{"SPEARS","BOWS"},
-					new String[]{""}),
+					new String[]{"STEEL_SPEAR","COMPOSITE_BOW"},
+					new String[]{""}, 30, 50),
 			new ExpeditionUnit("MARINE", "Marine", "Marines", UNIT_WEIGHT, 250,
 					new Roll("1D3"),
 					new Roll("1D2"),
 					3,
 					90,5,
 					2,
-					new String[]{"GUNS","XBOWS","SWORDS","SPEARS"},
-					new String[]{"STUDDED_LEATHER"}),
+					new String[]{"HARQUEBUS","WOODEN_CROSSBOW","STEEL_SWORD","STEEL_SPEAR"},
+					new String[]{"STUDDED_VEST"}, 70, 100),
 			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", UNIT_WEIGHT, 200,
 					new Roll("1D3"),
 					new Roll("1D3"),
 					4,
 					95,5,
 					2,
-					new String[]{"SWORDS", "GUNS", "SPEARS"},
-					new String[]{"PLATE", "STUDDED_LEATHER"}),
+					new String[]{"STEEL_SWORD", "HARQUEBUS", "STEEL_SPEAR"},
+					new String[]{"BREASTPLATE", "STUDDED_VEST"}, 100, 200),
 			new ExpeditionUnit("ARCHER", "Archer","Archers", UNIT_WEIGHT, 200,
 					new Roll("1D2"),
 					new Roll("1D2"),
 					2,
 					70,10,
 					2,
-					new String[]{"XBOWS", "BOWS", "SPEARS"},
-					new String[]{"STUDDED_LEATHER"}),
+					new String[]{"WOODEN_CROSSBOW", "COMPOSITE_BOW", "STEEL_SPEAR"},
+					new String[]{"STUDDED_VEST"}, 120, 150),
 			new ExpeditionUnit("CAPTAIN", "Captain","Captains", UNIT_WEIGHT, 200,
 					new Roll("1D1"),
 					new Roll("1D1"),
 					3,
 					50,5,
 					3,
-					new String[]{"GUNS", "SWORDS", "SPEARS" },
-					new String[]{"PLATE", "STUDDED_LEATHER"}),
+					new String[]{"HARQUEBUS", "STEEL_SWORD", "STEEL_SPEAR" },
+					new String[]{"BREASTPLATE", "STUDDED_VEST"}, 300, 50),
 			new ExpeditionUnit("EXPLORER", "Explorer","Explorers", UNIT_WEIGHT, 400,
 					new Roll("1D2"),
 					new Roll("1D1"),
 					4,
 					70,5,
 					3,
-					new String[]{"SPEARS"},
-					new String[]{"STUDDED_LEATHER"}),
+					new String[]{"STEEL_SPEAR","WOODEN_MACE"},
+					new String[]{"STUDDED_VEST"}, 500, 50),
 			new ExpeditionUnit("CARPENTER", "Carpenter","Carpenters", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					3,
 					50,5, 
 					1, 
-					new String[]{"SPEARS"},
-					new String[]{""}),
+					new String[]{"STEEL_SPEAR","WOODEN_MACE"},
+					new String[]{""}, 60, 100),
 			new ExpeditionUnit("COLONIST",  "Colonist",  "Colonists",  UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
 					50,5,
 					1,
-					new String[]{"SPEARS"},
-					new String[]{""}),
+					new String[]{"STEEL_SPEAR","WOODEN_MACE"},
+					new String[]{""}, 10, 10),
 			//Native Units
 			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", UNIT_WEIGHT, 200, 
 					new Roll("1D3"),
@@ -343,68 +378,117 @@ public class ExpeditionDAO {
 					3,
 					80,15,
 					0,
-					new String[]{"SPEARS"},
-					new String[]{""}),
-			new ExpeditionUnit("NATIVE_BRAVE", "Brave","Braves", UNIT_WEIGHT, 200,
-					new Roll("1D4"),
-					new Roll("1D2"),
-					4,
-					90,10,
-					0,
-					new String[]{"SPEARS"},
-					new String[]{""}),
+					new String[]{"WOODEN_MACE"},
+					new String[]{""}, 200, 100),
 			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", UNIT_WEIGHT, 200,
 					new Roll("1D2"),
 					new Roll("1D1"),
 					2,
 					60,10,
 					0,
-					new String[]{"BOWS", "SPEARS"},
-					new String[]{""}),
+					new String[]{"SIMPLE_BOW", "WOODEN_MACE"},
+					new String[]{""}, 200, 100),
 			new ExpeditionUnit("NATIVE_COMMONER", "Native","Natives", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
 					50,5, 
 					0,
-					new String[]{""},
-					new String[]{""}),
-			new ExpeditionUnit("NATIVE_LEADER", "Shaman","Shamans", UNIT_WEIGHT, 50, 
+					new String[]{"WOODEN_MACE"},
+					new String[]{""}, 100, 10),
+			new ExpeditionUnit("NATIVE_SHAMAN", "Shaman","Shamans", UNIT_WEIGHT, 50, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
 					50,5,
 					0,
 					new String[]{""},
-					new String[]{""}),
-			
+					new String[]{""}, 100, 5000),
+			new ExpeditionUnit("EAGLE_WARRIOR", "Eagle Warrior","Eagle Warriors", UNIT_WEIGHT, 200,
+					new Roll("2D1"),
+					new Roll("1D1"),
+					3,
+					95,20,
+					2,
+					new String[]{"OBSIDIAN_SWORD", "WOODEN_MACE", "STEEL_SPEAR"},
+					new String[]{}, 200, 200),
+			new ExpeditionUnit("JAGUAR_WARRIOR", "Jaguar Warrior","Jaguar Warriors", UNIT_WEIGHT, 200,
+					new Roll("1D3"),
+					new Roll("1D2"),
+					4,
+					95,10,
+					2,
+					new String[]{"OBSIDIAN_SWORD", "STEEL_SWORD", "WOODEN_MACE", "STEEL_SPEAR"},
+					new String[]{"BREASTPLATE", "STUDDED_VEST"}, 200, 300),
+			new ExpeditionUnit("QUETZAL_ARCHER", "Quetzal Archer","Quetzal Archers", UNIT_WEIGHT, 200,
+					new Roll("1D2"),
+					new Roll("1D2"),
+					3,
+					95,5,
+					2,
+					new String[]{"PLUMED_BOW", "COMPOSITE_BOW", "SIMPLE_BOW","WOODEN_MACE"},
+					new String[]{}, 200, 300),
 			//Goods
-			new Food("FOOD", "Food", "Food", 3, 1, 1),
-			new Food("RUM", "Rum", "Rum", 2, 2, 5),
-			new Good("WOOD", "Wooden log", "Wooden logs", 10, GoodType.TOOL, 2),
-			new Food("FRESHWATER", "Freshwater", "Freshwater", 2,1, 1),
-			new Food("FOOD_SAUERKRAUT", "Sauerkraut","Sauerkraut", 3, 1, 2),
+			new Food("BISCUIT", "Biscuit", "Biscuit", 3, 1, 200,250, FOOD_PACK),
+			new Food("BREAD", "Bread", "Bread", 3, 1, 100, 200, FOOD_PACK),
+			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", 3, 1, 400,50, FOOD_PACK),
+			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", 3, 1, 400,50, FOOD_PACK),
+			new Food("BEANS", "Beans", "Beans", 3, 1, 800,100, FOOD_PACK),
+			new Food("MAIZE", "Maize", "Maize", 3, 1, 400,50, FOOD_PACK),
+			new Food("POTATOES", "Potatoes", "Potatoes", 3, 1, 800,200, FOOD_PACK),
+			new Food("TOMATOES", "Tomatoes", "Tomatoes", 3, 1, 800,200, FOOD_PACK),
+			new Food("FISH", "Fish", "Fish", 3, 1, 100, 200, FOOD_PACK),
 			
-			//New Worlds Goods
-			new Valuable("GOLD_NUGGET", "Gold Nugget", "Gold Nuggets", 5, 45),
-			new Valuable("GOLD_BRACELET", "Gold Bracelet","Gold Bracelets",  5, 25),
-			new Valuable("NATIVE_ARTIFACT", "Pottery", "Pottery", 10, 20),
-			new Food("NATIVE_FOOD", "Stash of Maíz", "Stashes of Maíz", 3, 1, 1),
+			new Food("FRESHWATER", "Freshwater", "Freshwater", 2,1, 20,5, LIQUID_PACK),
+			new Food("RUM", "Rum", "Rum", 2, 2, 400,500, LIQUID_PACK),
+			
+			
+			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "WOOD", 10, GoodType.SUPPLIES, 100,50),
+			
+			// Trade Goods, Old world
+			new ExpeditionItem("COTTON", "Cotton", "Cotton", "COTTON", 200, GoodType.TRADE_GOODS, 200 , 400),
+			new ExpeditionItem("SUGAR", "Sugar", "Sugar", "SUGAR", 800, GoodType.TRADE_GOODS, 400 , 800),
+			new ExpeditionItem("CLOTH", "Cloth", "Cloth", "CLOTH", 50, GoodType.TRADE_GOODS, 600, 700 ),
+			
+			// Trade Goods, New world
+			new ExpeditionItem("COCA", "Coca", "Coca", "COCA", 500, GoodType.TRADE_GOODS, 200, 500 ),
+			new ExpeditionItem("COCOA", "Cocoa", "Cocoa", "COCOA", 600, GoodType.TRADE_GOODS, 1200, 400 ),
+			new ExpeditionItem("CHILI_PEPPER", "Chili", "Chili", "CHILI_PEPPER", 600, GoodType.TRADE_GOODS, 1800, 400 ),
+			new ExpeditionItem("PINEAPPLE", "Pineapple", "Pineapple", "PINEAPPLE", 800, GoodType.TRADE_GOODS, 1000, 500 ),
+			new ExpeditionItem("STRAWBERRIES", "Strawberries", "Strawberries", "STRAWBERRIES", 800, GoodType.TRADE_GOODS, 1000 , 300),
+			new ExpeditionItem("TOBACCO", "Tobacco", "Tobacco", "TOBACCO", 200, GoodType.TRADE_GOODS, 1500 , 500),
+			new ExpeditionItem("COATS", "Coats", "Coats", "COATS", 60, GoodType.TRADE_GOODS, 2000, 800 ),
+			new ExpeditionItem("FURS", "Furs", "Furs", "FURS", 60, GoodType.TRADE_GOODS, 1000, 500 ),
+			new ExpeditionItem("GOLD_ARTIFACTS", "Gold Artifacts", "Gold Artifacts", "GOLD_ARTIFACTS", 40, GoodType.TRADE_GOODS, 1600, 500 ),
+			new ExpeditionItem("NATIVE_ARTIFACTS", "Native Artifacts", "Native Artifacts", "NATIVE_ARTIFACTS", 20, GoodType.TRADE_GOODS, 800, 200 ),
 
-			//Weapons
-			new Weapon("SPEARS", "Spear","Spears", new Roll("1D2"), new Roll("1D1"), false, 80, false, 8, 5),
-			new Weapon("SWORDS", "Sword", "Swords", new Roll("2D3"), new Roll("1D1"), false, 90, false, 10, 10),
-			new Weapon("BOWS", "Bow", "Bows", new Roll("1D3"), new Roll("0"), false, 80, true, 5, 6),
-			new Weapon("XBOWS", "Crossbow", "Crossbows", new Roll("2D2"), new Roll("0"), true, 95, true, 10, 25),
-			new Weapon("GUNS", "Harquebus", "Harquebuses", new Roll("3D2"), new Roll("0"), true, 70, true, 10, 30),
-			new Armor("PLATE", "Breastplate","Breastplates", 20, 4, new Roll("1D4"), "Plate", 50),
-			new Armor("STUDDED_LEATHER", "Studded Vest", "Studded Vests", 10, 1, new Roll("1D2"), "Leather", 20),
 			
-			new Good("ARROWS", "Arrow", "Arrows", 1, GoodType.WEAPON, 2),
+			// Armory
+			new Weapon("STEEL_SPEAR", "Steel Spear","Steel Spears", new Roll("1D2"), new Roll("1D1"), false, 80, false, 8, 5, 20),
+			new Weapon("STEEL_SWORD", "Steel Sword", "Steel Swords", new Roll("2D3"), new Roll("1D1"), false, 90, false, 10, 10, 50),
+			new Weapon("COMPOSITE_BOW", "Longbow", "Longbows", new Roll("1D3"), new Roll("0"), false, 80, true, 5, 6, 20),
+			new Weapon("WOODEN_CROSSBOW", "Crossbow", "Crossbows", new Roll("2D2"), new Roll("0"), true, 95, true, 10, 25, 50),
+			new Weapon("HARQUEBUS", "Harquebus", "Harquebuses", new Roll("3D2"), new Roll("0"), true, 70, true, 10, 30, 50),
+			
+			new Weapon("PLUMED_BOW", "Plumed Bow", "Plummed Bows", new Roll("1D4"), new Roll("0"), true, 95, true, 5, 20, 10),
+			new Weapon("SIMPLE_BOW", "Simple Bow", "Simple Bows", new Roll("1D2"), new Roll("0"), true, 80, true, 3, 3, 5),
+			new Weapon("OBSIDIAN_SWORD", "Obsidian Sword", "Obsidian Swords", new Roll("2D2"), new Roll("1D1"), false, 90, false, 15, 50, 100),
+			new Weapon("WOODEN_MACE", "Wooden Mace", "Wooden Maces", new Roll("1D1"), new Roll("0"), false, 70, false, 10, 3, 10),
+			
+			new Armor("BREASTPLATE", "Breastplate","Breastplates", 20, 4, new Roll("1D4"), "Plate", 50, 200),
+			new Armor("STUDDED_VEST", "Studded Vest", "Studded Vests", 10, 1, new Roll("1D2"), "Leather", 20, 10),
+			
+			// Livestock
+			new ExpeditionItem("ATTACK_DOG", "Attack Dog", "Attack Dogs", "ATTACK_DOG",  50, GoodType.LIVESTOCK, 100, 50),
+			new ExpeditionItem("COW", "Cow", "Cows", "COW",  500, GoodType.LIVESTOCK, 500, 600),
+			new ExpeditionItem("HORSE", "Horse", "Horses", "HORSE",  800, GoodType.LIVESTOCK, 1000, 3000),
+			new ExpeditionItem("PIGS", "Pig", "Pigs", "PIGS",  150, GoodType.LIVESTOCK, 300, 200),
+			new ExpeditionItem("LLAMA", "Llama", "Llamas", "LLAMA",  300, GoodType.LIVESTOCK, 800, 200),
+
 			
 			//Ships
-			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,false,3,100000, 10, false),
-			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,false,4,60000, 15, false),
+			new Vehicle("CARRACK","Carrack","Carracks",1,true,false,false,3,100000, 10, false, GoodType.VEHICLE, 16000, 32000),
+			new Vehicle("CARAVEL","Caravel","Caravels", 1,true,false,false,4,60000, 15, false, GoodType.VEHICLE, 12000, 24000),
 			
 			//Special
 			new ExpeditionUnit("KING_FERDINAND", "Ferdinand II, King of Aragón","Kings", UNIT_WEIGHT, 300, 
@@ -413,14 +497,14 @@ public class ExpeditionDAO {
 					2,
 					50,5, 
 					1, new String[]{""},
-					new String[]{""}) ,
+					new String[]{""},5000, 5000) ,
 			new ExpeditionUnit("QUEEN_ISABELLE", "Isabella, Queen of Castile and León","Queens", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
 					50,5, 
 					1, new String[]{""},
-					new String[]{""})
+					new String[]{""}, 5000, 5000) 
 		};
 		
 	}
@@ -433,37 +517,116 @@ public class ExpeditionDAO {
 	
 	private final static GoodType GOOD_TYPES[] = new GoodType[] {
 		GoodType.SUPPLIES,
-		GoodType.ARTIFACT,
-		GoodType.TOOL,
-		GoodType.WEAPON
+		GoodType.TRADE_GOODS,
+		GoodType.LIVESTOCK,
+		GoodType.ARMORY,
+		GoodType.PEOPLE
 	};
 
 	private static Map<String, Culture> culturesMap = new HashMap<String, Culture>(); 
 	static {
 		Culture[] cultures = new Culture[] { 
 			new Culture("MOUNT", "Fort Ancient", true, 3, 
-					composeList("NATIVE_WARRIOR,50"),
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,20"),
 					gtvm(1.0d,1.0d,1.0d,1.0d),
+					new String [] {"SIMPLE_BOW","WOODEN_MACE","BEANS","MAIZE","FISH","CLOTH","STRAWBERRIES","TOBACCO","COATS","FURS","NATIVE_ARTIFACTS"},
 					1, 3, 2), 
-			new Culture("MISSI", "Missisipians", true, 2, composeList("NATIVE_WARRIOR,30", "NATIVE_BRAVE, 10"), gtvm(1.5d,1.0d,1.0d,0.5d),1, 3, 3),
-			new Culture("AZTEC", "Aztec", true, 3, composeList("NATIVE_WARRIOR,40", "NATIVE_BRAVE,20", "NATIVE_ARCHER,10"), gtvm(0.5d,0.5d,1.0d,2.0d),3, 2, 2),
-			new Culture("HUAST", "Huastec", true, 2, composeList("NATIVE_WARRIOR,30", "NATIVE_BRAVE,10", "NATIVE_ARCHER,20"), gtvm(0.5d,1.0d,0.5d,2.0d),2, 1, 3),
-			new Culture("MIXTE", "Mixtec", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,0.5d,1.0d,1.5d),2, 1, 2),
-			new Culture("MAYA", "Maya", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,30"), gtvm(2.0d,2.0d,0.0d,1.0d),2, 2, 3),
-			new Culture("PURHE", "P'urhépecha", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(0.5d,0.0d,0.5d,3.0d),1, 3, 1),
-			new Culture("TOTON", "Totonac", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.5d,0.5d,1.0d),2, 1, 1),
-			new Culture("ZAPOT", "Zapotec", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.0d,1.0d,1.0d),2, 2, 2),
-			new Culture("CANAR", "Cañaris", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,2.0d,0.0d,1.0d),1, 3, 1),
-			new Culture("CHACH", "Chachapoya", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.5d,1.0d,0.5d),2, 2, 3),
-			new Culture("CHIMU", "Chimú", true, 1, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.0d,1.0d,1.0d),1, 2, 3),
-			new Culture("INCA", "Inca", true, 3, composeList("NATIVE_WARRIOR,20", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(0.0d,2.0d,1.0d,1.0d),3, 1, 3),
-			new Culture("MUISC", "Muisca", true, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.0d,1.0d,1.0d),1, 3, 3),
-			new Culture("TAIRO", "Tairona", true, 3, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,1.0d,1.0d,1.0d),1, 3, 3),
-			new Culture("ARTIC", "Artic Mammal Hunters", false, 1, composeList("NATIVE_WARRIOR,10"), gtvm(2.0d,1.0d,0.5d,0.5d),0, 0, 2),
-			new Culture("HUNTE", "Hunters-Gatherers", false, 2, composeList("NATIVE_BRAVE,10", "NATIVE_ARCHER,10"), gtvm(1.0d,0.0d,2.0d,1.0d),0, 1, 2),
-			new Culture("FISHI", "Fishing people", false, 3, composeList("NATIVE_WARRIOR,20"), gtvm(3.0d,0.0d,1.0d,0.0d),0, 1, 1),
-			new Culture("BISON", "Bison Hunters", false, 3, composeList("NATIVE_WARRIOR,10","NATIVE_ARCHER,10"), gtvm(2.0d,0.0d,0.0d,3.0d),0, 0, 3),
-			new Culture("FARME", "Maiz Farmers", false, 2, composeList("NATIVE_WARRIOR,10", "NATIVE_BRAVE,10"), gtvm(0.0d,0.0d,3.0d,1.0d),0, 1, 3)
+			new Culture("MISSI", "Missisipians", true, 2, 
+					composePairList("NATIVE_WARRIOR,30", "NATIVE_ARCHER,10"), 
+					gtvm(1.5d,1.0d,1.0d,0.5d,1),
+					new String [] {"SIMPLE_BOW","WOODEN_MACE","DRIED_MEAT","BEANS","FISH","CLOTH","STRAWBERRIES","TOBACCO","FURS","NATIVE_ARTIFACTS"},
+					1, 3, 3),
+			new Culture("AZTEC", "Aztec", true, 3, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,20", "JAGUAR_WARRIOR,10","EAGLE_WARRIOR,20"), 
+					gtvm(0.5d,0.5d,1.0d,2.0d,1),
+					new String [] {"SIMPLE_BOW","OBSIDIAN_SWORD","WOODEN_MACE","DRIED_MEAT","MAIZE","TOMATOES","FISH","CLOTH","COCOA","CHILI_PEPPER","COATS","FURS","GOLD_ARTIFACTS"},
+					3, 2, 2),
+			new Culture("HUAST", "Huastec", true, 2, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10", "JAGUAR_WARRIOR,5","EAGLE_WARRIOR,15"), 
+					gtvm(0.5d,1.0d,0.5d,2.0d,1),
+					new String [] {"SIMPLE_BOW","OBSIDIAN_SWORD","BEANS","MAIZE","FISH","CLOTH","COCOA","FURS","GOLD_ARTIFACTS","NATIVE_ARTIFACTS"},
+					2, 1, 3),
+			new Culture("MIXTE", "Mixtec", true, 3, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10", "EAGLE_WARRIOR,20", "QUETZAL_ARCHER,10"), 
+					gtvm(1.0d,0.5d,1.0d,1.5d,1),
+					new String [] {"PLUMED_BOW","SIMPLE_BOW","DRIED_MEAT","BEANS","MAIZE","TOMATOES","FISH","CLOTH","CHILI_PEPPER"},
+					2, 1, 2),
+			new Culture("MAYA", "Maya", true, 1, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10", "EAGLE_WARRIOR,10", "QUETZAL_ARCHER,30"),
+					gtvm(2.0d,2.0d,0.0d,1.0d,1),
+					new String [] {"PLUMED_BOW","SIMPLE_BOW","WOODEN_MACE","DRIED_MEAT","MAIZE","FISH","CLOTH","COCOA","CHILI_PEPPER","COATS","GOLD_ARTIFACTS","NATIVE_ARTIFACTS"},
+					2, 2, 3),
+			new Culture("PURHE", "P'urhépecha", true, 3, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10", "EAGLE_WARRIOR,20", "JAGUAR_WARRIOR,10"),
+					gtvm(0.5d,0.0d,0.5d,3.0d,1),
+					new String [] {"SIMPLE_BOW","OBSIDIAN_SWORD","WOODEN_MACE","BEANS","MAIZE","FISH","CLOTH","COCOA","CHILI_PEPPER","FURS","NATIVE_ARTIFACTS"},
+					1, 3, 1),
+			new Culture("TOTON", "Totonac", true, 2, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10", "EAGLE_WARRIOR,10", "QUETZAL_ARCHER,5"),
+					gtvm(1.0d,1.5d,0.5d,1.0d,1),
+					new String [] {"SIMPLE_BOW","OBSIDIAN_SWORD","DRIED_MEAT","BEANS","MAIZE","FISH","CLOTH","COCOA"},
+					2, 1, 1),
+			new Culture("ZAPOT", "Zapotec", true, 2, 
+					composePairList("NATIVE_WARRIOR,60"),
+					gtvm(1.0d,1.0d,1.0d,1.0d,1),
+					new String [] {"OBSIDIAN_SWORD","WOODEN_MACE","MAIZE","FISH","CLOTH","CHILI_PEPPER","COATS","NATIVE_ARTIFACTS"},
+					2, 2, 2),
+			new Culture("CANAR", "Cañaris", true, 3, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,20"), 
+					gtvm(1.0d,2.0d,0.0d,1.0d,1),
+					new String [] {"SIMPLE_BOW","WOODEN_MACE","LLAMA","DRIED_MEAT","BEANS","POTATOES","TOMATOES","FISH","CLOTH","COCA","COCOA","PINEAPPLE","FURS"},
+					1, 3, 1),
+			new Culture("CHACH", "Chachapoya", true, 1, 
+					composePairList("NATIVE_WARRIOR,40"),
+					gtvm(1.0d,1.5d,1.0d,0.5d,1),
+					new String [] {"WOODEN_MACE","LLAMA","BEANS","MAIZE","POTATOES","TOMATOES","CLOTH","COCOA","CHILI_PEPPER","PINEAPPLE","FURS","NATIVE_ARTIFACTS"},
+					2, 2, 3),
+			new Culture("CHIMU", "Chimú", true, 1, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10"),
+					gtvm(1.0d,1.0d,1.0d,1.0d,1),
+					new String [] {"SIMPLE_BOW","WOODEN_MACE","LLAMA","DRIED_MEAT","POTATOES","TOMATOES","FISH","CLOTH","COCA","PINEAPPLE","NATIVE_ARTIFACTS"},
+					1, 2, 3),
+			new Culture("INCA", "Inca", true, 3, 
+					composePairList("NATIVE_WARRIOR,40", "NATIVE_ARCHER,20"), 
+					gtvm(0.0d,2.0d,1.0d,1.0d,1),
+					new String [] {"SIMPLE_BOW","OBSIDIAN_SWORD","WOODEN_MACE","LLAMA","BEANS","MAIZE","POTATOES","TOMATOES","FISH","CLOTH","COCA","STRAWBERRIES","COATS","GOLD_ARTIFACTS","NATIVE_ARTIFACTS"},
+					3, 1, 3),
+			new Culture("MUISC", "Muisca", true, 2, 
+					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,20"),
+					gtvm(1.0d,1.0d,1.0d,1.0d,1),
+					new String [] {"SIMPLE_BOW","OBSIDIAN_SWORD","WOODEN_MACE","LLAMA","DRIED_MEAT","BEANS","POTATOES","TOMATOES","FISH","CLOTH","COCA","CHILI_PEPPER","PINEAPPLE","FURS","NATIVE_ARTIFACTS"},
+					1, 3, 3),
+			new Culture("TAIRO", "Tairona", true, 3, 
+					composePairList("NATIVE_WARRIOR,40", "NATIVE_ARCHER,20"), 
+					gtvm(1.0d,1.0d,1.0d,1.0d,1),
+					new String [] {"SIMPLE_BOW","WOODEN_MACE","DRIED_MEAT","MAIZE","TOMATOES","FISH","CLOTH","COCA","PINEAPPLE","FURS","GOLD_ARTIFACTS","NATIVE_ARTIFACTS"},
+					1, 3, 3),
+			
+			new Culture("ARTIC", "Artic Mammal Hunters", false, 1, 
+					composePairList(), 
+					gtvm(2.0d,1.0d,0.5d,0.5d,1),
+					new String [] {"DRIED_MEAT","CLOTH","COATS","FURS"},
+					0, 0, 2),
+			new Culture("HUNTE", "Hunters-Gatherers", false, 2, 
+					composePairList( "NATIVE_ARCHER,10"),
+					gtvm(1.0d,0.0d,2.0d,1.0d,1),
+					new String [] {"SIMPLE_BOW","DRIED_MEAT","CLOTH","FURS","NATIVE_ARTIFACTS"},
+					0, 1, 2),
+			new Culture("FISHI", "Fishing people", false, 3, 
+					composePairList("NATIVE_WARRIOR,40"),
+					gtvm(3.0d,0.0d,1.0d,0.0d,1),
+					new String [] {"BEANS","FISH","NATIVE_ARTIFACTS"},
+					0, 1, 1),
+			new Culture("BISON", "Bison Hunters", false, 3, 
+					composePairList("NATIVE_WARRIOR,40", "NATIVE_ARCHER,40"), 
+					gtvm(2.0d,0.0d,0.0d,3.0d,1),
+					new String [] {"SIMPLE_BOW","WOODEN_MACE","MAIZE","FURS"},
+					0, 0, 3),
+			new Culture("FARME", "Maiz Farmers", false, 2, 
+					composePairList("NATIVE_ARCHER,30"),
+					gtvm(0.0d,0.0d,3.0d,1.0d,1),
+					new String [] {"SIMPLE_BOW","WOODEN_MACE","BEANS","MAIZE","POTATOES","NATIVE_ARTIFACTS"},
+					0, 1, 3)
 		};
 		for (Culture culture: cultures){
 			culturesMap.put(culture.getCode(), culture);
@@ -484,7 +647,7 @@ public class ExpeditionDAO {
 		return ret;
 	}
 
-	private static List<Pair<Double, String>> composeList(String... pairs) {
+	private static List<Pair<Double, String>> composePairList(String... pairs) {
 		List<Pair<Double,String>> ret = new ArrayList<Pair<Double,String>>();
 		for (String pairString: pairs){
 			String[] splitPair = pairString.split(",");

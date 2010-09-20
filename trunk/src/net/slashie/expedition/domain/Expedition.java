@@ -459,7 +459,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	
 	public int getTotalUnits(){
 		int acum = 0;
-		List<Equipment> units = getUnits();
+		List<Equipment> units = getGoods(GoodType.PEOPLE);
 		for (Equipment unit: units){
 			acum += unit.getQuantity();
 		}
@@ -736,20 +736,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return currentlyCarrying;
 	}
 
-	public int getGoodCount(String string) {
-		int goodCount = 0;
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good){
-				Good good = (Good)equipment.getItem();
-				if (good.getFullID().equals(string)){
-					goodCount += equipment.getQuantity();
-				}
-			}
-		}
-		return goodCount;
-	}
-	
 	public int getItemCount(String itemId) {
 		int goodCount = 0;
 		List<Equipment> inventory = getInventory();
@@ -765,12 +751,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	public void reduceGood(String goodId, int quantity){
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good){
-				Good good = (Good)equipment.getItem();
-				if (good.getFullID().equals(goodId)){
-					reduceQuantityOf(equipment.getItem(), quantity);
-					return;
-				}
+			if (equipment.getItem().getFullID().equals(goodId)){
+				reduceQuantityOf(equipment.getItem(), quantity);
+				return;
 			}
 		}
 	}
@@ -805,9 +788,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		int currentValuable = 0;
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Valuable){
-				Valuable good = (Valuable)equipment.getItem();
-				currentValuable += good.getGoldValue() * equipment.getQuantity();
+			if (((ExpeditionItem)equipment.getItem()).getGoodType()== GoodType.TRADE_GOODS){
+				ExpeditionItem good = (ExpeditionItem)equipment.getItem();
+				currentValuable += Math.round(good.getEuropeValue() * (double)equipment.getQuantity());
 			}
 		}
 		return currentValuable;
@@ -818,11 +801,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		List<Equipment> inventory = getInventory();
 		for (int i = 0; i < inventory.size(); i++){
 			Equipment equipment = inventory.get(i);
-			if (equipment.getItem() instanceof Good){
-				Good good = (Good)equipment.getItem();
-				if (good.getGoodType() == GoodType.ARTIFACT){
-					reduceQuantityOf(good, equipment.getQuantity());
-				}
+			if (((ExpeditionItem)equipment.getItem()).getGoodType()== GoodType.TRADE_GOODS){
+				reduceQuantityOf(equipment.getItem(), equipment.getQuantity());
 			}
 		}
 		addAccountedGold(valuables);
@@ -870,7 +850,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	}
 
 	public List<Equipment> getUnarmedUnits() {
-		List<Equipment> units = getUnits();
+		List<Equipment> units = getGoods(GoodType.PEOPLE);
 		List<Equipment> ret = new ArrayList<Equipment>();
 		for (Equipment unit: units){
 			if (((ExpeditionUnit)unit.getItem()).getWeapon() == null){
@@ -881,7 +861,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	}
 	
 	public List<Equipment> getUnarmoredUnits() {
-		List<Equipment> units = getUnits();
+		List<Equipment> units = getGoods(GoodType.PEOPLE);
 		List<Equipment> ret = new ArrayList<Equipment>();
 		for (Equipment unit: units){
 			if (((ExpeditionUnit)unit.getItem()).getArmor() == null){
@@ -1170,41 +1150,22 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		addItem(unit, quantity);
 	}
 	
+	public void addAllItems(List<Equipment> items){
+		for (Equipment equipment: items){
+			if (canCarry(equipment.getItem(), equipment.getQuantity())){
+				addItem(equipment.getItem(), equipment.getQuantity());
+			} else {
+				GoodsCache cache = ((ExpeditionMacroLevel)getLevel()).getOrCreateCache(getPosition());
+				cache.addItem(equipment.getItem(), equipment.getQuantity());				
+			}
+			
+		}
+	}
+	
 	@Override
 	public void reduceUnits(ExpeditionUnit unit, int quantity) {
 		reduceQuantityOf(unit, quantity);
 		checkDeath();
-	}
-
-	public List<Equipment> getUnits(boolean clone) {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof ExpeditionUnit){
-				if (clone){
-					ret.add(new Equipment(equipment.getItem(), equipment.getQuantity()));
-				} else {
-					ret.add(equipment);
-				}
-			}
-		}
-		return ret;
-	}
-	
-	public List<Equipment> getUnits(){
-		return getUnits(false);
-	}
-
-	public List<Equipment> getTools() {
-		return getTools(false);
-	}
-	
-	public List<Equipment> getGoods() {
-		return getGoods(false);
-	}
-	
-	public List<Equipment> getValuables() {
-		return getValuables(false);
 	}
 
 	
@@ -1224,26 +1185,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return ret;
 	}
 
-	public List<Equipment> getGoods(boolean clone) {
+	public List<Equipment> getGoods(GoodType goodType, boolean clone) {
 		List<Equipment> ret = new ArrayList<Equipment>();  
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good && !(equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor || equipment.getItem() instanceof Valuable)){
-				if (clone){
-					ret.add(new Equipment(equipment.getItem(), equipment.getQuantity()));
-				} else {
-					ret.add(equipment);
-				}
-			}
-		}
-		return ret;
-	}
-
-	public List<Equipment> getValuables(boolean clone) {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Valuable){
+			if (((ExpeditionItem)equipment.getItem()).getGoodType() == goodType){
 				if (clone){
 					ret.add(new Equipment(equipment.getItem(), equipment.getQuantity()));
 				} else {
@@ -1254,4 +1200,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return ret;
 	}
 	
+	public List<Equipment> getGoods(GoodType goodType) {
+		return getGoods(goodType, false);
+		
+	}
+
+
 }

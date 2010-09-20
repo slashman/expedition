@@ -97,6 +97,7 @@ public class Town extends GoodsCache{
 									expedition.addAllItems(townOffer);
 									nativeTown.reduceAllItems(townOffer);
 									nativeTown.addAllItems(offer);
+									showBlockingMessage("Thank you, friend..");
 								} else {
 									showBlockingMessage("Some other time then..");
 								}

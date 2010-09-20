@@ -7,7 +7,7 @@ import java.util.List;
 import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionUnit;
-import net.slashie.expedition.domain.Good;
+import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.Weapon;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
@@ -33,7 +33,7 @@ public class ArmExpedition extends Action{
 			for (Equipment unit: units){
 				String[] preferredWeapons = ((ExpeditionUnit)unit.getItem()).getWeaponTypes();
 				for (String weaponType: preferredWeapons){
-					int available = getExpedition().getGoodCount(weaponType);
+					int available = getExpedition().getItemCount(weaponType);
 					int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
 					getExpedition().reduceGood(weaponType, unitsToArm);
 					//Split equipment in armed and disarmed
@@ -56,7 +56,7 @@ public class ArmExpedition extends Action{
 			for (Equipment unit: units){
 				String[] preferredArmors = ((ExpeditionUnit)unit.getItem()).getArmorTypes();
 				for (String armorType: preferredArmors){
-					int available = getExpedition().getGoodCount(armorType);
+					int available = getExpedition().getItemCount(armorType);
 					int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
 					getExpedition().reduceGood(armorType, unitsToArm);
 					//Split equipment in armored and unarmored
@@ -73,7 +73,7 @@ public class ArmExpedition extends Action{
 		} else {
 			if (isPlayer && !UserInterface.getUI().promptChat("Disarm Expedition: Are you sure?"))
 				return;
-			List<Equipment> units = getExpedition().getUnits();
+			List<Equipment> units = getExpedition().getGoods(GoodType.PEOPLE);
 			for (Equipment unit: units){
 				ExpeditionUnit eUnit = ((ExpeditionUnit)unit.getItem()); 
 				boolean useOffShore = isPlayer && getExpedition().getLocation() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)getExpedition().getLocation()).isDock(); 

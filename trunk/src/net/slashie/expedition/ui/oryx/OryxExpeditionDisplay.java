@@ -29,7 +29,8 @@ import net.slashie.utils.PropertyFilters;
 public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	private SwingSystemInterface si;
 	
-	private String IMG_TITLE;  
+	private String IMG_TITLE;
+	private String IMG_BLANK;
 	public static Font FNT_TEXT;
 	public static Font FNT_TITLE;
 	public static Font FNT_DIALOGUEIN;
@@ -41,6 +42,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	private void initProperties(Properties p){
 		IMG_TITLE = p.getProperty("IMG_TITLE");
+		IMG_BLANK = p.getProperty("IMG_BLANK");
 		COLOR_BOLD = PropertyFilters.getColor(p.getProperty("COLOR_BOLD"));
 		
 		try {
@@ -188,7 +190,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	
 	public int showSavedGames(File[] saveFiles){
-		si.drawImage(IMG_TITLE);
+		si.drawImage(IMG_BLANK);
 		if (saveFiles == null || saveFiles.length == 0){
 			si.print(3,6, "No adventurers available",Color.WHITE);
 			si.print(4,8, "[Space to Cancel]",Color.WHITE);

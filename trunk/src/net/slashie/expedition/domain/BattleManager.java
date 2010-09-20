@@ -17,7 +17,7 @@ import net.slashie.utils.Util;
 public class BattleManager {
 
 	public static void battle(String battleName, Expedition attacker, Actor defender) {
-		List<Equipment> attackingUnitsFullGroup = attacker.getUnits();
+		List<Equipment> attackingUnitsFullGroup = attacker.getGoods(GoodType.PEOPLE);
 		List<Equipment> defendingUnitsFullGroup = null;
 		
 		if (defender instanceof NativeTown){
@@ -29,14 +29,14 @@ public class BattleManager {
 				}
 				return;
 			} else {
-				defendingUnitsFullGroup = town.getUnits();
+				defendingUnitsFullGroup = town.getGoods(GoodType.PEOPLE);
 				town.resetTurnsBeforeNextExpedition();
 				defender.getLevel().getDispatcher().removeActor(town);
 				defender.getLevel().getDispatcher().addActor(town, true);
 			}
 		} else if (defender instanceof Expedition){
 			Expedition npe = (Expedition)defender;
-			defendingUnitsFullGroup = npe.getUnits();
+			defendingUnitsFullGroup = npe.getGoods(GoodType.PEOPLE);
 		} else {
 			//Invalid Defender
 			return;

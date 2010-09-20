@@ -127,7 +127,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
 			
-			ExpeditionItem food = ItemFactory.createItem("FOOD");
+			ExpeditionItem food = ItemFactory.createItem("BISCUIT");
 			ExpeditionItem sailor = ItemFactory.createItem("SAILOR");
 			ExpeditionItem captain = ItemFactory.createItem("CAPTAIN");
 			

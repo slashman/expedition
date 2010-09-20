@@ -8,6 +8,7 @@ public class ResetDeadReckon extends Action{
 	@Override
 	public void execute() {
 		((Expedition)performer).resetDeducedReckonWest();
+		//performer.setPosition(1570,1240,0);
 	}
 
 	@Override
