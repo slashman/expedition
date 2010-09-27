@@ -35,6 +35,7 @@ import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserCommand;
@@ -150,9 +151,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 		};
 	};
+	private SimplifiedUnitGFXMenuItem mainUnitMenuItem;
 	
 	@Override
-	public int switchChat(String prompt, String... options) {
+	public int switchChat(String title, String prompt, String... options) {
    		BorderedMenuBox selectionBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		selectionBox.setItemsPerPage(8);
    		selectionBox.setBounds(80, 300, 600,250);
@@ -164,6 +166,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		}
   		selectionBox.setMenuItems(menuItems);
   		selectionBox.setLegend(prompt);
+  		selectionBox.setTitle(title);
   		selectionBox.setTitleColor(TITLE_COLOR);
   		selectionBox.setForeColor(TEXT_COLOR);
   		selectionBox.draw();
@@ -212,7 +215,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	public boolean depart() {
-		if (promptChat("Do you want to leave the ports of Palos de la frontera? (Y/n)", 28, 2, 23, 5)){
+		if (promptChat("Do you want to leave the ports of Palos de la Frontera?")){
 			return true;
 		} else
 			return false;
@@ -312,6 +315,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void showBlockingMessage(String message) {
 		message = message.replaceAll("XXX", "\n");
 		showTextBox(message, 140, 288, 520, 200);
+	}
+	
+	@Override
+	public boolean promptChat(String message) {
+		return promptChat(message+" [Y/N]", 140,288,520,200);
 	}
 
 	public void transferFromCache(GoodsCache cache) {
@@ -591,6 +599,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		drawStatus();
 
 	}
+	
+	@Override
+	public void setPlayer(Player player) {
+		super.setPlayer(player);
+		mainUnitMenuItem = new SimplifiedUnitGFXMenuItem(new Equipment(getExpedition().getLeaderUnit(), 1));
+	}
 
 	private Expedition getExpedition(){
 		return (Expedition)getPlayer();
@@ -682,6 +696,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		unitsMenuBox.setMenuItems(expeditionUnitItems);
 		Collections.sort(expeditionUnitItems, ITEMS_COMPARATOR);
+		expeditionUnitItems.add(0, mainUnitMenuItem);
 		unitsMenuBox.draw();
 		vehiclesMenuBox.setMenuItems(vehicleUnitItems);
 		vehiclesMenuBox.draw();

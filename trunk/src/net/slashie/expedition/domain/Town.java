@@ -56,12 +56,12 @@ public class Town extends GoodsCache{
 		if (a != ExpeditionGame.getCurrentGame().getExpedition()){
 			return;
 		}
-		String description =  getLongDescription()+" XXX ";
+		String description =  "";
 		if (foundedIn != null){
 			description += "Founded on "+ DateFormat.getDateInstance(DateFormat.MEDIUM).format(foundedIn)+" by "+founderExpedition.getExpeditionaryTitle()+" XXX ";
 		}
 		description += "Current Population: "+getPopulation();
-		townAction(UserInterface.getUI().switchChat(description, getTownActions()), (Expedition)a);
+		townAction(UserInterface.getUI().switchChat(getLongDescription(),description, getTownActions()), (Expedition)a);
 	}
 	
 	protected void townAction(int switchChat, Expedition expedition) {
@@ -75,7 +75,7 @@ public class Town extends GoodsCache{
 				break;
 			case 1:
 				if (nativeTown.wantsToTradeWith(expedition)){
-					int goodTypeChoice = UserInterface.getUI().switchChat("What goods are you looking for?", GoodType.getChoicesList());
+					int goodTypeChoice = UserInterface.getUI().switchChat("Trading with "+nativeTown.getDescription(),"What goods are you looking for?", GoodType.getChoicesList());
 					GoodType goodType = GoodType.fromChoice(goodTypeChoice);
 					if (goodType == null){
 						//Cancelled

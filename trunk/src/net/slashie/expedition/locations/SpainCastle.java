@@ -27,7 +27,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 	
 	public SpainCastle () {
 		this.cellMap = new String [][]{{
-			"#cc#+#cc###C###cc#+#cc#",
+			/*"#cc#+#cc###C###cc#+#cc#",
 			"#........=T-T=........#",
 			"#........=F-I=........#",
 			"W........=---=........W",
@@ -41,7 +41,45 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			"W........=---=........W",
 			"#........=---=........#",
 			"#........=---=........#",
-			"###########S###########",
+			"###########S###########",*/
+			
+			"############W#####W######################ccccCcccc#########",
+			"#........#.....#.....#..................#..=T-T=..#.LLLLL.#",
+			"#........#.....#.................o......+..=F-I=..+E..D..R#",
+			"#........#.....#...........s...............=---=..#E.....R#",
+			"#........#.....#........................#..=---=..#.......#",
+			"#........#.....#.....#..................+..=---=..+.......#",
+			"#........#.##.##########....#############..=---=..#.......#",
+			"#........#.#............................#..=---=..###...###",
+			"#..........#............................W..=---=..W.......W",
+			"#....o...###..#.#..#...#....#...#..#.#..#.........#...g...W",
+			"#........#..............................###g._.g###.......#",
+			"#........#....#..a....s.......m....s.#..#.........#.......#",
+			"#........###............................#.................#",
+			"#........#........................................#.......#",
+			"#........#....#..a....s.......s....m.#....................S",
+			"#........#........................................#.......#",
+			"#........###............................#......o..........#",
+			"#........#....#..a....s.......m....s.#..#.........#.......#",
+			"#........#..............................##.#.#.####.......#",
+			"############..#.#..#...#....#...#..#.#..#.............g...W",
+			"...........#............................#.m....m..#.......W",
+			"...........#............................#.........#.......#",
+			"...........##.##########....################.#########.####",
+			"...........#...#.................#.....#..........#.......#",
+			"...........#...#.......o....o....#.....#.#.#.#.#..#.......#",
+			"...........#...#......................................s...W",
+			"...........#...#.................#.....#.#.....#..#.......#",
+			"...........#...#....#............#.....#..........#.......#",
+			".........####.##########.##.############.#.#.#.#..#########",
+			".........#.....#.................#.#......................#",
+			".........#.....#########.##.######.#########.##############",
+			".........#.....#.................#.#...#..........#.......#",
+			".........#.....#########....######.#......................W",
+			".........#.....#...................#.........m............#",
+			".........#.........................#......................W",
+			".........#.....#.....o.............#...#..........#.......#",
+			".........####W##########WWWW#########W######W##############",
 		}};
 		
 		charMap.put(".", "CASTLE_FLOOR");
@@ -54,8 +92,18 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		charMap.put("T", "THRONE");
 		charMap.put("F", "RED_CARPET ITEM KING_FERDINAND");
 		charMap.put("I", "RED_CARPET ITEM QUEEN_ISABELLE");
+		charMap.put("L", "BOOKSHELF");
+		charMap.put("E", "BOOKSHELF_L");
+		charMap.put("R", "BOOKSHELF_R");
+		charMap.put("D", "CASTLE_FLOOR NPC DOMINIK");
+		charMap.put("s", "CASTLE_FLOOR NPC SOLDIER");
+		charMap.put("m", "CASTLE_FLOOR NPC MARINE");
+		charMap.put("a", "CASTLE_FLOOR NPC ARCHER");
+		charMap.put("g", "CASTLE_FLOOR NPC GUARD");
+		charMap.put("o", "CASTLE_FLOOR NPC COLONIST");
 		charMap.put("C", "SPAIN_CREST");
 		charMap.put("c", "CASTLE_CURTAIN");
+		charMap.put("_", "CASTLE_FLOOR EXIT _START");
 		unleashers = new Unleasher[]{new KingsChat()};
 	}
 
@@ -68,14 +116,14 @@ public class SpainCastle extends StaticPattern implements Serializable {
 	public Unleasher[] getUnleashers() {
 		return super.getUnleashers();
 	}
-	
+
 	class KingsChat extends Unleasher {
-		Position CREST_POSITION = new Position(11,0);
+		Position CREST_POSITION = new Position(45,0);
 		@Override
 		public void unleash(AbstractLevel level, SworeGame game) {
 			Actor p = level.getPlayer();
 			int distance = net.slashie.utils.Position.distance(p.getPosition(), CREST_POSITION);
-			if (distance <= 6){
+			if (distance <= 5){
 				interactWithKings(level);
 			}
 		}
@@ -88,7 +136,8 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We, the Catholic King and Queen of Spain, have generously decided to grant you this audience. We have aproved your expedition to find the west path into the Indias.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Should your journey be sucessful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
 				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We will grant you 6.000 royal maravedíes as well as equipment and men, and we will order every person in Spain to aid you in whatever they can.");
-				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey, we await your safe return. XXX You are dismissed.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We have also instructed Fray Domenico to answer your questions about this journey, you will find him next to the Alcazar entrance.");
+				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey, we await your safe return. XXX XXX You are dismissed.");
 				stockExpedition(exp);
 			} else {
 				boolean earnedTitle = false;
@@ -112,7 +161,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			
 			 
 			level.getPlayer().setPosition(new Position(level.getExitFor("SPAIN")));
-			level.getPlayer().getPosition().y --;
+			level.getPlayer().getPosition().x --;
 			((Player)level.getPlayer()).darken();
 			((Player)level.getPlayer()).see();
 			UserInterface.getUI().refresh();
@@ -142,3 +191,4 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		
 	}
 }
+

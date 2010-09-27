@@ -130,8 +130,8 @@ public class ExpeditionGame extends SworeGame {
 		currentGame = this;
 		ExpeditionDisplay.thus.showIntro(getExpedition());
 		loadMetadata();
-		loadLevel("SPAIN");
-		setGameTime(20,7,1492);
+		loadLevel("SPAIN_CASTLE");
+		setGameTime(3,8,1492);
 	}
 	
 	private void loadMetadata() {

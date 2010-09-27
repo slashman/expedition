@@ -19,6 +19,7 @@ import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.BuildSettlement;
 import net.slashie.expedition.action.ChopWoods;
 import net.slashie.expedition.action.DropEquipment;
+import net.slashie.expedition.action.ForageFood;
 import net.slashie.expedition.action.MeleeAttack;
 import net.slashie.expedition.action.RepairShips;
 import net.slashie.expedition.action.Use;
@@ -60,7 +61,6 @@ import net.slashie.serf.ui.UISelector;
 import net.slashie.serf.ui.UserAction;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.UserInterface;
-import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.serf.ui.consoleUI.ConsoleUISelector;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
 import net.slashie.serf.ui.consoleUI.effects.CharEffectFactory;
@@ -68,7 +68,6 @@ import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.serf.ui.oryxUI.effects.GFXEffectFactory;
-import net.slashie.utils.FileUtil;
 import net.slashie.utils.sound.midi.STMidiPlayer;
 
 
@@ -317,6 +316,7 @@ public class RunExpedition {
 		Action resetReckon = new ResetDeadReckon();
 		Action repairShips = new RepairShips();
 		Action chopWoods = new ChopWoods();
+		Action forageFood = new ForageFood();
 
 		keyBindings = new Properties();
 		keyBindings.put("DONOTHING1_KEY", readKeyString(keyConfig, "doNothing"));
@@ -342,11 +342,12 @@ public class RunExpedition {
 		
 		keyBindings.put("DROP_EQUIPMENT_KEY", readKeyString(keyConfig, "drop"));
 		keyBindings.put("BUILD_SETTLEMENT_KEY", readKeyString(keyConfig, "build"));
-		keyBindings.put("RAIN_ARROWS_KEY", readKeyString(keyConfig, "fire"));
 		keyBindings.put("ARM_EXPEDITION_KEY", readKeyString(keyConfig, "arm"));
 		keyBindings.put("RESET_RECKON_KEY", readKeyString(keyConfig, "reset"));
 		keyBindings.put("REPAIR_SHIPS_KEY", readKeyString(keyConfig, "repair"));
 		keyBindings.put("CHOP_WOODS_KEY", readKeyString(keyConfig, "chopWoods"));
+		keyBindings.put("FORAGE_FOOD_KEY", readKeyString(keyConfig, "forageFood"));
+
 		
 		keyBindings.put("QUIT_KEY", readKeyString(keyConfig, "PROMPTQUIT"));
 		keyBindings.put("HELP1_KEY", readKeyString(keyConfig, "HELP1"));
@@ -363,6 +364,8 @@ public class RunExpedition {
 			    new UserAction(resetReckon, i(keyBindings.getProperty("RESET_RECKON_KEY"))),
 			    new UserAction(repairShips, i(keyBindings.getProperty("REPAIR_SHIPS_KEY"))),
 			    new UserAction(chopWoods, i(keyBindings.getProperty("CHOP_WOODS_KEY"))),
+			    new UserAction(forageFood, i(keyBindings.getProperty("FORAGE_FOOD_KEY"))),
+
 			};
 		
 		UserCommand[] userCommands = new UserCommand[]{

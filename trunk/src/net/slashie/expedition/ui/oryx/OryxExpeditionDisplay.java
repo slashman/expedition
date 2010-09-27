@@ -166,16 +166,17 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.print(6,11, "  a: Arm / Disarm expedition", Color.WHITE);
 		si.print(6,12, "  b: Build a Settlement", Color.WHITE);
 		si.print(6,13, "  d: Drop equipment", Color.WHITE);
-		si.print(6,14, "  i: Show inventory", Color.WHITE);
-		si.print(6,15, "  l: Look around", Color.WHITE);
-		si.print(6,16, "  r: Repair damaged ships", Color.WHITE);
-		si.print(6,17, "  R: Reset dead' reckon counter", Color.WHITE);
-		si.print(6,18, "  w: Chop wood from forests", Color.WHITE);
-		si.print(6,19, "  S: Save Game", Color.WHITE);
-		si.print(6,20, "  Q: Quit", Color.WHITE);
+		si.print(6,14, "  f: Fish or Forage for food", Color.WHITE);
+		si.print(6,15, "  i: Show inventory", Color.WHITE);
+		si.print(6,16, "  l: Look around", Color.WHITE);
+		si.print(6,17, "  r: Repair damaged ships", Color.WHITE);
+		si.print(6,18, "  R: Reset dead' reckon counter", Color.WHITE);
+		si.print(6,19, "  w: Chop wood from forests", Color.WHITE);
+		si.print(6,20, "  S: Save Game", Color.WHITE);
+		si.print(6,21, "  Q: Quit", Color.WHITE);
 		
-		si.print(6,21, "  ", Color.WHITE);
-		si.print(6,22, "  Press Space to continue", Color.CYAN);
+		si.print(6,22, "  ", Color.WHITE);
+		si.print(6,23, "  Press Space to continue", Color.CYAN);
 		si.refresh();
 
 		si.waitKey(CharKey.SPACE);

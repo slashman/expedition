@@ -6,6 +6,7 @@ import net.slashie.serf.ui.AppearanceFactory;
 public class OverworldExpeditionCell extends AbstractCell{
 	private boolean isLand, isRiver, isWood;
 	private int heightMod;
+	private int forageChance, forageQuantity;
 	
 	public boolean isRiver() {
 		return isRiver;
@@ -15,13 +16,15 @@ public class OverworldExpeditionCell extends AbstractCell{
 		return isLand;
 	}
 
-	public OverworldExpeditionCell(String pid, String description, boolean isLand, int heightMod, boolean isRiver, boolean isSolid, boolean isWood, boolean isOpaque) {
+	public OverworldExpeditionCell(String pid, String description, boolean isLand, int heightMod, boolean isRiver, boolean isSolid, boolean isWood, boolean isOpaque, int forageChance, int forageQuantity) {
 		super(pid, description, description, AppearanceFactory.getAppearanceFactory().getAppearance(pid), isSolid, isOpaque);
 		this.isLand = isLand;
 		this.heightMod = heightMod;
 		this.isRiver = isRiver;
 		this.isWood = isWood;
 		setWater(!isLand);
+		this.forageChance = forageChance;
+		this.forageQuantity = forageQuantity;
 	}
 
 	@Override
@@ -51,5 +54,14 @@ public class OverworldExpeditionCell extends AbstractCell{
 	public int getHeightMod() {
 		return heightMod;
 	}
+
+	public int getForageChance() {
+		return forageChance;
+	}
+
+	public int getForageQuantity() {
+		return forageQuantity;
+	}
+
 
 }
