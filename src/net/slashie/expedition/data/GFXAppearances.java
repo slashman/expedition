@@ -15,7 +15,7 @@ public class GFXAppearances {
 	public static GFXAppearance createAppearance(String ID, int xpos, int ypos){
 		xpos--;
 		ypos--;
-		String filename = "res/expedition.gif";
+		String filename = "res/expedition.png";
 		String darkfilename = "res/expedition_d.png";
 		BufferedImage bigImage = (BufferedImage) images.get(filename);
 		BufferedImage bigDarkImage = (BufferedImage) images.get(darkfilename);
@@ -114,11 +114,14 @@ public class GFXAppearances {
 				createAppearance("CASTLE_GATE", 11 ,4),
 				createAppearance("KING_FERDINAND", 11 ,10),
 				createAppearance("QUEEN_ISABELLE", 12 ,10),
+				createAppearance("DOMINIK", 1 ,19),
+				createAppearance("COLOMBUS", 2 ,19),
 
 				createAppearance("SAILOR", 1 ,10),
 				createAppearance("ROGUE", 2 ,10),
 				createAppearance("MARINE", 3 ,10),
 				createAppearance("SOLDIER", 6 ,10),
+				createAppearance("GUARD", 4 ,10),
 				createAppearance("ARCHER", 5 ,10),
 				createAppearance("CAPTAIN", 7 ,10),
 				createAppearance("EXPLORER", 8 ,10),
@@ -127,12 +130,15 @@ public class GFXAppearances {
 				
 				createAppearance("NATIVE_WARRIOR", 1 ,11),
 				createAppearance("NATIVE_ARCHER", 3 ,11),
-				createAppearance("NATIVE_COMMONER", 3 ,11),
+				createAppearance("NATIVE_COMMONER", 3 ,19),
 				createAppearance("NATIVE_SHAMAN", 3 ,11),
 				createAppearance("QUETZAL_ARCHER", 3 ,11),
 				createAppearance("EAGLE_WARRIOR", 2 ,11),
 				createAppearance("JAGUAR_WARRIOR", 2 ,11),
 
+				createAppearance("BOOKSHELF_L", 1, 20),
+				createAppearance("BOOKSHELF", 2, 20),
+				createAppearance("BOOKSHELF_R", 3, 20),
 				
 				createAppearance("GOODS_STORE", 1 ,6),
 				createAppearance("WEAPONS_STORE", 2 ,6),
@@ -141,6 +147,7 @@ public class GFXAppearances {
 				createAppearance("GUILD", 5 ,6),
 				
 				createAppearance("BISCUIT", 4 ,7),
+				createAppearance("FRUIT", 4 ,7),
 				createAppearance("BREAD", 4 ,7),
 				createAppearance("DRIED_MEAT", 4 ,7),
 

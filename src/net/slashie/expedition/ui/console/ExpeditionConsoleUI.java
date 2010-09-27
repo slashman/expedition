@@ -39,6 +39,7 @@ import net.slashie.libjcsi.textcomponents.TextBox;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserCommand;
@@ -53,6 +54,13 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	private ConsoleSystemInterface csi;
 	private ListBox expeditionUnitBox;
 	private ListBox vehiclesBox;
+	private SimplifiedUnitMenuItem mainUnitMenuItem;
+	
+	@Override
+	public void setPlayer(Player player) {
+		super.setPlayer(player);
+		mainUnitMenuItem = new SimplifiedUnitMenuItem(new Equipment(getExpedition().getLeaderUnit(),1));
+	}
 	
 	public ExpeditionConsoleUI (ConsoleSystemInterface csi){
 		this.csi = csi;
@@ -151,6 +159,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			}
 		}
 		Collections.sort(expeditionUnitsVector, expeditionUnitsComparator);
+		expeditionUnitsVector.add(0, mainUnitMenuItem);
 		expeditionUnitBox.setElements(expeditionUnitsVector);
 		
 		Vector vehicleItems = new Vector();
@@ -571,11 +580,12 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	
 
 	@Override
-	public int switchChat(String prompt, String... options) {
+	public int switchChat(String title, String prompt, String... options) {
 		MenuBox selectionBox = new MenuBox(csi);
-		selectionBox.setPosition(20,2);
-		selectionBox.setWidth(31);
-		selectionBox.setHeight(8);
+		selectionBox.setPosition(15,10);
+		selectionBox.setWidth(50);
+		selectionBox.setHeight(10);
+		
   		Vector<MenuItem> menuItems = new Vector<MenuItem>();
   		int i = 0;
   		for (String option: options){
@@ -585,6 +595,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   		selectionBox.setMenuItems(menuItems);
   		selectionBox.setPromptSize(2);
   		selectionBox.setBorder(true);
+  		selectionBox.setBorderColor(CSIColor.RED);
+  		selectionBox.setTitle(title);
   		selectionBox.setPrompt(prompt);
   		selectionBox.draw();
   		

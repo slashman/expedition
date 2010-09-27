@@ -109,7 +109,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	@Override
 	public void onStep(Actor a) {
 		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
-			switch (UserInterface.getUI().switchChat("What do you want to do?", "Fetch Equipment", "Caché Equipment")){
+			switch (UserInterface.getUI().switchChat("Goods Cache","What do you want to do?", "Fetch Equipment", "Caché Equipment")){
 			case 0:
 				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(this);
     			break;

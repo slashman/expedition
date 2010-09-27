@@ -34,6 +34,8 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class Expedition extends Player implements FoodConsumer, UnitContainer{
+	private ExpeditionUnit leaderUnit;
+	
 	public enum Title {
 		EXPLORER (1, "Explorador", 0, 0, 0, 0),
 		HIDALGO  (2, "Hidalgo",    0, 0, 1, 20000),
@@ -661,7 +663,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	
 	public Appearance getAppearance(){
 		if (getLocation().isZoomIn()){
-			return AppearanceFactory.getAppearanceFactory().getAppearance("EXPLORER");
+			return getLeaderUnit().getAppearance();
 		} else {
 			switch (getMovementMode()){
 			case FOOT:
@@ -1096,7 +1098,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        		wearOutShips(30);
 	        	}
 	        	if (cell.isLand() && !cell.isRiver()){
-	        		if (UserInterface.getUI().promptChat("Do you want to land?  (Y/n)")){
+	        		if (UserInterface.getUI().promptChat("Do you want to land?")){
 	        			GoodsCache ship = new ShipCache((ExpeditionGame)getGame(), getCurrentVehicles());
 	        			ship.addAllGoods(this);
 	        			removeAllGoods();
@@ -1203,6 +1205,14 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	public List<Equipment> getGoods(GoodType goodType) {
 		return getGoods(goodType, false);
 		
+	}
+
+	public ExpeditionUnit getLeaderUnit() {
+		return leaderUnit;
+	}
+
+	public void setLeaderUnit(ExpeditionUnit leaderUnit) {
+		this.leaderUnit = leaderUnit;
 	}
 
 

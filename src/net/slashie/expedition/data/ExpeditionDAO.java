@@ -78,14 +78,14 @@ public class ExpeditionDAO {
 		
 		return new AbstractCell[]{
 			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false),
-			new OverworldExpeditionCell("WATER", "Ocean", false, 0, false, false, false,false),
-			new OverworldExpeditionCell("WATER2", "Water", true, 0, true, false, false,false),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,true),
-			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,true),
-			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true),
-			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false),
+			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false, 15, 20),
+			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 10, 40),
+			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 50),
+			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 15, 20),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,true, 5, 10),
+			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,true, 0, 0),
+			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 10, 20),
+			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0),
 			
 			//Inworld Cells
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
@@ -100,6 +100,9 @@ public class ExpeditionDAO {
 			new ExpeditionCell("SPAIN_DOCKS", "Docks"),
 			new ExpeditionCell("SPAIN_WATER", "Ocean", false, false, true),
 			new ExpeditionCell("SPAIN_WALL", "Stone Wall", true, true),
+			new ExpeditionCell("BOOKSHELF", "Bookshelf", true, true),
+			new ExpeditionCell("BOOKSHELF_R", "Bookshelf", true, true),
+			new ExpeditionCell("BOOKSHELF_L", "Bookshelf", true, true),
 			new ExpeditionCell("SPAIN_HOUSE", "Houses", true, true),
 			new ExpeditionCell("SPAIN_SHIP", "Ships", false, false, true),
 			new ExpeditionCell("SPAIN_COLUMN", "Column", true, true),
@@ -149,7 +152,7 @@ public class ExpeditionDAO {
 			new CharAppearance("GRASS", '.', ConsoleSystemInterface.GREEN),
 			new CharAppearance("PLAINS", '.', ConsoleSystemInterface.BROWN),
 			new CharAppearance("WATER", '~', ConsoleSystemInterface.DARK_BLUE),
-			new CharAppearance("WATER2", '~', ConsoleSystemInterface.BLUE),
+			new CharAppearance("WATER2", '~', ConsoleSystemInterface.TEAL),
 			new CharAppearance("MOUNTAIN", '^', ConsoleSystemInterface.GREEN),
 			new CharAppearance("SNOWY_MOUNTAIN", '^', ConsoleSystemInterface.CYAN),
 			new CharAppearance("FOREST", '&', ConsoleSystemInterface.GREEN),
@@ -195,12 +198,19 @@ public class ExpeditionDAO {
 			
 			new CharAppearance("KING_FERDINAND", '@', ConsoleSystemInterface.TEAL),
 			new CharAppearance("QUEEN_ISABELLE", '@', ConsoleSystemInterface.LEMON),
+			new CharAppearance("DOMINIK", '@', ConsoleSystemInterface.BROWN),
+			new CharAppearance("COLOMBUS", '@', ConsoleSystemInterface.GRAY),
+
+			new CharAppearance("BOOKSHELF_L", '#', ConsoleSystemInterface.BROWN),
+			new CharAppearance("BOOKSHELF", '#', ConsoleSystemInterface.BROWN),
+			new CharAppearance("BOOKSHELF_R", '#', ConsoleSystemInterface.BROWN),
 			
 			//Units
 			new CharAppearance("SAILOR", 's', ConsoleSystemInterface.BLUE),
 			new CharAppearance("ROGUE", 'r', ConsoleSystemInterface.BROWN),
 			new CharAppearance("MARINE", 'm', ConsoleSystemInterface.TEAL),
 			new CharAppearance("SOLDIER", 'S', ConsoleSystemInterface.GREEN),
+			new CharAppearance("GUARD", 'S', ConsoleSystemInterface.GREEN),
 			new CharAppearance("ARCHER", 'a', ConsoleSystemInterface.DARK_BLUE),			
 			new CharAppearance("CAPTAIN", 'C', ConsoleSystemInterface.CYAN),
 			new CharAppearance("EXPLORER", 'e', ConsoleSystemInterface.BLUE),
@@ -231,6 +241,7 @@ public class ExpeditionDAO {
 			
 			//Goods
 			new CharAppearance("BISCUIT", '%', ConsoleSystemInterface.BROWN),
+			new CharAppearance("FRUIT", '%', ConsoleSystemInterface.YELLOW),
 			new CharAppearance("BREAD", '%', ConsoleSystemInterface.YELLOW),
 			new CharAppearance("DRIED_MEAT", '%', ConsoleSystemInterface.BROWN),
 			new CharAppearance("WHEAT_FOODER", '%', ConsoleSystemInterface.BROWN),
@@ -324,6 +335,14 @@ public class ExpeditionDAO {
 					new String[]{"HARQUEBUS","WOODEN_CROSSBOW","STEEL_SWORD","STEEL_SPEAR"},
 					new String[]{"STUDDED_VEST"}, 70, 100),
 			new ExpeditionUnit("SOLDIER", "Soldier","Soldiers", UNIT_WEIGHT, 200,
+					new Roll("1D3"),
+					new Roll("1D3"),
+					4,
+					95,5,
+					2,
+					new String[]{"STEEL_SWORD", "HARQUEBUS", "STEEL_SPEAR"},
+					new String[]{"BREASTPLATE", "STUDDED_VEST"}, 100, 200),
+			new ExpeditionUnit("GUARD", "A Burly Guard","Guards", UNIT_WEIGHT, 200,
 					new Roll("1D3"),
 					new Roll("1D3"),
 					4,
@@ -438,6 +457,7 @@ public class ExpeditionDAO {
 			new Food("POTATOES", "Potatoes", "Potatoes", 3, 1, 800,200, FOOD_PACK),
 			new Food("TOMATOES", "Tomatoes", "Tomatoes", 3, 1, 800,200, FOOD_PACK),
 			new Food("FISH", "Fish", "Fish", 3, 1, 100, 200, FOOD_PACK),
+			new Food("FRUIT", "Fruit", "Fruit", 3, 1, 100, 100, FOOD_PACK),
 			
 			new Food("FRESHWATER", "Freshwater", "Freshwater", 2,1, 20,5, LIQUID_PACK),
 			new Food("RUM", "Rum", "Rum", 2, 2, 400,500, LIQUID_PACK),
@@ -504,7 +524,21 @@ public class ExpeditionDAO {
 					1,
 					50,5, 
 					1, new String[]{""},
-					new String[]{""}, 5000, 5000) 
+					new String[]{""}, 5000, 5000),
+			new ExpeditionUnit("DOMINIK", "Fray Domenico Marcus","Mingoses", UNIT_WEIGHT, 300, 
+					new Roll("1D1"),
+					new Roll("1D1"),
+					1,
+					50,5, 
+					1, new String[]{""},
+					new String[]{""}, 5000, 5000),
+			new ExpeditionUnit("COLOMBUS", "Colón","Colones", UNIT_WEIGHT, 300, 
+					new Roll("1D1"),
+					new Roll("1D1"),
+					1,
+					50,5, 
+					1, new String[]{""},
+					new String[]{""}, 5000, 5000)
 		};
 		
 	}

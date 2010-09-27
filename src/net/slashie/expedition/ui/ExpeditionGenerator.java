@@ -2,6 +2,7 @@ package net.slashie.expedition.ui;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
+import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
@@ -29,8 +30,9 @@ public abstract class ExpeditionGenerator {
 		ret.setName("Colón");
 		ret.setExpeditionary("Colón");
 		ret.setAccountedGold(200);
-		ExpeditionItem explorer = ItemFactory.createItem("EXPLORER");
-		ret.addItem(explorer, 1);
+		ExpeditionUnit explorer = (ExpeditionUnit)ItemFactory.createItem("COLOMBUS");
+		ret.setLeaderUnit(explorer);
+		//ret.addItem(explorer, 1);
 		
 		ret.setMovementMode(MovementMode.FOOT);
 		return ret;
