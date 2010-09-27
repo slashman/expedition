@@ -9,6 +9,7 @@ import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
+import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.action.Action;
@@ -116,7 +117,8 @@ public class Walk extends Action{
 		}
 		Position var = directionToVariation(targetDirection);
         
-        
+		
+
         
 		if (expedition.getMovementMode() == MovementMode.SHIP){
 			boolean stalled = false;
@@ -145,6 +147,7 @@ public class Walk extends Action{
 		}
 		Position destinationPoint = Position.add(performer.getPosition(), var);
 
+		
 		AbstractCell cell = performer.getLevel().getMapCell(destinationPoint);
 
 		if (cell == null){
@@ -152,6 +155,15 @@ public class Walk extends Action{
 			actionCancelled = true;
         	return;
         }
+
+		if (((ExpeditionLevel)expedition.getLevel()).isZoomIn()){
+			Actor actor = expedition.getLevel().getActorAt(destinationPoint);
+			if (actor != null){
+				actor.onPlayerBump();
+				actionCancelled = true;
+	        	return;
+			}
+		}
 		
 		try {
 			expedition.landOn(destinationPoint);
