@@ -20,7 +20,15 @@ public class ChopWoods extends Action{
 	@Override
 	public void execute() {
 		Expedition expedition = (Expedition) performer;
+		
 		ExpeditionMacroLevel level = (ExpeditionMacroLevel)  expedition.getLocation();
+		
+		if (expedition.getLocation().getLocation().getB() >= -30){
+			level.addMessage("This forest is not your property!");
+			return;
+		}
+
+		
 		OverworldExpeditionCell cell = (OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition());
 		if (cell.isWood()){
 			AbstractFeature f = null;
@@ -73,6 +81,12 @@ public class ChopWoods extends Action{
 			return false;
 		}
 		ExpeditionMacroLevel level = (ExpeditionMacroLevel)  expedition.getLocation();
+		
+		if (expedition.getLocation().getLocation().getB() >= -30){
+			invalidationMessage = "This forest is not your property!";
+			return false;
+		}
+		
 		OverworldExpeditionCell cell = (OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition());
 		if (cell.isWood()){
 			AbstractFeature f = null;
