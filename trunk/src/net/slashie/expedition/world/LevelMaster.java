@@ -70,6 +70,7 @@ public class LevelMaster {
 			WorldGenerator.addNativeSettlements(ret);
 			ret.getHelper().setMusicKey("SEA");
 			ret.setID("WORLD");
+			ret.setWindDirection(CardinalDirection.WEST);
 			return ret;
 		} else if (levelID.equals("NEW_WORLD")){
 			

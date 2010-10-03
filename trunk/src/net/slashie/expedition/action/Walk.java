@@ -7,6 +7,7 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.SailingPoint;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -206,6 +207,14 @@ public class Walk extends Action{
 		return getExpedition().getMovementSpeed().getMovementCost();
 	}
 	
+
+	@Override
+	public String getSFX() {
+		if (ExpeditionGame.getCurrentGame().getExpedition().getMovementMode() == MovementMode.FOOT)
+			return "wav/shaktool_yowzer_footstep_1.wav";
+		else
+			return "wav/shaktool_yowzer_footstep_2.wav";
+	}
 	
 
 }

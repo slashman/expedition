@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.org.apache.xerces.internal.impl.dv.xs.DayDV;
+
 import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
@@ -14,10 +16,13 @@ import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
+import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.town.Building;
 import net.slashie.expedition.world.Culture;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionFeature;
 import net.slashie.expedition.world.OverworldExpeditionCell;
+import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.AppearanceFactory;
@@ -82,8 +87,8 @@ public class ExpeditionDAO {
 			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 10, 40),
 			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 50),
 			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 15, 20),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,true, 5, 10),
-			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,true, 0, 0),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,false, 5, 10),
+			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,false, 0, 0),
 			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 10, 20),
 			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0),
 			
@@ -114,6 +119,8 @@ public class ExpeditionDAO {
 			new ExpeditionCell("CASTLE_GATE", "Castle Gate", "TRAVEL_CASTLE"),
 			
 			new ExpeditionCell("CASTLE_FLOOR", "Castle Floor"),
+			new ExpeditionCell("CASTLE_PLAZA", "Garden"),
+			new ExpeditionCell("CASTLE_TREE", "Tree", true, true),
 			new ExpeditionCell("BLUE_CARPET", "Carpet"),
 			new ExpeditionCell("RED_CARPET", "Carpet"),
 			new ExpeditionCell("CASTLE_WALL", "Castle Wall", true, true),
@@ -186,6 +193,8 @@ public class ExpeditionDAO {
 			
 			// Castle
 			new CharAppearance("CASTLE_FLOOR", '.', ConsoleSystemInterface.BROWN),
+			new CharAppearance("CASTLE_PLAZA", '.', ConsoleSystemInterface.GREEN),
+			new CharAppearance("CASTLE_TREE", '&', ConsoleSystemInterface.BROWN),
 			new CharAppearance("BLUE_CARPET", '=', ConsoleSystemInterface.BLUE),
 			new CharAppearance("RED_CARPET", '=', ConsoleSystemInterface.RED),
 			new CharAppearance("CASTLE_WALL", '#', ConsoleSystemInterface.PURPLE),
@@ -200,6 +209,9 @@ public class ExpeditionDAO {
 			new CharAppearance("QUEEN_ISABELLE", '@', ConsoleSystemInterface.LEMON),
 			new CharAppearance("DOMINIK", '@', ConsoleSystemInterface.BROWN),
 			new CharAppearance("COLOMBUS", '@', ConsoleSystemInterface.GRAY),
+			new CharAppearance("BIZCOCHO", 'd', ConsoleSystemInterface.BROWN),
+			new CharAppearance("CRISTOFORO", '@', ConsoleSystemInterface.GREEN),
+			new CharAppearance("SANTIAGO", '@', ConsoleSystemInterface.YELLOW),
 
 			new CharAppearance("BOOKSHELF_L", '#', ConsoleSystemInterface.BROWN),
 			new CharAppearance("BOOKSHELF", '#', ConsoleSystemInterface.BROWN),
@@ -463,7 +475,7 @@ public class ExpeditionDAO {
 			new Food("RUM", "Rum", "Rum", 2, 2, 400,500, LIQUID_PACK),
 			
 			
-			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "WOOD", 10, GoodType.SUPPLIES, 100,50),
+			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "WOOD", 10, GoodType.SUPPLIES, 100,5),
 			
 			// Trade Goods, Old world
 			new ExpeditionItem("COTTON", "Cotton", "Cotton", "COTTON", 200, GoodType.TRADE_GOODS, 200 , 400),
@@ -538,10 +550,52 @@ public class ExpeditionDAO {
 					1,
 					50,5, 
 					1, new String[]{""},
+					new String[]{""}, 5000, 5000),
+			new ExpeditionUnit("BIZCOCHO", "Bizcocho","Bizcochos", UNIT_WEIGHT, 300, 
+					new Roll("1D1"),
+					new Roll("1D1"),
+					1,
+					50,5, 
+					1, new String[]{""},
+					new String[]{""}, 5000, 5000),
+			new ExpeditionUnit("CRISTOFORO", "Juan Cristóforo, el bardo","Jices", UNIT_WEIGHT, 300, 
+					new Roll("1D1"),
+					new Roll("1D1"),
+					1,
+					50,5, 
+					1, new String[]{""},
+					new String[]{""}, 5000, 5000),
+			new ExpeditionUnit("SANTIAGO", "Don Santiago","Santiagos", UNIT_WEIGHT, 300, 
+					new Roll("1D1"),
+					new Roll("1D1"),
+					1,
+					50,5, 
+					1, new String[]{""},
 					new String[]{""}, 5000, 5000)
 		};
 		
 	}
+
+	private static Building[] buildings = new Building[]{
+		new Building("PLAZA", "Plaza", "Center of community life for the settlement", 40, DayShiftAgent.TICKS_PER_DAY * 40, 0, 14),
+		new Building("HOUSE", "House", "Simple wooden house, can hold 10 persons", 40, DayShiftAgent.TICKS_PER_DAY * 30, 10, 7),
+		new Building("CHURCH", "Small Church", "", 60, DayShiftAgent.TICKS_PER_DAY * 60, 0, 10),
+		new Building("MILL", "Mill", "", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
+		new Building("FARM", "Farm", "", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
+		new Building("LUMBER_CAMP", "Lumber Camp", "", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
+		new Building("TRADING_OUTPOST", "Trading Outpost", "", 60, DayShiftAgent.TICKS_PER_DAY * 120, 0, 10),
+		new Building("HARBOR", "Harbor", "", 60, DayShiftAgent.TICKS_PER_DAY * 120, 0, 14),
+		new Building("BLACKSMITH", "Blacksmith", "", 60, DayShiftAgent.TICKS_PER_DAY * 200, 0, 14),
+		new Building("MISSION", "Mission", "", 60, DayShiftAgent.TICKS_PER_DAY * 400, 0, 30),
+		new Building("BARRACKS", "Barracks", "", 60, DayShiftAgent.TICKS_PER_DAY * 400, 0, 30),
+		new Building("STABLES", "Stables", "", 60, DayShiftAgent.TICKS_PER_DAY * 500, 0, 30),
+		new Building("FORT", "Fort", "", 60, DayShiftAgent.TICKS_PER_DAY * 1000, 0, 120),
+		new Building("CATHEDRAL", "Cathedral", "", 60, DayShiftAgent.TICKS_PER_DAY * 1000, 0, 120),
+		new Building("PALISADE", "Palisade", "", 60, DayShiftAgent.TICKS_PER_DAY * 400, 0, 30),
+		new Building("STONE_WALL", "Stone Wall", "", 60, DayShiftAgent.TICKS_PER_DAY * 800, 0, 60),
+		new Building("WATCH_TOWER", "Watch tower", "", 60, DayShiftAgent.TICKS_PER_DAY * 500, 0, 20)
+		
+	};
 	
 	public static ExpeditionUnit[] getUnitDefinitions(){
 		return new ExpeditionUnit[]{
@@ -688,5 +742,9 @@ public class ExpeditionDAO {
 			ret.add(new Pair<Double, String>(Double.parseDouble(splitPair[1])/100.0d, splitPair[0]));
 		}
 		return ret;
+	}
+
+	public static Building[] getBuildings() {
+		return buildings;
 	}
 }

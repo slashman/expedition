@@ -1,6 +1,9 @@
 package net.slashie.expedition.ui;
 
+import java.text.DateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
@@ -10,7 +13,11 @@ import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
+import net.slashie.expedition.domain.Town;
+import net.slashie.expedition.town.Building;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.text.EnglishGrammar;
+import net.slashie.util.Pair;
 
 public class CommonUI {
 	public static String getMenuCacheDescription(Equipment item, Expedition expedition, GoodsCache cache){
@@ -169,6 +176,37 @@ public class CommonUI {
 			message += "No losses for both sides XXX ";
 		}
 		return message;
+	}
+
+	public static String getTownDescription(Town town) {
+		String townInfo = town.getName()+" XXX ";
+		if (town.getFoundedIn() != null){
+			townInfo += "Founded on "+ DateFormat.getDateInstance(DateFormat.MEDIUM).format(town.getFoundedIn())+" by "+town.getFounderExpedition().getExpeditionaryTitle()+" XXX ";
+		}
+		if (town.getPopulationCapacity() > 0){
+			townInfo += "Population: "+town.getPopulation()+"/"+town.getPopulationCapacity()+" XXX ";
+		} else {
+			townInfo += "Population: "+town.getPopulation()+" XXX ";
+		}
+		
+		Map<String, Pair<Building, Integer>> buildingsMap = new HashMap<String, Pair<Building,Integer>>();
+		for (Building building: town.getBuildings()){
+			Pair<Building, Integer> pair = buildingsMap.get(building.getId());
+			if (pair == null){
+				pair = new Pair<Building, Integer>(building, 1);
+				buildingsMap.put(building.getId(), pair);
+			} else {
+				pair.setB(pair.getB()+1);
+			}
+		}
+		int i = 1;
+		for (Pair<Building, Integer> pair: buildingsMap.values()){
+			townInfo += pair.getB()+" "+EnglishGrammar.plural(pair.getA().getDescription(),pair.getB());
+			if (i < buildingsMap.values().size())
+				townInfo += ", ";
+			i++;
+		}
+		return townInfo;
 	}
 	
 }

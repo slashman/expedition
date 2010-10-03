@@ -28,38 +28,18 @@ public class ExpeditionGame extends SworeGame {
 	private static ExpeditionGame currentGame;
 	private int lastExpeditionId = 1;
 	private Calendar currentTime;
-	private int dayShiftCount = 12;
+	
 	@Override
 	public void afterPlayerAction() {
 		if (getExpedition().getLocation() instanceof ExpeditionMicroLevel){
 			
 		} else {
-			dayShiftCount += getExpedition().getLastActionTimeCost();
 			getExpedition().getLocation().elapseTime(getExpedition().getLastActionTimeCost());
-			if (dayShiftCount >= 200){ // Each day takes 200 turns
-				dayShiftCount = 0;
-				int month = currentTime.get(Calendar.MONTH);
-				currentTime.add(Calendar.DATE, 1);
-				if (currentTime.get(Calendar.MONTH) > month){
-					monthChange();
-				}
-				//Everybody eat
-				for (int i = 0; i < foodConsumers.size(); i++){
-					foodConsumers.get(i).consumeFood();
-				}
-				
-				
-				Expedition expedition = getExpedition();
-				expedition.wearOutShips(5);
-				
-				
-				
-			}
 		}
 		
 	}
 	
-	private void monthChange() {
+	public void monthChange() {
 		List<Town> towns = ((Expedition)getPlayer()).getTowns();
 		for (Town town: towns){
 			town.tryGrowing();
@@ -206,6 +186,10 @@ public class ExpeditionGame extends SworeGame {
 			ExpeditionDisplay.thus.showHelp();
 			break;
 		}
+	}
+
+	public List<FoodConsumer> getFoodConsumers() {
+		return foodConsumers;
 	}
 
 }

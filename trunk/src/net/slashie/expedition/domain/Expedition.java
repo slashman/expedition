@@ -3,18 +3,16 @@ package net.slashie.expedition.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Hashtable;
 import java.util.List;
 
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.town.Building;
+import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
-import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.FoodConsumerDelegate;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -475,6 +473,14 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return (int)Math.round((double)getCurrentFood()/(double)getDailyFoodConsumption());
 	}
 	
+	/**
+	 * Ignores extreme food consumption conditions (like hibernating)
+	 * @return
+	 */
+	public int getProjectedFoodDays(){
+		return (int)Math.round((double)getCurrentFood()/(double)foodConsumerDelegate.getDailyFoodConsumption());
+	}
+	
 	private int getCurrentFood(){
 		int currentFood = 0;
 		List<Equipment> inventory = getInventory();
@@ -769,8 +775,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	public void consumeFood() {
 		foodConsumerDelegate.consumeFood();
 	}
+	
 	public int getDailyFoodConsumption() {
-		return foodConsumerDelegate.getDailyFoodConsumption();
+		if (isHibernate()){
+			return 0;
+		} else {
+			return foodConsumerDelegate.getDailyFoodConsumption();
+		}
 	}
 
 	
@@ -834,7 +845,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	public int getOffshoreFoodDays() {
 		MovementMode currentMovementMode = getMovementMode();
 		setMovementMode(MovementMode.SHIP);
-		int ret = getFoodDays();
+		int ret = getProjectedFoodDays();
 		setMovementMode(currentMovementMode);
 		return ret;
 	}
@@ -905,9 +916,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			i++;
 		}
 		if (quantity == 1)
-			level.addMessage(killMessage +" dies.");
+			getLevel().addMessage(killMessage +" dies.");
 		else
-			level.addMessage(killMessage +" die.");
+			getLevel().addMessage(killMessage +" die.");
 	}
 
 	public void addTown(Town town) {
@@ -921,7 +932,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	
 	public void checkDrown() {
 		if (getTotalShips() <= 0){
-			OverworldExpeditionCell cell = (OverworldExpeditionCell) level.getMapCell(getPosition());
+			OverworldExpeditionCell cell = (OverworldExpeditionCell) getLevel().getMapCell(getPosition());
 			if (cell.isRiver()){
 				setMovementMode(MovementMode.FOOT);
 			} else {
@@ -958,7 +969,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				}
 			}
 			for (Vehicle vehicle: vehiclesToRemove){
-				OverworldExpeditionCell cell = (OverworldExpeditionCell) level.getMapCell(getPosition());
+				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLevel().getMapCell(getPosition());
 				if (cell.isRiver()){
 					getLevel().addMessage("The "+vehicle.getDescription()+" breaks into the shallow water.");
 				} else {
@@ -1215,5 +1226,41 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		this.leaderUnit = leaderUnit;
 	}
 
+	
+	/**
+	 * Determines how much building power has this expedition
+	 * @return
+	 */
+	public int getBuildingCapacity() {
+		int power = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof ExpeditionUnit){
+				int multiplier = ((ExpeditionUnit)equipment.getItem()).getBasicId().equals("CARPENTER") ? 2 : 1;
+				power += ((ExpeditionUnit)equipment.getItem()).getPower() * equipment.getQuantity() * multiplier;
+			}
+		}
+		return power;
+	}
 
+
+	/**
+	 * Get the buildings the expeditions knows how to build
+	 * @return
+	 */
+	public List<Building> getKnownBuildings() {
+		// TODO Make this dependant on the advancement level of the expedition
+		return BuildingFactory.getBuildingsList();
+	}
+
+	private boolean hibernate;
+
+	public boolean isHibernate() {
+		return hibernate;
+	}
+
+	public void setHibernate(boolean hibernate) {
+		this.hibernate = hibernate;
+	}
+	
 }

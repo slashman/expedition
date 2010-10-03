@@ -11,7 +11,11 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.expedition.world.agents.DayShiftAgent;
+import net.slashie.expedition.world.agents.WindAgent;
+import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Player;
+import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.util.Pair;
@@ -19,11 +23,18 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class ExpeditionMacroLevel extends ExpeditionLevelReader{
+	private Actor currentWindAgent;
+	private Actor currentDayShiftAgent;
+
 	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
 			int levelHeight, int gridWidth, int gridHeight,
 			Hashtable<String, String> charmap, Position startPosition) {
 		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap,
 				startPosition);
+		currentWindAgent = new WindAgent();
+		currentDayShiftAgent = new DayShiftAgent();
+		addActor(currentWindAgent);
+		addActor(currentDayShiftAgent);
 	}
 
 	private Pair<Integer,Integer> handyReusablePair = new Pair<Integer, Integer>(0,0);
@@ -165,47 +176,23 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	@Override
 	public CardinalDirection getWindDirection() {
-		if (currentWind == null || isTimeToChangeWind()){
-			CardinalDirection prevailingWind = getPrevailingWind(ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH));
-			currentWind = prevailingWind;
-			int rotateSign = Util.chance(50) ? 1 : -1;
-			int rotate = 0;
-			isOnITZ = false;
-			if (currentWind == CardinalDirection.NULL){
-				// In the doldrums
-				isOnITZ = true;
-				if (Util.chance(50)){
-					rotate = Util.rand(0, 2);
-				}  
-			} else if (!getWeather().isWindy() && Util.chance(15)) {
-				rotate = 0;
-				currentWind = CardinalDirection.NULL;
-			} else if (Util.chance(70)){
-				rotate = Util.rand(0, 2);
-			} else if (Util.chance(30)){
-				rotate = Util.rand(1, 4);
-			}
-			for (int i = 0; i < rotate; i++){
-				currentWind = currentWind.rotate(rotateSign);
-			}
-			isTimeToChangeWind = false;
-		}
 		return currentWind;
+	}
+	
+	public void setWindDirection(CardinalDirection direction){
+		currentWind = direction;
 	}
 	
 
 	@Override
 	public void elapseTime(int lastActionTimeCost) {
-		windChangeCounter += lastActionTimeCost;
+		//TODO: Create Agents for each of this phenomena
 		stormBreedCounter -= lastActionTimeCost;
 		stormChangeCounter += lastActionTimeCost;
 		weatherChangeCounter -= lastActionTimeCost;
 		tempChangeCounter -= lastActionTimeCost;
 
-		if (windChangeCounter > 500){
-			isTimeToChangeWind = true;
-			windChangeCounter = 0;
-		}
+		
 		
 		if (weatherChangeCounter < 0){
 			weatherChange();
@@ -364,19 +351,12 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	
 	private List<Storm> storms = new ArrayList<Storm>();
 	
-	private int windChangeCounter;
 	private int stormBreedCounter;
 	private int stormChangeCounter;
 
-	private boolean isTimeToChangeWind;
-	
-	private boolean isTimeToChangeWind() {
-		return isTimeToChangeWind;
-	}
-
 	private CardinalDirection currentWind;
 
-	private CardinalDirection getPrevailingWind(int month) {
+	public CardinalDirection getPrevailingWind(int month) {
 		int itcz = TemperatureRules.getITCZ(month) + Util.rand(-5, 5);
 		int latitude = resolveYToLatitude();
 		if (latitude >= itcz -4 && latitude <= itcz +4){
@@ -484,8 +464,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		if (formerWeather != weather){
 			addMessage(weather.getChangeMessage(formerWeather));
 			if (weather.isWindy() && getWindDirection() == CardinalDirection.NULL){
-				isTimeToChangeWind = true;
-				getWindDirection();
+				getDispatcher().callActor(currentWindAgent);
 			}
 		}
 		
@@ -497,5 +476,40 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	public int getApparentTemperature() {
 		return apparentTemperature;
+	}
+
+	
+	public void setIsOnITZ(boolean isOnITZ) {
+		this.isOnITZ = isOnITZ;
+	}
+	
+	private Position LOSPosition= new Position(0,0,0);
+	public boolean blockLOS(int x, int y) {
+		LOSPosition.x = x;
+		LOSPosition.y = y;
+		LOSPosition.z = 0;
+		if (!isValidCoordinate(x,y))
+			return true;
+		List<AbstractFeature> feats = getFeaturesAt(LOSPosition);
+		if (feats != null)
+			for (AbstractFeature feat: feats){
+				if (feat != null && feat.isOpaque())
+					return true;
+				if (feat != null)
+					feat.onSeenByPlayer();
+			}
+		AbstractCell cell = getMapCell(x, y, getPlayer().getPosition().z);
+		if (cell == null)
+			return false;
+		else {
+			AbstractCell playerCell = getMapCell(getPlayer().getPosition());
+			if (cell.getHeightMod() == playerCell.getHeightMod())
+				return cell.isOpaque();
+			else if (cell.getHeightMod() > playerCell.getHeightMod())
+				return true;
+			else
+				return false;
+				
+		}
 	}
 }

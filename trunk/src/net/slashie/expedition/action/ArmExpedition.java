@@ -17,12 +17,16 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.UserInterface;
 
 public class ArmExpedition extends Action{
+	private boolean actionCancelled;
 	@Override
 	public void execute() {
+		actionCancelled = false;
 		boolean isPlayer = getExpedition() == ExpeditionGame.getCurrentGame().getPlayer(); 
 		if (!getExpedition().isArmed()){
-			if ( isPlayer && !UserInterface.getUI().promptChat("Arm Expedition: Are you sure?"))
+			if ( isPlayer && !UserInterface.getUI().promptChat("Arm Expedition: Are you sure?")){
+				actionCancelled = true;
 				return;
+			}
 			
 			List<Equipment> units = getExpedition().getUnarmedUnits();
 			Collections.sort(units, new Comparator<Equipment>() {
@@ -71,8 +75,11 @@ public class ArmExpedition extends Action{
 			}
 			getExpedition().setArmed(true);
 		} else {
-			if (isPlayer && !UserInterface.getUI().promptChat("Disarm Expedition: Are you sure?"))
+			if (isPlayer && !UserInterface.getUI().promptChat("Disarm Expedition: Are you sure?")){
+				actionCancelled = true;
 				return;
+			}
+				
 			List<Equipment> units = getExpedition().getGoods(GoodType.PEOPLE);
 			for (Equipment unit: units){
 				ExpeditionUnit eUnit = ((ExpeditionUnit)unit.getItem()); 
@@ -117,6 +124,8 @@ public class ArmExpedition extends Action{
 	
 	@Override
 	public int getCost() {
+		if (actionCancelled)
+			return 0;
 		return getExpedition().getTotalUnits();
 	}
 

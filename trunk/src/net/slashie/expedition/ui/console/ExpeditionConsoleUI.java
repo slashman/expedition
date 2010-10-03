@@ -1,7 +1,6 @@
 package net.slashie.expedition.ui.console;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,12 +18,13 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
+import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
-import net.slashie.expedition.ui.oryx.CacheGFXMenuItem;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.TemperatureRules;
@@ -45,10 +45,9 @@ import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
-import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.util.Pair;
-import net.slashie.utils.ImageUtils;
 import net.slashie.utils.Position;
+
 
 public class ExpeditionConsoleUI extends ConsoleUserInterface implements ExpeditionUserInterface{
 	private ConsoleSystemInterface csi;
@@ -399,7 +398,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	}
 	
 	public boolean promptChat(String message){
-		return super.promptChat(message, 27,2,24,5);
+		return super.promptChat(message, 22,1,34,8);
 	}
 
 	public void transferFromCache(GoodsCache cache) {
@@ -541,7 +540,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				continue;
 			}
 			
-			if (item.getGoodType() != GoodType.PEOPLE && !ship.canCarry(item, quantity)){
+			if (!ship.canCarry(item, quantity)){
 				cacheBox.setPrompt("Not enough room in the "+ship.getDescription());
 				cacheBox.draw();
 				continue;
@@ -557,7 +556,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				if (choice.getQuantity() == 0){
 					menuItems = new Vector();
 					for (Equipment item2: getExpedition().getInventory()){
-			  			menuItems.add(new CacheGFXMenuItem(item2, ship));
+			  			menuItems.add(new CacheItem(item2, ship));
 			  		}
 			  		cacheBox.setMenuItems(menuItems);				
 			  	}
@@ -634,7 +633,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   		int choice = 0;
   		while (true){
   			csi.print(xpos,ypos+3,  "( ) Units      ( ) Supplies   ( ) Armory     ( ) TradeGoods ( ) Livestock", ConsoleSystemInterface.BLUE);
-  			csi.print(1+choice*15, ypos+3, "*", ConsoleSystemInterface.WHITE);
+  			csi.print(2+choice*15, ypos+3, "*", ConsoleSystemInterface.WHITE);
   			
   	  		List<Equipment> inventory = null;
   	  		switch (choice){
@@ -900,12 +899,194 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	@Override
 	public boolean promptUnitList(List<Equipment> unitList, String title,
 			String prompt) {
-		return false;
+		Equipment.eqMode = true;
+		MenuBox cacheBox = new MenuBox(csi);
+   		cacheBox.setHeight(13);
+   		cacheBox.setWidth(54);
+   		cacheBox.setPosition(24,7);
+  		Vector<InventoryItem> menuItems = new Vector<InventoryItem>();
+  		for (Equipment item: unitList){
+  			menuItems.add(new InventoryItem(item, getExpedition()));
+  		}
+  		cacheBox.setMenuItems(menuItems);
+  		Collections.sort(menuItems, inventoryItemsComparator);
+  		cacheBox.setPromptSize(2);
+  		cacheBox.setBorder(true);
+  		cacheBox.setPrompt(prompt);
+  		cacheBox.setTitle(title);
+  		cacheBox.draw();
+		return prompt();
 	}
 	
 	@Override
 	public List<Equipment> selectItemsFromExpedition(String prompt, String verb) {
-		return null;
+		List<Equipment> expeditionEquipment = getExpedition().getInventory();
+    	csi.saveBuffer();
+   		Equipment.eqMode = true;
+   		Map<String, Equipment> selectionMap = new HashMap<String, Equipment>();
+		List<Equipment> selection = new ArrayList<Equipment>();
+   		MenuBox cacheBox = new MenuBox(csi);
+   		cacheBox.setHeight(13);
+   		cacheBox.setWidth(54);
+   		cacheBox.setPosition(24,7);
+  		Vector menuItems = new Vector();
+  		for (Equipment item: expeditionEquipment){
+  			menuItems.add(new InventoryItem(new Equipment(item.getItem(), item.getQuantity()), getExpedition()));
+  		}
+  		cacheBox.setMenuItems(menuItems);
+  		cacheBox.setPromptSize(2);
+  		cacheBox.setBorder(true);
+  		cacheBox.setPrompt(prompt+" [Space to exit]");
+  		//cacheBox.setTitle("On Ship...");
+  		cacheBox.setForeColor(ConsoleSystemInterface.RED);
+  		cacheBox.setBorderColor(ConsoleSystemInterface.TEAL);
+  		cacheBox.draw();
+  		
+		while (true) {
+	  		cacheBox.setPrompt(prompt+" [Space to exit]");
+			csi.refresh();
+			InventoryItem itemChoice = ((InventoryItem)cacheBox.getSelection());
+			if (itemChoice == null){
+				break;
+			}
+			Equipment choice = itemChoice.getEquipment();
+			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+			cacheBox.setPrompt("How many "+item.getDescription()+" will you "+verb+"?");
+			cacheBox.draw();
+			csi.refresh();
+			int quantity = readQuantity(25, 9, "                       ", 5);
+			if (quantity == 0)
+				continue;
+			
+			if (quantity > choice.getQuantity()){
+				cacheBox.setPrompt("Not enough "+choice.getItem().getDescription());
+				cacheBox.draw();
+				continue;
+			}
+			
+			if (quantity == 0)
+				continue;
+			
+			choice.reduceQuantity(quantity);
+			
+			if (selectionMap.get(item.getFullID()) == null){
+				Equipment e = new Equipment(item, quantity);
+				selectionMap.put(item.getFullID(), e);
+				selection.add(e);
+			} else {
+				Equipment e = selectionMap.get(item.getFullID());
+				e.setQuantity(e.getQuantity()+quantity);
+			}
+			
+			if (choice.getQuantity() == 0){
+				menuItems.remove(choice);
+			}
+			cacheBox.setPrompt("You "+verb+" "+quantity+" "+choice.getItem().getDescription()+" [Press Space]");
+			cacheBox.draw();
+			csi.refresh();
+			csi.waitKey(CharKey.SPACE);
+	 		//menuBox.draw();
+		}
+		Equipment.eqMode = false;
+		csi.restore();
+ 		csi.refresh();
+ 		return selection;
+	}
+	
+	@Override
+	public List<Building> createBuildingPlan() {
+		List<Building> knownBuildings = getExpedition().getKnownBuildings();
+		List<BuildingMenuItem> buildingMenuItems = new ArrayList<BuildingMenuItem>();
+		for (Building building: knownBuildings){
+			buildingMenuItems.add(new BuildingMenuItem(building));
+		}
+		MenuBox cacheBox = new MenuBox(csi);
+   		cacheBox.setHeight(13);
+   		cacheBox.setWidth(54);
+   		cacheBox.setPosition(24,7);
+  		cacheBox.setMenuItems(buildingMenuItems);
+  		cacheBox.setPromptSize(2);
+  		cacheBox.setBorder(true);
+  		cacheBox.setPrompt("Building Plan [Space to exit]");
+  		//cacheBox.setTitle("On Ship...");
+  		cacheBox.setForeColor(ConsoleSystemInterface.RED);
+  		cacheBox.setBorderColor(ConsoleSystemInterface.TEAL);
+  		cacheBox.draw();
+  		
+  		String[] choices = new String[]{"Add", "Remove"};
+  		int typeChoice = 0;
+  		while (true){
+  			String legend = "";
+  			for (int i = 0; i < choices.length; i++){
+  				if (i == typeChoice){
+  					legend += ">";
+  				}
+  				legend += choices[i];
+  				if (i == typeChoice){
+  					legend += "<";
+  				}
+  				legend += "    ";
+  			}
+  			cacheBox.setPrompt(legend);
+  			cacheBox.draw();
+  	  		
+	  		CharKey x = new CharKey(CharKey.NONE);
+			while (x.code == CharKey.NONE)
+				x = csi.inkey();
+			
+			if (x.isLeftArrow()){
+				typeChoice--;
+				if (typeChoice == -1)
+					typeChoice = 0;
+				continue;
+			}
+			if (x.isRightArrow()){
+				typeChoice++;
+				if (typeChoice == choices.length)
+					typeChoice = choices.length-1;
+				continue;
+			}
+			
+			BuildingMenuItem buildingChoice = ((BuildingMenuItem)cacheBox.getSelection(x));
+
+			if (buildingChoice == null){
+				if (x.code != CharKey.SPACE){
+					continue;
+				}
+				break;
+			}
+			
+			if (typeChoice == 0){
+				buildingChoice.add();
+			} else {
+				buildingChoice.remove();
+			}
+			
+			cacheBox.draw();
+			csi.refresh();
+			//refresh();
+  		}
+  		List<Building> buildingPlan = new ArrayList<Building>();
+  		for (BuildingMenuItem buildingMenuItem: buildingMenuItems){
+  			for (int i = 0; i < buildingMenuItem.getQuantity(); i++){
+  				buildingPlan.add(buildingMenuItem.getBuilding());
+  			}
+		}
+  		
+  		csi.restore();
+ 		csi.refresh();
+ 		return buildingPlan;
+	}
+	
+	@Override
+	public void showCityInfo(Town town) {
+		String townInfo = CommonUI.getTownDescription(town);
+   		printTextBox(townInfo, 15, 1, 50, 8, CSIColor.RED);
+	}
+	
+	@Override
+	public void afterTownAction() {
+		csi.restore();
 	}
 	
 }

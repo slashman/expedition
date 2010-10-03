@@ -4,22 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
-import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.ui.ExpeditionUserInterface;
-import net.slashie.expedition.world.ExpeditionLevel;
+import net.slashie.expedition.town.Building;
+import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
-import net.slashie.expedition.world.SettlementType;
+import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.action.Message;
 import net.slashie.serf.game.Player;
+import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
+import net.slashie.utils.OutParameter;
 import net.slashie.utils.Position;
 
 public class BuildSettlement extends Action{
+	private static final List<Building> DEFAULT_FIRST_TOWN_BUILDINGS = new ArrayList<Building>();
+	static {
+		DEFAULT_FIRST_TOWN_BUILDINGS.add(BuildingFactory.createBuilding("PLAZA"));
+		DEFAULT_FIRST_TOWN_BUILDINGS.add(BuildingFactory.createBuilding("HOUSE"));
+		DEFAULT_FIRST_TOWN_BUILDINGS.add(BuildingFactory.createBuilding("HOUSE"));
+		DEFAULT_FIRST_TOWN_BUILDINGS.add(BuildingFactory.createBuilding("HOUSE"));
+		DEFAULT_FIRST_TOWN_BUILDINGS.add(BuildingFactory.createBuilding("HOUSE"));
+	}
+	private int netTimeCost;
+	private List<Building> firstTownBuildings;
+
 	/*
 	Las expediciones continuaron por el interior del territorio con Gonzalo Jiménez de Quezada quien 
 	fundó a Santafé de Bogotá el 6 de agosto de 1538. Para consolidar la ciudad se señalaron la plaza mayor, 
@@ -28,24 +39,15 @@ public class BuildSettlement extends Action{
 	@Override
 	public void execute() {
 		//Confirm
-		if (!UserInterface.getUI().promptChat("Establish a town? (Y/n)"))
+		if (!UserInterface.getUI().promptChat("Establish a town?")){
+			netTimeCost = 0;
 			return;
+		}
 		Expedition expedition = (Expedition)performer;
 		//Check if the land is claimed
 		if (expedition.getLocation().getLocation().getB() >= -30){
 			msg("This land is claimed already!");
-			return;
-		}
-		
-		//Check resources availability (for the plaza)
-		if (expedition.getItemCount("WOOD") < 200){
-			msg("You need at least 200 wood for the plaza and the first building.");
-			return;
-		}
-		
-		//Check units availability
-		if (expedition.getTotalUnits() < 101){
-			msg("You need at least 100 people to found the town.");
+			netTimeCost = 0;
 			return;
 		}
 		
@@ -54,29 +56,44 @@ public class BuildSettlement extends Action{
 		for (Town town: towns){
 			if (Position.distance(town.getPosition(), expedition.getPosition()) < 100){
 				msg("This settlement is too close to "+town.getName());
+				netTimeCost = 0;
+				return;
+			}
+		}
+
+		firstTownBuildings = getFirstTownBuildings();
+		OutParameter woodCost = new OutParameter();
+		OutParameter netTimeCostObj = new OutParameter();
+		try {
+			BuildingFactory.getPlanCost(firstTownBuildings, expedition, netTimeCostObj, woodCost);
+		} catch (ActionCancelException e) {
+			netTimeCost = 0;
+			return;
+		}
+		netTimeCost = netTimeCostObj.getIntValue();
+		int daysCost = (int)Math.ceil((double)netTimeCost / (double)DayShiftAgent.TICKS_PER_DAY);
+		
+		if (!UserInterface.getUI().promptChat("Building these "+firstTownBuildings.size()+" buildings will cost "+woodCost.getIntValue()+" wood and will take about "+daysCost+" days. Are you sure?")){
+			netTimeCost = 0;
+			return;
+		}
+		
+		if (daysCost > expedition.getFoodDays()){
+			if (!UserInterface.getUI().promptChat("Your expedition will ran out of supplied before finishing construction! Are you sure?")){
+				netTimeCost = 0;
 				return;
 			}
 		}
 		
-		
-		expedition.reduceGood("WOOD", 200);
-		
-		String cityName = UserInterface.getUI().inputBox("Enter a name for the new town");
-		
-		// Transfer the units
-		Town town = new Town((ExpeditionGame)((Player)performer).getGame());
-		town.setName(cityName);
-		((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(town, 100);
+	}
 
-		//Add the city
-		town.setPosition(new Position(performer.getPosition()));
-		expedition.addTown(town);
-		performer.getLevel().addFeature(town);
+	private List<Building> getFirstTownBuildings() {
+		return DEFAULT_FIRST_TOWN_BUILDINGS;
 	}
 
 	@Override
 	public String getID() {
-		return "BuildCache";
+		return "BuildSettlement";
 	}
 	
 	public void msg(String message){
@@ -106,5 +123,37 @@ public class BuildSettlement extends Action{
 		}
 		return "";
 	}
-
+	
+	@Override
+	public int getCost() {
+		return netTimeCost;
+	}
+	
+	@Override
+	public void executeDisplaced() {
+		if (getCost() == 0)
+			return;
+		Expedition expedition = (Expedition)performer;
+		String cityName = UserInterface.getUI().inputBox("Enter a name for the new town");
+		Town town = new Town((ExpeditionGame)((Player)performer).getGame());
+		town.setName(cityName);
+		
+		try {
+			BuildingFactory.executeConstructionPlan(town, firstTownBuildings, expedition);
+		} catch (ActionCancelException e) {
+			return;
+		}
+		
+		//Add the city
+		town.setPosition(new Position(performer.getPosition()));
+		expedition.addTown(town);
+		performer.getLevel().addFeature(town);
+		
+		UserInterface.getUI().refresh();
+	}
+	
+	@Override
+	public void executionInterrupted() {
+		msg("You stop the construction");
+	}
 }

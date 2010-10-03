@@ -278,9 +278,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 				i++;
 			}
 			if (quantity == 1)
-				level.addMessage(killMessage +" dies.");
+				getLevel().addMessage(killMessage +" dies.");
 			else
-				level.addMessage(killMessage +" die.");
+				getLevel().addMessage(killMessage +" die.");
 		}
 	}
 
