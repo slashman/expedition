@@ -137,7 +137,7 @@ public class Spain extends StaticPattern {
 
 	@Override
 	public String getDescription() {
-		return "Palos, Andalusia";
+		return "Palos";
 	}
 
 }

@@ -10,6 +10,7 @@ import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.ai.NativeActionSelector;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.Culture;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
@@ -17,6 +18,7 @@ import net.slashie.serf.ai.SimpleAI;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
+import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
@@ -271,5 +273,56 @@ public class NativeTown extends Town{
 
 	public void setUnfriendly(boolean b) {
 		isUnfriendly = b;
+	}
+	
+	@Override
+	protected void townAction(int switchChat, Expedition expedition) {
+		NativeTown nativeTown = (NativeTown) this;
+		switch (switchChat){
+		case 0:
+			nativeTown.setUnfriendly(true);
+			String battleName = "You raid the "+nativeTown.getDescription();
+    		BattleManager.battle(battleName, expedition, nativeTown);
+			break;
+		case 1:
+			if (nativeTown.wantsToTradeWith(expedition)){
+				int goodTypeChoice = UserInterface.getUI().switchChat("Trading with "+nativeTown.getDescription(),"What goods are you looking for?", GoodType.getChoicesList());
+				GoodType goodType = GoodType.fromChoice(goodTypeChoice);
+				if (goodType == null){
+					//Cancelled
+					break;
+				}
+				if (nativeTown.canTradeGoodType(goodType)){
+					List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer");
+					if (offer == null){
+						//Cancelled
+						break;
+					}
+					if (UserInterface.getUI().promptChat("Are you sure?")){
+						List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
+						if (townOffer == null || townOffer.size() == 0){
+							showBlockingMessage("We can offer you nothing for that.");
+						} else {
+							if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it? [Y/N]")){
+								expedition.reduceAllItems(offer);
+								expedition.addAllItems(townOffer);
+								nativeTown.reduceAllItems(townOffer);
+								nativeTown.addAllItems(offer);
+								showBlockingMessage("Thank you, friend..");
+							} else {
+								showBlockingMessage("Some other time then..");
+							}
+						}
+					}
+				} else {
+					showBlockingMessage("We have no "+goodType.getDescription()+" to trade.");
+				}
+			} else {
+				showBlockingMessage("The "+nativeTown.getDescription()+" refuses to trade with you.");
+			}
+			break;
+		case 2:
+			break;
+		}
 	}
 }

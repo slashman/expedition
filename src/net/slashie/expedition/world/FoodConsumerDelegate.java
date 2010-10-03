@@ -47,7 +47,7 @@ public class FoodConsumerDelegate implements Serializable{
 	public void consumeFood(){
 		if (disabled)
 			return;
-		int remainder = reduceFood(getDailyFoodConsumption());
+		int remainder = reduceFood(foodConsumer.getDailyFoodConsumption());
 		if (remainder > 0){
 			//Reduce expedition resistance
 			starveResistance --;
@@ -63,6 +63,8 @@ public class FoodConsumerDelegate implements Serializable{
 	}
 	
 	public int reduceFood(int quantity){
+		if (quantity == 0)
+			return 0;
 		int foodToSpend = quantity;
 		List<Equipment> inventory = this.foodConsumer.getInventory();
 		int originalSize = inventory.size();

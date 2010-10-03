@@ -58,19 +58,19 @@ public class NPC extends AwareActor{
 				case 0:
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
 						m("You should establish a strong presence for Spain in the lands you have discovered!");
-						m("Remember you need at least 200 wood and one hundred man to found an oustanding settlement");
+						m("Remember you need at least 200 wood to found an oustanding settlement");
 					} else {
 						m("The crown is looking forward to gain a competitive edge against the portuguese navigators, which have discovered the african path to the Indias.");
 						m("You should now sail eastward, if your calculations are right, you will find the Indias about 1200 nautical miles into the Atlantic Ocean");
 						m("You may want to take some trading merchandise with you, but remember this is just an exploratory voyage, it is of more importance to lay the foundations for a trading outpost.");
-						m("Remember you need at least 200 wood and one hundred man to found an oustanding settlement. You can obtain wood by 'c'hopping or buying from the Supplies store.");
+						m("Remember you need at least 200 wood to found an oustanding settlement. You can obtain wood by 'c'hopping or buying from the Supplies store.");
 					}
 					break;
 				case 1:
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
 						m("By your reckoning, the trip will take about two months.");
 					} else {
-						m("By your reckoning, the trip may take about two months into the unknown. You should however be equipped for the worst, you don't know what awaits you in the high sea!");
+						m("By your reckoning, the trip may take about one month into the unknown. You should however be equipped for the worst, you don't know what awaits you in the high sea!");
 						m("Remember to check out your \"Food Days\" calculations before departing. The crown has given you enough supplies for a long trip with your sailing crew...");
 						m("But if you decide to bring more people, you will have to get your own supplies");
 					}

@@ -1,17 +1,13 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.item.ItemFactory;
-import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.UserInterface;
-import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
 public class BattleManager {
@@ -42,6 +38,8 @@ public class BattleManager {
 			return;
 		}
 		
+		// Interrupt whatever action the defender was up to
+		defender.setInterrupted();
 		
 		// Trim attacking and defending teams to 60, 20 ranged (if possible), 20 mounted (if possible) and the remaining.
 		List<Equipment> attackingUnits = selectSquad(attackingUnitsFullGroup);

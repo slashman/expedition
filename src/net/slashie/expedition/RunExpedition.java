@@ -30,6 +30,7 @@ import net.slashie.expedition.data.GFXAppearances;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionGenerator;
 import net.slashie.expedition.ui.console.CharExpeditionDisplay;
@@ -112,6 +113,8 @@ public class RunExpedition {
 				System.out.println("Loading Data");
 				initializeItems();
 				initializeCells();
+				initializeBuildings();
+				
 				
 				/*initializeMonsters();
 				initializeNPCs();*/
@@ -493,6 +496,10 @@ public class RunExpedition {
 
 	private static void initializeItems(){
 		ItemFactory.init(ExpeditionDAO.getItemDefinitions(AppearanceFactory.getAppearanceFactory()));
+	}
+	
+	private static void initializeBuildings(){
+		BuildingFactory.setBuildings(ExpeditionDAO.getBuildings());
 	}
 
 	    public static void crash(String message, Throwable exception){

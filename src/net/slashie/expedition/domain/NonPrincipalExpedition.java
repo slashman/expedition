@@ -55,7 +55,7 @@ public class NonPrincipalExpedition extends Expedition{
 			} else {
 				getLevel().addFeature(cache);
 			}*/
-			((ExpeditionMacroLevel)level).addAllEquipment(this, getPosition());
+			((ExpeditionMacroLevel)getLevel()).addAllEquipment(this, getPosition());
 			die();
 		}
 	}

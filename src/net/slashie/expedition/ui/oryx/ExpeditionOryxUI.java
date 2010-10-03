@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -23,9 +24,11 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
+import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -38,6 +41,7 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.sound.STMusicManagerNew;
+import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
@@ -327,7 +331,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		//List<Equipment> expeditionEquipment = getExpedition().getInventory();
     	
    		Equipment.eqMode = true;
-   		
+   		clearTextBox();
    		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		menuBox.setItemsPerPage(12);
   		menuBox.setBounds(160, 16, 624,480);
@@ -452,6 +456,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	public void transferFromExpedition(GoodsCache ship, int minUnits) {
    		Equipment.eqMode = true;
+   		clearTextBox();
    		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		menuBox.setItemsPerPage(12);
   		menuBox.setBounds(160, 16, 624,480);
@@ -538,8 +543,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				continue;
 			}
 			
-			//if (item instanceof Good && !ship.canCarry(item, quantity)){
-			if (item.getGoodType() != GoodType.PEOPLE && !ship.canCarry(item, quantity)){
+			//if (item.getGoodType() != GoodType.PEOPLE && !ship.canCarry(item, quantity)){
+			if (!ship.canCarry(item, quantity)){
 				menuBox.setLegend("Not enough room in the "+ship.getDescription()+" [Press Space]");
 				menuBox.draw();
 				si.waitKey(CharKey.SPACE);
@@ -936,5 +941,94 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.restore();
  		si.refresh();
  		return selection;
+	}
+
+	@Override
+	public List<Building> createBuildingPlan() {
+		List<Building> knownBuildings = getExpedition().getKnownBuildings();
+		List<BuildingGFXMenuItem> buildingMenuItems = new ArrayList<BuildingGFXMenuItem>();
+		for (Building building: knownBuildings){
+			buildingMenuItems.add(new BuildingGFXMenuItem(building));
+		}
+		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		menuBox.setItemsPerPage(12);
+  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setTitle("Building Plan [Space to exit]");
+  		menuBox.setLegend("");
+  		menuBox.setMenuItems(buildingMenuItems);
+  		String[] choices = new String[]{"Add", "Remove"};
+  		int typeChoice = 0;
+  		while (true){
+  			String legend = "";
+  			for (int i = 0; i < choices.length; i++){
+  				if (i == typeChoice){
+  					legend += ">";
+  				}
+  				legend += choices[i];
+  				if (i == typeChoice){
+  					legend += "<";
+  				}
+  				legend += "    ";
+  			}
+  			menuBox.setLegend(legend);
+  	  		menuBox.draw();
+  	  		
+	  		CharKey x = new CharKey(CharKey.NONE);
+			while (x.code == CharKey.NONE)
+				x = si.inkey();
+			
+			if (x.isLeftArrow()){
+				typeChoice--;
+				if (typeChoice == -1)
+					typeChoice = 0;
+				continue;
+			}
+			if (x.isRightArrow()){
+				typeChoice++;
+				if (typeChoice == choices.length)
+					typeChoice = choices.length-1;
+				continue;
+			}
+			
+			BuildingGFXMenuItem buildingChoice = ((BuildingGFXMenuItem)menuBox.getSelection(x));
+
+			if (buildingChoice == null){
+				if (x.code != CharKey.SPACE){
+					continue;
+				}
+				break;
+			}
+			
+			if (typeChoice == 0){
+				buildingChoice.add();
+			} else {
+				buildingChoice.remove();
+			}
+			
+			menuBox.draw();
+			//refresh();
+  		}
+  		List<Building> buildingPlan = new ArrayList<Building>();
+  		for (BuildingGFXMenuItem buildingMenuItem: buildingMenuItems){
+  			for (int i = 0; i < buildingMenuItem.getQuantity(); i++){
+  				buildingPlan.add(buildingMenuItem.getBuilding());
+  			}
+		}
+  		
+  		si.restore();
+ 		si.refresh();
+ 		return buildingPlan;
+	}
+	
+	@Override
+	public void showCityInfo(Town town) {
+		String townInfo = CommonUI.getTownDescription(town);
+		townInfo = townInfo.replaceAll("XXX", "\n");
+   		printTextBox(townInfo, 80, 20, 600, 200);
+	}
+	
+	@Override
+	public void afterTownAction() {
+		clearTextBox();
 	}
 }
