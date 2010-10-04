@@ -31,6 +31,7 @@ import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.town.BuildingFactory;
+import net.slashie.expedition.town.NPCFactory;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionGenerator;
 import net.slashie.expedition.ui.console.CharExpeditionDisplay;
@@ -114,6 +115,7 @@ public class RunExpedition {
 				initializeItems();
 				initializeCells();
 				initializeBuildings();
+				initializeNPCS();
 				
 				
 				/*initializeMonsters();
@@ -500,6 +502,10 @@ public class RunExpedition {
 	
 	private static void initializeBuildings(){
 		BuildingFactory.setBuildings(ExpeditionDAO.getBuildings());
+	}
+	
+	private static void initializeNPCS(){
+		NPCFactory.setNPCs(ExpeditionDAO.getNPCs());
 	}
 
 	    public static void crash(String message, Throwable exception){

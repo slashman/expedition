@@ -232,7 +232,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
     	}
    		Equipment.eqMode = true;
    		//Item.shopMode = true;
-   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
   		menuBox.setItemsPerPage(12);
   		menuBox.setBounds(160, 16, 624,480);
   		int fontSize = si.getGraphics2D().getFont().getSize();

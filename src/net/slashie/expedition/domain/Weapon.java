@@ -22,9 +22,9 @@ public class Weapon extends ExpeditionItem{
 		return defense;
 	}
 
-	public Weapon(String classifierId, String description, String pluralDescription,
+	public Weapon(String classifierId, String description, String pluralDescription, String longDescription,
 			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight, int europeValue, int americaValue) {
-		super(classifierId, description, pluralDescription, classifierId, weight, GoodType.ARMORY, europeValue, americaValue);
+		super(classifierId, description, pluralDescription, longDescription, classifierId, weight, GoodType.ARMORY, europeValue, americaValue);
 		this.burden = burden;
 		this.isTool = isTool;
 		this.attack = attack;

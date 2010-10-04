@@ -9,6 +9,7 @@ import net.slashie.serf.ui.consoleUI.CharAppearance;
 public class ExpeditionItem extends AbstractItem implements Cloneable{
 	private String classifierId;
 	private String description;
+	private String longDescription;
 	private GoodType goodType;
 	private int europeValue;
 	private int americaValue;
@@ -23,12 +24,13 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 		return weight;
 	}
 
-	public ExpeditionItem(String classifierId, String description, String pluralDescription,
+	public ExpeditionItem(String classifierId, String description, String pluralDescription, String longDescription,
 			String appearanceId, int weight, GoodType goodType, int europeValue, int americaValue) {
 		super(appearanceId);
 		this.classifierId = classifierId;
 		this.description = description;
 		this.appearanceId = appearanceId;
+		this.longDescription = longDescription;
 		this.weight = weight;
 		this.pluralDescription = pluralDescription;
 		this.goodType = goodType;
@@ -141,6 +143,10 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 
 	public void setValuePack(int valuePack) {
 		this.valuePack = valuePack;
+	}
+
+	public String getLongDescription() {
+		return longDescription;
 	}
 
 }

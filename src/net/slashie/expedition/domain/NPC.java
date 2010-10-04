@@ -10,8 +10,9 @@ import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Util;
 
-public class NPC extends AwareActor{
+public class NPC extends AwareActor implements Cloneable{
 	private ExpeditionUnit unit;
+	private String[] talkLines;
 	@Override
 	public String getClassifierID() {
 		return unit.getFullID()+super.toString();
@@ -27,7 +28,7 @@ public class NPC extends AwareActor{
 		return unit.getAppearance();
 	}
 	
-	public NPC(ExpeditionUnit unit) {
+	public NPC(ExpeditionUnit unit, boolean nullSelector, String... talkLines) {
 		super();
 		this.unit = unit;
 		if (unit.getBasicId().equals("GUARD") || unit.getBasicId().equals("DOMINIK")){
@@ -35,6 +36,7 @@ public class NPC extends AwareActor{
 		} else {
 			selector = new SimpleAI(null, new NPCWalk());
 		}
+		this.talkLines = talkLines;
 	}
 
 	@Override
@@ -58,13 +60,14 @@ public class NPC extends AwareActor{
 				case 0:
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
 						m("You should establish a strong presence for Spain in the lands you have discovered!");
-						m("Remember you need at least 200 wood to found an oustanding settlement");
 					} else {
 						m("The crown is looking forward to gain a competitive edge against the portuguese navigators, which have discovered the african path to the Indias.");
-						m("You should now sail eastward, if your calculations are right, you will find the Indias about 1200 nautical miles into the Atlantic Ocean");
+						m("You should now sail eastward... if your calculations are right, you will find the Indias about 1200 nautical miles into the Atlantic Ocean");
 						m("You may want to take some trading merchandise with you, but remember this is just an exploratory voyage, it is of more importance to lay the foundations for a trading outpost.");
-						m("Remember you need at least 200 wood to found an oustanding settlement. You can obtain wood by 'c'hopping or buying from the Supplies store.");
 					}
+					m("Remember you need at least 200 wood to found an oustanding settlement. You can obtain wood by chopping or buying from the Supplies store. ");
+					m("Once you build a settlement, you can leave people inhabiting it and they will look out for their own survival, so you can use settlements as exploration bases.");
+					m("A settlement may host 40 people when created, but you can continue expanding it with more buildings if you want to push its growth forward.");
 					break;
 				case 1:
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
@@ -73,12 +76,15 @@ public class NPC extends AwareActor{
 						m("By your reckoning, the trip may take about one month into the unknown. You should however be equipped for the worst, you don't know what awaits you in the high sea!");
 						m("Remember to check out your \"Food Days\" calculations before departing. The crown has given you enough supplies for a long trip with your sailing crew...");
 						m("But if you decide to bring more people, you will have to get your own supplies");
+						m("Your most important supply will be food: you can forage for fruits on the wilderness or fish on shallow waters, but it's better to keep your expedition stocked");
 					}
 					break;
 				case 2:
-					m("My friend, how can I give advise on sailing the seas to a great navigator such as you! You have been on board since you were a child!");
+					m("My friend... how can I give advise on sailing the seas to a great navigator such as you! You have been on board since you were a child!");
 					m("As you used to say yourself, it's all matter of pointing your ships to your location and letting the wind run behind you, but sometimes wind just won't travel with you...");
 					m("And that's where the ships' crew has work to do! a well trained crew can sail even against the wind, but it will take them much longer, and time is precious on the sea.");
+					m("Your ships will sail much faster if you have a full crew for each one (1 captain and 25 sailors), and if they are in good shape (integrity higher than 3/4).");
+					m("Our navigators have discovered strong soutwestern winds on the recently conquered Canary Islands, southwest of Palos. That may be a good spot for your trip to start.");
 					break;
 				case 3:
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
@@ -86,13 +92,12 @@ public class NPC extends AwareActor{
 					} else {
 						m("You don't know what awaits you in your trip, but it's better to be prepared for the worst..");
 					}
-					m("Try to have at least some trained soldiers in your ships and buy them weapons and armor. Remember to 'a'rm your expedition when its time to combat!");
-					m("The better equiped men will be chosen as the first row and no more than sixty units can combat at once.");
-					m("Remember an assault is divided into Ranged, Mounted and Melee phase, and that you may suffer retailation on any phase..");
-					m("Ranged units attack in the ranged phase, both parts attack at the same time and thus wounded units are disabled only on next phase.");
-					m("Mounted units attack in the mounted phase, thus they get to attack twice on each combat round.");
-					m("Only a maximum of 20 ranged and 20 cavalry units can participate on each combat round. Your units may be wounded or killed on each phase");
-					m("Be careful when chosing when to fight and when to retreat!");
+					m("Try to have at least some trained soldiers in your ships and buy them weapons and armor. and remember to 'a'rm your expedition when its time to combat.");
+					m("Combat is divided on assaults: the sixty best equiped men from each expedition will be chosen for the assault, with a maximum of 20 ranged and 20 mounted.");
+					m("An assault is divided into three phases: \"Ranged\", \"Mounted\" and \"Melee\", and you may suffer retailation from the defending party on any phase.");
+					m("Each phase may bring wounded or dead units. Wounded units can not participate on the assault and are taken to the back row.");
+					m("Units with ranged equipment and mounted units can participate more than once on battle, during the Ranged and Mounted phases.");
+					m("Chosing when to fight and when to retreat may save your life!");
 					break;
 				case 4:
 					m("May God be with you!");
@@ -115,9 +120,16 @@ public class NPC extends AwareActor{
 					m("Then what's your business here!");
 				}
 			}
-			
+		} else {
+			if (talkLines.length > 0){
+				m(Util.randomElementOf(talkLines));
+			}
 		}
 
+	}
+	
+	public String getUnitId(){
+		return unit.getBasicId();
 	}
 
 	private void m(String string) {

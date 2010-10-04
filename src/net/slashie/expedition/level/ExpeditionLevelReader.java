@@ -7,6 +7,7 @@ import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.NPC;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.town.NPCFactory;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.serf.level.Dispatcher;
 import net.slashie.serf.level.GridLevelReader;
@@ -47,7 +48,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 				setSpawnPointUsed(p);
 			}
 		} else if (cmds[1].equals("NPC")){
-			NPC npc = new NPC ((ExpeditionUnit)ItemFactory.createItem(cmds[2]));
+			NPC npc = NPCFactory.createNPC(cmds[2]);
 			npc.setPosition(where.x+xoff,where.y+yoff,where.z);
 			addActor(npc);
 		}

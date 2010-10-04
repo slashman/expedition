@@ -15,9 +15,9 @@ public class Armor extends ExpeditionItem {
 		return defense;
 	}
 	
-	public Armor(String classifierId, String description, String pluralDescription,
+	public Armor(String classifierId, String description, String pluralDescription, String longDescription, 
 			int weight, int burden, Roll defense, String shortDescription, int europeValue, int americaValue) {
-		super(classifierId, description, pluralDescription, classifierId, weight, GoodType.ARMORY, europeValue, americaValue);
+		super(classifierId, description, pluralDescription, longDescription, classifierId, weight, GoodType.ARMORY, europeValue, americaValue);
 		this.burden = burden;
 		this.defense = defense;
 		this.shortDescription = shortDescription;
