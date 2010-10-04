@@ -1262,5 +1262,23 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	public void setHibernate(boolean hibernate) {
 		this.hibernate = hibernate;
 	}
+
+	public enum Tip {
+		ON_THE_WAY_TO_NEW_WORLD,
+		YOU_ARE_ON_IRONS,
+		TRAPPED_ON_A_STORM,
+		LANDING_ON_NEW_WORLD,
+		EXPANDING_SETTLEMENT
+	}
 	
+	public void giveTip(Tip tip){
+		if (!getFlag("TIP_GIVEN_"+tip)){
+			setFlag("TIP_GIVEN_"+tip, true);
+			switch (tip){
+			case YOU_ARE_ON_IRONS:
+				
+				break;
+			}
+		}
+	}
 }

@@ -58,7 +58,7 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.print(20,13, "b. Resume Expedition", ConsoleSystemInterface.WHITE);
 		csi.print(20,14, "c. Quit", ConsoleSystemInterface.WHITE);
 		csi.print(8,19, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", ConsoleSystemInterface.CYAN);
-		csi.print(8,20, "Music by Roguebards Mingos, Jice and Troyminator", ConsoleSystemInterface.CYAN);
+		csi.print(8,20, "Music by Roguebards Mingos and Jice", ConsoleSystemInterface.CYAN);
 		
 		csi.refresh();
     	STMusicManagerNew.thus.playKey("TITLE");

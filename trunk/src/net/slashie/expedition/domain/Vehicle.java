@@ -39,10 +39,10 @@ public class Vehicle extends ExpeditionItem{
 	public void setCarryCapacity(int carryCapacity) {
 		this.carryCapacity = carryCapacity;
 	}
-	public Vehicle(String classifierId, String description, String pluralDescription,
+	public Vehicle(String classifierId, String description, String pluralDescription, String longDescription,
 			int weight, boolean moveOnWater,
 			boolean moveOnAir, boolean isHorse, int speedModifier, int carryCapacity, int resistance, boolean fakeVehicle, GoodType goodType, int europeValue, int americaValue) {
-		super(classifierId, description,pluralDescription, classifierId, weight, goodType, europeValue, americaValue);
+		super(classifierId, description,pluralDescription, longDescription, classifierId, weight, goodType, europeValue, americaValue);
 		this.moveOnWater = moveOnWater;
 		this.isHorse = isHorse;
 		this.moveOnAir = moveOnAir;

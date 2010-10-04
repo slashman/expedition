@@ -31,7 +31,11 @@ public class StoreGFXMenuItem implements GFXMenuItem {
 	}
 	
 	public String getMenuDetail(){
-		return "";
+		if (item.getItem() instanceof ExpeditionItem){
+			return ((ExpeditionItem)item.getItem()).getLongDescription();
+		} else {
+			return "";
+		}
 	}
 	
 	public String getMenuDescription() {

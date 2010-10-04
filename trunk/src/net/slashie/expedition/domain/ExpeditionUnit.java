@@ -30,6 +30,7 @@ public class ExpeditionUnit extends Vehicle{
 	private Armor armor;
 	private Vehicle vehicle;
 	
+	
 	public void setArmor(Armor armor) {
 		this.armor = armor;
 		updateCompositeVariables();
@@ -105,6 +106,7 @@ public class ExpeditionUnit extends Vehicle{
 	public ExpeditionUnit(String classifierId, 
 			String description, 
 			String pluralDescription,
+			String longDescription,
 			int weight, 
 			int carryCapacity,
 			Roll baseAttack, 
@@ -114,7 +116,7 @@ public class ExpeditionUnit extends Vehicle{
 			int evadeChance,
 			int dailyFoodConsumption,
 			String[] weaponTypes, String[] armorTypes, int europeValue, int americaValue) {
-		super(classifierId, description, pluralDescription, weight, false,
+		super(classifierId, description, pluralDescription, longDescription, weight, false,
 				false, false, 1, carryCapacity, 1, true, GoodType.PEOPLE, europeValue, americaValue);
 		this.name = description;
 		this.baseAttack = baseAttack;
@@ -300,6 +302,8 @@ public class ExpeditionUnit extends Vehicle{
 		}
 		return new Pair<String, Integer>(unitsString, unitCount);
 	}
+
+	
 }
 
 	

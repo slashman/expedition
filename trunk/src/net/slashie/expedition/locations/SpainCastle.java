@@ -1,15 +1,11 @@
 package net.slashie.expedition.locations;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
-import net.slashie.expedition.domain.ExpeditionItem;
-import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.Title;
-import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
@@ -23,8 +19,6 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class SpainCastle extends StaticPattern implements Serializable {
-
-	
 	public SpainCastle () {
 		this.cellMap = new String [][]{{
 			/*"#cc#+#cc###C###cc#+#cc#",
@@ -48,19 +42,19 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			"#........#.....#.................o......+..=F-I=..+E..D..R#",
 			"#........#.....#...........s...............=---=..#E.....R#",
 			"#........#.....#........................#..=---=..#.......#",
-			"#........#.....#.....#..................+..=---=..+.......#",
+			"#........#.....#.....#..................+..=---=..+.....d.#",
 			"#........#.##.##########....#############..=---=..#.......#",
-			"#........#.#............................#..=---=..###...###",
-			"#..........#............................W..=---=..W.......W",
+			"#........#.#....a.....s...m.....s.......#..=---=..###...###",
+			"#..........#.............Z..............W..=---=..W.......W",
 			"#....o...###..#.#..#...#....#...#..#.#..#.........#...g...W",
 			"#........#..............................###g._.g###.......#",
-			"#........#....#..a....s.......m....s.#..#.........#.......#",
-			"#........###............................#.................#",
-			"#........#........................................#.......#",
-			"#........#....#..a....s.......s....m.#....................S",
-			"#........#........................................#.......#",
-			"#........###............................#......o..........#",
-			"#........#....#..a....s.......m....s.#..#.........#.......#",
+			"#........#....#.,,,,,,,,,,,,,,,,,,,,.#..#.........#.......#",
+			"#........###....,,,t,,,,,,,t,,,,,,,,....#.................#",
+			"#........#......,,,,,,,,,,,,,,,,,,,,..............#.......#",
+			"#........#....#.,,,,,,t,,,,,,,,,,,,,.#....................S",
+			"#........#......,,,,,,,,,,,,,,,,,,,,..............#.......#",
+			"#........###....,,,,,,,,,,,,t,,,,,,,....#......o..........#",
+			"#........#....#.,,,,,,,,,,,,,,,,,,,,.#..#.........#.......#",
 			"#........#..............................##.#.#.####.......#",
 			"############..#.#..#...#....#...#..#.#..#.............g...W",
 			"...........#............................#.m....m..#.......W",
@@ -75,7 +69,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			".........#.....#.................#.#......................#",
 			".........#.....#########.##.######.#########.##############",
 			".........#.....#.................#.#...#..........#.......#",
-			".........#.....#########....######.#......................W",
+			".........#.....#########....######.#..................J...W",
 			".........#.....#...................#.........m............#",
 			".........#.........................#......................W",
 			".........#.....#.....o.............#...#..........#.......#",
@@ -83,6 +77,8 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		}};
 		
 		charMap.put(".", "CASTLE_FLOOR");
+		charMap.put(",", "CASTLE_PLAZA");
+		charMap.put("t", "CASTLE_TREE");
 		charMap.put("=", "BLUE_CARPET");
 		charMap.put("-", "RED_CARPET");
 		charMap.put("#", "CASTLE_WALL");
@@ -96,6 +92,9 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		charMap.put("E", "BOOKSHELF_L");
 		charMap.put("R", "BOOKSHELF_R");
 		charMap.put("D", "CASTLE_FLOOR NPC DOMINIK");
+		charMap.put("d", "CASTLE_FLOOR NPC BIZCOCHO");
+		charMap.put("J", "CASTLE_FLOOR NPC CRISTOFORO");
+		charMap.put("Z", "CASTLE_FLOOR NPC SANTIAGO");
 		charMap.put("s", "CASTLE_FLOOR NPC SOLDIER");
 		charMap.put("m", "CASTLE_FLOOR NPC MARINE");
 		charMap.put("a", "CASTLE_FLOOR NPC ARCHER");
@@ -176,19 +175,13 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
 			
-			ExpeditionItem food = ItemFactory.createItem("BISCUIT");
-			ExpeditionItem sailor = ItemFactory.createItem("SAILOR");
-			ExpeditionItem captain = ItemFactory.createItem("CAPTAIN");
-			
-			ret.addItemOffshore(sailor, Util.rand(85,95));
-			ret.addItemOffshore(captain, 3);
-			ret.addItemOffshore(food, 20000);
-			
-			
+			ret.addItemOffshore(ItemFactory.createItem("SAILOR"), Util.rand(85,95));
+			ret.addItemOffshore(ItemFactory.createItem("ROGUE"), Util.rand(15,25));
+			ret.addItemOffshore(ItemFactory.createItem("CAPTAIN"), 3);
+			ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 3);
+			ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), Util.rand(19000, 21000));
+			ret.addItemOffshore(ItemFactory.createItem("WOOD"), Util.rand(250, 350));
 		}
-		
-		
-		
 	}
 }
 
