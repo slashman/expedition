@@ -55,6 +55,7 @@ public class LevelMaster {
 			ret.setID("SPAIN_CASTLE");
 			ret.setZoomIn(true);
 			ret.setTemperature(20);
+			ret.setDock(true);
 			return ret;
 		} else if (levelID.equals("WORLD")){
 			StaticPattern pattern = new World();

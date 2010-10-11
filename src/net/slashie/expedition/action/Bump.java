@@ -84,4 +84,12 @@ public class Bump extends Action {
 		return "Bump";
 	}
 
+	
+	@Override
+	public int getCost() {
+		if (performer instanceof NonPrincipalExpedition)
+			return ((NonPrincipalExpedition)performer).getMovementSpeed().getMovementCost();
+		else
+			return 40;
+	}
 }

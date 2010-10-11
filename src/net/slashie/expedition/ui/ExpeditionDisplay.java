@@ -3,8 +3,9 @@ package net.slashie.expedition.ui;
 import java.io.File;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.game.ExpeditionGame;
 
-public abstract class ExpeditionDisplay {
+public abstract class ExpeditionDisplay  {
 	public static ExpeditionDisplay thus;
 	/**
 	 * Shows the title screen
@@ -22,4 +23,7 @@ public abstract class ExpeditionDisplay {
 	public abstract void showIntro(Expedition expedition);
 	
 	public abstract void showHelp();
+	
+	public abstract Expedition createExpedition(ExpeditionGame game);
+
 }

@@ -79,7 +79,7 @@ public class BuildSettlement extends Action{
 		}
 		
 		if (daysCost > expedition.getFoodDays()){
-			if (!UserInterface.getUI().promptChat("Your expedition will ran out of supplied before finishing construction! Are you sure?")){
+			if (!UserInterface.getUI().promptChat("Your expedition will run out of supplies before finishing construction! Are you sure?")){
 				netTimeCost = 0;
 				return;
 			}

@@ -7,6 +7,7 @@ public class OverworldExpeditionCell extends AbstractCell{
 	private boolean isLand, isRiver, isWood;
 	private int heightMod;
 	private int forageChance, forageQuantity;
+	private boolean isForest;
 	
 	public boolean isRiver() {
 		return isRiver;
@@ -16,11 +17,12 @@ public class OverworldExpeditionCell extends AbstractCell{
 		return isLand;
 	}
 
-	public OverworldExpeditionCell(String pid, String description, boolean isLand, int heightMod, boolean isRiver, boolean isSolid, boolean isWood, boolean isOpaque, int forageChance, int forageQuantity) {
+	public OverworldExpeditionCell(String pid, String description, boolean isLand, int heightMod, boolean isRiver, boolean isSolid, boolean isWood, boolean isOpaque, int forageChance, int forageQuantity, boolean isForest) {
 		super(pid, description, description, AppearanceFactory.getAppearanceFactory().getAppearance(pid), isSolid, isOpaque);
 		this.isLand = isLand;
 		this.heightMod = heightMod;
 		this.isRiver = isRiver;
+		this.isForest = isForest;
 		this.isWood = isWood;
 		setWater(!isLand);
 		this.forageChance = forageChance;
@@ -61,6 +63,11 @@ public class OverworldExpeditionCell extends AbstractCell{
 
 	public int getForageQuantity() {
 		return forageQuantity;
+	}
+
+
+	public boolean isForest() {
+		return isForest;
 	}
 
 

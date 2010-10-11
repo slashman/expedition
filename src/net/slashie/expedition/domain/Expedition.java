@@ -133,7 +133,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			int reduction = 0;
 			int boost = 0;
 			if (!hasFullShipCrew()){
-				reduction++;
+				reduction+=2;
 			} 
 			if (getShipHealth() < 70){
 				reduction++;
@@ -1065,6 +1065,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        	if (cell.getStepCommand().equals("DEPARTURE")){
 	        		if (getTotalShips() == 0) {
         				getLevel().addMessage("You have no ships to board.");
+        				throw new ActionCancelException();
+	        		} else if (getItemCount("SAILOR") < 15){
+	        			getLevel().addMessage("You need at least 15 sailors to depart.");
         				throw new ActionCancelException();
 	        		} else {
 		        		if (((ExpeditionUserInterface)UserInterface.getUI()).depart()){

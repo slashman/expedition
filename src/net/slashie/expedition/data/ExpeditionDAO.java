@@ -82,17 +82,19 @@ public class ExpeditionDAO {
 		guild.addItem(5000, new StoreItemInfo("SOLDIER"));
 		guild.addItem(1500, new StoreItemInfo("ARCHER"));
 		guild.addItem(1000, new StoreItemInfo("CARPENTER"));
+		guild.addItem(200, new StoreItemInfo("EXPLORER"));
+
 		
 		return new AbstractCell[]{
 			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false, 15, 20),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 10, 40),
-			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 50),
-			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 15, 20),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,false, 5, 10),
-			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,false, 0, 0),
-			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 10, 20),
-			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0),
+			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false, 15, 20, false),
+			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 10, 40, false),
+			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 50, false),
+			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 15, 20, false),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,false, 5, 10, false),
+			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,false, 0, 0, false),
+			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 10, 20, true),
+			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0, false),
 			
 			//Inworld Cells
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
@@ -324,7 +326,7 @@ public class ExpeditionDAO {
 	public static ExpeditionItem[] getItemDefinitions(AppearanceFactory appFactory){
 		return new ExpeditionItem[]{
 			//People
-			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", "Ship Crew", UNIT_WEIGHT, 200,
+			new ExpeditionUnit("SAILOR", "Sailor", "Sailors", "Ship Crew.", UNIT_WEIGHT, 200,
 					new Roll("1D1"),
 					new Roll("1D1"),
 					2,
@@ -356,7 +358,7 @@ public class ExpeditionDAO {
 					2,
 					new String[]{"STEEL_SWORD", "HARQUEBUS", "STEEL_SPEAR","WOODEN_MACE"},
 					new String[]{"BREASTPLATE", "STUDDED_VEST"}, 100, 200),
-			new ExpeditionUnit("GUARD", "A Burly Guard","Guards", "Heavily Armored Guard", UNIT_WEIGHT, 200,
+			new ExpeditionUnit("GUARD", "Burly Guard","Guards", "Heavily Armored Guard", UNIT_WEIGHT, 200,
 					new Roll("1D3"),
 					new Roll("1D3"),
 					4,
@@ -410,7 +412,7 @@ public class ExpeditionDAO {
 					new Roll("1D2"),
 					3,
 					80,15,
-					0,
+					1,
 					new String[]{"WOODEN_MACE"},
 					new String[]{""}, 200, 100),
 			new ExpeditionUnit("NATIVE_ARCHER", "Archer","Archers", "Able with the bow", UNIT_WEIGHT, 200,
@@ -418,7 +420,7 @@ public class ExpeditionDAO {
 					new Roll("1D1"),
 					2,
 					60,10,
-					0,
+					1,
 					new String[]{"SIMPLE_BOW", "WOODEN_MACE"},
 					new String[]{""}, 200, 100),
 			new ExpeditionUnit("NATIVE_COMMONER", "Native","Natives", "Working member of a tribe", UNIT_WEIGHT, 300, 
@@ -426,7 +428,7 @@ public class ExpeditionDAO {
 					new Roll("1D1"),
 					1,
 					50,5, 
-					0,
+					1,
 					new String[]{"WOODEN_MACE"},
 					new String[]{""}, 100, 10),
 			new ExpeditionUnit("NATIVE_SHAMAN", "Shaman","Shamans", "Shaman of the tribe", UNIT_WEIGHT, 50, 
@@ -434,7 +436,7 @@ public class ExpeditionDAO {
 					new Roll("1D1"),
 					1,
 					50,5,
-					0,
+					2,
 					new String[]{""},
 					new String[]{""}, 100, 5000),
 			new ExpeditionUnit("EAGLE_WARRIOR", "Eagle Warrior","Eagle Warriors", "Elite Warrior", UNIT_WEIGHT, 200,
@@ -462,10 +464,11 @@ public class ExpeditionDAO {
 					new String[]{"PLUMED_BOW", "COMPOSITE_BOW", "SIMPLE_BOW","WOODEN_MACE"},
 					new String[]{}, 200, 300),
 			//Goods
-			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 200,250, FOOD_PACK),
+			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 40,50, FOOD_PACK),
 			new Food("BREAD", "Bread", "Bread", "Food Ration", 3, 1, 100, 200, FOOD_PACK),
 			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 3, 1, 400,50, FOOD_PACK),
 			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 3, 1, 400,50, FOOD_PACK),
+			
 			new Food("BEANS", "Beans", "Beans", "Food Ration", 3, 1, 800,100, FOOD_PACK),
 			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 400,50, FOOD_PACK),
 			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 3, 1, 800,200, FOOD_PACK),
@@ -473,9 +476,8 @@ public class ExpeditionDAO {
 			new Food("FISH", "Fish", "Fish", "Food Ration", 3, 1, 100, 200, FOOD_PACK),
 			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 100, 100, FOOD_PACK),
 			
-			new Food("FRESHWATER", "Freshwater", "Freshwater", "Liquid of Life", 2,1, 20,5, LIQUID_PACK),
-			new Food("RUM", "Rum", "Rum", "Liquid of Life", 2, 2, 400,500, LIQUID_PACK),
-			
+			new ExpeditionItem("FRESHWATER", "Freshwater", "Freshwater", "Liquid of Life", "FRESHWATER", 2, GoodType.SUPPLIES, 20,5),
+			new ExpeditionItem("RUM", "Rum", "Rum", "Liquid of Life", "RUM", 2, GoodType.SUPPLIES, 400,500),
 			
 			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "Wood piece", "WOOD", 10, GoodType.SUPPLIES, 100,5),
 			
@@ -539,7 +541,7 @@ public class ExpeditionDAO {
 					50,5, 
 					1, new String[]{""},
 					new String[]{""}, 5000, 5000),
-			new ExpeditionUnit("DOMINIK", "Fray Domenico Marcus","Mingoses", "", UNIT_WEIGHT, 300, 
+			new ExpeditionUnit("DOMINIK", "Friar Domenico Marcus","Mingoses", "", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,

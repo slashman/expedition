@@ -44,7 +44,7 @@ public interface ExpeditionUserInterface {
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
-			AssaultOutcome[] meleeAttackOutcome);
+			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore);
 	
 	public void showBattleScene(
 			String battleTitle, 
