@@ -161,7 +161,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public int switchChat(String title, String prompt, String... options) {
    		BorderedMenuBox selectionBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		selectionBox.setItemsPerPage(8);
-   		selectionBox.setBounds(80, 300, 600,250);
+   		selectionBox.setBounds(80, 300, 640,250);
   		Vector<GFXMenuItem> menuItems = new Vector<GFXMenuItem>();
   		int i = 0;
   		for (String option: options){
@@ -318,11 +318,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 
 	public void showBlockingMessage(String message) {
 		message = message.replaceAll("XXX", "\n");
-		showTextBox(message, 140, 288, 520, 200);
+		showTextBox(message, 140, 300, 520, 250);
 	}
 	
 	@Override
 	public boolean promptChat(String message) {
+		message = message.replaceAll("XXX", "\n");
 		return promptChat(message+" [Y/N]", 140,288,520,200);
 	}
 
@@ -763,6 +764,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public void showBattleScene(String battleTitle, List<Equipment> attackingUnits,
 			List<Equipment> defendingUnits) {
+		clearTextBox();
 		si.drawImage(168, 72, BATTLE_BACKGROUND);
 		int xBase = 192;
 		int yBase = 96; 
@@ -803,8 +805,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			String battleTitle, AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
-			AssaultOutcome[] meleeAttackOutcome) {
-		String message = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits, battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
+			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
+		String message = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits, battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome, attackerScore, defenderScore);
 		message = message.replaceAll("XXX", "\n");
 		showTextBox(message, 16, 16, 776, 576);
 	}
@@ -815,6 +817,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	 */
 	public boolean promptUnitList(List<Equipment> unitList, String title, String prompt) {
 		Equipment.eqMode = true;
+		clearTextBox();
+
    		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
    		cacheBox.setItemsPerPage(12);
    		cacheBox.setBounds(160, 16, 624,480);
@@ -838,7 +842,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Equipment.eqMode = true;
 		Map<String, Equipment> selectionMap = new HashMap<String, Equipment>();
 		List<Equipment> selection = new ArrayList<Equipment>();
-		
+		clearTextBox();
 		Map<GoodType, List<Equipment>> expeditionGoodsMap = new HashMap<GoodType, List<Equipment>>();
 		GoodType[] goodTypes = GoodType.getGoodTypes();
 		for (GoodType goodType: goodTypes){

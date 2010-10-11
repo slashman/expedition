@@ -3,6 +3,7 @@ package net.slashie.expedition.ui.console;
 import java.io.File;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.libjcsi.CharKey;
@@ -114,4 +115,14 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.refresh();
 	}
 
+	@Override
+	public Expedition createExpedition(ExpeditionGame game) {
+		csi.cls();
+		csi.print(2, 2, "Please, by what name are your explorations to be known?");
+		csi.locateCaret(3,3);
+		csi.refresh();
+		String name = csi.input(10);
+		
+		return ExpeditionFactory.createPlayerExpedition(name, game);
+	}
 }

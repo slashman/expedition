@@ -83,11 +83,12 @@ public class CommonUI {
 		}
 	}
 
-	public static String getBattleResultsString(List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits, String battleName,
+	public static String getBattleResultsString(
+			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits, String battleName,
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
-			AssaultOutcome[] meleeAttackOutcome) {
+			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
 		String message = battleName+" XXX ";
 		
 		message += ExpeditionUnit.getUnitsStringFromEquipment(originalAttackingUnits).getA()+" XXX ";
@@ -174,6 +175,11 @@ public class CommonUI {
 		
 		if (nothingHappened) {
 			message += "No losses for both sides XXX ";
+		}
+		if (attackerScore > defenderScore){
+			message += "The attacking party wins the battle XXX ";
+		} else {
+			message += "The defending party wins the battle XXX ";
 		}
 		return message;
 	}

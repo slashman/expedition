@@ -26,6 +26,7 @@ public class NativeTown extends Town{
 	private static final String[] NATIVE_ACTIONS = new String [] {
 		"Raid the settlement",
 		"Trade Goods",
+		"Threaten",
 		"Leave",
 		//Peaceful
 		/*
@@ -43,6 +44,7 @@ public class NativeTown extends Town{
 	private int turnsBeforeNextExpedition;
 	private Map<GoodType, Double> goodTypeModifiers = new HashMap<GoodType, Double>();
 	private boolean isUnfriendly;
+	private int scaredLevel;
 	
 	public void setGoodTypeModifier(GoodType goodType, double modifier){
 		goodTypeModifiers.put(goodType, modifier);
@@ -88,6 +90,8 @@ public class NativeTown extends Town{
 			items += Util.rand(-items*0.1d, items*0.1d);
 			addItem(i, items);
 		}
+		
+		setScaredLevel(getCulture().getAggresiveness()*-2);
 		/*addItem(ItemFactory.createItem("GOLD_NUGGET"), Util.rand(0, size*culture.getGoldModifier()*20));
 		addItem(ItemFactory.createItem("GOLD_BRACELET"), Util.rand(0, size*culture.getGoldModifier()*40));
 		addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, size*culture.getArtifactModifier()*30));
@@ -196,7 +200,7 @@ public class NativeTown extends Town{
 		
 		ret.calculateInitialPower();
 		
-		turnsBeforeNextExpedition = expeditionPower * 3;
+		turnsBeforeNextExpedition = expeditionPower * 10;
 		return ret;
 	}
 
@@ -233,22 +237,16 @@ public class NativeTown extends Town{
 
 	public List<Equipment> calculateOffer(
 			GoodType goodType,
-			List<Equipment> offer) {
-		int value = 0;
-		for (Equipment eqOffer: offer){
-			ExpeditionItem good = (ExpeditionItem) eqOffer.getItem();
-			value += evalItem(good) * eqOffer.getQuantity();
-			//System.out.println("Offer value is:" + value+" with "+good.getDescription());
-		}
+			int offerValue) {
 		List<Equipment> townOffer = new ArrayList<Equipment>();
 		List<Equipment> townGoods = getGoods(goodType);
 		for (Equipment townGood: townGoods){
 			ExpeditionItem good = (ExpeditionItem) townGood.getItem();
-			if (value > 0){
+			if (offerValue > 0){
 				double goodValue = evalItem(good);
 				if (goodValue == 0)
 					continue;
-				int maxQuantity = (int)Math.floor((double)value/(double)goodValue);
+				int maxQuantity = (int)Math.floor((double)offerValue/(double)goodValue);
 				if (maxQuantity == 0)
 					continue;
 				int quantity = townGood.getQuantity();
@@ -256,11 +254,21 @@ public class NativeTown extends Town{
 					quantity = maxQuantity;
 				}
 				townOffer.add(new Equipment(good, quantity));
-				value -= goodValue * quantity;
+				offerValue -= goodValue * quantity;
 			} else
 				break;
 		}
 		return townOffer;
+	}
+	public List<Equipment> calculateOffer(
+			GoodType goodType,
+			List<Equipment> offer) {
+		int value = 0;
+		for (Equipment eqOffer: offer){
+			ExpeditionItem good = (ExpeditionItem) eqOffer.getItem();
+			value += evalItem(good) * eqOffer.getQuantity();
+		}
+		return calculateOffer(goodType, value);
 	}
 
 	private int evalItem(ExpeditionItem good) {
@@ -322,7 +330,69 @@ public class NativeTown extends Town{
 			}
 			break;
 		case 2:
+			// If the town is scared, they will give you items
+			if (getScaredLevel() <= 0 || Util.chance(getCulture().getAggresiveness()*25)){
+				showBlockingMessage("The "+nativeTown.getCulture().getName()+" do not fear you, begone!");
+				setUnfriendly(true);
+				setScaredLevel(0);
+			} else {
+				int goodTypeChoice = UserInterface.getUI().switchChat("Threatening "+nativeTown.getDescription(),"Please spare us! what do you want?", GoodType.getChoicesList());
+				GoodType goodType = GoodType.fromChoice(goodTypeChoice);
+				if (goodType == null){
+					//Cancelled
+					break;
+				}
+				if (nativeTown.canTradeGoodType(goodType)){
+					List<Equipment> townOffer = nativeTown.calculateOffer(goodType, getScaredLevel()*200);
+					if (townOffer == null || townOffer.size() == 0){
+						showBlockingMessage("We have no "+goodType.getDescription());
+					} else {
+						if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it? [Y/N]")){
+							expedition.addAllItems(townOffer);
+							nativeTown.reduceAllItems(townOffer);
+							reduceScaredLevel();
+							showBlockingMessage("Begone now.");
+						} else {
+							showBlockingMessage("It is all we have!");
+						}
+					}
+				} else {
+					showBlockingMessage("We have no "+goodType.getDescription());
+				}
+				
+			}
+		case 3:
 			break;
 		}
+	}
+
+	public int getScaredLevel() {
+		return scaredLevel;
+	}
+
+	public void setScaredLevel(int scaredLevel) {
+		this.scaredLevel = scaredLevel;
+	}
+
+	public void reduceScaredLevel() {
+		scaredLevel --;
+		if (scaredLevel <= -10){
+			scaredLevel = -10;
+		}
+		checkFriendlyChange();
+	}
+	
+	private void checkFriendlyChange() {
+		if (scaredLevel > 0)
+			setUnfriendly(false);
+		
+	}
+
+	public void increaseScaredLevel(){
+		scaredLevel++;
+		if (scaredLevel > 5){
+			scaredLevel = 5;	
+		}
+		checkFriendlyChange();
 	}
 }

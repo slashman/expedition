@@ -2,6 +2,7 @@ package net.slashie.expedition.domain;
 
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
+import net.slashie.expedition.world.OverworldExpeditionCell;
 
 
 public class NonPrincipalExpedition extends Expedition{
@@ -36,7 +37,10 @@ public class NonPrincipalExpedition extends Expedition{
 		return getName();
 	}
 
-	
+	@Override
+	public double getFoodConsumptionMultiplier() {
+		return 0;
+	}
 	
 	public void checkDeath(){
 		if (getTotalUnits() <= 0){
@@ -78,4 +82,18 @@ public class NonPrincipalExpedition extends Expedition{
 		return ret;
 	}
 	*/
+	
+	@Override
+	public MovementSpeed getMovementSpeed() {
+		if (((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).isForest()){
+			return MovementSpeed.FAST;
+		} else {
+			return MovementSpeed.NORMAL;
+		}
+	}
+	
+	public void consumeFood() {
+		//Do Nothing
+		MovementSpeed.NONE.getDescription();
+	}
 }

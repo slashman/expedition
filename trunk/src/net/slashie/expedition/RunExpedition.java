@@ -33,15 +33,12 @@ import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.town.NPCFactory;
 import net.slashie.expedition.ui.ExpeditionDisplay;
-import net.slashie.expedition.ui.ExpeditionGenerator;
 import net.slashie.expedition.ui.console.CharExpeditionDisplay;
-import net.slashie.expedition.ui.console.CharPlayerGenerator;
 import net.slashie.expedition.ui.console.ExpeditionConsoleUI;
 import net.slashie.expedition.ui.console.ExpeditionConsoleUISelector;
 import net.slashie.expedition.ui.console.effects.CharEffects;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.expedition.ui.oryx.OryxExpeditionDisplay;
-import net.slashie.expedition.ui.oryx.OryxPlayerGenerator;
 import net.slashie.expedition.ui.oryx.effects.GFXEffects;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
@@ -128,7 +125,6 @@ public class RunExpedition {
 					System.out.println("Initializing Oryx GFX User Interface");
 					UserInterface.setSingleton(new ExpeditionOryxUI());
 					ExpeditionDisplay.thus = new OryxExpeditionDisplay(si, UIconfiguration);
-					ExpeditionGenerator.thus = new OryxPlayerGenerator(si);
 					
 					EffectFactory.setSingleton(new GFXEffectFactory());
 					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(new GFXEffects().getEffects());
@@ -150,7 +146,6 @@ public class RunExpedition {
 		            System.out.println("Initializing Console User Interface");
 					UserInterface.setSingleton(new ExpeditionConsoleUI(csi));
 					ExpeditionDisplay.thus = new CharExpeditionDisplay(csi);
-					ExpeditionGenerator.thus = new CharPlayerGenerator(csi);
 					
 					EffectFactory.setSingleton(new CharEffectFactory());
 					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());
@@ -165,7 +160,6 @@ public class RunExpedition {
 					UserInterface.setSingleton(new ExpeditionConsoleUI(csi));
 					//CharCuts.initializeSingleton();
 					ExpeditionDisplay.thus = new CharExpeditionDisplay(csi);
-					ExpeditionGenerator.thus = new CharPlayerGenerator(csi);
 					//PlayerGenerator.thus.initSpecialPlayers();
 					EffectFactory.setSingleton(new CharEffectFactory());
 					((CharEffectFactory)EffectFactory.getSingleton()).setEffects(new CharEffects().getEffects());

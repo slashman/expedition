@@ -8,6 +8,7 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.UserInterface;
+import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
 public class BattleManager {
@@ -58,10 +59,45 @@ public class BattleManager {
 		
 		// Melee phase: Attacker charges (Defender will attack back)
 		AssaultOutcome[] attackerMeleeAttackOutcome = meleeAttack(attackingUnits, attacker, defendingUnits, (UnitContainer)defender);
+		
+		// Score outcomes to see who won
+		int attackerScore = 0;
+		int defenderScore = 0;
+		attackerScore += eval(attackerRangedAttackOutcome);
+		defenderScore += eval(defenderRangedAttackOutcome);
+		attackerScore += eval(attackerMountedAttackOutcome[0]);
+		defenderScore += eval(attackerMountedAttackOutcome[0]);
+		attackerScore += eval(attackerMeleeAttackOutcome[0]);
+		defenderScore += eval(attackerMeleeAttackOutcome[0]);
+		/*System.out.println("Attacker Score "+attackerScore);
+		System.out.println("Defender Score "+defenderScore);*/
+		if (attackerScore > defenderScore){
+			if (defender instanceof NativeTown){
+				((NativeTown)defender).increaseScaredLevel();
+			} else if (defender instanceof NonPrincipalExpedition){
+				
+			}
+		} else {
+			if (defender instanceof NativeTown){
+				((NativeTown)defender).reduceScaredLevel();
+			} else if (defender instanceof NonPrincipalExpedition){
+				
+			}
+		}
+		((ExpeditionUserInterface)UserInterface.getUI()).showBattleResults(originalAttackingUnits, originalDefendingUnits, battleName, attackerRangedAttackOutcome, defenderRangedAttackOutcome, attackerMountedAttackOutcome, attackerMeleeAttackOutcome, attackerScore, defenderScore);
+		
+		
+	}
 
-		((ExpeditionUserInterface)UserInterface.getUI()).showBattleResults(originalAttackingUnits, originalDefendingUnits, battleName, attackerRangedAttackOutcome, defenderRangedAttackOutcome, attackerMountedAttackOutcome, attackerMeleeAttackOutcome);
-		
-		
+	private static int eval(AssaultOutcome assaultOutcome) {
+		int score = 0;
+		for (Pair<ExpeditionUnit, Integer> wound: assaultOutcome.getWounds()){
+			score += wound.getB();
+		}
+		for (Pair<ExpeditionUnit, Integer> death: assaultOutcome.getDeaths()){
+			score += death.getB() * 3;
+		}
+		return score;
 	}
 
 	private static List<Equipment> cloneEquipmentList(

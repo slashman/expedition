@@ -9,6 +9,7 @@ import net.slashie.serf.action.Actor;
 import net.slashie.serf.action.AwareActor;
 import net.slashie.serf.action.PassAction;
 import net.slashie.utils.Position;
+import net.slashie.utils.Util;
 
 public class NativeActionSelector implements ActionSelector {
 	private static final Action PASS_ACTION = new PassAction(200);
@@ -75,6 +76,8 @@ public class NativeActionSelector implements ActionSelector {
 				}
 			}
 		}
+		if (Util.chance(20))
+			town.reduceScaredLevel();
 		return PASS_ACTION;
 	}
 	

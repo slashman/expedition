@@ -9,7 +9,6 @@ import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.ui.ExpeditionDisplay;
-import net.slashie.expedition.ui.ExpeditionGenerator;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
@@ -70,7 +69,7 @@ public class ExpeditionGame extends SworeGame {
 
 	@Override
 	public Player generatePlayer(int gameType, SworeGame game) {
-		return ExpeditionGenerator.thus.createExpedition((ExpeditionGame)game);
+		return ExpeditionDisplay.thus.createExpedition((ExpeditionGame)game);
 	}
 
 	@Override
@@ -163,7 +162,7 @@ public class ExpeditionGame extends SworeGame {
 	}
 	
 	public static String getVersion(){
-		return "v0.1.8-RC3";
+		return "v0.2-RC1";
 	}
 	
 	public Expedition getExpedition(){

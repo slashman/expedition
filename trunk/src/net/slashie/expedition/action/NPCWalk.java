@@ -1,5 +1,6 @@
 package net.slashie.expedition.action;
 
+import net.slashie.expedition.domain.NonPrincipalExpedition;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
@@ -52,7 +53,10 @@ public class NPCWalk extends Action{
 	
 	@Override
 	public int getCost() {
-		return 50;
+		if (performer instanceof NonPrincipalExpedition)
+			return ((NonPrincipalExpedition)performer).getMovementSpeed().getMovementCost();
+		else
+			return 40;
 	}
 	
 	

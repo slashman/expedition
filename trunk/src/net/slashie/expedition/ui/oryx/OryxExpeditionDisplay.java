@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import net.slashie.libjcsi.CharKey;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.serf.game.SworeGame;
@@ -153,30 +154,36 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 
 	public void showHelp(){
 		si.saveBuffer();
-		si.cls();
-		si.print(6, 1, " == Commands ==", Color.CYAN);
-		si.print(6, 3, "  /---\\     ", Color.WHITE);
-		si.print(6, 4, "  |789|  Move Around using the numpad or", Color.WHITE);
-		si.print(6, 5, "  |4 6|  The directional keys.", Color.WHITE);
-		si.print(6, 6, "  |123|", Color.WHITE);
-		si.print(6, 7, "  \\---/", Color.WHITE);
-		si.print(6, 8, "  ", Color.WHITE);
-		si.print(6, 9, " == In the overworld ==", Color.CYAN);
-		si.print(6,10, "  ", Color.WHITE);
-		si.print(6,11, "  a: Arm / Disarm expedition", Color.WHITE);
-		si.print(6,12, "  b: Build a Settlement", Color.WHITE);
-		si.print(6,13, "  d: Drop equipment", Color.WHITE);
-		si.print(6,14, "  f: Fish or Forage for food", Color.WHITE);
-		si.print(6,15, "  i: Show inventory", Color.WHITE);
-		si.print(6,16, "  l: Look around", Color.WHITE);
-		si.print(6,17, "  r: Repair damaged ships", Color.WHITE);
-		si.print(6,18, "  R: Reset dead' reckon counter", Color.WHITE);
-		si.print(6,19, "  w: Chop wood from forests", Color.WHITE);
-		si.print(6,20, "  S: Save Game", Color.WHITE);
-		si.print(6,21, "  Q: Quit", Color.WHITE);
+		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
+		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
 		
-		si.print(6,22, "  ", Color.WHITE);
-		si.print(6,23, "  Press Space to continue", Color.CYAN);
+		si.cls();
+		si.print(3, 1, "== HELP ==", Color.CYAN);
+		si.print(3, 2, "== Movement ==", Color.CYAN);
+		si.print(3, 3, " On Foot ", Color.CYAN);
+		si.print(3, 4, "Move Around using the numpad ", Color.WHITE);
+		si.print(3, 5, "or the directional keys", Color.WHITE);
+		
+		si.print(40, 3, " Sailing", Color.CYAN);
+		si.print(40, 4, "Rotate your ships using Left/Right", Color.WHITE);
+		si.print(40, 5, "Advance with any other direction", Color.WHITE);
+		
+		si.print(3, 6, " ", Color.WHITE);
+		si.print(3, 7, "== Commands ==", Color.CYAN);
+		
+		si.print(3, 8, "  a: Arm / Disarm expedition", Color.WHITE);
+		si.print(3, 9, "  b: Build a Settlement", Color.WHITE);
+		si.print(3,10, "  d: Drop equipment", Color.WHITE);
+		si.print(3,11, "  f: Fish or Forage for food", Color.WHITE);
+		si.print(3,12, "  i: Show inventory", Color.WHITE);
+		si.print(3,13, "  l: Look around", Color.WHITE);
+		si.print(3,14, "  r: Repair damaged ships", Color.WHITE);
+		si.print(3,15, "  R: Reset dead' reckon counter", Color.WHITE);
+		si.print(3,16, "  w: Chop wood from forests", Color.WHITE);
+		si.print(3,17, "  S: Save Game", Color.WHITE);
+		si.print(3,18, "  Q: Quit", Color.WHITE);
+		si.print(3,19, "  ", Color.WHITE);
+		si.print(3,20, "  Press Space to continue", Color.CYAN);
 		si.refresh();
 
 		si.waitKey(CharKey.SPACE);
@@ -297,6 +304,24 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		return ret;
 	}
 	
-	
+	@Override
+	public Expedition createExpedition(ExpeditionGame game) {
+		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
+		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
+		STMusicManagerNew.thus.playKey("TITLE");
+		
+		si.setFont(FNT_TEXT);
+		String name = "";
+		while (name.trim().equals("")){
+			si.drawImage(IMG_TITLE);
+			si.printAtPixel(60, 555, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
+			si.printAtPixel(60, 570, "Artwork by Oryx, 2010", Color.WHITE);
+			si.printAtPixel(60, 585, "Music by Roguebards Mingos and Jice", Color.WHITE);
+			
+			si.printAtPixel(128, 428, "Please, by what name are your explorations to be known?", Color.WHITE);
+			name = si.input(222, 463, Color.WHITE, 10);
+		}
+		return ExpeditionFactory.createPlayerExpedition(name, game);
+	}
 	
 }

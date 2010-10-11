@@ -137,7 +137,7 @@ public class ExpeditionUnit extends Vehicle{
 		updateCompositeVariables();
 	}
 	
-	private void updateCompositeVariables(){
+	public void updateCompositeVariables(){
 		fullId = super.getFullID();
 		unitWeight = super.getWeight();
 		fullDescription = "";

@@ -83,7 +83,10 @@ public class ArmExpedition extends Action{
 			List<Equipment> units = getExpedition().getGoods(GoodType.PEOPLE);
 			for (Equipment unit: units){
 				ExpeditionUnit eUnit = ((ExpeditionUnit)unit.getItem()); 
-				boolean useOffShore = isPlayer && getExpedition().getLocation() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)getExpedition().getLocation()).isDock(); 
+				boolean useOffShore = isPlayer 
+					&& 
+					getExpedition().getLocation() instanceof ExpeditionMicroLevel && 
+					((ExpeditionMicroLevel)getExpedition().getLocation()).isDock(); 
 				if (eUnit.getWeapon() != null || eUnit.getArmor() != null){
 					int quantity = unit.getQuantity();
 					Weapon weapon = eUnit.getWeapon();

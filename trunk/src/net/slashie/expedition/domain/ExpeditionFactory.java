@@ -3,6 +3,7 @@ package net.slashie.expedition.domain;
 import java.util.ArrayList;
 
 import net.slashie.expedition.action.Bump;
+import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.ai.RangedActionSpec;
@@ -35,6 +36,24 @@ public class ExpeditionFactory {
 		ret.addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(expeditionPower*100, expeditionPower*700));
 		
 		ret.calculateInitialPower();
+		return ret;
+	}
+	
+	public static Expedition createPlayerExpedition(String name, ExpeditionGame game) {
+		name = name.trim();
+		Expedition ret = new Expedition(game);
+		ret.setGame(game);
+		ret.setAppearanceId("EXPEDITION");
+		ret.setName(name);
+		ret.setExpeditionary(name);
+		ret.setAccountedGold(200);
+		ExpeditionUnit explorer = (ExpeditionUnit)ItemFactory.createItem("COLOMBUS");
+		explorer.setDescription(name);
+		explorer.setName(name);
+		explorer.updateCompositeVariables();
+		ret.setLeaderUnit(explorer);
+		ret.setMovementMode(MovementMode.FOOT);
+		
 		return ret;
 	}
 }

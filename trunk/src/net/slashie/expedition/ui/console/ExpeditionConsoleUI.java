@@ -844,9 +844,9 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
-			AssaultOutcome[] meleeAttackOutcome) {
+			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
 		csi.saveBuffer();
-		String message = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits,battleName,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome);
+		String message = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits,battleName,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome, attackerScore, defenderScore);
 		showTextBox(message, 1, 0, 78, 24, CSIColor.YELLOW);
 		csi.restore();
 

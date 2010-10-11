@@ -131,8 +131,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 			equipmentx = new Equipment(item, quantity);
 			itemsHash.put(toAddID, equipmentx);
 			items.add(equipmentx);
-		} else
+		} else {
 			equipmentx.increaseQuantity(quantity);
+		}
 
 	}
 	
@@ -232,8 +233,10 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 			Equipment equipment = (Equipment) items.get(i);
 			if (equipment.getItem().equals(item)){
 				equipment.reduceQuantity(quantity);
-				if (equipment.isEmpty())
+				if (equipment.isEmpty()){
 					items.remove(equipment);
+					itemsHash.remove(equipment.getItem().getFullID());
+				}
 				return;
 			}
 		}
@@ -244,8 +247,10 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 			Equipment equipment = (Equipment) items.get(i);
 			if (equipment.getItem().getFullID().equals(itemId)){
 				equipment.reduceQuantity(quantity);
-				if (equipment.isEmpty())
+				if (equipment.isEmpty()){
 					items.remove(equipment);
+					itemsHash.remove(equipment.getItem().getFullID());
+				}
 				return;
 			}
 		}
