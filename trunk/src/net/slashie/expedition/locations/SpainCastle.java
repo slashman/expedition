@@ -132,9 +132,9 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			if (!exp.getFlag("MET_WITH_KINGS")){
 				//First meeting with kings
 				exp.setFlag("MET_WITH_KINGS", true);
-				m("We, the Catholic King and Queen of Spain, have generously decided to grant you this audience. In spite of our advisors words, we have aproved your expedition to find the west path into the Indies.");
-				m("Should your journey be sucessful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
-				m("We have comissioned two caravels and a carrack for your trip. What other aid should the crown grant you?");
+				m("We, the Catholic King and Queen of Spain, have generously decided to grant you this audience. In spite of our advisors words, we have approved your expedition to find the west path into the Indies.");
+				m("Should your journey be successful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
+				m("We have commissioned two caravels and a carrack for your trip. What other aid should the crown grant you?");
 				int choice = -1;
 				while (choice == -1){
 					choice = (UserInterface.getUI()).switchChat("Audience with the King and Queen","What other aid should the crown grant you?",

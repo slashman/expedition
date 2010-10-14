@@ -51,7 +51,7 @@ public class NPC extends AwareActor implements Cloneable{
 			out: while (true){
 				int choice = (UserInterface.getUI()).switchChat(unit.getDescription(),"Hello, friend Cristobal... how may I assist you?", 
 						"What should I do next?", //how much wood and colonists you'll need when you get there
-						"Do you have any advise for the voyage?", //how much water and food you'll need to cross the ocean, aid on sailing
+						"Do you have any advice for the voyage?", //how much water and food you'll need to cross the ocean, aid on sailing
 						"What about the crew?", //aid on units 
 						"What if I meet resistance?", //Tell them about combat and suggest how many soldiers they need.
 						"Thank you, friend!" 
@@ -61,20 +61,20 @@ public class NPC extends AwareActor implements Cloneable{
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
 						m("You should establish a strong presence for Spain in the lands you have discovered!");
 					} else {
-						m("The crown is looking forward to gain a competitive edge against the portuguese navigators, whom have discovered the african path to the Indias.");
+						m("The crown is looking forward to gain a competitive edge against the Portuguese navigators, whom have discovered the African path to the Indias.");
 						m("You should now sail westward... if your calculations are right, you will find the Indias about 1200 nautical miles into the Atlantic Ocean");
 						m("You may want to take some trading merchandise with you, but remember this is just an exploratory voyage, it is of more importance to lay the foundations for a trading outpost.");
 					}
-					m("Remember you need at least 200 wood to found an oustanding settlement. You can obtain wood by chopping or buying from the Supplies store. ");
+					m("Remember you need at least 200 wood to found an outstanding settlement. You can obtain wood by chopping or buying from the Supplies store. ");
 					m("Once you build a settlement, you can leave people inhabiting it and they will look out for their own survival, so you can use settlements as exploration bases.");
 					m("A settlement may host 40 people when created, but you can continue expanding it with more buildings if you want to push its growth forward.");
 					break;
 				case 1:
-					m("My friend... how can I give advise on sailing the seas to a great navigator such as you! You have been on board since you were a child!");
+					m("My friend... how can I give advice on sailing the seas to a great navigator such as you! You have been on board since you were a child!");
 					m("As you say yourself, it is all matter of pointing your ships to your destination and letting wind run behind you, but sometimes wind just will not travel with you...");
 					m("And that's where the ships' crew has work to do! a well trained crew can sail even against the wind, but it will take them much longer, and time is precious on the sea.");
 					m("Your ships will sail much faster if you have a full crew for each one (1 captain and 25 sailors), and if they are in good shape (integrity higher than 3/4).");
-					m("Our navigators have discovered strong soutwestern winds on the recently conquered Canary Islands, southwest of Palos. That may be a good spot for your voyage to start.");
+					m("Our navigators have discovered strong southwestern winds on the recently conquered Canary Islands, southwest of Palos. That may be a good spot for your voyage to start.");
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
 						m("By your reckoning, the voyage will take about three months. Remember to check out your \"Food Days\" calculations before departing");
 					} else {
@@ -85,18 +85,18 @@ public class NPC extends AwareActor implements Cloneable{
 					m("You can forage for fruits on the wilderness or fish on shallow waters, but it's better to keep your expedition stocked");
 					break;
 				case 2:
-					m("Your expedition is made up of men of different skills, it is important to know the role of each one in order to have a sucessful journey.");
+					m("Your expedition is made up of men of different skills, it is important to know the role of each one in order to have a successful journey.");
 					m("First off, the sailing crew. It is conformed of Sailors and Captains.");
 					m("Sailors are weak in combat but you need 25 of them for each ship to achieve decent speed on adverse winds. Sailors can only use basic weapons (Lances and Maces, for instance)");
-					m("Captains can use stronger weapons and armor (Harquebuses and Swords, and Breastplates or Studded Leather). You need one per ship to complete the crew.");
+					m("Captains can use stronger weapons and armor (Harquebus and Swords, and Breastplates or Studded Leather). You need one per ship to complete the crew.");
 					m("Rogues can make part of your expedition, they are survival wolves and will gladly take part of your adventure. They are stronger than sailors and can use swords.");
 					m("Marines and Soldiers are specialized and strong warriors which are trained to fight under harsh conditions. They are the strongest men you can have on board.");
-					m("Marines can handle and prefer ranged weapons like crossbows and harquebuses, but they can't wear breastplate. They can also wear swords in addition to basic weapons.");
-					m("Soldiers, on the other hand, prefer to use the sword and can wear breastplate, making them valuable in the combat field. They can also use harquebuses");
+					m("Marines can handle and prefer ranged weapons like crossbows and harquebus, but they can't wear breastplate. They can also wear swords in addition to basic weapons.");
+					m("Soldiers, on the other hand, prefer to use the sword and can wear breastplate, making them valuable in the combat field. They can also use harquebus");
 					m("Archers are light warriors trained on the use of the bow, which may be valuable in the wilderness. They can wear basic armor and crossbows too.");
 					m("Explorers are weak but indispensable in your journey; they extend the field of view of your expedition, and that may save your life. They can only wear basic weapons");
 					m("Carpenters specialize on fixing your ships, they make much better use of wood, and having a healthy ship greatly increases your chances of success");
-					m("Finally, you can also bring colonists with you, they are people willing to strenghten the presence of the crown in foreign lands.");
+					m("Finally, you can also bring colonists with you, they are people willing to strengthen the presence of the crown in foreign lands.");
 					break;
 				case 3:
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
@@ -105,11 +105,11 @@ public class NPC extends AwareActor implements Cloneable{
 						m("You don't know what awaits you in your voyage, but it's better to be prepared for the worst..");
 					}
 					m("Try to have at least some trained soldiers in your ships and buy them weapons and armor. and remember to 'a'rm your expedition when its time to combat.");
-					m("Combat is divided on assaults: the sixty best equiped men from each expedition will be chosen for the assault, with a maximum of 20 ranged and 20 mounted.");
-					m("An assault is divided into three phases: \"Ranged\", \"Mounted\" and \"Melee\", and you may suffer retailation from the defending party on any phase.");
-					m("Each phase may bring wounded or dead units. Wounded units can not participate on the assault and are taken to the back row.");
+					m("Combat is divided on assaults: the sixty best equipped men from each expedition will be chosen for the assault, with a maximum of 20 ranged and 20 mounted.");
+					m("An assault is divided into three phases: \"Ranged\", \"Mounted\" and \"Melee\", and you may suffer retaliation from the defending party on any phase.");
+					m("Each phase may bring wounded or dead units. Wounded units cannot participate on the assault and are taken to the back row.");
 					m("Units with ranged equipment and mounted units can participate more than once on battle, during the Ranged and Mounted phases.");
-					m("Chosing when to fight and when to retreat may save your life!");
+					m("Choosing when to fight and when to retreat may save your life!");
 					break;
 				case 4:
 					m("May God be with you!");
