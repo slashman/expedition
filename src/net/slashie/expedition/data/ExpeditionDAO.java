@@ -41,10 +41,10 @@ public class ExpeditionDAO {
 		
 		Store goodsStore = new Store();
 		goodsStore.setOwnerName("Goods Store");
-		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", FOOD_PACK, "half-tonnels"));
-		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", LIQUID_PACK, "tonnels"));
-		goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", FOOD_PACK, "half-tonnels"));
-		goodsStore.addItem(500, new StoreItemInfo("RUM", LIQUID_PACK, "tonnels"));
+		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", FOOD_PACK, "half-barrels"));
+		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", LIQUID_PACK, "barrels"));
+		goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", FOOD_PACK, "half-barrels"));
+		goodsStore.addItem(500, new StoreItemInfo("RUM", LIQUID_PACK, "barrels"));
 		goodsStore.addItem(10000, new StoreItemInfo("WOOD", WOOD_PACK, "packs"));
 		
 		//Weapons Store
@@ -504,9 +504,9 @@ public class ExpeditionDAO {
 			new Weapon("STEEL_SWORD", "Steel Sword", "Steel Swords", "Strong weapon [Marine, Soldier, Captain, Rogue]", new Roll("2D3"), new Roll("1D1"), false, 90, false, 10, 10, 50),
 			new Weapon("COMPOSITE_BOW", "Longbow", "Longbows", "Cheap ranged weapon [Archer]", new Roll("1D3"), new Roll("0"), false, 80, true, 5, 6, 20),
 			new Weapon("WOODEN_CROSSBOW", "Crossbow", "Crossbows", "Simple ranged weapon [Marine, Archer]", new Roll("2D2"), new Roll("0"), true, 95, true, 10, 25, 50),
-			new Weapon("HARQUEBUS", "Harquebus", "Harquebuses", "Strong ranged weapon [Marine, Soldier, Captain]", new Roll("3D2"), new Roll("0"), true, 70, true, 10, 30, 50),
+			new Weapon("HARQUEBUS", "Harquebus", "Harquebus", "Strong ranged weapon [Marine, Soldier, Captain]", new Roll("3D2"), new Roll("0"), true, 70, true, 10, 30, 50),
 			
-			new Weapon("PLUMED_BOW", "Plumed Bow", "Plummed Bows", "Spiritual Bows [Quetzal Archer]", new Roll("1D4"), new Roll("0"), true, 95, true, 5, 20, 10),
+			new Weapon("PLUMED_BOW", "Plumed Bow", "Plumed Bows", "Spiritual Bows [Quetzal Archer]", new Roll("1D4"), new Roll("0"), true, 95, true, 5, 20, 10),
 			new Weapon("SIMPLE_BOW", "Simple Bow", "Simple Bows", "Simple Wooden Bow [Archer, Native Archer, Quetzal Archer]", new Roll("1D2"), new Roll("0"), true, 80, true, 3, 3, 5),
 			new Weapon("OBSIDIAN_SWORD", "Obsidian Sword", "Obsidian Swords", "Polished stone sword [Eagle Warrior, Jaguar Warrior]",new Roll("2D2"), new Roll("1D1"), false, 90, false, 15, 50, 100),
 			new Weapon("WOODEN_MACE", "Wooden Mace", "Wooden Maces", "Simple wooden mace [All classes]", new Roll("1D1"), new Roll("0"), false, 70, false, 10, 3, 10),
