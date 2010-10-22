@@ -1,8 +1,12 @@
 package net.slashie.expedition.town;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class Building implements Cloneable, Serializable{
+	public enum SpecialCapability {
+		FORAGED_FOOD_STORAGE
+	}
 	private String id;
 	private String description;
 	private String longDescription;
@@ -10,10 +14,10 @@ public class Building implements Cloneable, Serializable{
 	private int buildTimeCost;
 	private int populationCapacity;
 	private int minBuildDays;
-
+	private Map<SpecialCapability, Object> specialCapabilities;
 
 	public Building(String id, String description, String longDescription, int woodCost,
-			int buildTimeCost, int populationCapacity, int minBuildDays) {
+			int buildTimeCost, int populationCapacity, int minBuildDays, Map<SpecialCapability, Object> specialCapabilities) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -22,6 +26,7 @@ public class Building implements Cloneable, Serializable{
 		this.buildTimeCost = buildTimeCost;
 		this.populationCapacity = populationCapacity;
 		this.minBuildDays = minBuildDays;
+		this.specialCapabilities = specialCapabilities;
 	}
 	public String getDescription() {
 		return description;
@@ -50,6 +55,7 @@ public class Building implements Cloneable, Serializable{
 		return longDescription;
 	}
 
-
-	
+	public Object getSpecialCapability(SpecialCapability capabilityId){
+		return specialCapabilities.get(capabilityId);
+	}
 }

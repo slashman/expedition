@@ -43,7 +43,7 @@ public class WorldGenerator {
 			for (Pair<Position,Culture> cultureCenter: cultureCenters){
 				int numberOfSettlements = 0;
 				int range = 15;
-				numberOfSettlements = Util.rand(2, 4);
+				numberOfSettlements = Util.rand(3, 6);
 				int fussible = 0;
 				for (int i = 0; i < numberOfSettlements; i++){
 					Position settlementPosition = new Position(

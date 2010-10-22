@@ -16,6 +16,7 @@ import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.ai.SimpleAI;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
@@ -294,36 +295,56 @@ public class NativeTown extends Town{
 			break;
 		case 1:
 			if (nativeTown.wantsToTradeWith(expedition)){
-				int goodTypeChoice = UserInterface.getUI().switchChat("Trading with "+nativeTown.getDescription(),"What goods are you looking for?", GoodType.getChoicesList());
-				GoodType goodType = GoodType.fromChoice(goodTypeChoice);
-				if (goodType == null){
-					//Cancelled
+				int actionChoice = UserInterface.getUI().switchChat("Trading with "+nativeTown.getDescription(),"What do you want to do?", 
+					"Ask the "+nativeTown.getCulture().getName()+" what they want", "Trade goods");
+				switch (actionChoice){
+				case 0:
+					List<GoodType> mostValued = getCulture().getMostValuedGoodTypes();
+					if (mostValued.size() == 0){
+						
+					} else {
+						String interestedString = "We are mostly interested in ";
+						List<String> strings = new ArrayList<String>();
+						for (GoodType goodType: mostValued){
+							strings.add(goodType.getDescription());
+						}
+						interestedString += EnglishGrammar.stringList(strings);
+						showBlockingMessage(interestedString);
+					}
 					break;
-				}
-				if (nativeTown.canTradeGoodType(goodType)){
-					List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer");
-					if (offer == null){
+				case 1:
+					int goodTypeChoice = UserInterface.getUI().switchChat("Trading with "+nativeTown.getDescription(),"What goods are you looking for?", GoodType.getChoicesList());
+					GoodType goodType = GoodType.fromChoice(goodTypeChoice);
+					if (goodType == null){
 						//Cancelled
 						break;
 					}
-					if (UserInterface.getUI().promptChat("Are you sure?")){
-						List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
-						if (townOffer == null || townOffer.size() == 0){
-							showBlockingMessage("We can offer you nothing for that.");
-						} else {
-							if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it? [Y/N]")){
-								expedition.reduceAllItems(offer);
-								expedition.addAllItems(townOffer);
-								nativeTown.reduceAllItems(townOffer);
-								nativeTown.addAllItems(offer);
-								showBlockingMessage("Thank you, friend..");
+					if (nativeTown.canTradeGoodType(goodType)){
+						List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer");
+						if (offer == null){
+							//Cancelled
+							break;
+						}
+						if (UserInterface.getUI().promptChat("Are you sure?")){
+							List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
+							if (townOffer == null || townOffer.size() == 0){
+								showBlockingMessage("We can offer you nothing for that.");
 							} else {
-								showBlockingMessage("Some other time then..");
+								if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it? [Y/N]")){
+									expedition.reduceAllItems(offer);
+									expedition.addAllItems(townOffer);
+									nativeTown.reduceAllItems(townOffer);
+									nativeTown.addAllItems(offer);
+									showBlockingMessage("Thank you, friend..");
+								} else {
+									showBlockingMessage("Some other time then..");
+								}
 							}
 						}
+					} else {
+						showBlockingMessage("We have no "+goodType.getDescription()+" to trade.");
 					}
-				} else {
-					showBlockingMessage("We have no "+goodType.getDescription()+" to trade.");
+					break;
 				}
 			} else {
 				showBlockingMessage("The "+nativeTown.getDescription()+" refuses to trade with you.");

@@ -70,6 +70,7 @@ public class GFXAppearances {
 				createAppearance("PLAINS", 4 ,3),
 				createAppearance("WATER", 1 ,1),
 				createAppearance("WATER2", 3 ,1),
+				createAppearance("WATER_SHADOW", 4 ,20),
 				createAppearance("MOUNTAIN", 5 ,17),
 				createAppearance("SNOWY_MOUNTAIN", 6 ,17),
 				createAppearance("FOREST", 2 ,17),
@@ -137,9 +138,9 @@ public class GFXAppearances {
 				createAppearance("NATIVE_ARCHER", 3 ,11),
 				createAppearance("NATIVE_COMMONER", 3 ,19),
 				createAppearance("NATIVE_SHAMAN", 3 ,11),
-				createAppearance("QUETZAL_ARCHER", 3 ,11),
-				createAppearance("EAGLE_WARRIOR", 2 ,11),
-				createAppearance("JAGUAR_WARRIOR", 2 ,11),
+				createAppearance("QUETZAL_ARCHER", 8 ,19),
+				createAppearance("EAGLE_WARRIOR", 9 ,19),
+				createAppearance("JAGUAR_WARRIOR", 10 ,19),
 
 				createAppearance("BOOKSHELF_L", 1, 20),
 				createAppearance("BOOKSHELF", 2, 20),
@@ -151,23 +152,24 @@ public class GFXAppearances {
 				createAppearance("MERCHANT", 4 ,6),
 				createAppearance("GUILD", 5 ,6),
 				
-				createAppearance("BISCUIT", 4 ,7),
-				createAppearance("FRUIT", 4 ,7),
-				createAppearance("BREAD", 4 ,7),
+				createAppearance("BISCUIT", 6 ,8),
+				createAppearance("FRUIT", 7 ,7),
+				createAppearance("BREAD", 7 ,7),
 				createAppearance("DRIED_MEAT", 4 ,7),
 
-				createAppearance("RUM", 6 ,8),
-				createAppearance("WOOD", 7 ,8),
+				createAppearance("RUM", 5 ,8),
+				createAppearance("WOOD", 4 ,24),
 				createAppearance("FRESHWATER", 8 ,7),
 				createAppearance("SAUERKRAUT", 9 ,7),
 				createAppearance("DEAD_NATIVE", 4 ,12),
 				createAppearance("NATIVE_ARTIFACTS", 4 ,8),
 				
-				createAppearance("BEANS", 6 ,7),
+				createAppearance("BEANS", 1 ,24),
 				createAppearance("MAIZE", 6 ,7),
-				createAppearance("POTATOES", 6 ,7),
-				createAppearance("TOMATOES", 6 ,7),
-				createAppearance("FISH", 6 ,7),
+				createAppearance("WHEAT", 5 ,24),
+				createAppearance("POTATOES", 2 ,24),
+				createAppearance("TOMATOES", 3 ,24),
+				createAppearance("FISH", 1 ,22),
 
 				
 				createAppearance("COTTON", 4 ,8),
@@ -193,16 +195,20 @@ public class GFXAppearances {
 				createAppearance("STUDDED_VEST", 7 ,9),
 				createAppearance("BREASTPLATE", 8 ,9),
 				
-				createAppearance("PLUMED_BOW", 3 ,17),
-				createAppearance("SIMPLE_BOW", 3 ,17),
-				createAppearance("OBSIDIAN_SWORD", 2 ,9),
-				createAppearance("WOODEN_MACE", 1 ,9),
+				createAppearance("PLUMED_BOW", 2 ,23),
+				createAppearance("SIMPLE_BOW", 1 ,23),
+				createAppearance("OBSIDIAN_SWORD", 4 ,23),
+				createAppearance("WOODEN_MACE", 3 ,23),
 
 				
 				createAppearance("CARRACK", 5 ,5),
 				createAppearance("CARAVEL", 1 ,5),
 
-				
+				createAppearance("ATTACK_DOG", 1 ,21),
+				createAppearance("COW", 2 ,21),
+				createAppearance("HORSE", 3 ,21),
+				createAppearance("PIGS", 4 ,21),
+				createAppearance("LLAMA", 5 ,21),
 			};
 	}
 

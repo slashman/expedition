@@ -315,7 +315,6 @@ public class RunExpedition {
 		Action resetReckon = new ResetDeadReckon();
 		Action repairShips = new RepairShips();
 		Action chopWoods = new ChopWoods();
-		Action forageFood = new ForageFood();
 
 		keyBindings = new Properties();
 		keyBindings.put("DONOTHING1_KEY", readKeyString(keyConfig, "doNothing"));
@@ -345,8 +344,6 @@ public class RunExpedition {
 		keyBindings.put("RESET_RECKON_KEY", readKeyString(keyConfig, "reset"));
 		keyBindings.put("REPAIR_SHIPS_KEY", readKeyString(keyConfig, "repair"));
 		keyBindings.put("CHOP_WOODS_KEY", readKeyString(keyConfig, "chopWoods"));
-		keyBindings.put("FORAGE_FOOD_KEY", readKeyString(keyConfig, "forageFood"));
-
 		
 		keyBindings.put("QUIT_KEY", readKeyString(keyConfig, "PROMPTQUIT"));
 		keyBindings.put("HELP1_KEY", readKeyString(keyConfig, "HELP1"));
@@ -363,8 +360,6 @@ public class RunExpedition {
 			    new UserAction(resetReckon, i(keyBindings.getProperty("RESET_RECKON_KEY"))),
 			    new UserAction(repairShips, i(keyBindings.getProperty("REPAIR_SHIPS_KEY"))),
 			    new UserAction(chopWoods, i(keyBindings.getProperty("CHOP_WOODS_KEY"))),
-			    new UserAction(forageFood, i(keyBindings.getProperty("FORAGE_FOOD_KEY"))),
-
 			};
 		
 		UserCommand[] userCommands = new UserCommand[]{

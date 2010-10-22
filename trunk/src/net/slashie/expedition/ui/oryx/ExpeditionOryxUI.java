@@ -79,9 +79,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public void showInventory() {
 		Equipment.eqMode = true;
-		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
    		menuBox.setItemsPerPage(12);
-  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Expedition Inventory [Space to exit]");
   		si.saveBuffer();
   		int typeChoice = 0;
@@ -234,7 +234,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		//Item.shopMode = true;
    		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
   		menuBox.setItemsPerPage(12);
-  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setBounds(16, 16, 768,480);
   		int fontSize = si.getGraphics2D().getFont().getSize();
   		
   		Vector menuItems = new Vector();
@@ -302,18 +302,16 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	 				getExpedition().addItemOffshore((ExpeditionItem) choice.getItem(), quantity);
 	 				choice.reduceQuantity(buyQuantity);
 	 				prompt = "Thank you! Do you need anything else?";
-					refresh();
+					//refresh();
 			 	} else {
 			 		prompt = "You can't afford it! Do you need anything else?";
 			 	}
 			else {
 				prompt = "Ok, do you need anything else?";
 			}
-	 		//menuBox.draw();
 		}
 		Equipment.eqMode = false;
-		//Item.shopMode = false;
-		//si.restore();
+
 	}
 
 	public void showBlockingMessage(String message) {
@@ -333,9 +331,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
     	
    		Equipment.eqMode = true;
    		clearTextBox();
-   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
    		menuBox.setItemsPerPage(12);
-  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Transfer from "+cache.getDescription()+" [Space to exit]");
   		menuBox.setLegend("Select the units or equipment");
   		int typeChoice = 0;
@@ -443,8 +441,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			menuBox.setLegend(choice.getItem().getDescription()+" transfered. [Press Space]");
 			menuBox.draw();
 			si.waitKey(CharKey.SPACE);
-			refresh();
-	 		//menuBox.getSelection();
+			//refresh();
   		}
   		
  		if (cache.destroyOnEmpty() && cache.getItems().size() == 0)
@@ -458,9 +455,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void transferFromExpedition(GoodsCache ship, int minUnits) {
    		Equipment.eqMode = true;
    		clearTextBox();
-   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
    		menuBox.setItemsPerPage(12);
-  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Transfer to "+ship.getDescription()+" [Space to exit]");
   		menuBox.setLegend("Select the units to remove from the expedition");
   		int typeChoice = 0;
@@ -581,7 +578,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			menuBox.setLegend(choice.getItem().getDescription()+" transfered into the "+ship.getDescription()+" [Press Space]");
 			menuBox.draw();
 			si.waitKey(CharKey.SPACE);
-			refresh();
+			//refresh();
   		}
   		
 		Equipment.eqMode = false;
@@ -633,7 +630,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		
 		// Box 2
-		si.print(2, 5, statsExpedition.getOffshoreFoodDays()+" food days "+TemperatureRules.getTemperatureFoodModifierString(getExpedition().getLocation().getTemperature()));
+		si.print(2, 5, statsExpedition.getOffshoreFoodDays()+" food days "+
+				TemperatureRules.getTemperatureFoodModifierString(getExpedition().getLocation().getTemperature())
+				+ (statsExpedition.isForaging() ? " (foraging)" : "")
+		);
 		if (getExpedition().getLevel() instanceof ExpeditionMicroLevel)
 			si.print(2, 6, "Carrying "+statsExpedition.getOffshoreCurrentlyCarrying()+"%");
 		else
@@ -819,7 +819,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Equipment.eqMode = true;
 		clearTextBox();
 
-   		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		BorderedMenuBox cacheBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
    		cacheBox.setItemsPerPage(12);
    		cacheBox.setBounds(160, 16, 624,480);
   		
@@ -849,9 +849,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			expeditionGoodsMap.put(goodType, getExpedition().getGoods(goodType, true));
 		}
 			
-   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
    		menuBox.setItemsPerPage(12);
-  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle(prompt+" [Space to exit]");
   		menuBox.setLegend(prompt);
   		int typeChoice = 0;
@@ -954,9 +954,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		for (Building building: knownBuildings){
 			buildingMenuItems.add(new BuildingGFXMenuItem(building));
 		}
-		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
+		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
    		menuBox.setItemsPerPage(12);
-  		menuBox.setBounds(160, 16, 624,480);
+  		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Building Plan [Space to exit]");
   		menuBox.setLegend("");
   		menuBox.setMenuItems(buildingMenuItems);

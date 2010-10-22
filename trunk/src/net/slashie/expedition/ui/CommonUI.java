@@ -11,6 +11,7 @@ import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.NativeTown;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Town;
@@ -22,28 +23,34 @@ import net.slashie.util.Pair;
 public class CommonUI {
 	public static String getMenuCacheDescription(Equipment item, Expedition expedition, GoodsCache cache){
 		String itemDescription = ((ExpeditionItem)item.getItem()).getFullDescription();
+		itemDescription += " <";
 		int inventory = item.getQuantity();
 		int stock = 0;
 		if (expedition != null){
+			int current = expedition.getItemCountBasic(item.getItem().getFullID());
+			if (current > 0){
+				itemDescription += " On Expedition: "+current;
+			}
 			if (((ExpeditionItem)item.getItem()).getGoodType() != GoodType.PEOPLE){ 
 				stock = expedition.getCarryable((ExpeditionItem)item.getItem());
 				if (stock < inventory)
-					return itemDescription + " (Max "+stock+") {Available "+inventory+"}";
-				else
-					return itemDescription + " {Available "+inventory+"}";
-			} else {
-				return itemDescription + " {Available "+inventory+"}";
+					itemDescription += " Max: "+stock;
 			}
+			itemDescription += " Available: "+inventory+" >";
+			return itemDescription;
 		} else {
+			int current = cache.getItemCountBasic(item.getItem().getFullID());
 			stock = cache.getCarryable((ExpeditionItem)item.getItem());
-			if (stock == -1)
-				return itemDescription + " {On Expedition "+inventory+"}";
-			else {
-				if (stock < inventory)
-					return itemDescription + " (Max "+stock+") {On Expedition "+inventory+"}";
-				else
-					return itemDescription + " {On Expedition "+inventory+"}";
+			itemDescription += " On Expedition: "+inventory;
+			if (current > 0){
+				itemDescription += " On "+cache.getDescription()+": "+current;
 			}
+			if (stock != -1){
+				if (stock < inventory)
+					itemDescription += " Max: "+stock;
+			}
+			itemDescription += " >";
+			return itemDescription;
 		}
 	}
 	
@@ -51,34 +58,35 @@ public class CommonUI {
 		String itemDescription = item.getItem().getDescription();
 		int inventory = item.getQuantity();
 		int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
+		int current = offShore.getItemCountBasic(item.getItem().getFullID());
 		StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
 		if (item.getItem() instanceof ExpeditionUnit){
 			if (stock < 0)
 				stock = 0;
 			if (itemInfo.getPack() > 1){
 				if (stock < inventory)
-					return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
+					return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
 				else
-					return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ {"+inventory+" Available}";
+					return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
 			} else {
 				if (stock < inventory)
-					return itemDescription + ", "+itemInfo.getPrice()+"$ (max "+stock+") {"+inventory+" Available}";
+					return itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
 				else
-					return itemDescription + ", "+itemInfo.getPrice()+"$ {"+inventory+" Available}";
+					return itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
 			}
 		} else {
 			if (stock < 0)
 				stock = 0;
 			if (itemInfo.getPack() > 1){
 				if (stock < inventory)
-					return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
+					return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
 				else
-					return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ {Stock:"+inventory+"}";
+					return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
 			} else {
 				if (stock < inventory)
-					return itemDescription + " for "+itemInfo.getPrice()+"$ (max "+stock+") {Stock:"+inventory+"}";
+					return itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
 				else
-					return itemDescription + " for "+itemInfo.getPrice()+"$ {Stock:"+inventory+"}";
+					return itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
 			}
 		}
 	}
@@ -186,6 +194,20 @@ public class CommonUI {
 
 	public static String getTownDescription(Town town) {
 		String townInfo = town.getName()+" XXX ";
+		if (town instanceof NativeTown){
+			NativeTown nativeTown = (NativeTown) town;
+			townInfo += "Disposition: ";
+			if (nativeTown.isUnfriendly()){
+				townInfo += "Hostile ";
+			} else {
+				townInfo += "Friendly ";
+			}
+			if (nativeTown.getScaredLevel()>0){
+				townInfo += "Afraid ";
+			}
+			townInfo += " XXX ";
+		}
+		
 		if (town.getFoundedIn() != null){
 			townInfo += "Founded on "+ DateFormat.getDateInstance(DateFormat.MEDIUM).format(town.getFoundedIn())+" by "+town.getFounderExpedition().getExpeditionaryTitle()+" XXX ";
 		}

@@ -12,7 +12,7 @@ import net.slashie.serf.action.Actor;
 
 public class DayShiftAgent extends Actor{
 
-	public static final int TICKS_PER_DAY = 200;
+	public static final int TICKS_PER_DAY = 275;
 	
 	protected static final Action BEAT = new Action() {
 

@@ -102,25 +102,14 @@ public class Walk extends Action{
         }
 		return true;
 	}
-
 	
 	@Override
 	public void execute() {
 		actionCancelled = false;
 		Expedition expedition = (Expedition) performer;
-		if (targetDirection == Action.SELF){
-			try {
-				expedition.landOn(expedition.getPosition());
-			} catch (ActionCancelException e) {
-				
-			}
-			return;
-		}
-		Position var = directionToVariation(targetDirection);
-        
 		
-
-        
+		Position var = directionToVariation(targetDirection);
+                
 		if (expedition.getMovementMode() == MovementMode.SHIP){
 			boolean stalled = false;
 			//Don't walk, sail instead!
@@ -144,7 +133,15 @@ public class Walk extends Action{
 			} else {
 				var = expedition.getHeading().getVectors();
 			}
-			
+		} else {
+			if (targetDirection == Action.SELF){
+				try {
+					expedition.landOn(expedition.getPosition());
+				} catch (ActionCancelException e) {
+					
+				}
+				return;
+			}
 		}
 		Position destinationPoint = Position.add(performer.getPosition(), var);
 
@@ -175,20 +172,6 @@ public class Walk extends Action{
         //UserInterface.getUI().addMessage(new Message("Your expedition travels "+directionDescriptions[targetDirection], performer.getPosition()));
 	}
 	
-	private String[] directionDescriptions = new String[]{
-		"north",
-		"south",
-		"west",
-		"east",
-		"northeast",
-		"northwest",
-		"southeast",
-		"southwest",
-		"nowhere"
-	};
-			
-
-
 	@Override
 	public String getID() {
 		return "WALK";

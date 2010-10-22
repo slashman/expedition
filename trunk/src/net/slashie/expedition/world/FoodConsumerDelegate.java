@@ -52,12 +52,12 @@ public class FoodConsumerDelegate implements Serializable{
 			//Reduce expedition resistance
 			starveResistance --;
 			if (starveResistance <= 0){
-				int unitsToKill = (int)Math.ceil((double) foodConsumer.getTotalUnits()*(double)Util.rand(5, 40)/100.0d);
+				int unitsToKill = (int)Math.ceil((double) foodConsumer.getTotalUnits()*(double)Util.rand(5, 20)/100.0d);
 				if (unitsToKill > 0)
 					foodConsumer.killUnits(unitsToKill);
 			}
 		} else {
-			if (starveResistance < 5)
+			if (starveResistance < 7)
 				starveResistance++;
 		}
 	}
