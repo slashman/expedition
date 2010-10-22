@@ -1,6 +1,6 @@
 package net.slashie.expedition.action;
 
-import java.util.List;
+
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
@@ -16,24 +16,7 @@ public class ForageFood extends Action{
 	@Override
 	public void execute() {
 		Expedition expedition = (Expedition) performer;
-		
-		ExpeditionMacroLevel level = (ExpeditionMacroLevel)  expedition.getLocation();
-		
-		OverworldExpeditionCell cell = (OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition());
-		if (Util.chance(cell.getForageChance())){
-			String food = "";
-			if (cell.isRiver()){
-				level.addMessage("You get some fish.");
-				food = "FISH";
-			} else {
-				level.addMessage("You forage some fruits.");
-				food = "FRUIT";
-			}
-			ExpeditionItem foodSample = ItemFactory.createItem(food);
-			expedition.addItem(foodSample, cell.getForageQuantity());
-		} else {
-			level.addMessage("You find nothing.");
-		}
+		expedition.forageFood();
 	}
 	
 	private String invalidationMessage;
@@ -43,6 +26,9 @@ public class ForageFood extends Action{
 		if (!(performer.getLevel() instanceof ExpeditionMacroLevel)){
 			invalidationMessage = "You can't forage here";
 			return false;
+		}
+		if (!((Expedition)a).forageFood()){
+			a.getLevel().addMessage("You find nothing");
 		}
 		return true;
 	}

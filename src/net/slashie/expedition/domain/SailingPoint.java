@@ -13,7 +13,7 @@ public enum SailingPoint {
 	RUNNING_STORM ("Surfing",MovementSpeed.NORMAL),
 	
 	NONE ("None"),
-	STALLED ("Stalled");
+	STALLED ("Becalmed");
 	
 	private String name;
 	private Integer from, to;

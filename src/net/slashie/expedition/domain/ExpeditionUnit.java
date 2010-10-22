@@ -303,7 +303,10 @@ public class ExpeditionUnit extends Vehicle{
 		return new Pair<String, Integer>(unitsString, unitCount);
 	}
 
-	
+	@Override
+	public String getBaseID() {
+		return getBasicId();
+	}
 }
 
 	

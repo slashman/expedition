@@ -9,12 +9,14 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
+import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.world.agents.DayShiftAgent;
+import net.slashie.expedition.world.agents.ForageAgent;
+import net.slashie.expedition.world.agents.WeeklyAgent;
 import net.slashie.expedition.world.agents.WindAgent;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.Appearance;
@@ -25,6 +27,8 @@ import net.slashie.utils.Util;
 public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	private Actor currentWindAgent;
 	private Actor currentDayShiftAgent;
+	private Actor currentForageAgent;
+	private Actor currentWeeklyAgent;
 
 	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
 			int levelHeight, int gridWidth, int gridHeight,
@@ -33,8 +37,12 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				startPosition);
 		currentWindAgent = new WindAgent();
 		currentDayShiftAgent = new DayShiftAgent();
+		currentForageAgent = new ForageAgent();
+		currentWeeklyAgent = new WeeklyAgent();
 		addActor(currentWindAgent);
 		addActor(currentDayShiftAgent);
+		addActor(currentForageAgent);
+		addActor(currentWeeklyAgent);
 	}
 
 	private Pair<Integer,Integer> handyReusablePair = new Pair<Integer, Integer>(0,0);
@@ -390,6 +398,42 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return false;
 	}
 
+	AbstractFeature shadowFeature = new AbstractFeature(){
+		{
+			setAppearanceId("WATER_SHADOW");
+		}
+		
+		@Override
+		public String getClassifierID() {
+			return "WaterShadow";
+		}
+
+		@Override
+		public String getDescription() {
+			return "Sea Wind Shadow";
+		}
+		
+		@Override
+		public Appearance getAppearance() {
+			return super.getAppearance();
+		}
+		
+		@Override
+		public boolean isInvisible() {
+			return false;
+		}
+		
+		@Override
+		public boolean isVisible() {
+			return true;
+		}
+		
+		@Override
+		public boolean isOpaque() {
+			return false;
+		}
+	};
+	
 	AbstractFeature stormletFeature = new StormletFeature();
 	@Override
 	@Deprecated
@@ -411,6 +455,18 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}else if (ret != null){
 			if (ret.contains(stormletFeature)){
 				ret.remove(stormletFeature);
+			}
+		}
+		
+		// Ship shadow
+		OverworldExpeditionCell cell = (OverworldExpeditionCell) getMapCell(p);
+		if (ret == null && cell.isSea() && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
+			// Get cell to the wind shadow
+			Position var = getWindDirection().getVectors();
+			if (p.equals(Position.add(getExpedition().getPosition(), var))){
+				if (ret == null)
+					ret = new ArrayList<AbstractFeature>();
+				ret.add(shadowFeature);
 			}
 		}
 		return ret;

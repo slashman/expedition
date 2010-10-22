@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -467,6 +468,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	}
 	
 	public int getFoodDays(){
+		if (getTotalUnits() == 0){
+			return 10;
+		}
 		if (getDailyFoodConsumption() == 0){
 			return 0;
 		}
@@ -478,6 +482,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	 * @return
 	 */
 	public int getProjectedFoodDays(){
+		if (getTotalUnits() == 0){
+			return 10;
+		}
 		return (int)Math.round((double)getCurrentFood()/(double)foodConsumerDelegate.getDailyFoodConsumption());
 	}
 	
@@ -749,6 +756,17 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
 			if (equipment.getItem().getFullID().equals(itemId)){
+				goodCount += equipment.getQuantity();
+			}
+		}
+		return goodCount;
+	}
+	
+	public int getItemCountBasic(String itemId) {
+		int goodCount = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (((ExpeditionItem)equipment.getItem()).getBaseID().equals(itemId)){
 				goodCount += equipment.getQuantity();
 			}
 		}
@@ -1240,7 +1258,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		for (Equipment equipment: inventory){
 			if (equipment.getItem() instanceof ExpeditionUnit){
 				int multiplier = ((ExpeditionUnit)equipment.getItem()).getBasicId().equals("CARPENTER") ? 2 : 1;
-				power += ((ExpeditionUnit)equipment.getItem()).getPower() * equipment.getQuantity() * multiplier;
+				power += equipment.getQuantity() * multiplier;
 			}
 		}
 		return power;
@@ -1283,5 +1301,52 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				break;
 			}
 		}
+	}
+
+	public boolean forageFood() {
+		if (!(getLocation() instanceof ExpeditionMacroLevel)){
+			return false;
+		}
+		ExpeditionMacroLevel level = (ExpeditionMacroLevel)  getLocation();
+		
+		OverworldExpeditionCell cell = (OverworldExpeditionCell) getLevel().getMapCell(getPosition());
+		if (Util.chance(cell.getForageChance())){
+			int quantity = cell.getForageQuantity() ;
+			String food = "";
+			if (cell.isRiver()){
+				if (isForaging()){
+					food = "FISH";
+					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
+					quantity *= multiplier;
+					level.addMessage("You catch "+quantity+" fish.");
+				} else {
+					return false;
+				}
+			} else if (cell.isSea()) {
+				food = "FISH";
+				int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
+				quantity *= multiplier;
+				level.addMessage("You catch "+quantity+" fish.");
+			} else {
+				if (isForaging()){
+					food = "FRUIT";
+					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
+					quantity *= multiplier;
+					level.addMessage("You forage "+quantity+" fruits.");
+				} else {
+					return false;
+				}
+				
+			}
+			ExpeditionItem foodSample = ItemFactory.createItem(food);
+			addItem(foodSample, quantity);
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+	public boolean isForaging() {
+		return getFoodDays() <= 5;
 	}
 }

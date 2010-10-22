@@ -1,6 +1,7 @@
 package net.slashie.expedition.world;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.slashie.expedition.domain.GoodType;
@@ -15,6 +16,7 @@ public class Culture implements Serializable{
 	private List<Pair<Double, String>> classDistribution;
 	private String[] items;
 	private List<Pair<GoodType, Double>> goodTypeValuationModifiers;
+	private List<GoodType> mostValuedGoodTypes = new ArrayList<GoodType>();
 	public List<Pair<GoodType, Double>> getGoodTypeValuationModifiers() {
 		return goodTypeValuationModifiers;
 	}
@@ -37,6 +39,13 @@ public class Culture implements Serializable{
 		this.agricultureModifier = agricultureModifier;
 		this.goodTypeValuationModifiers = goodTypeValuationModifiers;
 		this.items = items;
+		for (Pair<GoodType, Double> goodTypeValuationModifier: goodTypeValuationModifiers){
+			if (goodTypeValuationModifier.getB() > 1.0d){
+				mostValuedGoodTypes.add(goodTypeValuationModifier.getA());
+			}
+		}
+			
+		
 	}
 	
 	public String getCode() {
@@ -78,6 +87,12 @@ public class Culture implements Serializable{
 	public String[] getItems() {
 		return items;
 	}
+
+	public List<GoodType> getMostValuedGoodTypes() {
+		return mostValuedGoodTypes;
+	}
+	
+
 
 		
 }

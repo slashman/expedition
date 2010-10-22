@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.org.apache.xerces.internal.impl.dv.xs.DayDV;
-
 import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
@@ -17,9 +15,10 @@ import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
-import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.town.Building;
+import net.slashie.expedition.town.Farm;
+import net.slashie.expedition.town.Building.SpecialCapability;
 import net.slashie.expedition.world.Culture;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionFeature;
@@ -74,6 +73,9 @@ public class ExpeditionDAO {
 		merchant.addItem(10000, new StoreItemInfo("COTTON"));
 		merchant.addItem(10000, new StoreItemInfo("SUGAR"));
 		merchant.addItem(10000, new StoreItemInfo("CLOTH"));
+		merchant.addItem(200, new StoreItemInfo("COW"));
+		merchant.addItem(200, new StoreItemInfo("HORSE"));
+		merchant.addItem(200, new StoreItemInfo("PIGS"));
 		
 		//Guild
 		Store guild = new Store();
@@ -87,13 +89,13 @@ public class ExpeditionDAO {
 		
 		return new AbstractCell[]{
 			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false, 15, 20, false),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 10, 40, false),
-			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 50, false),
-			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 15, 20, false),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,false, 5, 10, false),
+			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false, 25, 20, false),
+			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 25, 20, false),
+			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 10, false),
+			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 25, 20, false),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,false, 10, 5, false),
 			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,false, 0, 0, false),
-			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 10, 20, true),
+			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 20, 20, true),
 			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0, false),
 			
 			//Inworld Cells
@@ -164,6 +166,7 @@ public class ExpeditionDAO {
 			new CharAppearance("PLAINS", '.', ConsoleSystemInterface.BROWN),
 			new CharAppearance("WATER", '~', ConsoleSystemInterface.DARK_BLUE),
 			new CharAppearance("WATER2", '~', ConsoleSystemInterface.TEAL),
+			new CharAppearance("WATER_SHADOW", '*', ConsoleSystemInterface.TEAL),
 			new CharAppearance("MOUNTAIN", '^', ConsoleSystemInterface.GREEN),
 			new CharAppearance("SNOWY_MOUNTAIN", '^', ConsoleSystemInterface.CYAN),
 			new CharAppearance("FOREST", '&', ConsoleSystemInterface.GREEN),
@@ -263,6 +266,7 @@ public class ExpeditionDAO {
 			new CharAppearance("WHEAT_FOODER", '%', ConsoleSystemInterface.BROWN),
 			new CharAppearance("BEANS", '%', ConsoleSystemInterface.BROWN),
 			new CharAppearance("MAIZE", '%', ConsoleSystemInterface.GREEN),
+			new CharAppearance("WHEAT", '%', ConsoleSystemInterface.YELLOW),
 			new CharAppearance("POTATOES", '%', ConsoleSystemInterface.BROWN),
 			new CharAppearance("TOMATOES", '%', ConsoleSystemInterface.RED),
 			new CharAppearance("FISH", '%', ConsoleSystemInterface.CYAN),
@@ -471,6 +475,7 @@ public class ExpeditionDAO {
 			
 			new Food("BEANS", "Beans", "Beans", "Food Ration", 3, 1, 800,100, FOOD_PACK),
 			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 400,50, FOOD_PACK),
+			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 20,40, FOOD_PACK),
 			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 3, 1, 800,200, FOOD_PACK),
 			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 3, 1, 800,200, FOOD_PACK),
 			new Food("FISH", "Fish", "Fish", "Food Ration", 3, 1, 100, 200, FOOD_PACK),
@@ -580,13 +585,28 @@ public class ExpeditionDAO {
 		
 	}
 
+	private final static Map<SpecialCapability, Object> NO_CAPABILITIES = new HashMap<SpecialCapability, Object>();
+	private final static Map<SpecialCapability, Object> PLAZA_CAPABILITIES = new HashMap<SpecialCapability, Object>();
+	static {
+		PLAZA_CAPABILITIES.put(SpecialCapability.FORAGED_FOOD_STORAGE, 50);
+	}
+	private final static Map<SpecialCapability, Object> STORAGE_CAPABILITIES = new HashMap<SpecialCapability, Object>();
+	static {
+		STORAGE_CAPABILITIES.put(SpecialCapability.FORAGED_FOOD_STORAGE, 300);
+	}
+	
 	private static Building[] buildings = new Building[]{
-		new Building("PLAZA", "Plaza", "Center of community life for the settlement", 40, DayShiftAgent.TICKS_PER_DAY * 40, 0, 14),
-		new Building("HOUSE", "House", "Simple wooden house, can hold 10 persons", 40, DayShiftAgent.TICKS_PER_DAY * 30, 10, 7),
-		new Building("CHURCH", "Small Church", "", 60, DayShiftAgent.TICKS_PER_DAY * 60, 0, 10),
-		new Building("MILL", "Mill", "", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
-		new Building("FARM", "Farm", "", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
-		new Building("LUMBER_CAMP", "Lumber Camp", "", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
+		new Building("PLAZA", "Plaza", "Center of community life", 40, DayShiftAgent.TICKS_PER_DAY * 120, 0, 14, PLAZA_CAPABILITIES),
+		new Building("HOUSE", "House", "Simple wooden house, can hold 10 persons", 40, DayShiftAgent.TICKS_PER_DAY * 90, 10, 7, NO_CAPABILITIES),
+		// new Building("CHURCH", "Small Church", "", 60, DayShiftAgent.TICKS_PER_DAY * 60, 0, 10),
+		
+		new Building("STORAGE", "Storage Tower", "Can hold 300 units of foraged food", 60, DayShiftAgent.TICKS_PER_DAY * 240, 0, 14, STORAGE_CAPABILITIES),
+		new Farm(),
+		/*new Building(),
+		new Building("MILL", "Mill", "Transforms grain into bread", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
+		
+		new Building("LUMBER_CAMP", "Lumber Camp", "Can hold 500 units of wood", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
+		
 		new Building("TRADING_OUTPOST", "Trading Outpost", "", 60, DayShiftAgent.TICKS_PER_DAY * 120, 0, 10),
 		new Building("HARBOR", "Harbor", "", 60, DayShiftAgent.TICKS_PER_DAY * 120, 0, 14),
 		new Building("BLACKSMITH", "Blacksmith", "", 60, DayShiftAgent.TICKS_PER_DAY * 200, 0, 14),
@@ -597,7 +617,7 @@ public class ExpeditionDAO {
 		new Building("CATHEDRAL", "Cathedral", "", 60, DayShiftAgent.TICKS_PER_DAY * 1000, 0, 120),
 		new Building("PALISADE", "Palisade", "", 60, DayShiftAgent.TICKS_PER_DAY * 400, 0, 30),
 		new Building("STONE_WALL", "Stone Wall", "", 60, DayShiftAgent.TICKS_PER_DAY * 800, 0, 60),
-		new Building("WATCH_TOWER", "Watch tower", "", 60, DayShiftAgent.TICKS_PER_DAY * 500, 0, 20)
+		new Building("WATCH_TOWER", "Watch tower", "", 60, DayShiftAgent.TICKS_PER_DAY * 500, 0, 20)*/
 		
 	};
 	
@@ -645,12 +665,12 @@ public class ExpeditionDAO {
 					2, 1, 2),
 			new Culture("MAYA", "Maya", true, 1, 
 					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10", "EAGLE_WARRIOR,10", "QUETZAL_ARCHER,30"),
-					gtvm(2.0d,2.0d,0.0d,1.0d,1),
+					gtvm(2.0d,2.0d,0.1d,1.0d,1),
 					new String [] {"PLUMED_BOW","SIMPLE_BOW","WOODEN_MACE","DRIED_MEAT","MAIZE","FISH","CLOTH","COCOA","CHILI_PEPPER","COATS","GOLD_ARTIFACTS","NATIVE_ARTIFACTS"},
 					2, 2, 3),
 			new Culture("PURHE", "P'urhépecha", true, 3, 
 					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10", "EAGLE_WARRIOR,20", "JAGUAR_WARRIOR,10"),
-					gtvm(0.5d,0.0d,0.5d,3.0d,1),
+					gtvm(0.5d,0.1d,0.5d,3.0d,1),
 					new String [] {"SIMPLE_BOW","OBSIDIAN_SWORD","WOODEN_MACE","BEANS","MAIZE","FISH","CLOTH","COCOA","CHILI_PEPPER","FURS","NATIVE_ARTIFACTS"},
 					1, 3, 1),
 			new Culture("TOTON", "Totonac", true, 2, 
@@ -665,7 +685,7 @@ public class ExpeditionDAO {
 					2, 2, 2),
 			new Culture("CANAR", "Cañaris", true, 3, 
 					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,20"), 
-					gtvm(1.0d,2.0d,0.0d,1.0d,1),
+					gtvm(1.0d,2.0d,0.1d,1.0d,1),
 					new String [] {"SIMPLE_BOW","WOODEN_MACE","LLAMA","DRIED_MEAT","BEANS","POTATOES","TOMATOES","FISH","CLOTH","COCA","COCOA","PINEAPPLE","FURS"},
 					1, 3, 1),
 			new Culture("CHACH", "Chachapoya", true, 1, 
@@ -680,7 +700,7 @@ public class ExpeditionDAO {
 					1, 2, 3),
 			new Culture("INCA", "Inca", true, 3, 
 					composePairList("NATIVE_WARRIOR,40", "NATIVE_ARCHER,20"), 
-					gtvm(0.0d,2.0d,1.0d,1.0d,1),
+					gtvm(0.1d,2.0d,1.0d,1.0d,1),
 					new String [] {"SIMPLE_BOW","OBSIDIAN_SWORD","WOODEN_MACE","LLAMA","BEANS","MAIZE","POTATOES","TOMATOES","FISH","CLOTH","COCA","STRAWBERRIES","COATS","GOLD_ARTIFACTS","NATIVE_ARTIFACTS"},
 					3, 1, 3),
 			new Culture("MUISC", "Muisca", true, 2, 
@@ -701,22 +721,22 @@ public class ExpeditionDAO {
 					0, 0, 2),
 			new Culture("HUNTE", "Hunters-Gatherers", false, 2, 
 					composePairList( "NATIVE_ARCHER,10"),
-					gtvm(1.0d,0.0d,2.0d,1.0d,1),
+					gtvm(1.0d,0.1d,2.0d,1.0d,1),
 					new String [] {"SIMPLE_BOW","DRIED_MEAT","CLOTH","FURS","NATIVE_ARTIFACTS"},
 					0, 1, 2),
 			new Culture("FISHI", "Fishing people", false, 3, 
 					composePairList("NATIVE_WARRIOR,40"),
-					gtvm(3.0d,0.0d,1.0d,0.0d,1),
+					gtvm(3.0d,0.1d,1.0d,0.1d,1),
 					new String [] {"BEANS","FISH","NATIVE_ARTIFACTS"},
 					0, 1, 1),
 			new Culture("BISON", "Bison Hunters", false, 3, 
 					composePairList("NATIVE_WARRIOR,40", "NATIVE_ARCHER,40"), 
-					gtvm(2.0d,0.0d,0.0d,3.0d,1),
+					gtvm(2.0d,0.1d,0.1d,3.0d,1),
 					new String [] {"SIMPLE_BOW","WOODEN_MACE","MAIZE","FURS"},
 					0, 0, 3),
 			new Culture("FARME", "Maiz Farmers", false, 2, 
 					composePairList("NATIVE_ARCHER,30"),
-					gtvm(0.0d,0.0d,3.0d,1.0d,1),
+					gtvm(0.5d,0.1d,3.0d,1.0d,1),
 					new String [] {"SIMPLE_BOW","WOODEN_MACE","BEANS","MAIZE","POTATOES","NATIVE_ARTIFACTS"},
 					0, 1, 3)
 		};

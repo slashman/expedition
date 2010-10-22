@@ -149,4 +149,9 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 		return longDescription;
 	}
 
+
+	public String getBaseID() {
+		return getFullID();
+	}
+
 }

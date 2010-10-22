@@ -42,6 +42,17 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		return goodCount;
 	}
 	
+	public int getItemCountBasic(String string) {
+		int goodCount = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (((ExpeditionItem)equipment.getItem()).getBaseID().equals(string)){
+				goodCount += equipment.getQuantity();
+			}
+		}
+		return goodCount;
+	}
+	
 	public List<Equipment> getItems() {
 		return items;
 	}

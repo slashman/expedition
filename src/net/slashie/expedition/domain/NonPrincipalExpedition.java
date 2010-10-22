@@ -3,6 +3,7 @@ package net.slashie.expedition.domain;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
+import net.slashie.utils.Util;
 
 
 public class NonPrincipalExpedition extends Expedition{
@@ -86,7 +87,10 @@ public class NonPrincipalExpedition extends Expedition{
 	@Override
 	public MovementSpeed getMovementSpeed() {
 		if (((OverworldExpeditionCell)getLevel().getMapCell(getPosition())).isForest()){
-			return MovementSpeed.FAST;
+			if (Util.chance(50))
+				return MovementSpeed.FAST;
+			else
+				return MovementSpeed.NORMAL;
 		} else {
 			return MovementSpeed.NORMAL;
 		}

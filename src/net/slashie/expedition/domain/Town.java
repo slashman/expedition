@@ -9,6 +9,8 @@ import net.slashie.expedition.action.Hibernate;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.town.Building;
+import net.slashie.expedition.town.Farm;
+import net.slashie.expedition.town.Building.SpecialCapability;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.ui.UserInterface;
@@ -20,7 +22,7 @@ public class Town extends GoodsCache{
 		"Transfer equipment to expedition",
 		"Construct building on settlement",
 		"Inhabit Settlement",
-		"Leave" 
+		"Enter" 
 	};
 	private String name;
 	protected Expedition founderExpedition;
@@ -98,6 +100,7 @@ public class Town extends GoodsCache{
 				expedition.getLevel().addMessage(getDescription()+" can't host all of your expedition.");
 			}
 		case 4:
+			expedition.setPosition(getPosition());
 			break;
 		}
 	}
@@ -190,6 +193,41 @@ public class Town extends GoodsCache{
 
 	public List<Building> getBuildings() {
 		return buildings;
+	}
+
+	
+	public void forageFood() {
+		// Get max foraged food storage
+		int maxForagedStorage = getMaxForagedStorage(); 
+		// Get food foraging capacity
+		int foragingCapacity = getTotalUnits();
+		// Store food
+		if (foragingCapacity > maxForagedStorage){
+			foragingCapacity = maxForagedStorage;
+		}
+		if (foragingCapacity > 0){
+			String food = "FRUIT";
+			ExpeditionItem foodSample = ItemFactory.createItem(food);
+			addItem(foodSample, foragingCapacity);
+		}
+	}
+
+	private int getMaxForagedStorage() {
+		int acum = 0;
+		for (Building building: buildings){
+			Integer forageStorageCapacity = (Integer) building.getSpecialCapability(SpecialCapability.FORAGED_FOOD_STORAGE);
+			if (forageStorageCapacity == null)
+				continue;
+			acum += forageStorageCapacity;
+		}
+		return acum;
+	}
+
+	public void checkCrops() {
+		for (Building building: buildings){
+			if (building instanceof Farm)
+				((Farm)building).checkCrop(ExpeditionGame.getCurrentGame().getGameTime(), this);
+		}
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
@@ -42,6 +43,9 @@ public class BuildingFactory {
 		
 		for (Building building: plan){
 			town.addBuilding(building);
+			if (building instanceof Farm){
+				((Farm)building).plant(ExpeditionGame.getCurrentGame().getGameTime());
+			}
 		}
 		
 		builders.reduceGood("WOOD", woodCost);
