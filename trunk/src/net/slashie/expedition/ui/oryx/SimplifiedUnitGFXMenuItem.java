@@ -1,6 +1,6 @@
 package net.slashie.expedition.ui.oryx;
 
-import net.slashie.expedition.domain.ExpeditionUnit;
+import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.serf.game.Equipment;
 
 public class SimplifiedUnitGFXMenuItem extends UnitGFXMenuItem {
@@ -10,7 +10,7 @@ public class SimplifiedUnitGFXMenuItem extends UnitGFXMenuItem {
 	}
 	
 	public String getMenuDescription() {
-		return ((ExpeditionUnit)e.getItem()).getDescription();
+		return ((ExpeditionItem)e.getItem()).getDescription();
 	}
 
 }

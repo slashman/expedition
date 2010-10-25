@@ -1,10 +1,17 @@
 package net.slashie.expedition.domain;
 
-import net.slashie.serf.action.Message;
 import net.slashie.serf.level.AbstractLevel;
-import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Util;
 
+/**
+ * A vehicle carries around expeditions units and items, allowing the expedition to 
+ * go through otherwise unsurmountable terrain, and/or increasing its traveling speed
+ * 
+ * Will be used to model: Ships, Wagons, Airships
+ * Horses are modeled differently
+ * @author Slash
+ *
+ */
 public class Vehicle extends ExpeditionItem{
 	private boolean moveOnWater;
 	private boolean moveOnAir;
@@ -13,7 +20,6 @@ public class Vehicle extends ExpeditionItem{
 	private int resistance;
 	private boolean fakeVehicle;
 	private int maxResistance;
-	private boolean isHorse;
 	
 	public boolean isMoveOnWater() {
 		return moveOnWater;
@@ -41,10 +47,9 @@ public class Vehicle extends ExpeditionItem{
 	}
 	public Vehicle(String classifierId, String description, String pluralDescription, String longDescription,
 			int weight, boolean moveOnWater,
-			boolean moveOnAir, boolean isHorse, int speedModifier, int carryCapacity, int resistance, boolean fakeVehicle, GoodType goodType, int europeValue, int americaValue) {
+			boolean moveOnAir, int speedModifier, int carryCapacity, int resistance, boolean fakeVehicle, GoodType goodType, int europeValue, int americaValue) {
 		super(classifierId, description,pluralDescription, longDescription, classifierId, weight, goodType, europeValue, americaValue);
 		this.moveOnWater = moveOnWater;
-		this.isHorse = isHorse;
 		this.moveOnAir = moveOnAir;
 		this.speedModifier = speedModifier;
 		this.carryCapacity = carryCapacity;
@@ -81,9 +86,4 @@ public class Vehicle extends ExpeditionItem{
 		if (resistance > maxResistance)
 			resistance = maxResistance;
 	}
-	public boolean isHorse() {
-		return isHorse;
-	}
-	
-	
 }

@@ -31,7 +31,7 @@ public class NPC extends AwareActor implements Cloneable{
 	public NPC(ExpeditionUnit unit, boolean nullSelector, String... talkLines) {
 		super();
 		this.unit = unit;
-		if (unit.getBasicId().equals("GUARD") || unit.getBasicId().equals("DOMINIK")){
+		if (unit.getBaseID().equals("GUARD") || unit.getBaseID().equals("DOMINIK")){
 			selector = new NullSelector();
 		} else {
 			selector = new SimpleAI(null, new NPCWalk());
@@ -46,7 +46,7 @@ public class NPC extends AwareActor implements Cloneable{
 	
 	@Override
 	public void onPlayerBump() {
-		if (unit.getBasicId().equals("DOMINIK")){
+		if (unit.getBaseID().equals("DOMINIK")){
 			Expedition e = ExpeditionGame.getCurrentGame().getExpedition();
 			out: while (true){
 				int choice = (UserInterface.getUI()).switchChat(unit.getDescription(),"Hello, friend Cristobal... how may I assist you?", 
@@ -117,7 +117,7 @@ public class NPC extends AwareActor implements Cloneable{
 					break out;
 				}
 			}
-		} else if (unit.getBasicId().equals("GUARD")){
+		} else if (unit.getBaseID().equals("GUARD")){
 			switch (Util.rand(0, 2)){
 			case 0:
 				m(says()+"I guard the castle and all within.");
@@ -149,14 +149,14 @@ public class NPC extends AwareActor implements Cloneable{
 	}
 
 	private boolean isUnique() {
-		return unit.getBasicId().equals("SANTIAGO") ||
-		unit.getBasicId().equals("CRISTOFORO") ||
-		unit.getBasicId().equals("BIZCOCHO")
+		return unit.getBaseID().equals("SANTIAGO") ||
+		unit.getBaseID().equals("CRISTOFORO") ||
+		unit.getBaseID().equals("BIZCOCHO")
 		;
 	}
 
 	public String getUnitId(){
-		return unit.getBasicId();
+		return unit.getBaseID();
 	}
 
 	private void m(String string) {

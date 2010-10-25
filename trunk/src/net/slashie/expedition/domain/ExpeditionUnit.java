@@ -2,12 +2,24 @@ package net.slashie.expedition.domain;
 
 import java.util.List;
 
+import net.slashie.expedition.item.Mount;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.text.EnglishGrammar;
+import net.slashie.serf.ui.Appearance;
+import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.util.Pair;
 import net.slashie.utils.roll.Roll;
 
 public class ExpeditionUnit extends Vehicle{
+	
+	@Override
+	public Appearance getAppearance() {
+		if (!isMounted()){
+			return super.getAppearance();
+		} else {
+			return AppearanceFactory.getAppearanceFactory().getAppearance(getBaseID()+"_MOUNTED");
+		}
+	}
 	
 	private String name;
 	private int movement; //TODO: Make this affect expedition speed?
@@ -28,7 +40,7 @@ public class ExpeditionUnit extends Vehicle{
 	private String special;
 	private Weapon weapon;
 	private Armor armor;
-	private Vehicle vehicle;
+	private Mount mount;
 	
 	
 	public void setArmor(Armor armor) {
@@ -117,7 +129,7 @@ public class ExpeditionUnit extends Vehicle{
 			int dailyFoodConsumption,
 			String[] weaponTypes, String[] armorTypes, int europeValue, int americaValue) {
 		super(classifierId, description, pluralDescription, longDescription, weight, false,
-				false, false, 1, carryCapacity, 1, true, GoodType.PEOPLE, europeValue, americaValue);
+				false, 1, carryCapacity, 1, true, GoodType.PEOPLE, europeValue, americaValue);
 		this.name = description;
 		this.baseAttack = baseAttack;
 		this.baseDefense = baseDefense;
@@ -138,11 +150,17 @@ public class ExpeditionUnit extends Vehicle{
 	}
 	
 	public void updateCompositeVariables(){
-		fullId = super.getFullID();
+		fullId = super.getBaseID();
 		unitWeight = super.getWeight();
 		fullDescription = "";
 		compositeAttack = new Roll(baseAttack);
 		compositeDefense = new Roll(baseDefense);
+		
+		if (getMount() != null){
+			fullDescription += "Mounted ";
+			compositeAttack.addModifier(2);
+			unitWeight += mount.getWeight();
+		}
 		
 		if (isWounded){
 			fullDescription += "Wounded ";
@@ -180,10 +198,8 @@ public class ExpeditionUnit extends Vehicle{
 			unitWeight += armor.getWeight();
 			compositeDefense = new Roll(armor.getDefense());
 		}
-		if (vehicle != null && vehicle.isHorse()){
-			isMounted = true;
-		} else {
-			isMounted = false;
+		if (mount != null){
+			fullId += ";MOUNT:"+mount.getFullID();
 		}
 		if (isWounded){
 			fullId += ",WOUNDED";
@@ -204,7 +220,6 @@ public class ExpeditionUnit extends Vehicle{
 	}
 	
 	private int unitWeight;
-	private boolean isMounted;
 	private boolean isWounded;
 	private String fullDescriptionBase;
 	@Override
@@ -229,10 +244,6 @@ public class ExpeditionUnit extends Vehicle{
 		return isRangedAttack;
 	}
 
-	public boolean isMounted() {
-		return isMounted;
-	}
-
 	public boolean isWounded() {
 		return isWounded;
 	}
@@ -245,10 +256,6 @@ public class ExpeditionUnit extends Vehicle{
 	@Override
 	public String getPluralDescription() {
 		return fullDescriptionBase + super.getPluralDescription();
-	}
-	
-	public String getBasicId(){
-		return super.getFullID();
 	}
 	
 	public static Pair<String, Integer> getUnitsString(
@@ -303,10 +310,20 @@ public class ExpeditionUnit extends Vehicle{
 		return new Pair<String, Integer>(unitsString, unitCount);
 	}
 
-	@Override
-	public String getBaseID() {
-		return getBasicId();
+	public Mount getMount() {
+		return mount;
 	}
+
+	public void setMount(Mount mount) {
+		this.mount = mount;
+		updateCompositeVariables();
+	}
+
+	public boolean isMounted() {
+		return getMount() != null;
+	}
+
+
 }
 
 	
