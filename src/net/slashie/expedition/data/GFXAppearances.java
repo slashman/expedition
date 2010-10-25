@@ -44,6 +44,46 @@ public class GFXAppearances {
 		return null;
 	}
 	
+	public static GFXAppearance sumAppearances(String ID, int xpos1, int ypos1, int xpos2, int ypos2){
+		xpos1--;
+		ypos1--;
+		xpos2--;
+		ypos2--;
+		String filename = "res/expedition.png";
+		String darkfilename = "res/expedition_d.png";
+		BufferedImage bigImage = (BufferedImage) images.get(filename);
+		BufferedImage bigDarkImage = (BufferedImage) images.get(darkfilename);
+		if (bigImage == null){
+			try {
+				bigImage = ImageUtils.createImage(filename);
+			} catch (Exception e){
+				SworeGame.crash("Error loading image "+filename, e);
+			}
+			images.put(filename, bigImage);
+			try {
+				bigDarkImage = ImageUtils.createImage(darkfilename);
+			} catch (Exception e){
+				SworeGame.crash("Error loading image "+darkfilename, e);
+			}
+			images.put(darkfilename, bigDarkImage);
+		}
+		try {
+			BufferedImage img1 = ImageUtils.crearImagen(bigImage,  xpos1*24, ypos1*24, 24, 24);
+			BufferedImage imgd1 = ImageUtils.crearImagen(bigDarkImage,  xpos1*24, ypos1*24, 24, 24);
+			BufferedImage img2 = ImageUtils.crearImagen(bigImage,  xpos2*24, ypos2*24, 24, 24);
+			BufferedImage imgd2 = ImageUtils.crearImagen(bigDarkImage,  xpos2*24, ypos2*24, 24, 24);
+			BufferedImage imgSum = ImageUtils.overlay(img1, img2, 0, 0);
+			BufferedImage imgSumD = ImageUtils.overlay(imgd1, imgd2, 0, 0);
+			GFXAppearance ret = new GFXAppearance(ID, imgSum, imgSumD, 0,0);
+			return ret;
+		} catch (Exception e){
+			SworeGame.crash("Error loading image "+filename, e);
+		}
+		return null;
+		
+	}
+
+	
 	public static GFXAppearance[] getGFXAppearances(){
 		
 		return new GFXAppearance[]{
@@ -58,7 +98,8 @@ public class GFXAppearances {
 				createAppearance("SHIP_EXPEDITION_SW", 7 ,15),
 				createAppearance("SHIP_EXPEDITION_NW", 8 ,15),
 				createAppearance("BOAT_EXPEDITION", 3, 16),
-				
+				createAppearance("HORSE_EXPEDITION", 2,16),
+
 				
 				
 				//Non principal Expeditions
@@ -133,6 +174,25 @@ public class GFXAppearances {
 				createAppearance("EXPLORER", 8 ,10),
 				createAppearance("CARPENTER", 9 ,10),
 				createAppearance("COLONIST", 10 ,10),
+				
+				sumAppearances("SAILOR_MOUNTED", 1 ,10 , 1, 25),
+				sumAppearances("ROGUE_MOUNTED", 2 ,10, 1, 25),
+				sumAppearances("MARINE_MOUNTED", 3 ,10, 1, 25),
+				sumAppearances("SOLDIER_MOUNTED", 6 ,10, 1, 25),
+				sumAppearances("GUARD_MOUNTED", 7 ,19, 1, 25),
+				sumAppearances("ARCHER_MOUNTED", 5 ,10, 1, 25),
+				sumAppearances("CAPTAIN_MOUNTED", 7 ,10, 1, 25),
+				sumAppearances("EXPLORER_MOUNTED", 8 ,10, 1, 25),
+				sumAppearances("CARPENTER_MOUNTED", 9 ,10, 1, 25),
+				sumAppearances("COLONIST_MOUNTED", 10 ,10, 1, 25),
+				sumAppearances("COLOMBUS_MOUNTED", 2 ,19, 1, 25),
+				sumAppearances("NATIVE_WARRIOR_MOUNTED", 1 ,11, 1, 25),
+				sumAppearances("NATIVE_ARCHER_MOUNTED", 3 ,11, 1, 25),
+				sumAppearances("NATIVE_COMMONER_MOUNTED", 3 ,19, 1, 25),
+				sumAppearances("NATIVE_SHAMAN_MOUNTED", 3 ,11, 1, 25),
+				sumAppearances("QUETZAL_ARCHER_MOUNTED", 8 ,19, 1, 25),
+				sumAppearances("EAGLE_WARRIOR_MOUNTED", 9 ,19, 1, 25),
+				sumAppearances("JAGUAR_WARRIOR_MOUNTED", 10 ,19, 1, 25),
 				
 				createAppearance("NATIVE_WARRIOR", 1 ,11),
 				createAppearance("NATIVE_ARCHER", 3 ,11),

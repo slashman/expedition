@@ -147,7 +147,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		expeditionUnitsVector.clear();
 		resumedEquipments.clear();
 		for (Equipment expeditionUnit: statsExpedition.getGoods(GoodType.PEOPLE)){
-			String basicId = ((ExpeditionUnit)expeditionUnit.getItem()).getBasicId();
+			String basicId = ((ExpeditionUnit)expeditionUnit.getItem()).getBaseID();
 			Equipment resumedEquipment = resumedEquipments.get(basicId) ;
 			if (resumedEquipment == null){
 				resumedEquipment = new Equipment(expeditionUnit.getItem(), expeditionUnit.getQuantity());

@@ -1,15 +1,12 @@
 package net.slashie.expedition;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Properties;
 
 import javax.sound.midi.MidiSystem;
@@ -19,10 +16,9 @@ import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.BuildSettlement;
 import net.slashie.expedition.action.ChopWoods;
 import net.slashie.expedition.action.DropEquipment;
-import net.slashie.expedition.action.ForageFood;
 import net.slashie.expedition.action.MeleeAttack;
+import net.slashie.expedition.action.MountMounts;
 import net.slashie.expedition.action.RepairShips;
-import net.slashie.expedition.action.Use;
 import net.slashie.expedition.action.Walk;
 import net.slashie.expedition.action.navigation.ResetDeadReckon;
 import net.slashie.expedition.data.ExpeditionDAO;
@@ -315,6 +311,7 @@ public class RunExpedition {
 		Action resetReckon = new ResetDeadReckon();
 		Action repairShips = new RepairShips();
 		Action chopWoods = new ChopWoods();
+		Action mountMounts = new MountMounts();
 
 		keyBindings = new Properties();
 		keyBindings.put("DONOTHING1_KEY", readKeyString(keyConfig, "doNothing"));
@@ -344,6 +341,7 @@ public class RunExpedition {
 		keyBindings.put("RESET_RECKON_KEY", readKeyString(keyConfig, "reset"));
 		keyBindings.put("REPAIR_SHIPS_KEY", readKeyString(keyConfig, "repair"));
 		keyBindings.put("CHOP_WOODS_KEY", readKeyString(keyConfig, "chopWoods"));
+		keyBindings.put("MOUNT_KEY", readKeyString(keyConfig, "mount"));
 		
 		keyBindings.put("QUIT_KEY", readKeyString(keyConfig, "PROMPTQUIT"));
 		keyBindings.put("HELP1_KEY", readKeyString(keyConfig, "HELP1"));
@@ -360,6 +358,7 @@ public class RunExpedition {
 			    new UserAction(resetReckon, i(keyBindings.getProperty("RESET_RECKON_KEY"))),
 			    new UserAction(repairShips, i(keyBindings.getProperty("REPAIR_SHIPS_KEY"))),
 			    new UserAction(chopWoods, i(keyBindings.getProperty("CHOP_WOODS_KEY"))),
+			    new UserAction(mountMounts, i(keyBindings.getProperty("MOUNT_KEY"))),
 			};
 		
 		UserCommand[] userCommands = new UserCommand[]{

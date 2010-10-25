@@ -72,7 +72,7 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 
 	@Override
 	public String getFullID() {
-		return classifierId;
+		return getBaseID();
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 	
 	public String getGroupClassifier() {
 		if (getGoodType() == GoodType.PEOPLE)
-			return "UNIT_"+((ExpeditionUnit)this).getBasicId();
+			return "UNIT_"+getBaseID();
 		else {
 			return getGoodType().toString();
 		}
@@ -151,7 +151,9 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 
 
 	public String getBaseID() {
-		return getFullID();
+		return classifierId;
 	}
+
+	
 
 }

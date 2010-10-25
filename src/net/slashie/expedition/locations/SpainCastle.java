@@ -161,15 +161,15 @@ public class SpainCastle extends StaticPattern implements Serializable {
 					choice = -1;
 					while (choice == -1){
 						choice = (UserInterface.getUI()).switchChat("Audience with the King and Queen","How much would you need?",
-								"By my accounts, I need 12.430 Maravedíes.",
+								"By my accounts, I need 11.530 Maravedíes.",
 								"6.000 Maravedíes will be more than enough",
 								"2.000 Maravedíes, and your blessing."
 								);
 					}
 					switch (choice){
 					case 0:
-						m("Then, we trust 12.430 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
-						exp.setAccountedGold(12430);
+						m("Then, we trust 11.530 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						exp.setAccountedGold(11530);
 						break;
 					case 1:
 						m("Then, we trust 6.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
@@ -180,6 +180,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 						exp.setAccountedGold(2000);
 						break;
 					}
+					exp.addItemOffshore(ItemFactory.createItem("SAILOR"), 15);
 				}
 				
 				m("We have also instructed Friar Domenico to answer your questions about this journey, you will find him next to the Alcazar entrance.");

@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.item.Mount;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -150,6 +151,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				ret = ret.boost();
 			}
 			return ret;
+		} else if (getMovementMode() == MovementMode.HORSE){
+			return MovementSpeed.FAST;
 		} else {
 			if (getFoodDays() == 0){
 				return MovementSpeed.SLOW;
@@ -173,8 +176,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		int requiredCaptains = ships;
 		int requiredSailors = ships * 25;
 		
-		int captains = getItemCount("CAPTAIN");
-		int sailors = getItemCount("SAILOR");
+		int captains = getItemCountBasic("CAPTAIN");
+		int sailors = getItemCountBasic("SAILOR");
 		return captains >= requiredCaptains && sailors >= requiredSailors;
 		
 	}
@@ -388,13 +391,17 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			}
 			return carryCapacity;
 		} else {
-			// On foot, carry capacity is determined by the expedition itself
+			// On foot, carry capacity is determined by the expedition itself, and its horses
 			int carryCapacity = 0;
 			List<Equipment> inventory = getInventory();
 			for (Equipment equipment: inventory){
 				if (equipment.getItem() instanceof Vehicle){
 					carryCapacity += ((Vehicle)equipment.getItem()).getCarryCapacity() * equipment.getQuantity();
 				}
+				if (equipment.getItem() instanceof Mount){
+					carryCapacity += ((Mount)equipment.getItem()).getCarryCapacity() * equipment.getQuantity();
+				}
+				
 			}
 			return carryCapacity;
 		}
@@ -468,9 +475,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	}
 	
 	public int getFoodDays(){
-		if (getTotalUnits() == 0){
-			return 10;
-		}
 		if (getDailyFoodConsumption() == 0){
 			return 0;
 		}
@@ -482,9 +486,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	 * @return
 	 */
 	public int getProjectedFoodDays(){
-		if (getTotalUnits() == 0){
-			return 10;
-		}
 		return (int)Math.round((double)getCurrentFood()/(double)foodConsumerDelegate.getDailyFoodConsumption());
 	}
 	
@@ -1084,7 +1085,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        		if (getTotalShips() == 0) {
         				getLevel().addMessage("You have no ships to board.");
         				throw new ActionCancelException();
-	        		} else if (getItemCount("SAILOR") < 15){
+	        		} else if (getItemCountBasic("SAILOR") < 15){
 	        			getLevel().addMessage("You need at least 15 sailors to depart.");
         				throw new ActionCancelException();
 	        		} else {
@@ -1135,10 +1136,14 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        			ship.addAllGoods(this);
 	        			removeAllGoods();
 	        			setMovementMode(MovementMode.FOOT);
+	        			
         				setCurrentVehicles(new ArrayList<Vehicle>());
 	        			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(ship);
 	        			ship.setPosition(new Position(getPosition()));
 	        			getLevel().addFeature(ship);
+	        			if (getUnmountedUnits().size() == 0){
+	    					setMovementMode(MovementMode.HORSE);
+	    				}
 	        		} else {
 	        			throw new ActionCancelException();
 	        		}
@@ -1257,7 +1262,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
 			if (equipment.getItem() instanceof ExpeditionUnit){
-				int multiplier = ((ExpeditionUnit)equipment.getItem()).getBasicId().equals("CARPENTER") ? 2 : 1;
+				int multiplier = ((ExpeditionUnit)equipment.getItem()).getBaseID().equals("CARPENTER") ? 2 : 1;
 				power += equipment.getQuantity() * multiplier;
 			}
 		}
@@ -1347,6 +1352,36 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	}
 
 	public boolean isForaging() {
-		return getFoodDays() <= 5;
+		return getLocation() instanceof ExpeditionMacroLevel && getFoodDays() <= 5;
+	}
+	
+	public boolean isMounted() {
+		return getFlag("MOUNTED");
+	}
+	
+	public void setMounted(boolean value){
+		setFlag("MOUNTED", value);
+	}
+
+	public List<Equipment> getMounts() {
+		List<Equipment> ret = new ArrayList<Equipment>();
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Mount){
+				ret.add(equipment);
+			}
+		}
+		return ret;
+	}
+
+	public List<Equipment> getUnmountedUnits() {
+		List<Equipment> units = getGoods(GoodType.PEOPLE);
+		List<Equipment> ret = new ArrayList<Equipment>();
+		for (Equipment unit: units){
+			if (((ExpeditionUnit)unit.getItem()).getMount() == null){
+				ret.add(unit);
+			}
+		}
+		return ret;
 	}
 }

@@ -28,6 +28,7 @@ import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -37,6 +38,7 @@ import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
@@ -156,6 +158,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		};
 	};
 	private SimplifiedUnitGFXMenuItem mainUnitMenuItem;
+	private AbstractItem HORSES_ITEM;
 	
 	@Override
 	public int switchChat(String title, String prompt, String... options) {
@@ -680,11 +683,16 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		expeditionUnitsVector.clear();
 		expeditionUnitsVector.addAll(statsExpedition.getGoods(GoodType.PEOPLE));
+		int horses = statsExpedition.getItemCountBasic("HORSE");
+		if (horses > 0){
+			Equipment forgedEquipment = new Equipment(HORSES_ITEM, horses);
+			expeditionUnitsVector.add(forgedEquipment);
+		}
 		
 		expeditionUnitItems.clear();
 		resumedEquipments.clear();
 		for (Equipment expeditionUnit: expeditionUnitsVector){
-			String basicId = ((ExpeditionUnit)expeditionUnit.getItem()).getBasicId();
+			String basicId = ((ExpeditionItem)expeditionUnit.getItem()).getBaseID();
 			Equipment resumedEquipment = resumedEquipments.get(basicId) ;
 			if (resumedEquipment == null){
 				resumedEquipment = new Equipment(expeditionUnit.getItem(), expeditionUnit.getQuantity());
@@ -739,6 +747,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		HORSES_ITEM = ItemFactory.createItem("HORSE");
 		
 	}
 	

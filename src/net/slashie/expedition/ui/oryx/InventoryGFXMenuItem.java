@@ -29,7 +29,7 @@ public class InventoryGFXMenuItem implements GFXMenuItem {
 		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
 		if (eitem instanceof ExpeditionUnit){
 			ExpeditionUnit unit = (ExpeditionUnit) eitem;
-			return "ATK"+ unit.getAttack().getMax()+" DEF"+ unit.getDefense().getMax() +" {Weight: "+(eitem.getWeight() * quantity)+")";
+			return "Attack: "+ unit.getAttack().getString()+", Defense: "+ unit.getDefense().getString() +", Weight: "+(eitem.getWeight() * quantity)+"";
 		} else {
 			return "Weight: "+(eitem.getWeight() * quantity);
 		}

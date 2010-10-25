@@ -15,7 +15,9 @@ import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
+import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.item.Mount;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.Farm;
 import net.slashie.expedition.town.Building.SpecialCapability;
@@ -145,7 +147,7 @@ public class ExpeditionDAO {
 	public static CharAppearance[] getCharAppearances(){
 		return new CharAppearance[]{
 			//Expeditions
-			new CharAppearance("EXPEDITION", '@', ConsoleSystemInterface.RED),
+			new CharAppearance("EXPEDITION", '@', ConsoleSystemInterface.GRAY),
 			new CharAppearance("SHIP_EXPEDITION", 'v', ConsoleSystemInterface.RED),
 			new CharAppearance("SHIP_EXPEDITION_N", '^', ConsoleSystemInterface.RED),
 			new CharAppearance("SHIP_EXPEDITION_E", '>', ConsoleSystemInterface.RED),
@@ -156,9 +158,10 @@ public class ExpeditionDAO {
 			new CharAppearance("SHIP_EXPEDITION_SW", 'L', ConsoleSystemInterface.RED),
 			new CharAppearance("SHIP_EXPEDITION_NW", 'F', ConsoleSystemInterface.RED),
 			new CharAppearance("BOAT_EXPEDITION", 'v', ConsoleSystemInterface.RED),
+			new CharAppearance("HORSE_EXPEDITION", 'H', ConsoleSystemInterface.GRAY),
 			
 			//Non principal Expeditions
-			new CharAppearance("HOSTILE_EXPEDITION", '@', ConsoleSystemInterface.BLUE),
+			new CharAppearance("HOSTILE_EXPEDITION", '@', ConsoleSystemInterface.RED),
 			new CharAppearance("BOAT_HOSTILE_EXPEDITION", 'v', ConsoleSystemInterface.RED),
 			
 			//Overworld Terrain
@@ -522,14 +525,14 @@ public class ExpeditionDAO {
 			// Livestock
 			new ExpeditionItem("ATTACK_DOG", "Attack Dog", "Attack Dogs", "Men best companion", "ATTACK_DOG",  50, GoodType.LIVESTOCK, 100, 50),
 			new ExpeditionItem("COW", "Cow", "Cows", "Cow", "COW",  500, GoodType.LIVESTOCK, 500, 600),
-			new ExpeditionItem("HORSE", "Horse", "Horses", "Mounts", "HORSE",  800, GoodType.LIVESTOCK, 1000, 3000),
+			new Mount("HORSE", "Horse", "Horses", "Mounts", "HORSE",  800, GoodType.LIVESTOCK, 1000, 3000, 1600, MovementSpeed.FAST),
 			new ExpeditionItem("PIGS", "Pig", "Pigs", "Big Pink Pig", "PIGS",  150, GoodType.LIVESTOCK, 300, 200),
 			new ExpeditionItem("LLAMA", "Llama", "Llamas", "Horse-like creature", "LLAMA",  300, GoodType.LIVESTOCK, 800, 200),
 
 			
 			//Ships
-			new Vehicle("CARRACK","Carrack","Carracks", "Big, bulky ship",1,true,false,false,3,100000, 10, false, GoodType.VEHICLE, 16000, 32000),
-			new Vehicle("CARAVEL","Caravel","Caravels", "Small, quick ship", 1,true,false,false,4,60000, 15, false, GoodType.VEHICLE, 12000, 24000),
+			new Vehicle("CARRACK","Carrack","Carracks", "Big, bulky ship",1,true,false,3,100000, 10, false, GoodType.VEHICLE, 16000, 32000),
+			new Vehicle("CARAVEL","Caravel","Caravels", "Small, quick ship", 1,true,false,4,60000, 15, false, GoodType.VEHICLE, 12000, 24000),
 			
 			//Special
 			new ExpeditionUnit("KING_FERDINAND", "Ferdinand II, King of Aragón","Kings", "King", UNIT_WEIGHT, 300, 
