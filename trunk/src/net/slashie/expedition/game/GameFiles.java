@@ -1,19 +1,15 @@
 package net.slashie.expedition.game;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.serf.game.GameSessionInfo;
+import net.slashie.utils.DESEncrypter;
 import net.slashie.utils.FileUtil;
 import net.slashie.utils.SerializableChecker;
 
@@ -70,6 +66,18 @@ public class GameFiles {
 			ExpeditionGame.crash("Error writing the chardump", ioe);
 		}
 	}
-			
+		
+	public static String decode(String serial){
+		DESEncrypter encr = new DESEncrypter("Thank you for supporting slashware interactive!");
+		return encr.decrypt(serial);
+	}
 	
+	public static String encode(String supporter, String level){
+		DESEncrypter encr = new DESEncrypter("Thank you for supporting slashware interactive!");
+		return encr.encrypt(supporter+","+level);
+	}
+	
+	public static void main (String [] args){
+		System.out.println(encode("Slashie","Hero"));
+	}
 }

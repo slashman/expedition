@@ -1,14 +1,18 @@
 package net.slashie.expedition.ui.console;
 
+import java.awt.Color;
+import java.io.BufferedReader;
 import java.io.File;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.serf.sound.STMusicManagerNew;
+import net.slashie.utils.FileUtil;
 
 public class CharExpeditionDisplay extends ExpeditionDisplay{
 	private ConsoleSystemInterface csi;
@@ -53,13 +57,35 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 	@Override
 	public int showTitleScreen() {
 		csi.cls();
+		String registrant = null;
+		String supporterLevel = "Unregistered";
+		try {
+			BufferedReader r = FileUtil.getReader("registration.key");
+			String key = r.readLine();
+			r.close();
+			String decoded = GameFiles.decode(key);
+			registrant = decoded.split(",")[0];
+			supporterLevel = decoded.split(",")[1];
+		} catch (Exception e) {
+			e.printStackTrace();
+			registrant = null;
+		}
+		
 		csi.print(18, 4, "EXPEDITION", ConsoleSystemInterface.CYAN);
 		csi.print(20, 5, "The New World", ConsoleSystemInterface.BLUE);
 		csi.print(20,12, "a. Create Expedition", ConsoleSystemInterface.WHITE);
 		csi.print(20,13, "b. Resume Expedition", ConsoleSystemInterface.WHITE);
 		csi.print(20,14, "c. Quit", ConsoleSystemInterface.WHITE);
-		csi.print(8,19, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", ConsoleSystemInterface.CYAN);
-		csi.print(8,20, "Music by Roguebards Mingos and Jice", ConsoleSystemInterface.CYAN);
+		csi.print(8,17, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", ConsoleSystemInterface.CYAN);
+		csi.print(8,18, "Music by Roguebards Mingos and Jice", ConsoleSystemInterface.CYAN);
+		
+		csi.print(8,18, "Music by Roguebards Mingos and Jice", ConsoleSystemInterface.CYAN);
+		if (registrant == null || registrant.equals("unregistered")){
+			csi.print(8, 20, "Unregistered Version", ConsoleSystemInterface.WHITE);
+		} else {
+			csi.print(8, 20, "Registered for "+supporterLevel+" "+registrant+"!", ConsoleSystemInterface.YELLOW);
+		}
+		
 		
 		csi.refresh();
     	STMusicManagerNew.thus.playKey("TITLE");
