@@ -114,6 +114,20 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	
 	public static final int DEATH_BY_STARVATION = 1, DEATH_BY_DROWNING = 2, DEATH_BY_SLAYING = 3;
 
+	private static final String[] MORALE_DESCRIPTIONS = new String[] {
+		"Rebellious",
+		"Cracking appart",
+		"Hopeless",
+		"Downcast",
+		"Restless",
+		"Calm",
+		"Steadfast",
+		"Content",
+		"Happy",
+		"Joyous",
+		"Victorious"
+	};
+
 	private int deducedReckonWest;
 	
 	public void resetDeducedReckonWest(){
@@ -150,10 +164,32 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			for (int i = 0; i < boost; i++){
 				ret = ret.boost();
 			}
+			boost = getMoraleSpeedModifier();
+			if (boost <0){
+				for (int i = 0; i < boost; i++){
+					ret = ret.reduced();
+				}
+			} else {
+				for (int i = 0; i < boost; i++){
+					ret = ret.boost();
+				}
+			}
 			return ret;
 		} else if (getMovementMode() == MovementMode.HORSE){
 			return MovementSpeed.FAST;
 		} else {
+			MovementSpeed ret = MovementSpeed.NORMAL;
+			int boost = getMoraleSpeedModifier();
+			if (boost <0){
+				for (int i = 0; i < boost; i++){
+					ret = ret.reduced();
+				}
+			} else {
+				for (int i = 0; i < boost; i++){
+					ret = ret.boost();
+				}
+			}
+			
 			if (getFoodDays() == 0){
 				return MovementSpeed.SLOW;
 			} else {
@@ -187,6 +223,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		setGame(game);
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		game.addFoodConsumer(this);
+		expeditionMorale = 5;
 	}
 	
 	
@@ -1144,6 +1181,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        			if (getUnmountedUnits().size() == 0){
 	    					setMovementMode(MovementMode.HORSE);
 	    				}
+	        			resetDaysAtSea();
 	        		} else {
 	        			throw new ActionCancelException();
 	        		}
@@ -1173,6 +1211,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
         super.landOn(destinationPoint);
 	}
 	
+	private void resetDaysAtSea() {
+		daysOnSea = 0;
+	}
+
 	@Override
 	public void doNothing() {
 		try {
@@ -1281,6 +1323,12 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 
 	private boolean hibernate;
 
+	private int winBalance = 0;
+
+	private int daysOnSea;
+
+	private int expeditionMorale;
+
 	public boolean isHibernate() {
 		return hibernate;
 	}
@@ -1384,4 +1432,125 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		}
 		return ret;
 	}
+	
+	public int getMorale(){
+		return expeditionMorale;
+	}
+	public void updateMorale(){
+		if (getTotalUnits() == 0){
+			expeditionMorale = 5;
+			return;
+		}
+		expeditionMorale = 5;
+		// Maluses
+		// Lack of food
+		if (getFoodDays() < 15)
+			expeditionMorale --;
+		if (getFoodDays() < 5)
+			expeditionMorale --;
+		// Military Losses
+		if (winBalance  < -2)
+			expeditionMorale --;
+		if (winBalance < -5)
+			expeditionMorale --;
+		// Long time no see land
+		if (daysOnSea > 20)
+			expeditionMorale --;
+		if (daysOnSea > 40)
+			expeditionMorale --;
+		// On a storm
+		if (getMovementMode() == MovementMode.SHIP && getLocation().hasStorm(getPosition())){
+			expeditionMorale -= 2;
+		}
+		// Ships Cracking appart
+		if (getMovementMode() == MovementMode.SHIP && getShipHealth() < 50 ){
+			expeditionMorale --;
+		}
+		// Becalmed
+		if (getLocation().getWindDirection() == CardinalDirection.NULL){
+			expeditionMorale --;
+		}
+		
+		//Bonuses
+		// Military Wins
+		if (winBalance > 2)
+			expeditionMorale ++;
+		if (winBalance > 5)
+			expeditionMorale ++;
+		// Leaders
+		if (getItemCountBasic("CAPTAIN") >= 1)
+			expeditionMorale ++;
+		if (getItemCountBasic("SOLDIER") >= 1 || getItemCountBasic("MARINE") >= 1)
+			expeditionMorale ++;
+		// Loot
+		if (getSumOfValuables() > 5000)
+			expeditionMorale ++;
+		// Ship in good health
+		if (getMovementMode() == MovementMode.SHIP && getShipHealth() > 95 ){
+			expeditionMorale ++;
+		}
+		// Rum for the sailors
+		if (getMovementMode() == MovementMode.SHIP && getItemCountBasic("RUM") > getItemCountBasic("SAILOR") * 5){
+			expeditionMorale ++;
+		}
+		
+		if (expeditionMorale > 10){
+			expeditionMorale = 10;
+			return;
+		}
+		if (expeditionMorale < 0) {
+			expeditionMorale = 0;
+			return;
+		}
+	}
+	
+	public String getMoraleDescription(){
+		return MORALE_DESCRIPTIONS [getMorale()];
+		
+	}
+
+	public void increaseWinBalance() {
+		winBalance++;
+		if (winBalance == 10)
+			winBalance = 10;
+	}
+
+	public void decreaseWinBalance() {
+		winBalance--;
+		if (winBalance == -10)
+			winBalance = -10;
+	}
+
+	public void increaseDaysAtSea() {
+		daysOnSea ++;
+	}
+	
+	public int getMoraleAttackModifier(){
+		int morale = getMorale();
+		if (morale == 10)
+			return 3;
+		if (morale >= 8)
+			return 2;
+		if (morale >= 6)
+			return 1;
+		if (morale >= 4)
+			return 0;
+		if (morale >= 2)
+			return -1;
+		return -2;
+	}
+
+	public int getMoraleSpeedModifier(){
+		int morale = getMorale();
+		if (morale >= 8)
+			return 2;
+		if (morale >= 6)
+			return 1;
+		if (morale >= 4)
+			return 0;
+		if (morale >= 2)
+			return -1;
+		return -2;
+	}
+	
 }

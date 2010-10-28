@@ -642,7 +642,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		else
 			si.print(2, 6, "Carrying "+statsExpedition.getCurrentlyCarrying()+"%");		
 		
-		si.print(2, 7, statsExpedition.getPower()+(statsExpedition.isArmed()?" Power (Armed)":" Power"));
+		si.print(2, 7, statsExpedition.getMoraleDescription()+(statsExpedition.isArmed()?"(Armed)":""));
 		
 
 		

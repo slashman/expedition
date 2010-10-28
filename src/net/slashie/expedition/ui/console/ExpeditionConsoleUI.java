@@ -116,7 +116,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			csi.print(3, 6, "Carrying "+statsExpedition.getOffshoreCurrentlyCarrying()+"%");
 		else
 			csi.print(3, 6, "Carrying "+statsExpedition.getCurrentlyCarrying()+"%");
-		csi.print(3, 7, statsExpedition.getPower()+(statsExpedition.isArmed()?" Power (Armed)":" Power"));
+		csi.print(3, 7, statsExpedition.getMoraleDescription()+(statsExpedition.isArmed()?"(Armed)":""));
 		
 		//Box 3
 		AbstractCell currentCell = getExpedition().getLocation().getMapCell(getExpedition().getPosition());
