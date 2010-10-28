@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -18,12 +19,14 @@ import net.slashie.libjcsi.CharKey;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.oryxUI.AddornedBorderTextArea;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
+import net.slashie.utils.FileUtil;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.PropertyFilters;
 
@@ -107,17 +110,35 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.setFont(FNT_TEXT);
 		si.drawImage(IMG_TITLE);
 		//si.drawImage(215,60,IMG_TITLE_NAME);
-		si.printAtPixel(60, 555, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
-		si.printAtPixel(60, 570, "Artwork by Oryx, 2010", Color.WHITE);
-		si.printAtPixel(60, 585, "Music by Roguebards Mingos and Jice", Color.WHITE);
+		si.printAtPixel(91, 540, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
+		si.printAtPixel(164, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
 		CharKey x = new CharKey(CharKey.NONE);
     	int choice = 0;
     	si.saveBuffer();
     	out: while (true) {
+    		String registrant = null;
+    		String supporterLevel = "Unregistered";
+    		try {
+				BufferedReader r = FileUtil.getReader("registration.key");
+				String key = r.readLine();
+				r.close();
+				String decoded = GameFiles.decode(key);
+				registrant = decoded.split(",")[0];
+				supporterLevel = decoded.split(",")[1];
+			} catch (Exception e) {
+				e.printStackTrace();
+				registrant = null;
+			}
     		si.restore();
+    		if (registrant == null || registrant.equals("unregistered")){
+    			si.printAtPixel(10, 586, "Unregistered Version", Color.WHITE);
+    		} else {
+    			si.printAtPixel(10, 586, "Registered for "+supporterLevel+" "+registrant+"!", Color.YELLOW);
+    		}
     		si.drawImage(320, 404+choice*26, IMG_PICKER);
     		si.printAtPixel(350,428, "a. Create Expedition", Color.WHITE);
     		si.printAtPixel(350,454, "b. Resume Expedition", Color.WHITE);
+    		
     		si.printAtPixel(350,480, "c. Quit", Color.WHITE);
     		si.refresh();
 			while (x.code != CharKey.A && x.code != CharKey.a &&
@@ -148,6 +169,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		}
 	}
 	
+	
+
 	public void showIntro(Expedition e){
 	}
 	
