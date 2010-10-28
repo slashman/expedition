@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.serf.action.Action;
@@ -32,6 +33,11 @@ public class DayShiftAgent extends Actor{
 			
 			Expedition expedition = ExpeditionGame.getCurrentGame().getExpedition();
 			expedition.wearOutShips(5);
+			
+			if (expedition.getMovementMode() == MovementMode.SHIP){
+				expedition.increaseDaysAtSea();
+			}
+			expedition.updateMorale();
 		}
 
 		@Override
