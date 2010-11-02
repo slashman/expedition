@@ -282,8 +282,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
    		//Item.shopMode = true;
    		MenuBox menuBox = new MenuBox(csi);
   		menuBox.setHeight(13);
-  		menuBox.setWidth(54);
-  		menuBox.setPosition(24,7);
+  		menuBox.setWidth(76);
+  		menuBox.setPosition(2,7);
   		
   		Vector menuItems = new Vector();
   		for (Equipment item: merchandise){
