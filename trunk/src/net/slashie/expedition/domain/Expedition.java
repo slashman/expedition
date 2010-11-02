@@ -1013,15 +1013,17 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return (int)(Math.round ( ((double)sum/(double)sumMax) *100.0d));
 	}
 
-	public void wearOutShips(int chance) {
+	public void wearOutShips(int chance, boolean willingly) {
 		if (getMovementMode() == MovementMode.SHIP){
 			//Randomly damage ships
 			List<Vehicle> vehicles = getCurrentVehicles();
 			List<Vehicle> vehiclesToRemove = new ArrayList<Vehicle>();
 			for (Vehicle vehicle: vehicles){
-				vehicle.dailyWearOut(getLevel(),chance);
+				vehicle.wearOut(getLevel(),chance, willingly);
 				if (vehicle.isDestroyed()){
 					vehiclesToRemove.add(vehicle);
+					if (!willingly)
+						modifyPerceivedLuck(-3);
 				}
 			}
 			for (Vehicle vehicle: vehiclesToRemove){
@@ -1084,7 +1086,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		boolean storm = getLocation().hasStorm(destinationPoint) && getMovementMode() == MovementMode.SHIP; 
         if (storm){
 			getLevel().addMessage("You are caught on a Storm!");
-			wearOutShips(20);
+			wearOutShips(20, true);
 			increaseDeducedReckonWest(Util.rand(-5, 5));
 			if (Util.chance(30)){
 				//Random movement caused by the storm
@@ -1165,7 +1167,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        switch(getMovementMode()){
 	        case SHIP:
 	        	if (cell.isRiver()){
-	        		wearOutShips(30);
+	        		wearOutShips(30, true);
 	        	}
 	        	if (cell.isLand() && !cell.isRiver()){
 	        		if (UserInterface.getUI().promptChat("Do you want to land?")){
@@ -1181,6 +1183,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	        			if (getUnmountedUnits().size() == 0){
 	    					setMovementMode(MovementMode.HORSE);
 	    				}
+	        			if (daysOnSea > 20){
+	        				message("Land at last!");
+	        			}
 	        			resetDaysAtSea();
 	        		} else {
 	        			throw new ActionCancelException();
@@ -1372,6 +1377,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
 					level.addMessage("You catch "+quantity+" fish.");
+					modifyPerceivedLuck(1);
 				} else {
 					return false;
 				}
@@ -1380,12 +1386,14 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
 				quantity *= multiplier;
 				level.addMessage("You catch "+quantity+" fish.");
+				modifyPerceivedLuck(1);
 			} else {
 				if (isForaging()){
 					food = "FRUIT";
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
 					level.addMessage("You forage "+quantity+" fruits.");
+					modifyPerceivedLuck(1);
 				} else {
 					return false;
 				}
@@ -1454,22 +1462,39 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		if (winBalance < -5)
 			expeditionMorale --;
 		// Long time no see land
-		if (daysOnSea > 20)
+		if (daysOnSea > 20){
+			if (Util.chance(20)) message("We need to touch land");
 			expeditionMorale --;
-		if (daysOnSea > 40)
+		}
+		if (daysOnSea > 40){
+			if (Util.chance(20)) message("We really need to touch land!");
 			expeditionMorale --;
+		}
 		// On a storm
 		if (getMovementMode() == MovementMode.SHIP && getLocation().hasStorm(getPosition())){
+			if (Util.chance(20)) message("This storm will be our doom!");
 			expeditionMorale -= 2;
 		}
 		// Ships Cracking appart
 		if (getMovementMode() == MovementMode.SHIP && getShipHealth() < 50 ){
+			if (Util.chance(20)) message("Our ships are cracking apart.");
 			expeditionMorale --;
 		}
 		// Becalmed
 		if (getLocation().getWindDirection() == CardinalDirection.NULL){
 			expeditionMorale --;
 		}
+		// Unlucky
+		if (getPerceivedLuck() < -5){
+			if (Util.chance(20)) message("We are in a row of back luck.");
+			expeditionMorale --;
+		}
+		
+		// Temporary mod
+		if (hasCounter("MORALE_DOWN")){
+			expeditionMorale --;
+		}
+
 		
 		//Bonuses
 		// Military Wins
@@ -1480,17 +1505,32 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		// Leaders
 		if (getItemCountBasic("CAPTAIN") >= 1)
 			expeditionMorale ++;
-		if (getItemCountBasic("SOLDIER") >= 1 || getItemCountBasic("MARINE") >= 1)
+		if (getItemCountBasic("SOLDIER") >= 1 || getItemCountBasic("MARINE") >= 1){
 			expeditionMorale ++;
+		}
 		// Loot
-		if (getSumOfValuables() > 5000)
+		if (getSumOfValuables() > 5000){
+			if (Util.chance(20)) message("We are rich!");
 			expeditionMorale ++;
+		}
 		// Ship in good health
 		if (getMovementMode() == MovementMode.SHIP && getShipHealth() > 95 ){
+			if (Util.chance(20)) message("Our ships sail steady!");
 			expeditionMorale ++;
 		}
 		// Rum for the sailors
 		if (getMovementMode() == MovementMode.SHIP && getItemCountBasic("RUM") > getItemCountBasic("SAILOR") * 5){
+			if (Util.chance(20)) message("Rum for the sailors!");
+			expeditionMorale ++;
+		}
+		// Lucky
+		if (getPerceivedLuck() > 10){
+			if (Util.chance(10)) message("We feel lucky");
+			expeditionMorale ++;
+		}
+		
+		// Temporary Mod
+		if (hasCounter("MORALE_UP")){
 			expeditionMorale ++;
 		}
 		
@@ -1551,6 +1591,101 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		if (morale >= 2)
 			return -1;
 		return -2;
+	}
+
+	public void randomEvents() {
+		// Jonah
+		if (getPerceivedLuck() < -10){
+			if (getTotalUnits() > 1) {
+				if (Util.chance(20)){
+					int choice = UserInterface.getUI().switchChat("A man overboard is bringing us doom", "There is a Jonah amidst us, he must drown in the seas!XXX What will you do?", "Defend the man.", "Throw the man overboard.");
+					if (choice == 0){
+						getLevel().addMessage("We are doomed!");
+						setCounter("MORALE_DOWN", 100);
+					} else {
+						List<Equipment> units = getGoods(GoodType.PEOPLE);
+						Equipment randomEquipment = (Equipment) Util.randomElementOf(units);
+						reduceQuantityOf(randomEquipment.getItem());
+						getLevel().addMessage("You cast a "+randomEquipment.getItem().getDescription()+" into the sea. May he rests in peace");
+						modifyPerceivedLuck(10);
+						setCounter("MORALE_UP", 100);
+					}
+				}
+			}
+		}
+		// Unease
+		if (getMorale() < 4){
+			if (Util.chance(5)){
+				int choice = UserInterface.getUI().switchChat("Unease in your expedition", "Enough of this mindless journey! Let's head back home!XXX What will you do?", "Preach about the importance of this mission.", "Give away 100 gold.");
+				if (choice == 0){
+					int shot = Util.rand(0, 100);
+					if (shot < 30){
+						getLevel().addMessage("Your expedition feels motivated");
+						setCounter("MORALE_UP", 100);
+					} else if (shot < 60) {
+						getLevel().addMessage("Your empty words do not make a difference!");
+						setCounter("MORALE_DOWN", 100);
+					} else {
+						getLevel().addMessage("Your words make no effect on your men");
+					}
+				} else {
+					if (getAccountedGold() >= 100){
+						reduceAccountedGold(100);
+						if (Util.chance(90)){
+							getLevel().addMessage("We hope to survive enough to spend this gold.");
+							setCounter("MORALE_UP", 100);
+						} else {
+							getLevel().addMessage("Gold is of no use to us.");
+						}
+					} else {
+						setAccountedGold(0);
+						if (Util.chance(10)){
+							getLevel().addMessage("We hope to live enough to see that gold");
+							setCounter("MORALE_UP", 100);
+						} else {
+							
+							getLevel().addMessage("We do not believe in your empty promises!");
+							setCounter("MORALE_DOWN", 100);
+						}
+					}
+				}
+				updateMorale();
+			}
+		}
+		
+	}
+	
+	private int perceivedLuck;
+
+	public int getPerceivedLuck() {
+		return perceivedLuck;
+	}
+
+	public void modifyPerceivedLuck(int perceivedLuckMod) {
+		this.perceivedLuck += perceivedLuckMod;
+		if (perceivedLuck > 15)
+			perceivedLuck = 15;
+		if (perceivedLuck < -15)
+			perceivedLuck = -15;
+	}
+
+	public void dayShift() {
+		wearOutShips(5, false);
+		
+		if (getMovementMode() == MovementMode.SHIP){
+			increaseDaysAtSea();
+			if (getLocation().getWindDirection() == CardinalDirection.NULL){
+				modifyPerceivedLuck(-1);
+			}
+			if (getLocation().hasStorm(getPosition())){
+				modifyPerceivedLuck(-1);
+			}
+		}
+		updateMorale();
+		randomEvents();
+		if (Util.chance(50))
+			modifyPerceivedLuck(1);
+
 	}
 	
 }
