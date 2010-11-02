@@ -9,6 +9,7 @@ import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.ui.UserInterface;
 
 /**
  * Recovers resistance to the expedition ships
@@ -79,6 +80,13 @@ public class RepairShips extends Action{
 			remainingRepairmen -= normalCrew;
 		}
 		
+		if (carpenters > 0 && normalCrew > 0){
+			int choice = UserInterface.getUI().switchChat("Ship repairs", "Who will do the repair?", "Carpenters only (Optimize wood)", "All Crew (Optimize time)");
+			if (choice == 0){
+				normalCrew = 0;
+			}
+		}
+		
 		int recoveryPower = carpenters * CARPENTER_MULTIPLIER + normalCrew;
 		
 		int recovery = (int)Math.round(recoveryPower*RECOVERY_INDEX);
@@ -125,9 +133,16 @@ public class RepairShips extends Action{
 		expedition.reduceQuantityOf("WOOD", usedWood);
 		
 		String message = "You repair your ships with ";
-		if (usedCarpenters > 0)
-			message += usedCarpenters+" carpenters and ";
-		message += usedCrew+" crew members, spending "+usedWood+" wood.";
+		if (usedCarpenters > 0){
+			message += usedCarpenters+" carpenters";
+			if (usedCrew > 0){
+				message += " and "; 
+			}
+		}
+		if (usedCrew > 0){
+			message += usedCrew+" crew members";
+		}
+		message += ", spending "+usedWood+" wood.";
 		expedition.getLevel().addMessage(message);
 
 		
