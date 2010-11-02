@@ -199,13 +199,14 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.print(3,10, "  d: Drop equipment", Color.WHITE);
 		si.print(3,11, "  i: Show inventory", Color.WHITE);
 		si.print(3,12, "  l: Look around", Color.WHITE);
-		si.print(3,13, "  r: Repair damaged ships", Color.WHITE);
-		si.print(3,14, "  R: Reset dead' reckon counter", Color.WHITE);
-		si.print(3,15, "  w: Chop wood from forests", Color.WHITE);
-		si.print(3,16, "  S: Save Game", Color.WHITE);
-		si.print(3,17, "  Q: Quit", Color.WHITE);
-		si.print(3,18, "  ", Color.WHITE);
-		si.print(3,19, "  Press Space to continue", Color.CYAN);
+		si.print(3,13, "  m: Ride/Unmount your mounts", Color.WHITE);
+		si.print(3,14, "  r: Repair damaged ships", Color.WHITE);
+		si.print(3,15, "  R: Reset dead' reckon counter", Color.WHITE);
+		si.print(3,16, "  w: Chop wood from forests", Color.WHITE);
+		si.print(3,17, "  S: Save Game", Color.WHITE);
+		si.print(3,18, "  Q: Quit", Color.WHITE);
+		si.print(3,19, "  ", Color.WHITE);
+		si.print(3,20, "  Press Space to continue", Color.CYAN);
 		si.refresh();
 
 		si.waitKey(CharKey.SPACE);
@@ -336,9 +337,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		String name = "";
 		while (name.trim().equals("")){
 			si.drawImage(IMG_TITLE);
-			si.printAtPixel(60, 555, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
-			si.printAtPixel(60, 570, "Artwork by Oryx, 2010", Color.WHITE);
-			si.printAtPixel(60, 585, "Music by Roguebards Mingos and Jice", Color.WHITE);
+			si.printAtPixel(91, 540, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
+			si.printAtPixel(164, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
 			
 			si.printAtPixel(128, 428, "Please, by what name are your explorations to be known?", Color.WHITE);
 			name = si.input(222, 463, Color.WHITE, 10);
