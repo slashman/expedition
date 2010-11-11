@@ -19,6 +19,7 @@ import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.FoodConsumerDelegate;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.expedition.world.TemperatureRules;
+import net.slashie.expedition.world.Weather;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
@@ -30,6 +31,7 @@ import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
+import net.slashie.utils.Circle;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
@@ -212,8 +214,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		int requiredCaptains = ships;
 		int requiredSailors = ships * 25;
 		
-		int captains = getItemCountBasic("CAPTAIN");
-		int sailors = getItemCountBasic("SAILOR");
+		int captains = getUnwoundedUnitCountBasic("CAPTAIN");
+		int sailors = getUnwoundedUnitCountBasic("SAILOR");
 		return captains >= requiredCaptains && sailors >= requiredSailors;
 		
 	}
@@ -811,6 +813,18 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return goodCount;
 	}
 	
+	public int getUnwoundedUnitCountBasic(String basicId){
+		int goodCount = 0;
+		List<Equipment> inventory = getGoods(GoodType.PEOPLE);
+		for (Equipment equipment: inventory){
+			ExpeditionUnit unit = (ExpeditionUnit)equipment.getItem(); 
+			if (unit.getBaseID().equals(basicId) && !unit.isWounded()){
+				goodCount += equipment.getQuantity();
+			}
+		}
+		return goodCount;
+	}
+	
 
 	public void reduceGood(String goodId, int quantity){
 		List<Equipment> inventory = getInventory();
@@ -1093,6 +1107,25 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				destinationPoint.x += Util.rand(-1, 1);
 				destinationPoint.y += Util.rand(-1, 1);
 			}
+			if (Util.chance(5)){
+				ExpeditionUnit randomUnit = getRandomUnitFair();
+				int choice = UserInterface.getUI().switchChat("Man overboard!", "A "+randomUnit.getDescription()+" has fall overboard in the storm! XXX What will you do?", "Let's try to save him!", "We must leave the man behind.");
+				if (choice == 0){
+					if (Util.chance(50)){
+						message("You pull the "+randomUnit.getDescription()+" from the seas!");
+						setCounter("MORALE_UP", 100);
+					} else {
+						reduceQuantityOf(randomUnit);
+						message("The sea takes the "+randomUnit.getDescription()+" away!");
+					}
+					wearOutShips(50, false);
+				} else {
+					message("The sea takes the "+randomUnit.getDescription()+" away!");
+					reduceQuantityOf(randomUnit);
+					setCounter("MORALE_DOWN", 100);
+				}
+			}
+			seaAccident(10);
         }
         
         List<AbstractFeature> features = getLevel().getFeaturesAt(destinationPoint);
@@ -1216,6 +1249,24 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
         super.landOn(destinationPoint);
 	}
 	
+	private void seaAccident(int chance) {
+		if (Util.chance(chance)){
+			ExpeditionUnit randomUnit = getRandomUnitFair();
+			message("Accident! A "+randomUnit.getDescription()+" is injured!");
+			reduceUnits(randomUnit, 1);
+			ExpeditionUnit woundedUnit = (ExpeditionUnit) randomUnit.clone();
+			woundedUnit.setWounded(true);
+			addUnits(woundedUnit, 1);
+		}
+	}
+
+	private ExpeditionUnit getRandomUnitFair() {
+		// TODO Implement this in a fair way
+		List<Equipment> units = getGoods(GoodType.PEOPLE);
+		Equipment randomEquipment = (Equipment) Util.randomElementOf(units);
+		return (ExpeditionUnit) randomEquipment.getItem();
+	}
+
 	private void resetDaysAtSea() {
 		daysOnSea = 0;
 	}
@@ -1441,6 +1492,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return ret;
 	}
 	
+	/**
+	 * 0 to 10, 5 is normal
+	 * @return
+	 */
 	public int getMorale(){
 		return expeditionMorale;
 	}
@@ -1595,7 +1650,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 
 	public void randomEvents() {
 		// Jonah
-		if (getPerceivedLuck() < -10){
+		if (isOnSea() && getPerceivedLuck() < -10){
 			if (getTotalUnits() > 1) {
 				if (Util.chance(20)){
 					int choice = UserInterface.getUI().switchChat("A man overboard is bringing us doom", "There is a Jonah amidst us, he must drown in the seas!XXX What will you do?", "Defend the man.", "Throw the man overboard.");
@@ -1604,9 +1659,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 						setCounter("MORALE_DOWN", 100);
 					} else {
 						List<Equipment> units = getGoods(GoodType.PEOPLE);
-						Equipment randomEquipment = (Equipment) Util.randomElementOf(units);
-						reduceQuantityOf(randomEquipment.getItem());
-						getLevel().addMessage("You cast a "+randomEquipment.getItem().getDescription()+" into the sea. May he rests in peace");
+						ExpeditionUnit randomUnit = getRandomUnitFair();
+						getLevel().addMessage("You cast a "+randomUnit.getDescription()+" into the sea. May he rests in peace");
 						modifyPerceivedLuck(10);
 						setCounter("MORALE_UP", 100);
 					}
@@ -1653,8 +1707,45 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			}
 		}
 		
+		// Accident
+		if (isOnSea()){
+			seaAccident(getSeaAccidentChance(getLocation().getWeather()));
+		}
+		
+		if (onOpenSea()){
+			if (Util.chance(50) && getSightRange() > 4){
+				boolean boolo = nearLandSignals(18) || nearLandSignals(19) || nearLandSignals(20);
+			}
+		}
+		
 	}
 	
+	private int getSeaAccidentChance(Weather weather) {
+		switch (weather){
+		case CLEAR:
+		case FOG:
+		case CLOUDY:
+			return 3;
+		case RAIN:
+		case SNOW:
+			return 5;
+		case STORM:
+		case WINDY:
+			return 10;
+		case GALE_WIND:
+			return 20;
+		case HURRICANE:
+			return 40;
+		case DUST_STORM:
+			return 0;
+		}
+		return 0;
+	}
+
+	private boolean isOnSea() {
+		return getLocation() instanceof ExpeditionMacroLevel && ((OverworldExpeditionCell)getLocation().getMapCell(getPosition())).isSea();
+	}
+
 	private int perceivedLuck;
 
 	public int getPerceivedLuck() {
@@ -1686,6 +1777,102 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		if (Util.chance(50))
 			modifyPerceivedLuck(1);
 
+	}
+	
+	@Override
+	public void afterActing() {
+		super.afterActing();
+		// Randomly sight land
+		if (getMovementMode() == MovementMode.SHIP){
+			if (daysOnSea > 30 && onOpenSea()){
+				sightLand(getSightRange() + 1);
+				sightLand(getSightRange() + 2);
+			}
+		}
+		// Wrong Land sight
+		if (getMorale() < 4 && Util.chance(5) && daysOnSea > 30 && onOpenSea()){
+			CardinalDirection d = CardinalDirection.getRandomDirection();
+			switch (Util.rand(0, 1)){
+			case 0:
+				message("You see land to the "+d.getDescription()+"!");
+				break;
+			case 1:
+				message("You see a cloud block to the "+d.getDescription());
+				break;
+			}
+		}
+	}
+	
+	@Override
+	public void beforeActing() {
+		super.beforeActing();
+		isOnOpenSea = true;
+	}
+	
+	@Override
+	public void seeMapCell(AbstractCell cell) {
+		super.seeMapCell(cell);
+		if (isOnOpenSea){
+			if (cell instanceof OverworldExpeditionCell){
+				if (!((OverworldExpeditionCell)cell).isWater()){
+					isOnOpenSea = false;
+				}
+			}
+		}
+	}
+	
+	private boolean isOnOpenSea = false;
+
+	private boolean onOpenSea() {
+		return isOnOpenSea;
+	}
+
+	private void sightLand(int range) {
+		if (!(getLevel() instanceof ExpeditionMacroLevel))
+			return;
+		Circle c = new Circle(getPosition(), range);
+		List<Position> points = c.getPoints();
+		for (Position point: points){
+			if (Util.chance(15)){
+				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLocation().getMapCell(point);
+				if (cell != null && !cell.isWater()){
+					CardinalDirection d = CardinalDirection.getGeneralDirection(getPosition(), point);
+					message("You see land to the "+d.getDescription()+"!");
+					return;
+				}
+			}
+		}
+		
+	}
+	
+	private boolean nearLandSignals(int range){
+		// See if there's land nearby
+		if (!(getLevel() instanceof ExpeditionMacroLevel))
+			return false;
+		Circle c = new Circle(getPosition(), range);
+		List<Position> points = c.getPoints();
+		for (Position point: points){
+			if (Util.chance(5)){
+				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLocation().getMapCell(point);
+				if (cell != null && !cell.isWater()){
+					switch (Util.rand(0, 2)){
+					case 0:
+						message("You see some tufts of grass floating on the sea!");
+						return true;
+					case 1:
+						CardinalDirection d = CardinalDirection.getGeneralDirection(getPosition(), point);
+						message("You see birds heading "+d.getDescription());
+						return true;
+					case 2:
+						d = CardinalDirection.getGeneralDirection(getPosition(), point);
+						message("You see a cloud block to the "+d.getDescription());
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+		
 	}
 	
 }

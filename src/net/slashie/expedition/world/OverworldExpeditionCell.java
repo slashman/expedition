@@ -4,27 +4,32 @@ import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.AppearanceFactory;
 
 public class OverworldExpeditionCell extends AbstractCell{
-	private boolean isLand, isRiver, isWood;
+	private boolean 
+	isLand, 
+	isShallowWater,
+	isDeepWater,
+	isWood;
 	private int heightMod;
 	private int forageChance, forageQuantity;
 	private boolean isForest;
 	
 	public boolean isRiver() {
-		return isRiver;
+		return isShallowWater;
 	}
 
 	public boolean isLand() {
 		return isLand;
 	}
 
-	public OverworldExpeditionCell(String pid, String description, boolean isLand, int heightMod, boolean isRiver, boolean isSolid, boolean isWood, boolean isOpaque, int forageChance, int forageQuantity, boolean isForest) {
+	public OverworldExpeditionCell(String pid, String description, boolean isLand, int heightMod, boolean isShallowWater, boolean isSolid, boolean isWood, boolean isOpaque, int forageChance, int forageQuantity, boolean isForest, boolean isDeepWater) {
 		super(pid, description, description, AppearanceFactory.getAppearanceFactory().getAppearance(pid), isSolid, isOpaque);
 		this.isLand = isLand;
 		this.heightMod = heightMod;
-		this.isRiver = isRiver;
+		this.isShallowWater = isShallowWater;
 		this.isForest = isForest;
 		this.isWood = isWood;
-		setWater(!isLand);
+		this.isDeepWater = isDeepWater;
+		setWater(isDeepWater || isShallowWater);
 		this.forageChance = forageChance;
 		this.forageQuantity = forageQuantity;
 	}
@@ -49,8 +54,7 @@ public class OverworldExpeditionCell extends AbstractCell{
 	}
 
 	public boolean isSea() {
-		// TODO Split rivers and seas
-		return isWater() && !isRiver();
+		return isDeepWater;
 	}
 
 	public int getHeightMod() {
