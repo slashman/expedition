@@ -3,6 +3,7 @@ package net.slashie.expedition.ui.console;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
@@ -66,6 +67,8 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 			String decoded = GameFiles.decode(key);
 			registrant = decoded.split(",")[0];
 			supporterLevel = decoded.split(",")[1];
+		} catch (FileNotFoundException e) {
+			registrant = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			registrant = null;

@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Properties;
@@ -125,6 +126,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				String decoded = GameFiles.decode(key);
 				registrant = decoded.split(",")[0];
 				supporterLevel = decoded.split(",")[1];
+    		} catch (FileNotFoundException e) {
+    			registrant = null;
 			} catch (Exception e) {
 				e.printStackTrace();
 				registrant = null;

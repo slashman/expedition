@@ -91,14 +91,14 @@ public class ExpeditionDAO {
 		
 		return new AbstractCell[]{
 			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false, 25, 20, false),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 25, 20, false),
-			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 10, false),
-			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 25, 20, false),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,false, 10, 5, false),
-			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,false, 0, 0, false),
-			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 20, 20, true),
-			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0, false),
+			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false, 25, 20, false, false),
+			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 25, 20, false, false),
+			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 10, false, true),
+			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 25, 20, false, false),
+			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,false, 10, 5, false, false),
+			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,false, 0, 0, false, false),
+			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 20, 20, true, false),
+			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0, false, false),
 			
 			//Inworld Cells
 			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
