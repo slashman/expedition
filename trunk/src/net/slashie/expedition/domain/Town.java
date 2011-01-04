@@ -93,7 +93,7 @@ public class Town extends GoodsCache{
 		case 3: 
 			// Inhabit
 			if (getPopulation() + expedition.getTotalUnits() + 1 <= getPopulationCapacity()){
-				Hibernate hibernate = new Hibernate();
+				Hibernate hibernate = new Hibernate(7, true);
 				expedition.setPosition(getPosition().x(), getPosition().y(), getPosition().z());
 				expedition.setNextAction(hibernate);
 			} else {
