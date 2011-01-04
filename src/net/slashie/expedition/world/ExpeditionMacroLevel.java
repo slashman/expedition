@@ -14,6 +14,7 @@ import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.expedition.world.agents.ForageAgent;
+import net.slashie.expedition.world.agents.RandomEventAgent;
 import net.slashie.expedition.world.agents.WeeklyAgent;
 import net.slashie.expedition.world.agents.WindAgent;
 import net.slashie.serf.action.Actor;
@@ -29,6 +30,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	private Actor currentDayShiftAgent;
 	private Actor currentForageAgent;
 	private Actor currentWeeklyAgent;
+	private Actor currentRandomEventsAgent;
 
 	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
 			int levelHeight, int gridWidth, int gridHeight,
@@ -39,10 +41,12 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		currentDayShiftAgent = new DayShiftAgent();
 		currentForageAgent = new ForageAgent();
 		currentWeeklyAgent = new WeeklyAgent();
+		currentRandomEventsAgent = new RandomEventAgent();
 		addActor(currentWindAgent);
 		addActor(currentDayShiftAgent);
 		addActor(currentForageAgent);
 		addActor(currentWeeklyAgent);
+		addActor(currentRandomEventsAgent);
 	}
 
 	private Pair<Integer,Integer> handyReusablePair = new Pair<Integer, Integer>(0,0);

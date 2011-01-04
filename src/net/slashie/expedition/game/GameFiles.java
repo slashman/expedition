@@ -78,6 +78,6 @@ public class GameFiles {
 	}
 	
 	public static void main (String [] args){
-		System.out.println(encode("Slashie","Hero"));
+		System.out.println(encode("-","Unregistered"));
 	}
 }

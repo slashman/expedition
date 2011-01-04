@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.slashie.expedition.action.Hibernate;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
@@ -1109,11 +1110,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			}
 			if (Util.chance(5)){
 				ExpeditionUnit randomUnit = getRandomUnitFair();
-				int choice = UserInterface.getUI().switchChat("Man overboard!", "A "+randomUnit.getDescription()+" has fall overboard in the storm! XXX What will you do?", "Let's try to save him!", "We must leave the man behind.");
+				int choice = UserInterface.getUI().switchChat("Man overboard!", "A "+randomUnit.getDescription()+" has fallen overboard in the storm! XXX What will you do?", "Let's try to save him!", "We must leave the man behind.");
 				if (choice == 0){
 					if (Util.chance(50)){
 						message("You pull the "+randomUnit.getDescription()+" from the seas!");
-						setCounter("MORALE_UP", 100);
+						boostMorale(100);
 					} else {
 						reduceQuantityOf(randomUnit);
 						message("The sea takes the "+randomUnit.getDescription()+" away!");
@@ -1122,7 +1123,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				} else {
 					message("The sea takes the "+randomUnit.getDescription()+" away!");
 					reduceQuantityOf(randomUnit);
-					setCounter("MORALE_DOWN", 100);
+					setCounter("decreaseMorale(100);", 100);
 				}
 			}
 			seaAccident(10);
@@ -1570,7 +1571,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		}
 		// Ship in good health
 		if (getMovementMode() == MovementMode.SHIP && getShipHealth() > 95 ){
-			if (Util.chance(20)) message("Our ships sail steady!");
+			if (Util.chance(20)) message("Our ships are in good health.");
 			expeditionMorale ++;
 		}
 		// Rum for the sailors
@@ -1600,7 +1601,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	}
 	
 	public String getMoraleDescription(){
-		return MORALE_DESCRIPTIONS [getMorale()];
+		int morale = getMorale();
+		return MORALE_DESCRIPTIONS [morale] + " ("+morale+")";
 		
 	}
 
@@ -1656,13 +1658,12 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 					int choice = UserInterface.getUI().switchChat("A man overboard is bringing us doom", "There is a Jonah amidst us, he must drown in the seas!XXX What will you do?", "Defend the man.", "Throw the man overboard.");
 					if (choice == 0){
 						getLevel().addMessage("We are doomed!");
-						setCounter("MORALE_DOWN", 100);
+						decreaseMorale(100);
 					} else {
-						List<Equipment> units = getGoods(GoodType.PEOPLE);
 						ExpeditionUnit randomUnit = getRandomUnitFair();
 						getLevel().addMessage("You cast a "+randomUnit.getDescription()+" into the sea. May he rests in peace");
 						modifyPerceivedLuck(10);
-						setCounter("MORALE_UP", 100);
+						boostMorale(100);
 					}
 				}
 			}
@@ -1675,10 +1676,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 					int shot = Util.rand(0, 100);
 					if (shot < 30){
 						getLevel().addMessage("Your expedition feels motivated");
-						setCounter("MORALE_UP", 100);
+						boostMorale(100);
 					} else if (shot < 60) {
 						getLevel().addMessage("Your empty words do not make a difference!");
-						setCounter("MORALE_DOWN", 100);
+						decreaseMorale(100);
 					} else {
 						getLevel().addMessage("Your words make no effect on your men");
 					}
@@ -1687,7 +1688,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 						reduceAccountedGold(100);
 						if (Util.chance(90)){
 							getLevel().addMessage("We hope to survive enough to spend this gold.");
-							setCounter("MORALE_UP", 100);
+							boostMorale(100);
 						} else {
 							getLevel().addMessage("Gold is of no use to us.");
 						}
@@ -1695,11 +1696,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 						setAccountedGold(0);
 						if (Util.chance(10)){
 							getLevel().addMessage("We hope to live enough to see that gold");
-							setCounter("MORALE_UP", 100);
+							boostMorale(100);
 						} else {
 							
 							getLevel().addMessage("We do not believe in your empty promises!");
-							setCounter("MORALE_DOWN", 100);
+							decreaseMorale(100);
 						}
 					}
 				}
@@ -1712,26 +1713,62 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			seaAccident(getSeaAccidentChance(getLocation().getWeather()));
 		}
 		
-		if (onOpenSea()){
-			if (Util.chance(50) && getSightRange() > 4){
-				boolean boolo = nearLandSignals(18) || nearLandSignals(19) || nearLandSignals(20);
+		// Murder
+		if (hasCounter("KILLER_ALIVE") || getMorale() < 3){
+			if (Util.chance(hasCounter("KILLER_ALIVE")?10:5) && getTotalUnits() > 2){
+				ExpeditionUnit randomUnit = getRandomUnitFair();
+				reduceQuantityOf(randomUnit);
+				int choice = UserInterface.getUI().switchChat("Treacherous Murder!", "A "+randomUnit.getDescription()+" has been murdered! XXX What will you do?", "Investigate the event. (2 days)", "Ignore the event.");
+				if (choice == 0){
+					// Investigate the murder
+					setNextAction(new Hibernate(2, false));
+					if (Util.chance(50)){
+						boostMorale(100);
+						ExpeditionUnit murderer = getRandomUnitFair();
+						choice = UserInterface.getUI().switchChat("Treacherous Murder!", "You found a "+murderer.getDescription()+" to be the culprit! XXX What will you do?", "Punish the "+murderer.getDescription()+".", "Execute the "+murderer.getDescription()+".");
+						if (choice == 0){
+							getLevel().addMessage("You flog the "+murderer.getDescription()+".");
+							setCounter("KILLER_ALIVE", 100);
+						} else {
+							reduceQuantityOf(murderer);
+							getLevel().addMessage("You execute the "+murderer.getDescription()+". May this serve as an example");
+						}
+					} else {
+						getLevel().addMessage("You found no culprit.");
+						setCounter("KILLER_ALIVE", 50);
+					}
+				} else {
+					// Ignore the event
+					getLevel().addMessage("You hope the murderer won't show up again.");
+					decreaseMorale(100);
+					setCounter("KILLER_ALIVE", 200);
+				}
+
 			}
 		}
 		
 	}
 	
+	private void boostMorale(int i) {
+		setCounter("MORALE_UP", i);
+	}
+	
+	private void decreaseMorale(int i) {
+		setCounter("MORALE_DOWN", i);
+	}
+
 	private int getSeaAccidentChance(Weather weather) {
 		switch (weather){
 		case CLEAR:
 		case FOG:
 		case CLOUDY:
-			return 3;
+			return 2;
 		case RAIN:
 		case SNOW:
-			return 5;
+			return 4;
 		case STORM:
 		case WINDY:
-			return 10;
+			return 6;
 		case GALE_WIND:
 			return 20;
 		case HURRICANE:
@@ -1772,8 +1809,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				modifyPerceivedLuck(-1);
 			}
 		}
-		updateMorale();
-		randomEvents();
 		if (Util.chance(50))
 			modifyPerceivedLuck(1);
 
@@ -1784,23 +1819,28 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		super.afterActing();
 		// Randomly sight land
 		if (getMovementMode() == MovementMode.SHIP){
+			boolean sawLand = false;
 			if (daysOnSea > 30 && onOpenSea()){
-				sightLand(getSightRange() + 1);
-				sightLand(getSightRange() + 2);
+				sawLand = sightLand(getSightRange() + 1) || sightLand(getSightRange() + 2);
+				if (!sawLand && Util.chance(50) && getSightRange() > 4){
+					sawLand = nearLandSignals(18) || nearLandSignals(19) || nearLandSignals(20);
+				}
+				// Wrong Land sight
+				if (!sawLand && getMorale() < 4 && Util.chance(5)){
+					CardinalDirection d = CardinalDirection.getRandomDirection();
+					switch (Util.rand(0, 1)){
+					case 0:
+						message("You see land to the "+d.getDescription()+"!");
+						break;
+					case 1:
+						message("You see a cloud block to the "+d.getDescription());
+						break;
+					}
+				}
 			}
+			
 		}
-		// Wrong Land sight
-		if (getMorale() < 4 && Util.chance(5) && daysOnSea > 30 && onOpenSea()){
-			CardinalDirection d = CardinalDirection.getRandomDirection();
-			switch (Util.rand(0, 1)){
-			case 0:
-				message("You see land to the "+d.getDescription()+"!");
-				break;
-			case 1:
-				message("You see a cloud block to the "+d.getDescription());
-				break;
-			}
-		}
+
 	}
 	
 	@Override
@@ -1827,9 +1867,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return isOnOpenSea;
 	}
 
-	private void sightLand(int range) {
+	private boolean sightLand(int range) {
 		if (!(getLevel() instanceof ExpeditionMacroLevel))
-			return;
+			return false;
 		Circle c = new Circle(getPosition(), range);
 		List<Position> points = c.getPoints();
 		for (Position point: points){
@@ -1838,10 +1878,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 				if (cell != null && !cell.isWater()){
 					CardinalDirection d = CardinalDirection.getGeneralDirection(getPosition(), point);
 					message("You see land to the "+d.getDescription()+"!");
-					return;
+					return true;
 				}
 			}
 		}
+		return false;
 		
 	}
 	
