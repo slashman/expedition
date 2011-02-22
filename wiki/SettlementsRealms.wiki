@@ -8,7 +8,11 @@ This file will be used to fill the expedition world map with hundreds of cities,
 = How to help =
   * Take a look at the map and pick a city
   * Lookup wikipedia for that city, note its location
-  * Build a history record for the city, each record has a date, and may be a population record, a realm change or a name change.
+  * Build a history record for the city, each record has a date and may have the following:
+    * A population record
+    * A realm change
+    * A name change.
+    * A "join" event with another settlement
   * Realms are similar, but their history record are just for joining another realms
 
 The specification is WIP, please comment for anything you feel should be improved.
