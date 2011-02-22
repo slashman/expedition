@@ -21,7 +21,7 @@ The specification is WIP, please comment for anything you feel should be improve
   * [http://upload.wikimedia.org/wikipedia/commons/2/2c/Europe_about_1560.jpg Europe_about_1560]
   * http://en.wikipedia.org/wiki/Historical_cities
 
-= Details =
+= Example 1 =
 
 {{{
 
@@ -60,6 +60,34 @@ The specification is WIP, please comment for anything you feel should be improve
         <event date = "1516" name = "Spain"/>
       </history>
     </realm>
+  </realms>
+</geopolitical>
+
+}}}
+
+= Example 2 =
+
+{{{
+
+<geopolitical>
+  <settlements>
+    <settlement id = "MEDELLIN" lat="6°14'9.33N" long = "75°34'30.49W" patron = "java.koder@gmail.com" lastUpdate = "22/02/2011">
+      <history>
+        <event date = "1616" pop = "100" name = "Poblado de San Lorenzo" src = "In 1616 the colonial visitor Francisco de Herrera y Campuzano founded a settlement with 80 Amerindians"/>
+        <event date = "1574" pop = "1000" src = "After 1574, with Gaspar de Rodas settled in the valley, population started to grow."/>
+        <event date = "1675" pop = "3000" name = "Villa de Nuestra Señora de la Candelaria" src = "In 1675 the first census during colonial times was taken: there were 3,000 people and 280 families"/>
+        <event date = "1787" pop = "14507" src = "Antonio Mon y Velarde ordered one between 1786 and 1787: there were then 14,507 people and 241 families"/>
+        <event date = "1808" pop = "15347" src = "In 1808, two years before Colombia won independence, the city had 15,347 people and 360 families"/>
+        <event date = "1819" realm = "COLOMBIA"/>
+        <event date = "1905" pop = "59815" src = "In the first half of the twentieth century, the population of Medellín increased sixfold, from 59,815 inhabitants in 1905 to 358,189 in 1951."/>
+        <event date = "1951" pop = "358189" src = "In the first half of the twentieth century, the population of Medellín increased sixfold, from 59,815 inhabitants in 1905 to 358,189 in 1951."/>
+        <event date = "2005" pop = "2636101" src = ""/>
+      </history>
+    </settlement>
+  </settlements>
+  <realms>
+    <realm id = "SPAIN"/>
+    <realm id = "COLOMBIA"/>
   </realms>
 </geopolitical>
 
