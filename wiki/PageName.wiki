@@ -6,7 +6,7 @@
 This file will be used to fill the expedition world map with hundreds of cities, based on the history period being played!
 
 = Useful links =
-http://upload.wikimedia.org/wikipedia/commons/2/2c/Europe_about_1560.jpg
+[http://upload.wikimedia.org/wikipedia/commons/2/2c/Europe_about_1560.jpg Europe_about_1560]
 http://en.wikipedia.org/wiki/Historical_cities
 
 = Details =
