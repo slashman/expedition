@@ -26,42 +26,41 @@ The specification is WIP, please comment for anything you feel should be improve
 {{{
 
 <geopolitical>
- <settlements>
-  <settlement id = "PALOS" lat="37°14'N" long = "6°54'W">
-   <history>
-    <event date = "1120" pop = "10" realm = "ALMOHAD" name = "Palos"/>
-    <event date = "1248" realm = "CASTILE"/>
-    <event date = "1322" pop = "100"/>
-    <event date = "1475" pop = "2500" rem = "Fishing and seafaring expeditions to Guinea" />
-    <event date = "1550" pop = "700" rem = "Establishment of the Casa de Contratación at Seville in 1503"/>
-    <event date = "1700" pop = "125" rem = "By the 18th century, the town had only about 125 inhabitants"/>
-    <event date = "1750" pop = "2500" rem = "Catalan investors established a viticultural industry centered at Palos"/>
-    <event date = "2006" pop = "8415" rem = "According to the 2006 census"/>
-   </history>
-  </settlement>
- </settlements>
- <realms>
-  <realm id = "ALMOHAD"/>
-  <realm id = "CASTILE">
-   <history>
-    <event date = "1035" name = "Castile"/>
-    <event date = "1230" name = "Castile and Leon"/>
-    <event date = "1516" join = "SPAIN"/>
-   </history>
-  </realm>
-  <realm id = "LEON">
-   <history>
-    <event date = "910" name = "Leon"/>
-    <event date = "1230" join = "CASTILE"/>
-   </history>
-  </realm>
-  <realm id = "SPAIN">
-   <history>
-    <event date = "1516" name = "Spain"/>
-   </history>
-  </realm>
- </realms>
-
+  <settlements>
+    <settlement id = "PALOS" lat="37°14'N" long = "6°54'W" patron = "java.koder@gmail.com" lastUpdate = "22/02/2011">
+      <history>
+        <event date = "1120" pop = "10" realm = "ALMOHAD" name = "Palos"/>
+        <event date = "1248" realm = "CASTILE"/>
+        <event date = "1322" pop = "100"/>
+        <event date = "1475" pop = "2500" rem = "Fishing and seafaring expeditions to Guinea" />
+        <event date = "1550" pop = "700" rem = "Establishment of the Casa de Contratación at Seville in 1503"/>
+        <event date = "1700" pop = "125" rem = "By the 18th century, the town had only about 125 inhabitants"/>
+        <event date = "1750" pop = "2500" rem = "Catalan investors established a viticultural industry centered at Palos"/>
+        <event date = "2006" pop = "8415" rem = "According to the 2006 census"/>
+      </history>
+    </settlement>
+  </settlements>
+  <realms>
+    <realm id = "ALMOHAD"/>
+      <realm id = "CASTILE">
+        <history>
+          <event date = "1035" name = "Castile"/>
+          <event date = "1230" name = "Castile and Leon"/>
+          <event date = "1516" join = "SPAIN"/>
+        </history>
+      </realm>
+    <realm id = "LEON">
+      <history>
+        <event date = "910" name = "Leon"/>
+        <event date = "1230" join = "CASTILE"/>
+      </history>
+    </realm>
+    <realm id = "SPAIN">
+      <history>
+        <event date = "1516" name = "Spain"/>
+      </history>
+    </realm>
+  </realms>
 </geopolitical>
 
 }}}
