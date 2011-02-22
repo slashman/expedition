@@ -23,7 +23,7 @@ The specification is WIP, please comment for anything you feel should be improve
   * [http://upload.wikimedia.org/wikipedia/commons/2/2c/Europe_about_1560.jpg Europe_about_1560]
   * http://en.wikipedia.org/wiki/Historical_cities
 
-= Example 1 =
+= Example 1: Palos de la Frontera, Spain =
 
 {{{
 
@@ -67,7 +67,7 @@ The specification is WIP, please comment for anything you feel should be improve
 
 }}}
 
-= Example 2 =
+= Example 2: Medellín, Colombia =
 
 {{{
 
@@ -93,4 +93,101 @@ The specification is WIP, please comment for anything you feel should be improve
   </realms>
 </geopolitical>
 
+}}}
+
+== Example 3: Milwaukee, USA ==
+
+{{{
+<geopolitical>
+ <settlements>
+  <settlement id = "JUNEAUTOWN" lat="43°03'N" long="87°57'W" patron = "gamer2k4@gmail.com" lastUpdate = "22/02/2011">
+   <history>
+    <event date = "1825" pop = "100" realm = "WISCONSIN TERRITORY" name = "Juneautown" src = "Founded by Solomon Juneau east of the Milwaukee River; population is approximate" approximate />
+	<event date = "1830" pop = "400" approximat e/>
+	<event date = "1835" pop = "800" approximate />
+	<event date = "1840" pop = "1600" approximate />
+	<event date = "1845" pop = "3200" approximate />
+	<event date = "1846" join = "MILWAUKEE" src = "Combinined with Kilbourntown and Walker's Point to make Milwaukee"/>
+   </history>
+  </settlement>
+  <settlement id = "KILBOURNTOWN" lat="43°03'N" long="87°58'W">
+   <history>
+    <event date = "1826" pop = "100" realm = "WISCONSIN TERRITORY" name = "Kilbourntown" src = "Founded by Byron Kilbourn west of the Milwaukee River; population is approximate" approximate/>
+	<event date = "1830" pop = "300" approximate/>
+	<event date = "1835" pop = "600" approximate/>
+	<event date = "1840" pop = "1300" approximate/>
+	<event date = "1845" pop = "2800" approximate/>
+	<event date = "1846" join = "MILWAUKEE" src = "Combinined with Juneautown and Walker's Point to make Milwaukee"/>
+   </history>
+  </settlement>
+  <settlement id = "WALKER'S POINT" lat="43°02'N" long="87°57'W">
+   <history>
+    <event date = "1834" pop = "50" realm = "WISCONSIN TERRITORY" name = "Walker's Point" src = "Founded by George H. Walker when he built a cabin south of the Milwaukee River; population is approximate" approximate/>
+	<event date = "1838" pop = "200" approximate />
+	<event date = "1840" pop = "800" approximate />
+	<event date = "1845" pop = "2000" approximate />
+	<event date = "1846" join = "MILWAUKEE" src = "Combinined with Juneautown and Kilbourntown to make Milwaukee"/>
+   </history>
+  </settlement>
+  <settlement id = "MILWAUKEE" lat="43°03'N" long="87°57'W">
+   <history>
+    <event date = "1846" pop = "10000" realm = "WISCONSIN TERRITORY" name = "Milwaukee" src = "Juneautown, Kilbourntown, and Walker's point incorporated as Milwaukee"/>
+	<event date = "1848" realm = "WISCONSIN" src = "Wisconsin made into a state"/>
+    <event date = "1850" pop = "20061" src = "First census"/>
+    <event date = "1860" pop = "45246"/>
+    <event date = "1870" pop = "71440"/>
+    <event date = "1880" pop = "115587"/>
+    <event date = "1890" pop = "204468"/>
+    <event date = "1900" pop = "285315"/>
+    <event date = "1910" pop = "373857"/>
+    <event date = "1920" pop = "457147"/>
+    <event date = "1930" pop = "578249"/>
+    <event date = "1940" pop = "587472"/>
+    <event date = "1950" pop = "637392"/>
+    <event date = "1960" pop = "741324"/>
+    <event date = "1970" pop = "717099"/>
+    <event date = "1980" pop = "636212"/>
+    <event date = "1990" pop = "628088"/>
+    <event date = "2000" pop = "596974"/>
+    <event date = "2010" pop = "604133" src = "Latest census"/>
+   </history>
+  </settlement>
+ </settlements>
+ <realms>
+  <realm id = "FRENCH COLONIES">
+   <history>
+    <event date = "1634" name = "French Colonies" src = "Forts and colonies founded by French explorers"/>
+	<event date = "1763" join = "ILLINOIS COUNTRY"/>
+   </history>
+  </realm>
+  <realm id = "ILLINOIS COUNTRY">
+   <history>
+    <event date = "1763" name = "Illinois Country" src = "British gained authority with Treaty of Paris"/>
+	<event date = "1812" join = "ILLINOIS TERRITORY"/>
+   </history>
+  </realm>
+  <realm id = "ILLINOIS TERRITORY">
+   <history>
+    <event date = "1812" name = "Illinois Territory" src = "U.S. exercises control after War of 1812"/>
+	<event date = "1818" join = "WISCONSIN COUNTRY"/>
+   </history>
+  </realm>
+  <realm id = "WISCONSIN COUNTRY">
+   <history>
+    <event date = "1818" name = "Wisconsin Country" src = "Formed when Illinois was granted statehood"/>
+	<event date = "1836" join = "WISCONSIN TERRITORY"/>
+   </history>
+  </realm>
+  <realm id = "WISCONSIN TERRITORY">
+   <history>
+    <event date = "1836" name = "Wisconsin Territory" src = "Established by U.S. Congress; includes the future states of Wisconsin, Minnesota, Iowa, and parts of the Dakotas"/>
+	<event date = "1848" join = "WISCONSIN"/>
+   </history>
+  </realm>
+  <realm id = "WISCONSIN">
+   <history>
+    <event date = "1848" name = "Wisconsin" src = "Wisconsin granted statehood by U.S."/>
+   </history>
+  </realm>
+</geopolitical>
 }}}
