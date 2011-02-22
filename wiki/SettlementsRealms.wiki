@@ -13,6 +13,8 @@ This file will be used to fill the expedition world map with hundreds of cities,
     * A realm change
     * A name change.
     * A "join" event with another settlement
+    * A "abandoned" event
+  * Event records must have a "src" attribute, citing based on why it was defined, and if they use approximate facts, they should use the "approximate" attribute
   * Realms are similar, but their history record are just for joining another realms
 
 The specification is WIP, please comment for anything you feel should be improved.
@@ -29,14 +31,14 @@ The specification is WIP, please comment for anything you feel should be improve
   <settlements>
     <settlement id = "PALOS" lat="37°14'N" long = "6°54'W" patron = "java.koder@gmail.com" lastUpdate = "22/02/2011">
       <history>
-        <event date = "1120" pop = "10" realm = "ALMOHAD" name = "Palos"/>
+        <event date = "1120" pop = "10" realm = "ALMOHAD" name = "Palos" approximate/>
         <event date = "1248" realm = "CASTILE"/>
-        <event date = "1322" pop = "100"/>
-        <event date = "1475" pop = "2500" rem = "Fishing and seafaring expeditions to Guinea" />
-        <event date = "1550" pop = "700" rem = "Establishment of the Casa de Contratación at Seville in 1503"/>
-        <event date = "1700" pop = "125" rem = "By the 18th century, the town had only about 125 inhabitants"/>
-        <event date = "1750" pop = "2500" rem = "Catalan investors established a viticultural industry centered at Palos"/>
-        <event date = "2006" pop = "8415" rem = "According to the 2006 census"/>
+        <event date = "1322" pop = "100" approximate/>
+        <event date = "1475" pop = "2500" src = "Fishing and seafaring expeditions to Guinea" approximate/>
+        <event date = "1550" pop = "700" src = "Establishment of the Casa de Contratación at Seville in 1503" approximate/>
+        <event date = "1700" pop = "125" src = "By the 18th century, the town had only about 125 inhabitants"/>
+        <event date = "1750" pop = "2500" src = "Catalan investors established a viticultural industry centered at Palos" approximate/>
+        <event date = "2006" pop = "8415" src = "According to the 2006 census"/>
       </history>
     </settlement>
   </settlements>
@@ -73,15 +75,15 @@ The specification is WIP, please comment for anything you feel should be improve
   <settlements>
     <settlement id = "MEDELLIN" lat="6°14'9.33N" long = "75°34'30.49W" patron = "java.koder@gmail.com" lastUpdate = "22/02/2011">
       <history>
-        <event date = "1616" pop = "100" name = "Poblado de San Lorenzo" src = "In 1616 the colonial visitor Francisco de Herrera y Campuzano founded a settlement with 80 Amerindians"/>
-        <event date = "1574" pop = "1000" src = "After 1574, with Gaspar de Rodas settled in the valley, population started to grow."/>
+        <event date = "1616" pop = "100" name = "Poblado de San Lorenzo" src = "In 1616 the colonial visitor Francisco de Herrera y Campuzano founded a settlement with 80 Amerindians" approximate/>
+        <event date = "1574" pop = "1000" src = "After 1574, with Gaspar de Rodas settled in the valley, population started to grow." approximate/>
         <event date = "1675" pop = "3000" name = "Villa de Nuestra Señora de la Candelaria" src = "In 1675 the first census during colonial times was taken: there were 3,000 people and 280 families"/>
         <event date = "1787" pop = "14507" src = "Antonio Mon y Velarde ordered one between 1786 and 1787: there were then 14,507 people and 241 families"/>
         <event date = "1808" pop = "15347" src = "In 1808, two years before Colombia won independence, the city had 15,347 people and 360 families"/>
         <event date = "1819" realm = "COLOMBIA"/>
         <event date = "1905" pop = "59815" src = "In the first half of the twentieth century, the population of Medellín increased sixfold, from 59,815 inhabitants in 1905 to 358,189 in 1951."/>
         <event date = "1951" pop = "358189" src = "In the first half of the twentieth century, the population of Medellín increased sixfold, from 59,815 inhabitants in 1905 to 358,189 in 1951."/>
-        <event date = "2005" pop = "2636101" src = ""/>
+        <event date = "2005" pop = "2636101" src = "Census"/>
       </history>
     </settlement>
   </settlements>
