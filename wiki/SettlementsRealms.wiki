@@ -28,11 +28,11 @@ The specification is WIP, please comment for anything you feel should be improve
     <event date = "1120" pop = "10" realm = "ALMOHAD" name = "Palos"/>
     <event date = "1248" realm = "CASTILE"/>
     <event date = "1322" pop = "100"/>
-    <event date = "1475" pop = "2500" />
-    <event date = "1550" pop = "700"/>
-    <event date = "1700" pop = "125"/>
-    <event date = "1750" pop = "2500"/>
-    <event date = "2006" pop = "8415"/>
+    <event date = "1475" pop = "2500" rem = "Fishing and seafaring expeditions to Guinea" />
+    <event date = "1550" pop = "700" rem = "Establishment of the Casa de Contratación at Seville in 1503"/>
+    <event date = "1700" pop = "125" rem = "By the 18th century, the town had only about 125 inhabitants"/>
+    <event date = "1750" pop = "2500" rem = "Catalan investors established a viticultural industry centered at Palos"/>
+    <event date = "2006" pop = "8415" rem = "According to the 2006 census"/>
    </history>
   </settlement>
  </settlements>
