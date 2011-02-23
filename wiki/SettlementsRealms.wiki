@@ -19,6 +19,14 @@ This file will be used to fill the expedition world map with hundreds of cities,
 
 The specification is WIP, please comment for anything you feel should be improved.
 
+= Definitions =
+Settlement: A settlement [...] is a permanent or temporary community in which people live [...]. The term may include hamlets, villages, towns and cities.
+
+State: In the social sciences, a state is the compulsory political institution of a centralized government that maintains a monopoly of the legitimate use of force within a certain territory
+
+Confederation: A confederation is an association of sovereign member states that, by treaty, have delegated certain of their competences (or powers) to common institutions, in order to coordinate their policies in a number of areas, without constituting a new state on top of the member states
+
+
 = Useful links =
   * [http://upload.wikimedia.org/wikipedia/commons/2/2c/Europe_about_1560.jpg Europe_about_1560]
   * http://en.wikipedia.org/wiki/Historical_cities
@@ -29,35 +37,39 @@ The specification is WIP, please comment for anything you feel should be improve
 
 <geopolitical>
   <settlements>
-    <settlement id = "PALOS" lat="37°14'N" long = "6°54'W" patron = "java.koder@gmail.com" lastUpdate = "22/02/2011">
+    <settlement id = "PALOS" lat="37°14'N" long = "6°54'W" patron = "java.koder@gmail.com" lastUpdate = "23/02/2011">
+      <population>
+        <sample date = "1120" pop = "10" approximate/>
+        <sample date = "1322" pop = "100" approximate/>
+        <sample date = "1475" pop = "2500" src = "Fishing and seafaring expeditions to Guinea" approximate/>
+        <sample date = "1550" pop = "700" src = "Establishment of the Casa de Contratación at Seville in 1503" approximate/>
+        <sample date = "1700" pop = "125" src = "By the 18th century, the town had only about 125 inhabitants"/>
+        <sample date = "1750" pop = "2500" src = "Catalan investors established a viticultural industry centered at Palos" approximate/>
+        <sample date = "2006" pop = "8415" src = "According to the 2006 census"/>
+      </population>
+
       <history>
-        <event date = "1120" pop = "10" realm = "ALMOHAD" name = "Palos" approximate/>
-        <event date = "1248" realm = "CASTILE"/>
-        <event date = "1322" pop = "100" approximate/>
-        <event date = "1475" pop = "2500" src = "Fishing and seafaring expeditions to Guinea" approximate/>
-        <event date = "1550" pop = "700" src = "Establishment of the Casa de Contratación at Seville in 1503" approximate/>
-        <event date = "1700" pop = "125" src = "By the 18th century, the town had only about 125 inhabitants"/>
-        <event date = "1750" pop = "2500" src = "Catalan investors established a viticultural industry centered at Palos" approximate/>
-        <event date = "2006" pop = "8415" src = "According to the 2006 census"/>
+        <event date = "1120" state = "ALMOHAD" name = "Palos"/>
+        <event date = "1248" state = "CASTILE"/>
       </history>
     </settlement>
   </settlements>
-  <realms>
-    <realm id = "ALMOHAD"/>
-      <realm id = "CASTILE">
-        <history>
-          <event date = "1035" name = "Castile"/>
-          <event date = "1230" name = "Castile and Leon"/>
-          <event date = "1516" join = "SPAIN"/>
-        </history>
-      </realm>
-    <realm id = "LEON">
+  <states>
+    <state id = "ALMOHAD"/>
+    <state id = "CASTILE">
+      <history>
+        <event date = "1035" name = "Castile"/>
+        <event date = "1230" name = "Castile and Leon"/>
+        <event date = "1516" join = "SPAIN"/>
+      </history>
+    </state>
+    <state id = "LEON">
       <history>
         <event date = "910" name = "Leon"/>
         <event date = "1230" join = "CASTILE"/>
       </history>
-    </realm>
-    <realm id = "SPAIN">
+    </state
+    <state id = "SPAIN">
       <history>
         <event date = "1516" name = "Spain"/>
       </history>
