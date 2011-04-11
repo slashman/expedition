@@ -1,0 +1,17 @@
+<scenario>
+	<name>The New World</name>
+	<mainActor>
+		<name>Christopher Columbus</name>
+		<appearance>
+			<bundle>BASIC</bundle>
+			<appearanceId>COLOMBUS</appearanceId>
+		</appearance>
+		<overWorldAppearance>
+			<bundle>BASIC</bundle>
+			<appearanceId>EXPEDITION</appearanceId>
+		</overWorldAppearance>
+	</mainActor>
+	<location>SPAIN_CASTLE</location>
+	<date>03/08/1492</date>
+	
+</scenario>
