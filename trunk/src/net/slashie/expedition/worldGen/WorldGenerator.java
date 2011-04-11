@@ -25,7 +25,7 @@ public class WorldGenerator {
 			List<Pair<Position, Culture>> cultureCenters = new ArrayList<Pair<Position,Culture>>();
 			//Get the culture centers
 			try {
-				BufferedReader r = FileUtil.getReader("data/culture.properties");
+				BufferedReader r = FileUtil.getReader("scenarios/theNewWorld/culture.properties");
 				String line = r.readLine();
 				while (line != null){
 					String[] row = line.split(",");

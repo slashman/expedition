@@ -63,7 +63,7 @@ public class LevelMaster {
 			/*ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
 			"world", 150,150,50,50, pattern.getCharMap(), new Pair<String, Position>("_START", new Position(3198,801)));*/
 			ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
-					"data/world", 3374,2939,50,50, pattern.getCharMap(), new Position(3236,834));
+					"scenarios/theNewWorld/world", 3374,2939,50,50, pattern.getCharMap(), new Position(3236,834));
 			ret.setDescription(pattern.getDescription());
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());

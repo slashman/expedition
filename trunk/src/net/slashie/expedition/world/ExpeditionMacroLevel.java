@@ -9,7 +9,6 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
-import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.world.agents.DayShiftAgent;
@@ -61,11 +60,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	}
 	
 	private int resolveXToLongitude(){
-		return (int)Math.round((getPlayer().getPosition().x() - 3340)/19.6d); 
+		// return (int)Math.round((getPlayer().getPosition().x() - 3340)/19.6d); No longer needed since player position is now on minutes of lat and long 
+		return (int)Math.round(getPlayer().getPosition().x() / 60.0d);
 	}
 	
 	private int resolveYToLatitude(){
-		return (int)Math.round((getPlayer().getPosition().y() - 1572)/-19.47d); 
+		// return (int)Math.round((getPlayer().getPosition().y() - 1572)/-19.47d);
+		return (int)Math.round(getPlayer().getPosition().y() / 60.0d);
 	}
 	
 	private int currentTemperature = 15;
@@ -447,10 +448,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return super.getFeatureAt(position);
 	}
 	
+	//private Position tempP = new Position(0,0);
 	@Override
-	public List<AbstractFeature> getFeaturesAt(Position p) {
-		List<AbstractFeature> ret = super.getFeaturesAt(p);
-		if (hasStorm(p)){
+	public List<AbstractFeature> getFeaturesAt(Position tempP) {
+		/*tempP.x = ExpeditionLevelReader.transformLongIntoX(originalP.x());
+		tempP.y = ExpeditionLevelReader.transformLatIntoY(originalP.y());*/
+		List<AbstractFeature> ret = super.getFeaturesAt(tempP);
+		if (hasStorm(tempP)){
 			if (ret == null)
 				ret = new ArrayList<AbstractFeature>();
 			if (!ret.contains(stormletFeature)){
@@ -463,11 +467,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 		
 		// Ship shadow
-		OverworldExpeditionCell cell = (OverworldExpeditionCell) getMapCell(p);
+		OverworldExpeditionCell cell = (OverworldExpeditionCell) getMapCell(tempP);
 		if (ret == null && cell.isSea() && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
 			// Get cell to the wind shadow
-			Position var = getWindDirection().getVectors();
-			if (p.equals(Position.add(getExpedition().getPosition(), var))){
+			
+			int scale = ExpeditionLevelReader.getLongitudeScale(getExpedition().getLatitude());
+			Position var = Position.mul(getWindDirection().getVectors(), scale);
+			if (tempP.equals(Position.add(getExpedition().getPosition(), var))){
 				if (ret == null)
 					ret = new ArrayList<AbstractFeature>();
 				ret.add(shadowFeature);
