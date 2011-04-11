@@ -1,0 +1,52 @@
+<geopolitical>
+	<settlements>
+		<settlement id = "PALOS" lat="37°14'N" long = "6°54'W" patron = "java.koder@gmail.com" lastUpdate = "23/02/2011">
+			<population>
+				<sample date = "1120" pop = "10" approximate = "approximate"/>
+				<sample date = "1322" pop = "100" approximate = "approximate"/>
+				<sample date = "1475" pop = "2500" src = "Fishing and seafaring expeditions to Guinea" approximate = "approximate"/>
+				<sample date = "1550" pop = "700" src = "Establishment of the Casa de Contratación at Seville in 1503" approximate = "approximate"/>
+				<sample date = "1700" pop = "125" src = "By the 18th century, the town had only about 125 inhabitants"/>
+				<sample date = "1750" pop = "2500" src = "Catalan investors established a viticultural industry centered at Palos" approximate = "approximate"/>
+				<sample date = "2006" pop = "8415" src = "According to the 2006 census"/>
+			</population>
+			<history>
+				<event date = "1120" state = "ALMOHAD" name = "Palos"/>
+				<event date = "1248" state = "CASTILE"/>
+			</history>
+	    </settlement>
+	    <settlement id = "SAN_LUCAR" lat="36°46′N" long = "6°21′W" patron = "java.koder@gmail.com" lastUpdate = "04/04/2011">
+	    	<population>
+	    		<sample date = "2009" pop = "65805" src = "National statistical institute of Spain 2009"/>
+	    	</population>
+	    	<history>
+	    		<event date = "714" state = "ALMOHAD" name = "Masagued"/>
+	    		<event date = "1264" state = "CASTILE"/>
+	        	<event date = "1297" name = "Villa de Sanlúcar"/>
+	        	<event date = "1297" name = "Sanlúcar de Barrameda"/>
+	        	<event date = "1248" />
+			</history>
+		</settlement>
+	</settlements>
+	<states>
+    	<state id = "ALMOHAD"/>
+    	<state id = "CASTILE">
+    		<history>
+    			<event date = "1035" name = "Castile"/>
+    			<event date = "1230" name = "Castile and Leon"/>
+    			<event date = "1516" join = "SPAIN"/>
+    		</history>
+    	</state>
+    	<state id = "LEON">
+    		<history>
+    			<event date = "910" name = "Leon"/>
+    			<event date = "1230" join = "CASTILE"/>
+    		</history>
+    	</state>
+    	<state id = "SPAIN">
+    		<history>
+    			<event date = "1516" name = "Spain"/>
+    		</history>
+    	</state>
+    </states>
+</geopolitical>
