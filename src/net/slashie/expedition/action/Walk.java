@@ -8,6 +8,7 @@ import net.slashie.expedition.domain.SailingPoint;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -24,12 +25,47 @@ import net.slashie.utils.Util;
 public class Walk extends Action{
 	private boolean actionCancelled = false;
 	
+	/**
+	 * Inverted Up and Down since Y now means Lat which grows inversely 
+	 * @param code
+	 * @return
+	 */
+	public static Position directionToVariation(int code){
+		switch (code){
+			case UP:
+			return VARDN;
+			case DOWN:
+			return VARUP;
+			case LEFT:
+			return VARLF;
+			case RIGHT:
+			return VARRG;
+			case UPRIGHT:
+			return VARDR;
+			case UPLEFT:
+			return VARDL;
+			case DOWNRIGHT:
+			return VARUR;
+			case DOWNLEFT:
+			return VARUL;
+			case SELF:
+			return VARSL;
+			default:
+			return null;
+		}
+	}
+	
 	@Override
 	public boolean canPerform(Actor a) {
 		Expedition expedition = (Expedition) a;
+		int scale = 1;
+		if (expedition.getLevel() instanceof ExpeditionLevelReader){
+			scale = ExpeditionLevelReader.getLongitudeScale(expedition.getPosition().y());;
+		}
 		
 		//if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
 		if (expedition.getLevel() instanceof ExpeditionMicroLevel ){
+			
 			/*if (expedition.getOffshoreCurrentlyCarrying() > 100){
 				invalidationMessage = "You are stranded! drop some items!";
 				return false;
@@ -41,7 +77,13 @@ public class Walk extends Action{
 			}
 		}
 		
-        Position var = directionToVariation(targetDirection);
+        Position var = null;
+
+        if (expedition.getLevel() instanceof ExpeditionLevelReader){
+			var = directionToVariation(targetDirection);
+		} else {
+			var = Action.directionToVariation(targetDirection);
+		}
         
         if (expedition.getMovementMode() == MovementMode.SHIP){
 			
@@ -52,6 +94,8 @@ public class Walk extends Action{
 				return true;
 			}
 		}
+        
+        var = Position.mul(var, scale);
         
         Position destinationPoint = Position.add(a.getPosition(), var);
         
@@ -107,8 +151,12 @@ public class Walk extends Action{
 	public void execute() {
 		actionCancelled = false;
 		Expedition expedition = (Expedition) performer;
-		
-		Position var = directionToVariation(targetDirection);
+		Position var = null;
+		if (expedition.getLevel() instanceof ExpeditionLevelReader){
+			var = directionToVariation(targetDirection);
+		} else {
+			var = Action.directionToVariation(targetDirection);
+		}
                 
 		if (expedition.getMovementMode() == MovementMode.SHIP){
 			boolean stalled = false;
@@ -143,6 +191,14 @@ public class Walk extends Action{
 				return;
 			}
 		}
+		
+		int scale = 1;
+		if (expedition.getLevel() instanceof ExpeditionLevelReader){
+			scale = ExpeditionLevelReader.getLongitudeScale(expedition.getPosition().y());
+		}
+        var = Position.mul(var, scale);
+
+		
 		Position destinationPoint = Position.add(performer.getPosition(), var);
 
 		

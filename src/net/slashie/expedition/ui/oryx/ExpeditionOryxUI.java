@@ -29,6 +29,7 @@ import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -643,7 +644,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			si.print(2, 6, "Carrying "+statsExpedition.getCurrentlyCarrying()+"%");		
 		
 		si.print(2, 7, statsExpedition.getMoraleDescription()+(statsExpedition.isArmed()?"(Armed)":""));
-		
+		si.print(20, 1, "Scale "+ExpeditionLevelReader.getLongitudeScale(statsExpedition.getPosition().y));
+
 
 		
 		int line2 = 63;
@@ -1044,5 +1046,21 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public void afterTownAction() {
 		clearTextBox();
+	}
+	
+	@Override
+	public int getXScale() {
+		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
+			return ExpeditionLevelReader.getLongitudeScale(getExpedition().getLatitude());
+		else
+			return 1;
+	}
+	
+	@Override
+	public int getYScale() {
+		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
+			return -ExpeditionLevelReader.getLongitudeScale(getExpedition().getLatitude());
+		else
+			return 1;
 	}
 }

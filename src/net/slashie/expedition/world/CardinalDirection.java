@@ -4,14 +4,14 @@ import net.slashie.util.Util;
 import net.slashie.utils.Position;
 
 public enum CardinalDirection {
-	NORTH("N", 0, 0, -1, "north"),
-	NORTHWEST("NW", 45, -1, -1, "northwest"),
+	NORTH("N", 0, 0, 1, "north"),
+	NORTHWEST("NW", 45, -1, 1, "northwest"),
 	WEST("W", 90, -1, 0, "west"),
-	SOUTHWEST("SW", 135, -1, 1, "southwest"),
-	SOUTH("S", 180, 0,  1, "south"),
-	SOUTHEAST("SE", 225, 1, 1, "southeast"),
+	SOUTHWEST("SW", 135, -1, -1, "southwest"),
+	SOUTH("S", 180, 0,  -1, "south"),
+	SOUTHEAST("SE", 225, 1, -1, "southeast"),
 	EAST("E", 270, 1, 0, "east"),
-	NORTHEAST("NE",315, 1, -1,"northeast"),
+	NORTHEAST("NE",315, 1, 1,"northeast"),
 	NULL( "-", null, 0, 0, "-");
 	
 	private String abbreviation;

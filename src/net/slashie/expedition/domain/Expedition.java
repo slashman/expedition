@@ -9,6 +9,7 @@ import net.slashie.expedition.action.Hibernate;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
+import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -584,7 +585,12 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 
 	@Override
 	public int getDarkSightRange() {
-		return 9;
+		return getBaseSightRange();
+	}
+	
+	public int getBaseSightRange(){
+		return 27; // Changed to degrees TODO: Vary by scale
+		
 	}
 
 	@Override
@@ -639,13 +645,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			break;
 		}
 		
-		int ret = 8 + bonus - malus;
-		if (ret >= 1 && ret <= 9)
+		int ret = getBaseSightRange() + bonus - malus;
+		if (ret >= 1 && ret <= getBaseSightRange())
 			return ret;
 		else if (ret < 1)
 			return 1;
 		else
-			return 9;
+			return getBaseSightRange();
 	}
 
 	@Override
@@ -1914,6 +1920,24 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		}
 		return false;
 		
+	}
+	
+	@Override
+	public void see() {
+		if (getLevel() instanceof ExpeditionLevelReader){
+			fov.setScale(ExpeditionLevelReader.getLongitudeScale(getPosition().y()));
+		} else {
+			fov.setScale(1);
+		}
+		super.see();
+	}
+	
+	public int getLatitude(){
+		return getPosition().y();
+	}
+	
+	public int getLongitude(){
+		return getPosition().x();
 	}
 	
 }
