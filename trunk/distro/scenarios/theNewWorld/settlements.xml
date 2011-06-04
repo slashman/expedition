@@ -27,7 +27,71 @@
 	        	<event date = "1248" />
 			</history>
 		</settlement>
+		<settlement id = "CADIZ" lat="36°32′N" long ="6°17′W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
+			<population>
+				<sample date = "-1104" pop = "50"/>
+				<sample date = "-206" pop = "90000" src = "The ancient city had a population even greater than the 80,000 people who lived in Cádiz during the 16th and 17th century"/>
+				<sample date = "410" pop = "50" src = "The overthrow of Roman power in Hispania Baetica by the Visigoths in 410 saw the destruction of the original city"/>
+				<sample date = "1500" pop = "80000" src = "The ancient city had a population even greater than the 80,000 people who lived in Cádiz during the 16th and 17th century"/>
+				<sample date = "1600" pop = "80000" src = "The ancient city had a population even greater than the 80,000 people who lived in Cádiz during the 16th and 17th century"/>
+				<sample date = "1790" pop = "73000" src = "http://es.wikipedia.org/wiki/Archivo:Demograf%C3%ADa_en_C%C3%A1diz.svg"/>
+				<sample date = "1840" pop = "55000" src = "http://es.wikipedia.org/wiki/Archivo:Demograf%C3%ADa_en_C%C3%A1diz.svg"/>
+				<sample date = "1900" pop = "66000" src = "http://es.wikipedia.org/wiki/Archivo:Demograf%C3%ADa_en_C%C3%A1diz.svg"/>
+				<sample date = "1999" pop = "142449" src = "Census Estimate"/>
+				<sample date = "2006" pop = "130561" src = "Census Estimate"/>
+			</population>
+			<history>
+	    		<event date = "-1104" state = "PHOENICIA" name = "Gadir"/>
+	    		<event date = "-500" state = "CARTAGUE" />
+	    		<event date = "-206" state = "ROME" name = "Gades"/>
+	    		<event date = "410" state = "VISIGOTHS"/>
+	    		<event date = "550" state = "BYZANTIUM"/>
+	    		<event date = "711" state = "ALMOHAD" name = "Qādis"/>
+	    		<event date = "1262" state = "CASTILE" name = "Cádiz"/>
+	    	</history>
+		</settlement>
+		<settlement id = "GIBRALTAR" lat="36.143°N" long ="5.353°W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
+			<population>
+				<sample date = "-905" pop = "50"/>
+				<sample date = "711" pop = "50"/>
+				<sample date = "2008" pop = "29286"/>
+			</population>
+			<history>
+	    		<event date = "-905" state = "PHOENICIA" name = "Mons Calpe"/>
+	    		<event date = "711" state = "ALMOHAD" name = "Jabal Tāriq"/>
+	    		<event date = "1462" state = "MEDINA" name = "Gibraltar"/>
+	    		<event date = "1704" state = "ENGLAND"/>
+	    	</history>
+		</settlement>
+		<settlement id = "MALAGA" lat="36°43'N" long ="4°25'W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
+			<population>
+				<sample date = "-770" pop = "50"/>
+				<sample date = "2008" pop = "566447"/>
+			</population>
+			<history>
+	    		<event date = "-770" state = "PHOENICIA" name = "Malaka"/>
+	    		<event date = "-500" state = "CARTAGUE"/>
+	    		<event date = "-218" state = "ROME" name = "Malaca"/>
+	    		<event date = "550" state = "BYZANTIUM"/>
+	    		<event date = "621" state = "UMAYYAD" name = "Mālaqah"/>
+	    		<event date = "1487" state = "SPAIN" name = "Málaga"/>
+	    	</history>
+		</settlement>
+		<settlement id = "ALMERIA" lat="36°50'N" long ="2°27'W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
+			<population>
+				<sample date = "995" pop = "50"/>
+				<sample date = "1999" pop = "169027"/>
+				<sample date = "2007" pop = "189798"/>
+			</population>
+			<history>
+	    		<event date = "955" state = "UMAYYAD" name = "Al-Mariyya"/>
+	    		<event date = "1147" state = "CASTILE"/>
+	    		<event date = "1157" state = "ALMORAVID"/>
+	    		<event date = "1489" state = "SPAIN" name = "Almería"/>
+	    	</history>
+		</settlement>
 	</settlements>
+
 	<states>
     	<state id = "ALMOHAD"/>
     	<state id = "CASTILE">
