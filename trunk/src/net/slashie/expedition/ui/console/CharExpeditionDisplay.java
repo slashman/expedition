@@ -77,8 +77,9 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.print(18, 4, "EXPEDITION", ConsoleSystemInterface.CYAN);
 		csi.print(20, 5, "The New World", ConsoleSystemInterface.BLUE);
 		csi.print(20,12, "a. Create Expedition", ConsoleSystemInterface.WHITE);
-		csi.print(20,13, "b. Resume Expedition", ConsoleSystemInterface.WHITE);
-		csi.print(20,14, "c. Quit", ConsoleSystemInterface.WHITE);
+		csi.print(20,13, "b. Create Expedition", ConsoleSystemInterface.WHITE);
+		csi.print(20,14, "c. Resume Expedition", ConsoleSystemInterface.WHITE);
+		csi.print(20,15, "d. Quit", ConsoleSystemInterface.WHITE);
 		csi.print(8,17, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", ConsoleSystemInterface.CYAN);
 		csi.print(8,18, "Music by Roguebards Mingos and Jice", ConsoleSystemInterface.CYAN);
 		
@@ -95,7 +96,9 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
     	CharKey x = new CharKey(CharKey.NONE);
 		while (x.code != CharKey.A && x.code != CharKey.a &&
 				x.code != CharKey.B && x.code != CharKey.b &&
-				x.code != CharKey.C && x.code != CharKey.c)
+				x.code != CharKey.C && x.code != CharKey.c &&
+				x.code != CharKey.D && x.code != CharKey.d
+				)
 			x = csi.inkey();
 		csi.cls();
 		switch (x.code){
@@ -105,6 +108,8 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 			return 1;
 		case CharKey.C: case CharKey.c:
 			return 2;
+		case CharKey.D: case CharKey.d:
+			return 3;
 		}
 		return 0;
 	}
@@ -153,5 +158,10 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		String name = csi.input(10);
 		
 		return ExpeditionFactory.createPlayerExpedition(name, game);
+	}
+	
+	@Override
+	public int selectScenario() {
+		return 0;
 	}
 }
