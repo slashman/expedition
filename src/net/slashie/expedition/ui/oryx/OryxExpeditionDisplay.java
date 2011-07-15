@@ -1,18 +1,22 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Hashtable;
 import java.util.Properties;
-import java.util.Vector;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JTextArea;
 
 import net.slashie.libjcsi.CharKey;
@@ -21,15 +25,17 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.GameFiles;
+import net.slashie.expedition.game.GameFiles.LicenseInfo;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.oryxUI.AddornedBorderTextArea;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
-import net.slashie.utils.FileUtil;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.PropertyFilters;
+import net.slashie.utils.swing.CallbackActionListener;
+import net.slashie.utils.swing.CallbackHandler;
 
 public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	private SwingSystemInterface si;
@@ -42,10 +48,11 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	public static Font FNT_MONO;
 	private static BufferedImage IMG_PICKER;
 	private static BufferedImage IMG_BORDERS;
-	
+	private static Properties uiProperties;
 	public static Color COLOR_BOLD;
 	
 	private void initProperties(Properties p){
+		uiProperties = p;
 		IMG_TITLE = p.getProperty("IMG_TITLE");
 		IMG_BLANK = p.getProperty("IMG_BLANK");
 		COLOR_BOLD = PropertyFilters.getColor(p.getProperty("COLOR_BOLD"));
@@ -104,79 +111,173 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public int showTitleScreen(){
-		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
-		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
+		ExpeditionOryxUI oui = ((ExpeditionOryxUI)UserInterface.getUI()); 
+		oui.messageBox.setVisible(false);
+		oui.persistantMessageBox.setVisible(false);
 		STMusicManagerNew.thus.playKey("TITLE");
 		
 		si.setFont(FNT_TEXT);
 		si.drawImage(IMG_TITLE);
-		//si.drawImage(215,60,IMG_TITLE_NAME);
-		si.printAtPixel(91, 540, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
-		si.printAtPixel(164, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
-		CharKey x = new CharKey(CharKey.NONE);
-    	int choice = 0;
-    	si.saveBuffer();
-    	out: while (true) {
-    		String registrant = null;
-    		String supporterLevel = "Unregistered";
-    		try {
-				BufferedReader r = FileUtil.getReader("registration.key");
-				String key = r.readLine();
-				r.close();
-				String decoded = GameFiles.decode(key);
-				registrant = decoded.split(",")[0];
-				supporterLevel = decoded.split(",")[1];
-    		} catch (FileNotFoundException e) {
-    			registrant = null;
-			} catch (Exception e) {
-				e.printStackTrace();
-				registrant = null;
-			}
-    		si.restore();
-    		if (registrant == null || registrant.equals("unregistered")){
-    			si.printAtPixel(10, 586, "Unregistered Version", Color.WHITE);
-    		} else {
-    			si.printAtPixel(10, 586, "Registered for "+supporterLevel+" "+registrant+"!", Color.YELLOW);
-    		}
-    		si.drawImage(320, 404+choice*26, IMG_PICKER);
-    		si.printAtPixel(350,428, "a. Create Expedition", Color.WHITE);
-    		si.printAtPixel(350,454, "b. Resume Expedition", Color.WHITE);
-    		
-    		si.printAtPixel(350,480, "c. Quit", Color.WHITE);
-    		si.refresh();
-			while (x.code != CharKey.A && x.code != CharKey.a &&
-					x.code != CharKey.B && x.code != CharKey.b &&
-					x.code != CharKey.C && x.code != CharKey.c &&
-					x.code != CharKey.UARROW && x.code != CharKey.DARROW &&
-					x.code != CharKey.SPACE && x.code != CharKey.ENTER)
-				x = si.inkey();
-			switch (x.code){
-			case CharKey.A: case CharKey.a:
-				return 0;
-			case CharKey.B: case CharKey.b:
-				return 1;
-			case CharKey.C: case CharKey.c:
-				return 2;
-			case CharKey.UARROW:
-				if (choice > 0)
-					choice--;
-				break;
-			case CharKey.DARROW:
-				if (choice < 2)
-					choice++;
-				break;
-			case CharKey.SPACE: case CharKey.ENTER:
-				return choice;
-			}
-			x.code = CharKey.NONE;
+		si.printAtPixel(30, 540, "Version "+ExpeditionGame.getVersion()+", Slashware Interactive 2009-2011", Color.WHITE);
+		si.printAtPixel(30, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
+		
+   	
+    	// Read the license info 
+    	LicenseInfo licenseInfo = GameFiles.getLicenseInfo();
+		
+		if (licenseInfo.licensee == null || licenseInfo.licensee.equals("unregistered")){
+			si.printAtPixel(30, 586, "Unregistered Version", Color.WHITE);
+		} else {
+			si.printAtPixel(30, 586, "Registered for "+licenseInfo.licenseLevel+" "+licenseInfo.licensee+"!", Color.YELLOW);
 		}
+		
+		JButton historyButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_HISTORY")));
+		historyButton.setBounds(new Rectangle(558, 30, 223, 43));
+		cleanButton(historyButton);
+		JButton expeditionButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_EXPEDITION")));
+		expeditionButton.setBounds(new Rectangle(558, 78, 223, 43));
+		cleanButton(expeditionButton);
+		JButton resumeButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_CONTINUE")));
+		resumeButton.setBounds(new Rectangle(558, 126, 223, 43));
+		cleanButton(resumeButton);
+		
+		JButton exitButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_EXIT")));
+		exitButton.setBounds(new Rectangle(558, 174, 223, 43));
+		cleanButton(exitButton);
+		
+		si.add(historyButton);
+		si.add(expeditionButton);
+		si.add(resumeButton);
+		si.add(exitButton);
+		
+		si.refresh();
+		
+		CallbackHandler titleSelectionHandler = new CallbackHandler();
+		titleSelectionHandler.setCallback(null);
+		
+		historyButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getHandler().setCallback(0);
+			}
+		});
+		
+		expeditionButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getHandler().setCallback(1);
+			}
+		});
+		
+		resumeButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getHandler().setCallback(2);
+			}
+		});
+		
+		exitButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getHandler().setCallback(3);
+			}
+		});
+		
+		while (titleSelectionHandler.getCallback() == null){
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e1) {
+			}
+		}
+		
+		si.remove(historyButton);
+		si.remove(expeditionButton);
+		si.remove(resumeButton);
+		si.remove(exitButton);
+		si.recoverFocus();
+		return (Integer) titleSelectionHandler.getCallback();
+		
+	}
+	
+	public int selectScenario(){
+		JButton theNewWorldButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_THE_NEW_WORLD")));
+		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
+		cleanButton(theNewWorldButton);
+		si.printAtPixel(30, 440, "Please pick a scenario >>>>>", Color.WHITE);
+		si.refresh();
+
+		si.add(theNewWorldButton);
+		
+		CallbackHandler titleSelectionHandler = new CallbackHandler();
+		titleSelectionHandler.setCallback(null);
+		
+		theNewWorldButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				((JButton)e.getSource()).removeActionListener(this);
+				int xstart = 3;
+				int ystart = 4;
+				si.drawImage(uiProperties.getProperty("IMG_BLANK2"));
+				si.print(xstart, ystart + 1, "The New World", COLOR_BOLD);
+				si.print(xstart+3, ystart + 2, "Official Scenario by Slashware Interactive", Color.WHITE);
+				si.print(xstart, ystart + 3, "Date", COLOR_BOLD);
+				si.print(xstart+20, ystart + 3, "July 5, 1492", Color.WHITE);
+				si.print(xstart, ystart + 4, "Location", COLOR_BOLD);
+				si.print(xstart+20, ystart + 4, "Palos de la Frontera, Spain", Color.WHITE);
+				si.print(xstart, ystart + 5, "Expeditionary", COLOR_BOLD);
+				si.print(xstart+20, ystart + 5, "Cristoforo Colombo", Color.WHITE);
+				si.print(xstart+3, ystart + 6, "Navigation", COLOR_BOLD);
+				si.print(xstart+3, ystart + 7, "Cartography", COLOR_BOLD);
+				si.print(xstart+3, ystart + 8, "Negociation", COLOR_BOLD);
+				si.print(xstart+3, ystart + 9, "Land Combat", COLOR_BOLD);
+				si.print(xstart+3, ystart + 10, "Sea Combat", COLOR_BOLD);
+				
+				si.print(xstart+20, ystart + 6, "Expert", Color.WHITE);
+				si.print(xstart+20, ystart + 7, "Good", Color.WHITE);
+				si.print(xstart+20, ystart + 8, "Normal", Color.WHITE);
+				si.print(xstart+20, ystart + 9, "Unexperienced", Color.WHITE);
+				si.print(xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
+				
+				si.print(xstart+3, ystart + 17, "Use this scenario?", Color.WHITE);
+				
+				JButton okButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_OK")));
+				okButton.setBounds(286,475,223,43);
+				cleanButton(okButton);
+				si.add(okButton);
+				okButton.addActionListener(new CallbackActionListener(getHandler()){
+					public void actionPerformed(ActionEvent ev2) {
+						getHandler().setCallback(0);
+						si.remove((Component) ev2.getSource());
+					};
+				});
+			}
+		});
+		
+		while (titleSelectionHandler.getCallback() == null){
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e1) {
+			}
+		}
+		
+		si.remove(theNewWorldButton);
+		si.recoverFocus();
+		return (Integer) titleSelectionHandler.getCallback();
+		
 	}
 	
 	
 
-	public void showIntro(Expedition e){
+	private void cleanButton(JButton button) {
+		button.setBorder(null);
+		button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 	}
-	
+
+	public void showIntro(Expedition e){
+		si.drawImage(uiProperties.getProperty("IMG_THE_NEW_WORLD_INTRO"));
+		si.printAtPixel(30, 500, "Press Space to Continue", Color.WHITE);
+		si.waitKey(CharKey.SPACE);
+	}
 
 	public void showHelp(){
 		si.saveBuffer();
@@ -332,18 +433,9 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	@Override
 	public Expedition createExpedition(ExpeditionGame game) {
-		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
-		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
-		STMusicManagerNew.thus.playKey("TITLE");
-		
-		si.setFont(FNT_TEXT);
 		String name = "";
 		while (name.trim().equals("")){
-			si.drawImage(IMG_TITLE);
-			si.printAtPixel(91, 540, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", Color.WHITE);
-			si.printAtPixel(164, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
-			
-			si.printAtPixel(128, 428, "Please, by what name are your explorations to be known?", Color.WHITE);
+			si.printAtPixel(128, 428, "Enter a name for the expedition log", Color.WHITE);
 			name = si.input(222, 463, Color.WHITE, 10);
 		}
 		return ExpeditionFactory.createPlayerExpedition(name, game);
