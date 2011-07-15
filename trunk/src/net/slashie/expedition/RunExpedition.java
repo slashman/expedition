@@ -249,12 +249,17 @@ public class RunExpedition {
 		int choice = ExpeditionDisplay.thus.showTitleScreen();
 		switch (choice){
 		case 0:
-			newGame();
+			selectScenario();
 			break;
 		case 1:
-			loadGame();
+			System.out.println("Expedition "+ExpeditionGame.getVersion()+", clean Exit");
+			System.out.println("Thank you for playing!");
+			System.exit(0);
 			break;
 		case 2:
+			loadGame();
+			break;
+		case 3:
 			System.out.println("Expedition "+ExpeditionGame.getVersion()+", clean Exit");
 			System.out.println("Thank you for playing!");
 			System.exit(0);
@@ -263,6 +268,12 @@ public class RunExpedition {
 		
 	}
 	
+	private static void selectScenario() {
+		int choice = ExpeditionDisplay.thus.selectScenario();
+		newGame();
+		
+	}
+
 	private static void loadGame(){
 		File saveDirectory = new File("savegame");
 		File[] saves = saveDirectory.listFiles(new SaveGameFilenameFilter() );
