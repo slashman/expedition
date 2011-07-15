@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -44,7 +43,6 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.sound.STMusicManagerNew;
-import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
@@ -52,6 +50,7 @@ import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.ImageUtils;
+import net.slashie.utils.swing.BorderedGridBox;
 import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.MenuBox;
@@ -82,8 +81,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public void showInventory() {
 		Equipment.eqMode = true;
-		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
-   		menuBox.setItemsPerPage(12);
+		BorderedGridBox menuBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62, 202, 3, 2, null);
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Expedition Inventory [Space to exit]");
   		si.saveBuffer();
@@ -107,14 +105,19 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  			inventory = getExpedition().getGoods(goodTypes[typeChoice]);
   	  		}
   	  		
-  			Vector menuItems = new Vector();
-  	  		for (Equipment item: inventory){
-  	  			menuItems.add(new InventoryGFXMenuItem(item));
+  	  		List<InventoryCustomGFXMenuItem> invMenuItems = new Vector<InventoryCustomGFXMenuItem> ();
+	  		for (Equipment item: inventory){
+	  			invMenuItems.add(new InventoryCustomGFXMenuItem(item));
+	  		}
+	  		Collections.sort(invMenuItems, inventoryCustomItemsComparator);
+  	  		
+  	  		List<GFXMenuItem> menuItems = new Vector<GFXMenuItem> ();
+  	  		for (InventoryCustomGFXMenuItem menuItem: invMenuItems){
+  	  			menuItems.add(menuItem);
   	  		}
-  	  		Collections.sort(menuItems, inventoryItemsComparator);
   	  		menuBox.setMenuItems(menuItems);
   	  		menuBox.draw();
-  	  		
+  	  		//si.add(menuBox);
 	  		CharKey x = new CharKey(CharKey.NONE);
 			while (x.code != CharKey.SPACE && !x.isArrow())
 				x = si.inkey();
@@ -131,9 +134,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				if (typeChoice == goodTypes.length)
 					typeChoice = goodTypes.length-1;
 			}
-	 		
-	 		//menuBox.getSelection();
   		}
+  		menuBox.kill();
   		si.restore();
  		si.refresh();
  		Equipment.eqMode = false;
@@ -158,6 +160,27 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 		};
 	};
+	
+	private Comparator<InventoryCustomGFXMenuItem> inventoryCustomItemsComparator = new Comparator<InventoryCustomGFXMenuItem>(){
+		public int compare(InventoryCustomGFXMenuItem o1, InventoryCustomGFXMenuItem o2) {
+			if (o1.getEquipment().getItem() instanceof ExpeditionUnit){
+				if (o2.getEquipment().getItem() instanceof ExpeditionUnit){
+					return o1.getEquipment().getItem().getFullID().compareTo(o2.getEquipment().getItem().getFullID());
+				} else {
+					return -1;
+				}
+			} else if (o2.getEquipment().getItem() instanceof ExpeditionUnit){
+				if (o1.getEquipment().getItem() instanceof ExpeditionUnit){
+					return o1.getEquipment().getItem().getFullID().compareTo(o2.getEquipment().getItem().getFullID());
+				} else {
+					return 1;
+				}
+			} else {
+				return o1.getEquipment().getItem().getDescription().compareTo(o2.getEquipment().getItem().getDescription());
+			}
+		};
+	};
+	
 	private SimplifiedUnitGFXMenuItem mainUnitMenuItem;
 	private AbstractItem HORSES_ITEM;
 	
