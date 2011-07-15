@@ -25,6 +25,7 @@ BATTLE_BACKGROUND = res/grass-battle.png
 IMG_ICON = res/expedition_icon.gif
 IMG_TITLE = res/title.png
 IMG_BLANK = res/blank.png
+IMG_BLANK2 = res/blank2.png
 IMG_PROLOGUE = res/blank.png
 IMG_SAVED = res/blank.png
 IMG_FRAME = res/blank.png
@@ -62,3 +63,14 @@ FNT_MESSAGEBOX_SIZE = 26
 
 FNT_PERSISTANTMESSAGEBOX = res/REDENSEK.TTF
 FNT_PERSISTANTMESSAGEBOX_SIZE = 20
+
+# Buttons
+BTN_HISTORY = res/historicScenarioButton.png
+BTN_EXPEDITION = res/newExpeditionButton.png
+BTN_CONTINUE = res/continueJourneyButton.png 
+BTN_EXIT = res/exitButton.png
+BTN_OK = res/okButton.png
+
+# The New World
+BTN_THE_NEW_WORLD = res/theNewWorld.png
+IMG_THE_NEW_WORLD_INTRO = res/theNewWorldIntro_tmp.png
