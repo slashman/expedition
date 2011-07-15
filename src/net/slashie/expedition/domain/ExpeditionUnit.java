@@ -149,6 +149,17 @@ public class ExpeditionUnit extends Vehicle{
 		updateCompositeVariables();
 	}
 	
+	public String getStatusModifiersString(){
+		String ret = "";
+		if (getMount() != null){
+			ret += "Mounted ";
+		}
+		if (isWounded){
+			ret += "Wounded ";
+		}
+		return ret;
+	}
+	
 	public void updateCompositeVariables(){
 		fullId = super.getBaseID();
 		unitWeight = super.getWeight();

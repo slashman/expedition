@@ -2,7 +2,6 @@ package net.slashie.expedition.ui.oryx;
 
 import java.awt.Image;
 
-import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.serf.game.Equipment;
