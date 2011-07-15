@@ -1,6 +1,8 @@
 package net.slashie.expedition.game;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -75,6 +77,33 @@ public class GameFiles {
 	public static String encode(String supporter, String level){
 		DESEncrypter encr = new DESEncrypter("Thank you for supporting slashware interactive!");
 		return encr.encrypt(supporter+","+level);
+	}
+
+	public static class LicenseInfo {
+		public String licensee;
+		public String licenseLevel;
+	}
+	
+	public static LicenseInfo getLicenseInfo(){
+		String registrant = null;
+    	String supporterLevel = "Unregistered";
+    	try {
+    		BufferedReader r = FileUtil.getReader("registration.key");
+    		String key = r.readLine();
+    		r.close();
+    		String decoded = GameFiles.decode(key);
+    		registrant = decoded.split(",")[0];
+    		supporterLevel = decoded.split(",")[1];
+    	} catch (FileNotFoundException e) {
+    		registrant = null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			registrant = null;
+		}
+		LicenseInfo ret = new LicenseInfo();
+		ret.licensee = registrant;
+		ret.licenseLevel = supporterLevel;
+		return ret;
 	}
 	
 	public static void main (String [] args){
