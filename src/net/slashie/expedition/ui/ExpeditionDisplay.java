@@ -26,4 +26,6 @@ public abstract class ExpeditionDisplay  {
 	
 	public abstract Expedition createExpedition(ExpeditionGame game);
 
+	public abstract int selectScenario();
+
 }
