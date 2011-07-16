@@ -11,6 +11,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -149,42 +152,65 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		si.refresh();
 		
-		CallbackHandler titleSelectionHandler = new CallbackHandler();
-		titleSelectionHandler.setCallback(null);
+		BlockingQueue<Integer> titleSelectionHandler = new LinkedBlockingQueue<Integer>();
+
+		/*CallbackHandler titleSelectionHandler = new CallbackHandler();
+		titleSelectionHandler.setCallback(null);*/
 		
-		historyButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+		historyButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getHandler().setCallback(0);
+				try {
+					handler.put(0);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
-		expeditionButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+		expeditionButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getHandler().setCallback(1);
+				try {
+					handler.put(1);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
-		resumeButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+		resumeButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getHandler().setCallback(2);
+				try {
+					handler.put(2);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
-		exitButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+		exitButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getHandler().setCallback(3);
+				try {
+					handler.put(3);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
-		while (titleSelectionHandler.getCallback() == null){
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e1) {
-			}
+		Integer choice = null;
+		try {
+			choice = titleSelectionHandler.take();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		si.remove(historyButton);
@@ -192,7 +218,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.remove(resumeButton);
 		si.remove(exitButton);
 		si.recoverFocus();
-		return (Integer) titleSelectionHandler.getCallback();
+		return choice;
 		
 	}
 	
@@ -205,10 +231,12 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 
 		si.add(theNewWorldButton);
 		
-		CallbackHandler titleSelectionHandler = new CallbackHandler();
-		titleSelectionHandler.setCallback(null);
+		BlockingQueue<Integer> titleSelectionHandler = new LinkedBlockingQueue<Integer>();
+
+		/*CallbackHandler titleSelectionHandler = new CallbackHandler();
+		titleSelectionHandler.setCallback(null);*/
 		
-		theNewWorldButton.addActionListener(new CallbackActionListener(titleSelectionHandler){
+		theNewWorldButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				((JButton)e.getSource()).removeActionListener(this);
@@ -241,25 +269,31 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				okButton.setBounds(286,475,223,43);
 				cleanButton(okButton);
 				si.add(okButton);
-				okButton.addActionListener(new CallbackActionListener(getHandler()){
+				okButton.addActionListener(new CallbackActionListener<Integer>(handler){
 					public void actionPerformed(ActionEvent ev2) {
-						getHandler().setCallback(0);
+						try {
+							handler.put(0);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						si.remove((Component) ev2.getSource());
 					};
 				});
 			}
 		});
 		
-		while (titleSelectionHandler.getCallback() == null){
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e1) {
-			}
+		Integer choice = null;
+		try {
+			choice = titleSelectionHandler.take();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		
 		si.remove(theNewWorldButton);
 		si.recoverFocus();
-		return (Integer) titleSelectionHandler.getCallback();
+		return choice;
 		
 	}
 	

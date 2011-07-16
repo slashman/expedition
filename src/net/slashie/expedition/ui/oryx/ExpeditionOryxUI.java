@@ -1,7 +1,10 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
@@ -52,6 +61,9 @@ import net.slashie.util.Pair;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.swing.BorderedGridBox;
 import net.slashie.utils.swing.BorderedMenuBox;
+import net.slashie.utils.swing.CallbackActionListener;
+import net.slashie.utils.swing.CallbackHandler;
+import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.MenuBox;
 
@@ -78,28 +90,92 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		return "Quit?";
 	}
 
+	private void cleanButton(JButton button) {
+		button.setBorder(null);
+		button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		button.setContentAreaFilled(false);
+		button.setOpaque(false);
+		button.setFocusable(false);
+	}
+	
 	@Override
 	public void showInventory() {
 		Equipment.eqMode = true;
-		BorderedGridBox menuBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62, 202, 3, 2, null);
+		// Create the good type buttons
+		JButton peopleButton = new JButton(new ImageIcon(UIProperties.getProperty("BTN_PEOPLE")));
+		cleanButton(peopleButton);
+		peopleButton.setBounds(540,41, 24,24);	
+		JButton suppliesButton = new JButton(new ImageIcon(UIProperties.getProperty("BTN_SUPPLIES")));
+		cleanButton(suppliesButton);
+		suppliesButton.setBounds(569,41, 24,24);	
+		JButton tradeGoodsButton = new JButton(new ImageIcon(UIProperties.getProperty("BTN_MERCHANDISE")));
+		cleanButton(tradeGoodsButton);
+		tradeGoodsButton.setBounds(598,41, 24,24);	
+		JButton armoryButton = new JButton(new ImageIcon(UIProperties.getProperty("BTN_WEAPONS")));
+		cleanButton(armoryButton);
+		armoryButton.setBounds(627,41, 24,24);	
+		JButton livestockButton = new JButton(new ImageIcon(UIProperties.getProperty("BTN_LIVESTOCK")));
+		cleanButton(livestockButton);
+		livestockButton.setBounds(656,41, 24,24);	
+		JButton closeButton = new JButton(new ImageIcon(UIProperties.getProperty("BTN_CLOSE")));
+		cleanButton(closeButton);
+		closeButton.setBounds(730,41, 24,24);
+		
+		
+		si.add(peopleButton);
+		si.add(suppliesButton);
+		si.add(tradeGoodsButton);
+		si.add(armoryButton);
+		si.add(livestockButton);
+		si.add(closeButton);
+
+		
+		BlockingQueue<String> inventorySelectionQueue = new LinkedBlockingQueue<String>(1);
+		
+		peopleButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "0"));
+		suppliesButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "1"));
+		tradeGoodsButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "2"));
+		armoryButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "3"));
+		livestockButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "4"));
+		closeButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "BREAK"));
+		
+		
+		CallbackKeyListener cbkl = new CallbackKeyListener(inventorySelectionQueue){
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					CharKey x = new CharKey(SwingSystemInterface.charCode(e));
+					if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+						handler.put("BREAK");
+					} else if (x.isLeftArrow()){
+						handler.put("<");
+					} else if (x.isRightArrow()){
+						handler.put(">");
+					}
+				} catch (InterruptedException e1) {}
+			}
+		}; 
+		
+		
+		si.addKeyListener(cbkl);
+		
+		Image boxImage;
+		try {
+			boxImage = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
+		} catch (IOException e) {
+			ExpeditionGame.crash("Error reading IMG_BOX");
+			boxImage = null;
+		}
+		
+		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62, 202, 3, 2, null);
   		menuBox.setBounds(16, 16, 768,480);
-  		menuBox.setTitle("Expedition Inventory [Space to exit]");
+  		menuBox.setTitle("Examine Expedition Inventory");
   		si.saveBuffer();
   		int typeChoice = 0;
   		while (true){
-  			String legend = "";
   			GoodType[] goodTypes = GoodType.getGoodTypes();
-  			for (int i = 0; i < goodTypes.length; i++){
-  				if (i == typeChoice){
-  					legend += ">";
-  				}
-  				legend += goodTypes[i].getDescription();
-  				if (i == typeChoice){
-  					legend += "<";
-  				}
-  				legend += "    ";
-  			}
-  			menuBox.setLegend(legend);
+  			menuBox.setLegend(" - ");
+  			
   			List<Equipment> inventory = null;
   	  		if (typeChoice < goodTypes.length){
   	  			inventory = getExpedition().getGoods(goodTypes[typeChoice]);
@@ -116,29 +192,56 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  			menuItems.add(menuItem);
   	  		}
   	  		menuBox.setMenuItems(menuItems);
-  	  		menuBox.draw();
-  	  		//si.add(menuBox);
-	  		CharKey x = new CharKey(CharKey.NONE);
-			while (x.code != CharKey.SPACE && !x.isArrow())
-				x = si.inkey();
-			if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
-				break;
-			}
-			if (x.isLeftArrow()){
-				typeChoice--;
+  	  		si.restore();
+  	  		int boxX = 540 + typeChoice * 29 - 24;
+			int boxY = 41 - 24;
+  	  		menuBox.draw(boxX, boxY, boxImage);
+  	  		
+  	  		String command = null;
+  	  		while (command == null){
+				try {
+					command = inventorySelectionQueue.take();
+				} catch (InterruptedException e1) {
+				}
+	  		}
+			
+  	  		if (command.equals("BREAK")){
+  	  			break;
+  	  		} else if (command.equals("<")) {
+	  	  		typeChoice--;
 				if (typeChoice == -1)
 					typeChoice = 0;
-			}
-			if (x.isRightArrow()){
-				typeChoice++;
+			} else if (command.equals(">")){
+		  	  	typeChoice++;
 				if (typeChoice == goodTypes.length)
 					typeChoice = goodTypes.length-1;
+			} else {
+				typeChoice = Integer.parseInt(command);
 			}
   		}
   		menuBox.kill();
+  		si.remove(peopleButton);
+		si.remove(suppliesButton);
+		si.remove(tradeGoodsButton);
+		si.remove(armoryButton);
+		si.remove(livestockButton);
+		si.remove(closeButton);
+		si.removeKeyListener(cbkl);
   		si.restore();
  		si.refresh();
  		Equipment.eqMode = false;
+	}
+
+	private CallbackActionListener<String> getStringCallBackActionListener (BlockingQueue<String> queue, final String option) {
+		return new CallbackActionListener<String>(queue) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					handler.put(option);
+				} catch (InterruptedException e1) {}
+				si.recoverFocus();
+			}
+		};
 	}
 
 	private Comparator<InventoryGFXMenuItem> inventoryItemsComparator = new Comparator<InventoryGFXMenuItem>(){
@@ -748,6 +851,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	//BorderedMenuBox unitsMenuBox;
 	private MenuBox unitsMenuBox;
 	private MenuBox vehiclesMenuBox;
+	private Properties UIProperties;
 	
 	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
 		super.init(psi, title, gameCommands, UIProperties, target);
@@ -774,6 +878,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 		
 		HORSES_ITEM = ItemFactory.createItem("HORSE");
+		this.UIProperties = UIProperties;
 		
 	}
 	
