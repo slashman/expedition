@@ -70,6 +70,13 @@ BTN_EXPEDITION = res/newExpeditionButton.png
 BTN_CONTINUE = res/continueJourneyButton.png 
 BTN_EXIT = res/exitButton.png
 BTN_OK = res/okButton.png
+BTN_SUPPLIES = res/suppliesIcon.png
+BTN_PEOPLE = res/peopleIcon.png
+BTN_MERCHANDISE = res/merchandiseIcon.png
+BTN_WEAPONS = res/weaponsIcon.png
+BTN_LIVESTOCK = res/livestockIcon.png
+IMG_BOX = res/boxIcon.png
+BTN_CLOSE = res/xIcon.png
 
 # The New World
 BTN_THE_NEW_WORLD = res/theNewWorld.png
