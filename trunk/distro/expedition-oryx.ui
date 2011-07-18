@@ -1,9 +1,11 @@
 # Expedition UI Configuration File
 # Slash - Oryx UI
 
-useMouse = false
+useMouse = true
 TILE_SIZE = 24
 GADGETSIZE = 24
+
+mouseQuadrant = 360,216,72,72
 
 PC_POS = 16,10
 XRANGE = 9
@@ -77,7 +79,9 @@ BTN_WEAPONS = res/weaponsIcon.png
 BTN_LIVESTOCK = res/livestockIcon.png
 IMG_BOX = res/boxIcon.png
 BTN_CLOSE = res/xIcon.png
+IMG_CURSORS = res/ui.png
 
 # The New World
 BTN_THE_NEW_WORLD = res/theNewWorld.png
 IMG_THE_NEW_WORLD_INTRO = res/theNewWorldIntro_tmp.png
+
