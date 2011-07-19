@@ -259,36 +259,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private AbstractItem HORSES_ITEM;
 	
 	@Override
-	public int switchChat(String title, String prompt, String... options) {
-   		BorderedMenuBox selectionBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+6, null);
-   		selectionBox.setItemsPerPage(8);
-   		selectionBox.setBounds(80, 300, 640,250);
-  		Vector<GFXMenuItem> menuItems = new Vector<GFXMenuItem>();
-  		int i = 0;
-  		for (String option: options){
-  			menuItems.add(new SimpleGFXMenuItem(option,i));
-  			i++;
-  		}
-  		selectionBox.setMenuItems(menuItems);
-  		selectionBox.setLegend(prompt);
-  		selectionBox.setTitle(title);
-  		selectionBox.setTitleColor(TITLE_COLOR);
-  		selectionBox.setForeColor(TEXT_COLOR);
-  		selectionBox.draw();
-  		
-		while (true) {
-			si.refresh();
-			SimpleGFXMenuItem itemChoice = ((SimpleGFXMenuItem)selectionBox.getSelection());
-			if (itemChoice == null)
-				break;
-			return itemChoice.getValue();
-		}
-		return -1;	
-	}
-
-	@Override
 	public String inputBox(String prompt) {
 		return inputBox(prompt, 200, 40, 400, 200, 260, 120, 20);
+	}
+	
+	@Override
+	public int switchChat(String title, String prompt, String... options) {
+		return super.switchChat(title, prompt, TITLE_COLOR, TEXT_COLOR, options);
 	}
 	
 	public String inputBox(String prompt, int x, int y, int w, int h, int xp, int yp, int length){
@@ -456,7 +433,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public boolean promptChat(String message) {
 		message = message.replaceAll("XXX", "\n");
-		return promptChat(message+" [Y/N]", 140,288,520,200);
+		return promptChat(message, 140,288,520,200);
 	}
 
 	public void transferFromCache(GoodsCache cache) {
