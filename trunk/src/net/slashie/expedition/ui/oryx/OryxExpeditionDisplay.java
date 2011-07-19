@@ -2,7 +2,6 @@ package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Rectangle;
@@ -12,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.ImageIcon;
@@ -36,6 +34,7 @@ import net.slashie.utils.ImageUtils;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackHandler;
+import net.slashie.utils.swing.CleanButton;
 
 public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	private SwingSystemInterface si;
@@ -131,19 +130,15 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			si.printAtPixel(30, 586, "Registered for "+licenseInfo.licenseLevel+" "+licenseInfo.licensee+"!", Color.YELLOW);
 		}
 		
-		JButton historyButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_HISTORY")));
+		CleanButton historyButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_HISTORY")));
 		historyButton.setBounds(new Rectangle(558, 30, 223, 43));
-		cleanButton(historyButton);
-		JButton expeditionButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_EXPEDITION")));
+		CleanButton expeditionButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXPEDITION")));
 		expeditionButton.setBounds(new Rectangle(558, 78, 223, 43));
-		cleanButton(expeditionButton);
-		JButton resumeButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_CONTINUE")));
+		CleanButton resumeButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_CONTINUE")));
 		resumeButton.setBounds(new Rectangle(558, 126, 223, 43));
-		cleanButton(resumeButton);
-		
-		JButton exitButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_EXIT")));
+		CleanButton exitButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXIT")));
 		exitButton.setBounds(new Rectangle(558, 174, 223, 43));
-		cleanButton(exitButton);
+		
 		
 		si.add(historyButton);
 		si.add(expeditionButton);
@@ -163,8 +158,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				try {
 					handler.put(0);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 			}
 		});
@@ -175,8 +168,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				try {
 					handler.put(1);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 			}
 		});
@@ -187,8 +178,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				try {
 					handler.put(2);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 			}
 		});
@@ -199,8 +188,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				try {
 					handler.put(3);
 				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+
 				}
 			}
 		});
@@ -209,8 +197,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		try {
 			choice = titleSelectionHandler.take();
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 		
 		si.remove(historyButton);
@@ -223,9 +209,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public int selectScenario(){
-		JButton theNewWorldButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_THE_NEW_WORLD")));
+		CleanButton theNewWorldButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_THE_NEW_WORLD")));
 		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
-		cleanButton(theNewWorldButton);
 		si.printAtPixel(30, 440, "Please pick a scenario >>>>>", Color.WHITE);
 		si.refresh();
 
@@ -265,9 +250,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				
 				si.print(xstart+3, ystart + 17, "Use this scenario?", Color.WHITE);
 				
-				JButton okButton = new JButton(new ImageIcon(uiProperties.getProperty("BTN_OK")));
+				CleanButton okButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_OK")));
 				okButton.setBounds(286,475,223,43);
-				cleanButton(okButton);
 				si.add(okButton);
 				okButton.addActionListener(new CallbackActionListener<Integer>(handler){
 					public void actionPerformed(ActionEvent ev2) {
@@ -297,13 +281,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 	}
 	
-	
-
-	private void cleanButton(JButton button) {
-		button.setBorder(null);
-		button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	}
-
 	public void showIntro(Expedition e){
 		si.drawImage(uiProperties.getProperty("IMG_THE_NEW_WORLD_INTRO"));
 		si.printAtPixel(30, 500, "Press Space to Continue", Color.WHITE);
