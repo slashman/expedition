@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.utils.Debug;
+import net.slashie.serf.ui.Appearance;
 
 public class ItemFactory {
 	private static Hashtable<String, ExpeditionItem> definitions = new Hashtable<String, ExpeditionItem>();
@@ -23,6 +23,7 @@ public class ItemFactory {
 		return ret.clone();
 	}
 
+	
 	public static ExpeditionUnit createUnit(String fullID, String weaponType) {
 		
 		return null;
@@ -34,5 +35,24 @@ public class ItemFactory {
 			return 0;
 		}
 		return (int) Math.round(ret.getEuropeValue() * ret.getValuePack());
+	}
+
+	
+	public static String getItemNameById(String itemId) {
+		ExpeditionItem ret = definitions.get(itemId);
+		if (ret == null){
+			ExpeditionGame.crash("Item "+itemId+" not found");
+			//return null;
+		}
+		return ret.getDescription();
+	}
+	
+	public static Appearance getItemAppearanceById(String itemId) {
+		ExpeditionItem ret = definitions.get(itemId);
+		if (ret == null){
+			ExpeditionGame.crash("Item "+itemId+" not found");
+			//return null;
+		}
+		return ret.getAppearance();
 	}
 }
