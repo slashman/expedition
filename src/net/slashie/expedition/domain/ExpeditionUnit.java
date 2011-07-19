@@ -1,7 +1,9 @@
 package net.slashie.expedition.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.text.EnglishGrammar;
@@ -332,6 +334,33 @@ public class ExpeditionUnit extends Vehicle{
 
 	public boolean isMounted() {
 		return getMount() != null;
+	}
+
+	
+	public boolean isMonthlyWage() {
+		return true;
+	}
+
+	public List<Appearance> getAvailableWeaponAppearances() {
+		String[] weaponTypes = getWeaponTypes();
+		List<Appearance> ret = new ArrayList<Appearance>();
+		for (String weaponType: weaponTypes){
+			if (weaponType.equals(""))
+				continue;
+			ret.add(ItemFactory.getItemAppearanceById(weaponType));
+		}
+		return ret;
+	}
+
+	public List<Appearance> getAvailableArmorAppearances() {
+		String[] armorTypes = getArmorTypes();
+		List<Appearance> ret = new ArrayList<Appearance>();
+		for (String armorType: armorTypes){
+			if (armorType.equals(""))
+				continue;
+			ret.add(ItemFactory.getItemAppearanceById(armorType));
+		}
+		return ret;
 	}
 
 
