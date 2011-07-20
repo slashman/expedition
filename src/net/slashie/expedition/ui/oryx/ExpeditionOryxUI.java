@@ -1,7 +1,6 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -20,7 +19,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 
 import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
@@ -28,10 +26,12 @@ import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.ItemContainer;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Town;
+import net.slashie.expedition.domain.UnitContainer;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -81,6 +81,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private Image BTN_SPLIT_UP;
 	private Image BTN_SPLIT_DOWN;
 	private Image BTN_BUY;
+	private Image BTN_TRANSFER;
+	private BufferedImage IMG_BOX;
 	
 	@Override
 	public void showDetailedInfo(Actor a) {
@@ -149,14 +151,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		si.addKeyListener(cbkl);
 		
-		Image boxImage;
-		try {
-			boxImage = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
-		} catch (IOException e) {
-			ExpeditionGame.crash("Error reading IMG_BOX");
-			boxImage = null;
-		}
-		
 		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62, 202, 3, 2, null);
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Examine Expedition Inventory");
@@ -185,7 +179,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  		si.restore();
   	  		int boxX = 540 + typeChoice * 29 - 24;
 			int boxY = 41 - 24;
-  	  		menuBox.draw(boxX, boxY, boxImage);
+  	  		menuBox.draw(boxX, boxY, IMG_BOX);
   	  		
   	  		String command = null;
   	  		while (command == null){
@@ -265,6 +259,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	@Override
 	public int switchChat(String title, String prompt, String... options) {
+		((GFXUISelector)getPlayer().getSelector()).setMouseMovementActive(false);
 		return super.switchChat(title, prompt, TITLE_COLOR, TEXT_COLOR, options);
 	}
 	
@@ -415,8 +410,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			 	}
 			else {
 				prompt = "Ok, do you need anything else?";
-				/*keepItemChoice = true;
-				showuldn't ask to select the unit again*/
 			}
 	 		keepItemChoice = true;
 		}
@@ -432,14 +425,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	@Override
 	public boolean promptChat(String message) {
+		((GFXUISelector)getPlayer().getSelector()).setMouseMovementActive(false);
 		message = message.replaceAll("XXX", "\n");
 		return promptChat(message, 140,288,520,200);
 	}
 
-	public void transferFromCache(GoodsCache cache) {
+	public void transferFromCache_(GoodsCache cache) {
 		List<Equipment> cacheEquipment = cache.getItems();
-		//List<Equipment> expeditionEquipment = getExpedition().getInventory();
-    	
    		Equipment.eqMode = true;
    		clearTextBox();
    		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
@@ -495,6 +487,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 			
 			CacheGFXMenuItem itemChoice = ((CacheGFXMenuItem)menuBox.getSelection(x));
+			
+			
+			
 			if (itemChoice == null){
 				if (x.code != CharKey.SPACE){
 					continue;
@@ -535,7 +530,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				continue;
 			}
 			
-			//if (item instanceof Good && !getExpedition().canCarry(item, quantity)){
 			if (item.getGoodType() != GoodType.PEOPLE && !getExpedition().canCarry(item, quantity)){
 				menuBox.setLegend("Your expedition is full! [Press Space]");
 				menuBox.draw();
@@ -552,7 +546,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			menuBox.setLegend(choice.getItem().getDescription()+" transfered. [Press Space]");
 			menuBox.draw();
 			si.waitKey(CharKey.SPACE);
-			//refresh();
   		}
   		
  		if (cache.destroyOnEmpty() && cache.getItems().size() == 0)
@@ -563,141 +556,463 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
  		
 	}
 	
-	public void transferFromExpedition(GoodsCache ship, int minUnits) {
+	interface ItemTransferFunctionality {
+		String getTitle(ItemContainer goodsCache);
+		boolean validateBreak(ItemContainer goodsCache);
+		boolean validateAndPerformTransfer(ItemContainer goodsCache, Equipment choice, int quantity);
+	}
+	
+	class TransferFromCacheFunctionality implements ItemTransferFunctionality {
+		@Override
+		public String getTitle(ItemContainer goodsCache) {
+			return "Transfer from "+goodsCache.getDescription();
+		}
+		
+		@Override
+		public boolean validateBreak(ItemContainer goodsCache) {
+			if (goodsCache instanceof ShipCache){
+				if (getExpedition().getTotalUnits() > 0)
+					return true;
+				else {
+					showBlockingMessage("You must first disembark.");
+		  	  		return false;
+				}
+			} else {
+				return true;
+			}
+		}
+		
+		@Override
+		public boolean validateAndPerformTransfer(ItemContainer goodsCache, Equipment choice, int quantity) {
+  			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+			if (!(choice.getItem() instanceof ExpeditionUnit) && getExpedition().getTotalUnits() == 0){
+				showBlockingMessage("Someone must receive the goods!");
+				return false;
+			}
+			
+			if (quantity > choice.getQuantity()){
+				showBlockingMessage("Not enough "+choice.getItem().getDescription());
+				return false;
+			}
+			
+			if (item.getGoodType() != GoodType.PEOPLE && !getExpedition().canCarry(item, quantity)){
+				showBlockingMessage("Your expedition is full!");
+				return false;
+			}
+			goodsCache.reduceQuantityOf(choice.getItem(), quantity);
+			getExpedition().addItem(choice.getItem(), quantity);
+			if (choice.getQuantity() == 0){
+				goodsCache.getItems().remove(choice);
+			}
+			return true;
+		}
+	}
+
+	
+	class TransferFromExpeditionFunctionality implements ItemTransferFunctionality {
+		int minUnits;
+		TransferFromExpeditionFunctionality (int minUnits){
+			this.minUnits = minUnits;
+		}
+		
+		@Override
+		public String getTitle(ItemContainer goodsCache) {
+			return "Transfer to "+goodsCache.getDescription();
+		}
+		
+		@Override
+		public boolean validateBreak(ItemContainer goodsCache) {
+			if (minUnits != -1){
+				if (goodsCache.getTotalUnits() < minUnits){
+					showBlockingMessage("At least "+minUnits+" should be transfered.");
+					return false;
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		public boolean validateAndPerformTransfer(ItemContainer goodsCache, Equipment choice, int quantity) {
+  			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+			if (!goodsCache.canCarry(item, quantity)){
+				showBlockingMessage("Not enough room in the "+goodsCache.getDescription());
+				return false;
+			}
+			
+			getExpedition().reduceQuantityOf(choice.getItem(), quantity);
+		
+			if (choice.getItem() instanceof ExpeditionUnit && 
+					getExpedition().getCurrentlyCarrying()>100){
+				showBlockingMessage("The expedition can't carry the goods! Be sure to leave enough men on the expedition.");
+				getExpedition().addItem(choice.getItem(), quantity);
+				return false;
+			}
+		
+			goodsCache.addItem((ExpeditionItem)choice.getItem(), quantity);
+			return true;
+		}
+	}
+	
+	public void transferFromExpedition(GoodsCache ship) {
+		transferFromExpedition(ship, -1);
+	}
+	
+	public void transferFromExpedition(GoodsCache goodsCache, int minUnits) {
+		ItemTransferFunctionality transferFromExpeditionFunctionality = new TransferFromExpeditionFunctionality(minUnits);
+		transferItems(getExpedition(), goodsCache, transferFromExpeditionFunctionality, true);
+	}
+	
+	public void transferFromCache(GoodsCache goodsCache) {
+		ItemTransferFunctionality transferFromCacheFunctionality = new TransferFromCacheFunctionality();
+		transferItems(goodsCache, getExpedition(), transferFromCacheFunctionality, false);
+		if (goodsCache.destroyOnEmpty() && goodsCache.getItems().size() == 0)
+			level.destroyFeature(goodsCache);
+	}
+
+	public void transferItems(ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality, boolean fromExpedition) {
+		// Change UI Mode
    		Equipment.eqMode = true;
+		((GFXUISelector)getPlayer().getSelector()).setMouseMovementActive(false);
    		clearTextBox();
-   		BorderedMenuBox menuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,tileSize+10, null);
-   		menuBox.setItemsPerPage(12);
+   		
+   		// Create the close button and add it to the UI
+   		CleanButton closeButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_CLOSE")));
+		closeButton.setBounds(730,41, 24,24);
+		
+   		// Create the buttons for good type selection and add them to the UI
+   		CleanButton peopleButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_PEOPLE")));
+		peopleButton.setBounds(540,41, 24,24);	
+		CleanButton suppliesButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_SUPPLIES")));
+		suppliesButton.setBounds(569,41, 24,24);	
+		CleanButton tradeGoodsButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_MERCHANDISE")));
+		tradeGoodsButton.setBounds(598,41, 24,24);	
+		CleanButton armoryButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_WEAPONS")));
+		armoryButton.setBounds(627,41, 24,24);	
+		CleanButton livestockButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_LIVESTOCK")));
+		livestockButton.setBounds(656,41, 24,24);
+		si.add(peopleButton);
+		si.add(suppliesButton);
+		si.add(tradeGoodsButton);
+		si.add(armoryButton);
+		si.add(livestockButton);
+		si.add(closeButton);
+
+		
+		// Create the button to confirm transfer and add it to the UI
+		CleanButton transferButton = new CleanButton(new ImageIcon(BTN_TRANSFER));
+		transferButton.setSize(BTN_TRANSFER.getWidth(null),BTN_TRANSFER.getHeight(null));
+		
+		// Create the blockingqueue
+		BlockingQueue<String> transferFromExpeditionHandler = new LinkedBlockingQueue<String>(1);
+		
+		// Add callback listeners for good type selection
+		peopleButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:0"));
+		suppliesButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:1"));
+		tradeGoodsButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:2"));
+		armoryButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:3"));
+		livestockButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:4"));
+		
+		// Add callback listeners for screen close
+		closeButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "BREAK"));
+		
+		// Add a general callbacklistener for keyboard
+		CallbackKeyListener<String> cbkl = new CallbackKeyListener<String>(transferFromExpeditionHandler){
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					CharKey x = new CharKey(SwingSystemInterface.charCode(e));
+					if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+						handler.put("BREAK");
+					} else if (x.isLeftArrow()){
+						handler.put("GOOD_TYPE:<");
+					} else if (x.isRightArrow()){
+						handler.put("GOOD_TYPE:>");
+					}
+				} catch (InterruptedException e1) {}
+			}
+		};
+		si.addKeyListener(cbkl);
+		
+		// Add callback listener to confirm transfer
+		transferButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "CONFIRM_TRANSFER"));
+
+		// Create the gridbox component. Send the transferFromExpeditionHandler to allow item selection with both mouse and keyb
+   		TransferBorderGridBox menuBox = new TransferBorderGridBox(
+   				BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
+   				62,202,3,5, IMG_BOX, null, transferButton,
+   				from, to, 
+   				transferFromExpeditionHandler, BTN_SPLIT_UP, BTN_SPLIT_DOWN);
   		menuBox.setBounds(16, 16, 768,480);
-  		menuBox.setTitle("Transfer to "+ship.getDescription()+" [Space to exit]");
-  		menuBox.setLegend("Select the units to remove from the expedition");
+  		
+  		
+  		menuBox.setTitle(itemTransferFunctionality.getTitle(to));
+  		menuBox.setLegend("Select the units or goods to transfer");
+  		
   		int typeChoice = 0;
   		while (true){
-  			String legend = "";
+  			// Select data to draw and draw it
   			GoodType[] goodTypes = GoodType.getGoodTypes();
-  			for (int i = 0; i < goodTypes.length; i++){
-  				if (i == typeChoice){
-  					legend += ">";
-  				}
-  				legend += goodTypes[i].getDescription();
-  				if (i == typeChoice){
-  					legend += "<";
-  				}
-  				legend += "    ";
-  			}
-  			
-  			menuBox.setLegend(legend);
-  			
-  			
+  			List<Equipment> inventory = null;
+  			if (typeChoice < goodTypes.length){
+  	  			inventory = from.getGoods(goodTypes[typeChoice]);
+  	  		}  	  		
+  	  		
+  	  		Vector<CacheCustomGFXMenuItem> menuItems = new Vector<CacheCustomGFXMenuItem>();
+  	  		for (Equipment item: inventory){
+  	  			menuItems.add(new CacheCustomGFXMenuItem(item, from, to));
+  	  		}
+  	  		Collections.sort(menuItems, ITEMS_COMPARATOR);
+  	  		menuBox.setMenuItems(menuItems);
+  	  		menuBox.draw(true);
+  	  		
+  	  		// Wait for item or command selection
+  	  		String command = null;
+  	  		while (command == null){
+  	  			try {
+  	  				command = transferFromExpeditionHandler.take();
+  	  			} catch (InterruptedException ie){}
+  	  		}
+  	  		
+  	  		String[] commandParts = command.split(":");
+  	  		if (commandParts[0].equals("GOOD_TYPE")){
+  	  			// Change the good type
+  	  			if (commandParts[1].equals("<")){
+	  	  			typeChoice--;
+					if (typeChoice == -1)
+						typeChoice = 0;
+					continue;
+  	  			} else if (commandParts[1].equals(">")){
+	  	  			typeChoice++;
+					if (typeChoice == goodTypes.length)
+						typeChoice = goodTypes.length-1;
+					continue;
+  	  			} else {
+  	  				typeChoice = Integer.parseInt(commandParts[1]);
+  	  				continue;
+  	  			}
+  	  		} else if (commandParts[0].equals("BREAK")){
+  	  			if (!itemTransferFunctionality.validateBreak(to))
+	  	  			continue;
+				break;
+  	  		} else if (commandParts[0].equals("SELECT_UNIT")){
+  	  			menuBox.selectUnit(Integer.parseInt(commandParts[1]));
+  	  			
+  	  		} else if (commandParts[0].equals("CONFIRM_TRANSFER")){
+  	  			Equipment choice = menuBox.getSelectedUnit();
+  	  			int quantity = menuBox.getQuantity();
+  	  			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+  	  			if (quantity == 0)
+  	  				continue;
+  	  			
+				if (quantity > choice.getQuantity()){
+					showBlockingMessage("Not enough "+choice.getItem().getDescription());
+					continue;
+				}
+				
+				if (!itemTransferFunctionality.validateAndPerformTransfer(to, choice, quantity)){
+					continue;
+				}
+				
+				if (choice.getQuantity() == 0){
+					menuItems.remove(choice);
+				}
+				menuBox.setLegend(quantity+" " +choice.getItem().getDescription()+" transfered into the "+to.getDescription());
+  	  		}
+  		}
+  		
+		si.remove(peopleButton);
+		si.remove(suppliesButton);
+		si.remove(tradeGoodsButton);
+		si.remove(armoryButton);
+		si.remove(livestockButton);
+		si.remove(closeButton);
+  		si.removeKeyListener(cbkl);
+		menuBox.kill();
+		Equipment.eqMode = false;
+		si.restore();
+ 		si.refresh();
+	}
+	
+	
+	@Deprecated
+	public void transferFromExpedition_(ItemContainer goodsCache, int minUnits) {
+		// Change UI Mode
+   		Equipment.eqMode = true;
+		((GFXUISelector)getPlayer().getSelector()).setMouseMovementActive(false);
+   		clearTextBox();
+   		
+   		// Create the close button and add it to the UI
+   		CleanButton closeButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_CLOSE")));
+		closeButton.setBounds(730,41, 24,24);
+		
+   		// Create the buttons for good type selection and add them to the UI
+   		CleanButton peopleButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_PEOPLE")));
+		peopleButton.setBounds(540,41, 24,24);	
+		CleanButton suppliesButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_SUPPLIES")));
+		suppliesButton.setBounds(569,41, 24,24);	
+		CleanButton tradeGoodsButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_MERCHANDISE")));
+		tradeGoodsButton.setBounds(598,41, 24,24);	
+		CleanButton armoryButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_WEAPONS")));
+		armoryButton.setBounds(627,41, 24,24);	
+		CleanButton livestockButton = new CleanButton(new ImageIcon(UIProperties.getProperty("BTN_LIVESTOCK")));
+		livestockButton.setBounds(656,41, 24,24);
+		si.add(peopleButton);
+		si.add(suppliesButton);
+		si.add(tradeGoodsButton);
+		si.add(armoryButton);
+		si.add(livestockButton);
+		si.add(closeButton);
+
+		
+		// Create the button to confirm transfer and add it to the UI
+		CleanButton transferButton = new CleanButton(new ImageIcon(BTN_TRANSFER));
+		transferButton.setSize(BTN_TRANSFER.getWidth(null),BTN_TRANSFER.getHeight(null));
+		
+		// Create the blockingqueue
+		BlockingQueue<String> transferFromExpeditionHandler = new LinkedBlockingQueue<String>(1);
+		
+		// Add callback listeners for good type selection
+		peopleButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:0"));
+		suppliesButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:1"));
+		tradeGoodsButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:2"));
+		armoryButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:3"));
+		livestockButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:4"));
+		
+		// Add callback listeners for screen close
+		closeButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "BREAK"));
+		
+		// Add a general callbacklistener for keyboard
+		CallbackKeyListener<String> cbkl = new CallbackKeyListener<String>(transferFromExpeditionHandler){
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					CharKey x = new CharKey(SwingSystemInterface.charCode(e));
+					if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+						handler.put("BREAK");
+					} else if (x.isLeftArrow()){
+						handler.put("GOOD_TYPE:<");
+					} else if (x.isRightArrow()){
+						handler.put("GOOD_TYPE:>");
+					}
+				} catch (InterruptedException e1) {}
+			}
+		};
+		si.addKeyListener(cbkl);
+		
+		// Add callback listener to confirm transfer
+		transferButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "CONFIRM_TRANSFER"));
+
+		// Create the gridbox component. Send the transferFromExpeditionHandler to allow item selection with both mouse and keyb
+   		TransferBorderGridBox menuBox = new TransferBorderGridBox(
+   				BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
+   				62,202,3,5, IMG_BOX, null, transferButton,
+   				getExpedition(), goodsCache, 
+   				transferFromExpeditionHandler, BTN_SPLIT_UP, BTN_SPLIT_DOWN);
+  		menuBox.setBounds(16, 16, 768,480);
+  		
+  		
+  		menuBox.setTitle("Transfer to "+goodsCache.getDescription());
+  		menuBox.setLegend("Select the units or goods to transfer");
+  		
+  		int typeChoice = 0;
+  		while (true){
+  			// Select data to draw and draw it
+  			GoodType[] goodTypes = GoodType.getGoodTypes();
   			List<Equipment> inventory = null;
   			if (typeChoice < goodTypes.length){
   	  			inventory = getExpedition().getGoods(goodTypes[typeChoice]);
   	  		}  	  		
   	  		
-  	  		Vector menuItems = new Vector();
+  	  		Vector<CacheCustomGFXMenuItem> menuItems = new Vector<CacheCustomGFXMenuItem>();
   	  		for (Equipment item: inventory){
-  	  			menuItems.add(new CacheGFXMenuItem(item, ship));
+  	  			menuItems.add(new CacheCustomGFXMenuItem(item, goodsCache, getExpedition()));
   	  		}
   	  		Collections.sort(menuItems, ITEMS_COMPARATOR);
   	  		menuBox.setMenuItems(menuItems);
-  	  		menuBox.draw();
+  	  		menuBox.draw(true);
   	  		
-	  		CharKey x = new CharKey(CharKey.NONE);
-			while (x.code == CharKey.NONE)
-				x = si.inkey();
-			
-			if (x.isLeftArrow()){
-				typeChoice--;
-				if (typeChoice == -1)
-					typeChoice = 0;
-				continue;
-			}
-			if (x.isRightArrow()){
-				typeChoice++;
-				if (typeChoice == goodTypes.length)
-					typeChoice = goodTypes.length-1;
-				continue;
-			}
-			
-			CacheGFXMenuItem itemChoice = ((CacheGFXMenuItem)menuBox.getSelection(x));
-
-			if (itemChoice == null){
-				if (x.code != CharKey.SPACE){
+  	  		// Wait for item or command selection
+  	  		String command = null;
+  	  		while (command == null){
+  	  			try {
+  	  				command = transferFromExpeditionHandler.take();
+  	  			} catch (InterruptedException ie){}
+  	  		}
+  	  		
+  	  		String[] commandParts = command.split(":");
+  	  		if (commandParts[0].equals("GOOD_TYPE")){
+  	  			// Change the good type
+  	  			if (commandParts[1].equals("<")){
+	  	  			typeChoice--;
+					if (typeChoice == -1)
+						typeChoice = 0;
 					continue;
-				}
-				if (minUnits != -1){
-					if (ship.getTotalUnits() < minUnits){
-						menuBox.setLegend("At least "+minUnits+" should be transfered. [Press Space]");
-						menuBox.draw();
-						si.waitKey(CharKey.SPACE);
+  	  			} else if (commandParts[1].equals(">")){
+	  	  			typeChoice++;
+					if (typeChoice == goodTypes.length)
+						typeChoice = goodTypes.length-1;
+					continue;
+  	  			} else {
+  	  				typeChoice = Integer.parseInt(commandParts[1]);
+  	  				continue;
+  	  			}
+  	  		} else if (commandParts[0].equals("BREAK")){
+	  	  		if (minUnits != -1){
+					if (goodsCache.getTotalUnits() < minUnits){
+						showBlockingMessage("At least "+minUnits+" should be transfered.");
 						continue;
 					}
 				}
-				break;
-			}
-			Equipment choice = itemChoice.getEquipment();
-			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			menuBox.setLegend("How many "+item.getDescription()+" will you transfer?");
-			menuBox.draw();
-			si.refresh();
-			int quantity = readQuantity(657, 86, "                       ", 5);
+  	  			break;
+  	  		} else if (commandParts[0].equals("SELECT_UNIT")){
+  	  			menuBox.selectUnit(Integer.parseInt(commandParts[1]));
+  	  			
+  	  		} else if (commandParts[0].equals("CONFIRM_TRANSFER")){
+  	  			Equipment choice = menuBox.getSelectedUnit();
+  	  			int quantity = menuBox.getQuantity();
+  	  			ExpeditionItem item = (ExpeditionItem) choice.getItem();
+  	  			if (quantity == 0)
+  	  				continue;
 			
-			if (quantity == 0)
-				continue;
+				if (quantity > choice.getQuantity()){
+					showBlockingMessage("Not enough "+choice.getItem().getDescription());
+					continue;
+				}
 			
-			if (quantity > choice.getQuantity()){
-				menuBox.setLegend("Not enough "+choice.getItem().getDescription()+" [Press Space]");
-				menuBox.draw();
-				si.waitKey(CharKey.SPACE);
-				continue;
-			}
+				if (!goodsCache.canCarry(item, quantity)){
+					showBlockingMessage("Not enough room in the "+goodsCache.getDescription());
+					continue;
+				}
 			
-			//if (item.getGoodType() != GoodType.PEOPLE && !ship.canCarry(item, quantity)){
-			if (!ship.canCarry(item, quantity)){
-				menuBox.setLegend("Not enough room in the "+ship.getDescription()+" [Press Space]");
-				menuBox.draw();
-				si.waitKey(CharKey.SPACE);
-				continue;
-			}
+				getExpedition().reduceQuantityOf(choice.getItem(), quantity);
 			
-			getExpedition().reduceQuantityOf(choice.getItem(), quantity);
+				if (choice.getItem() instanceof ExpeditionUnit && 
+						getExpedition().getCurrentlyCarrying()>100){
+					showBlockingMessage("The expedition can't carry the goods! Be sure to leave enough men on the expedition.");
+					getExpedition().addItem(choice.getItem(), quantity);
+					continue;
+				}
 			
-			if (choice.getItem() instanceof ExpeditionUnit && 
-					getExpedition().getCurrentlyCarrying()>100){
-				menuBox.setLegend("The expedition can't carry the goods! [Press Space]");
-				menuBox.draw();
-				si.waitKey(CharKey.SPACE);
-				getExpedition().addItem(choice.getItem(), quantity);
+				goodsCache.addItem((ExpeditionItem)choice.getItem(), quantity);
+			
 				if (choice.getQuantity() == 0){
-					/* Guess this is no longer needed
-					menuItems = new Vector();
-			  		for (Equipment item2: getExpedition().getInventory()){
-			  			menuItems.add(new CacheGFXMenuItem(item2, ship));
-			  		}
-			  		Collections.sort(menuItems, ITEMS_COMPARATOR);
-			  		menuBox.setMenuItems(menuItems);
-			  		*/				
-			  	}
-				continue;
-			}
-			
-			ship.addItem(choice.getItem(), quantity);
-			
-			if (choice.getQuantity() == 0){
-				menuItems.remove(choice);
-			}
-			menuBox.setLegend(choice.getItem().getDescription()+" transfered into the "+ship.getDescription()+" [Press Space]");
-			menuBox.draw();
-			si.waitKey(CharKey.SPACE);
-			//refresh();
+					menuItems.remove(choice);
+				}
+				menuBox.setLegend(quantity+" " +choice.getItem().getDescription()+" transfered into the "+goodsCache.getDescription());
+  	  		}
   		}
   		
+		si.remove(peopleButton);
+		si.remove(suppliesButton);
+		si.remove(tradeGoodsButton);
+		si.remove(armoryButton);
+		si.remove(livestockButton);
+		si.remove(closeButton);
+  		si.removeKeyListener(cbkl);
+		menuBox.kill();
 		Equipment.eqMode = false;
 		si.restore();
  		si.refresh();
-	}
-	public void transferFromExpedition(GoodsCache ship) {
-		transferFromExpedition(ship, -1);
 	}
 	
 	@Override
@@ -857,6 +1172,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			BTN_SPLIT_UP = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_UP_BOUNDS"));
 			BTN_SPLIT_DOWN = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_DOWN_BOUNDS"));
 			BTN_BUY = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_BUY_BOUNDS"));
+			BTN_TRANSFER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_TRANSFER_BOUNDS"));
+			IMG_BOX = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			ExpeditionGame.crash("Error loading images", e);

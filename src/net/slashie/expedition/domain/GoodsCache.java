@@ -14,12 +14,10 @@ import net.slashie.serf.action.Actor;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.level.AbstractFeature;
-import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
-import net.slashie.utils.Util;
 
-public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitContainer{
+public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitContainer, ItemContainer{
 	private FoodConsumerDelegate foodConsumerDelegate; 
 	
 	public GoodsCache(ExpeditionGame game) {
@@ -72,12 +70,17 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	public void addAllGoods(GoodsCache cache){
 		for (Equipment equipment: cache.getInventory()){
-			addItem(equipment.getItem(), equipment.getQuantity());
+			addItem((ExpeditionItem)equipment.getItem(), equipment.getQuantity());
 		}
 	}
 	
 	public int getCarryable(ExpeditionItem item){
 		return -1;
+	}
+	
+	@Override
+	public int getCurrentlyCarrying() {
+		return getCurrentWeight();
 	}
 	
 	private int getCurrentWeight(){
@@ -135,7 +138,8 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		return true;
 	}
 
-	public void addItem(AbstractItem item, int quantity) {
+	@Override
+	public void addItem(ExpeditionItem item, int quantity) {
 		String toAddID = item.getFullID();
 		Equipment equipmentx = itemsHash.get(toAddID);
 		if (equipmentx == null){
@@ -150,7 +154,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	@Override
 	public String getDescription() {
-		return "Equipment Caché";
+		return "Ground";
 	}
 
 	@Override
@@ -158,6 +162,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		return true;
 	}
 
+	@Override
 	public int getTotalUnits() {
 		int totalUnits = 0;
 		List<Equipment> inventory = getItems();
@@ -271,6 +276,16 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		return true;
 	}
 	
+	@Override
+	public int getCarryCapacity() {
+		return -1;
+	}
+	
+	@Override
+	public int getTotalShips() {
+		return 0;
+	}
+	
 	public void killUnits(int quantity) {
 		Collection<Pair<ExpeditionUnit, Integer>> values = foodConsumerDelegate.killUnits(quantity);
 		if (wasSeen()){
@@ -336,7 +351,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 
 	public void addAllItems(List<Equipment> items) {
 		for (Equipment equipment: items){
-			addItem(equipment.getItem(), equipment.getQuantity());
+			addItem((ExpeditionItem)equipment.getItem(), equipment.getQuantity());
 		}
 	}
 	
@@ -344,5 +359,26 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		for (Equipment equipment: items){
 			reduceQuantityOf(equipment.getItem().getFullID(), equipment.getQuantity());
 		}
+	}
+	
+	public int getFoodDays(){
+		return foodConsumerDelegate.getFoodDays();
+	}
+	
+	@Override
+	public int getCurrentFood() {
+		int currentFood = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof Food){
+				Food good = (Food)equipment.getItem();
+				currentFood += good.getUnitsFedPerGood() * equipment.getQuantity();
+			}
+		}
+		return currentFood;
+	}
+
+	public int getWaterDays() {
+		return 0;
 	}
 }

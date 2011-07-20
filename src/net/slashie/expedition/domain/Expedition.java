@@ -37,7 +37,7 @@ import net.slashie.utils.Circle;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
-public class Expedition extends Player implements FoodConsumer, UnitContainer{
+public class Expedition extends Player implements FoodConsumer, UnitContainer, ItemContainer{
 	private ExpeditionUnit leaderUnit;
 	
 	public enum Title {
@@ -490,6 +490,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 	}*/
 	
 	public int getCarryable(ExpeditionItem item){
+		if (getMovementMode() != MovementMode.SHIP && item instanceof ExpeditionUnit) // All units welcome into a land expedition
+			return -1;
 		return (int)Math.floor((getCarryCapacity()-getCurrentWeight())/item.getWeight());
 	}
 	
@@ -522,7 +524,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return (int)Math.round((double)getCurrentFood()/(double)getDailyFoodConsumption());
 	}
 	
-	/**
+	/**	
 	 * Ignores extreme food consumption conditions (like hibernating)
 	 * @return
 	 */
@@ -530,7 +532,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		return (int)Math.round((double)getCurrentFood()/(double)foodConsumerDelegate.getDailyFoodConsumption());
 	}
 	
-	private int getCurrentFood(){
+	public int getCurrentFood(){
 		int currentFood = 0;
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
@@ -573,6 +575,12 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		
 	}
 
+	@Override
+	public boolean canCarry(ExpeditionItem item, int quantity) {
+		return canCarry((AbstractItem)item, quantity);
+	}
+	
+	
 	@Override
 	public boolean canCarry(AbstractItem item, int quantity) {
 		if (!(item instanceof ExpeditionItem))
@@ -1294,13 +1302,18 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 		addItem(unit, quantity);
 	}
 	
+	@Override
+	public void addItem(ExpeditionItem item, int quantity) {
+		super.addItem(item, quantity);
+	}
+	
 	public void addAllItems(List<Equipment> items){
 		for (Equipment equipment: items){
 			if (canCarry(equipment.getItem(), equipment.getQuantity())){
 				addItem(equipment.getItem(), equipment.getQuantity());
 			} else {
 				GoodsCache cache = ((ExpeditionMacroLevel)getLevel()).getOrCreateCache(getPosition());
-				cache.addItem(equipment.getItem(), equipment.getQuantity());				
+				cache.addItem((ExpeditionItem)equipment.getItem(), equipment.getQuantity());				
 			}
 			
 		}
@@ -1327,6 +1340,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer{
 			}
 		}
 		return ret;
+	}
+	
+	@Override
+	public List<Equipment> getItems() {
+		return getInventory();
 	}
 
 	public List<Equipment> getGoods(GoodType goodType, boolean clone) {

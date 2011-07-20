@@ -7,7 +7,6 @@ import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
-import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
 
 public class ShipCache extends GoodsCache{
@@ -23,15 +22,19 @@ public class ShipCache extends GoodsCache{
 		return (int)Math.floor((getCarryCapacity()-getCurrentWeight())/item.getWeight());
 	}
 	
-	private int getCarryCapacity(){
+	public int getCarryCapacity(){
 		int carryCapacity = 0;
 		for (Vehicle equipment: vehicles){
 			carryCapacity += equipment.getCarryCapacity();
 		}
 		return carryCapacity;
 	}
+	
+	public int getTotalShips(){
+		return vehicles.size();
+	}
 
-	private int getCurrentWeight(){
+	public int getCurrentWeight(){
 		int currentlyCarrying = 0;
 		List<Equipment> inventory = getItems();
 		for (Equipment equipment: inventory){
