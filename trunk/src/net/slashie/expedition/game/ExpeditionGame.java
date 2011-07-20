@@ -158,9 +158,12 @@ public class ExpeditionGame extends SworeGame {
 			}
 		}
 		if (level.getID().equals("WORLD")){
-			level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar Test
+			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar Test
 			level.getPlayer().setPosition(-4330, 732, 0); // Cabo dela vela
 			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atlántico
+			*/
+			//TODO: Add back Palos?
+			level.getPlayer().setPosition(-329, 2158, 0);
 		}
 
 		

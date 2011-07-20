@@ -563,7 +563,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				continue;
 			}
 			
-			ship.addItem(choice.getItem(), quantity);
+			ship.addItem((ExpeditionItem)choice.getItem(), quantity);
 			
 			if (choice.getQuantity() == 0){
 				menuItems.remove(choice);

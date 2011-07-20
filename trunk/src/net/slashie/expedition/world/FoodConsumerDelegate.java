@@ -10,7 +10,6 @@ import java.util.List;
 
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Food;
-import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.NonPrincipalExpedition;
 import net.slashie.serf.game.Equipment;
 import net.slashie.util.Pair;
@@ -161,5 +160,17 @@ public class FoodConsumerDelegate implements Serializable{
 		}
 		foodConsumer.checkDeath();
 		return acumHash.values();
+	}
+
+	
+	public int getFoodDays() {
+		if (getDailyFoodConsumption() == 0){
+			return 0;
+		}
+		return (int)Math.round((double)getCurrentFood()/(double)getDailyFoodConsumption());
+	}
+
+	private int getCurrentFood() {
+		return foodConsumer.getCurrentFood();
 	}
 }

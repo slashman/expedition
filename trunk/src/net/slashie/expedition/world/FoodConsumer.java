@@ -27,4 +27,6 @@ public interface FoodConsumer {
 	public AbstractLevel getLevel();
 
 	public Position getPosition();
+
+	public int getCurrentFood();
 }

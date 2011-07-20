@@ -195,7 +195,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		Integer choice = null;
 		try {
-			choice = titleSelectionHandler.take();
+			while (choice == null)
+				choice = titleSelectionHandler.take();
 		} catch (InterruptedException e1) {
 		}
 		
