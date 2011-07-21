@@ -1957,10 +1957,17 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public int getLongitude(){
 		return getPosition().x();
 	}
-
 	
 	public int getWaterDays() {
 		return 0;
 	}
-	
+
+	@Override
+	public String getDescription() {
+		if (movementMode == MovementMode.SHIP){
+			return "Ships";
+		} else {
+			return "Expedition";
+		}
+	}
 }

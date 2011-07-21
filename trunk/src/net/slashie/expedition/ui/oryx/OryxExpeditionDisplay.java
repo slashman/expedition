@@ -259,7 +259,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 						try {
 							handler.put(0);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						si.remove((Component) ev2.getSource());
@@ -272,7 +271,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		try {
 			choice = titleSelectionHandler.take();
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		

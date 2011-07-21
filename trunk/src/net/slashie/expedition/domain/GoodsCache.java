@@ -80,7 +80,12 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	@Override
 	public int getCurrentlyCarrying() {
-		return getCurrentWeight();
+		if (getCarryCapacity() == -1){
+			return -1;
+		} else {
+			return (int)Math.round(((double)getCurrentWeight()/(double)getCarryCapacity())*100.0d);
+		}
+		//return getCurrentWeight();
 	}
 	
 	private int getCurrentWeight(){
