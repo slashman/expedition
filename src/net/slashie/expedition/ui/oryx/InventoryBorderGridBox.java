@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.swing.BorderedGridBox;
-import net.slashie.utils.swing.CleanButton;
 
 public class InventoryBorderGridBox extends BorderedGridBox{
 	private static final long serialVersionUID = 1L;
@@ -39,8 +38,4 @@ public class InventoryBorderGridBox extends BorderedGridBox{
 	public void draw(boolean refresh) {
 		draw(boxX, boxY, box);
 	}
-	
-	
-	
-
 }
