@@ -98,5 +98,21 @@ public enum CardinalDirection {
 	public static CardinalDirection getRandomDirection() {
 		return (CardinalDirection) Util.randomElementOf(values());
 	}
+
+	private final static CardinalDirection[] actionDirectionMapping = new CardinalDirection[]{
+		NORTH,
+		SOUTH,
+		WEST,
+		EAST,
+		NORTHEAST,
+		NORTHWEST,
+		SOUTHEAST,
+		SOUTHWEST,
+		NULL
+	};
+	
+	public static CardinalDirection translateFromActionDirection(int actionDirection) {
+		return actionDirectionMapping[actionDirection];
+	}
 	
 }
