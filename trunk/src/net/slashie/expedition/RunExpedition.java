@@ -33,6 +33,7 @@ import net.slashie.expedition.ui.console.CharExpeditionDisplay;
 import net.slashie.expedition.ui.console.ExpeditionConsoleUI;
 import net.slashie.expedition.ui.console.ExpeditionConsoleUISelector;
 import net.slashie.expedition.ui.console.effects.CharEffects;
+import net.slashie.expedition.ui.oryx.ExpeditionGFXUISelector;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.expedition.ui.oryx.OryxExpeditionDisplay;
 import net.slashie.expedition.ui.oryx.effects.GFXEffects;
@@ -384,8 +385,9 @@ public class RunExpedition {
 		
 		switch (mode){
 		case SWING_GFX:
-			((ExpeditionOryxUI)ui).init((SwingSystemInterface)si, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2010", userCommands, UIconfiguration, null);
-			uiSelector = new GFXUISelector();
+			SwingSystemInterface ssi = (SwingSystemInterface)si;
+			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2010", userCommands, UIconfiguration, null);
+			uiSelector = new ExpeditionGFXUISelector();
 			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings);
 			break;
 		case JCURSES_CONSOLE: case SWING_CONSOLE:
