@@ -3,7 +3,6 @@ package net.slashie.expedition.ui.oryx;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -11,23 +10,25 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
+import javax.swing.AbstractAction;
 import javax.swing.JLabel;
-import javax.swing.JToolTip;
+import javax.swing.Timer;
 
+import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
-import net.slashie.serf.action.Actor;
-import net.slashie.serf.action.Message;
-import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserAction;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
+import net.slashie.utils.Position;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.swing.CallbackActionListener;
+import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
 
 public class ExpeditionGFXUISelector extends GFXUISelector{
@@ -58,18 +59,20 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		legendLabel.setSize(800,15);
 		si.add(legendLabel);
 		
+		Cursor HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2);
+		
 		try {
-			armButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ARM_BOUNDS")));
-			buildButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_BUILD_BOUNDS")));
-			dropButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DROP_BOUNDS")));
-			inventoryButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_INVENTORY_BOUNDS")));
-			lookButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_LOOK_BOUNDS")));
-			mountButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MOUNT_BOUNDS")));
-			repairButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_REPAIR_BOUNDS")));
-			resetButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")));
-			chopButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")));
-			saveButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")));
-			quitButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")));
+			armButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ARM_BOUNDS")), HAND_CURSOR);
+			buildButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_BUILD_BOUNDS")), HAND_CURSOR);
+			dropButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DROP_BOUNDS")), HAND_CURSOR);
+			inventoryButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_INVENTORY_BOUNDS")), HAND_CURSOR);
+			lookButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_LOOK_BOUNDS")), HAND_CURSOR);
+			mountButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MOUNT_BOUNDS")), HAND_CURSOR);
+			repairButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_REPAIR_BOUNDS")), HAND_CURSOR);
+			resetButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")), HAND_CURSOR);
+			chopButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")), HAND_CURSOR);
+			saveButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), HAND_CURSOR);
+			quitButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), HAND_CURSOR);
 		} catch (IOException e) {
 			ExpeditionGame.crash("Error loading buttons", e);
 		}
@@ -196,6 +199,97 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 					handler.put(option);
 				} catch (InterruptedException e1) {}
 				si.recoverFocus();
+			}
+		};
+	}
+
+	private void performMovement() {
+		int quadrant = defineQuadrant(mousePosition.x, mousePosition.y);
+		mouseDirection = QDIRECTIONS[quadrant-1];
+		
+		Expedition expedition = (Expedition) getUI().getPlayer();				
+		if (expedition.getMovementMode() == MovementMode.SHIP){
+			// Compare with heading and move in the correct direction
+			CardinalDirection heading = expedition.getHeading();
+			CardinalDirection wantedHeading = CardinalDirection.translateFromActionDirection(mouseDirection);
+			if (wantedHeading == CardinalDirection.NULL){
+				// move forward
+				try {
+					selectionHandler.put("MOUSE_MOVE:"+Action.UP);
+					mouseDirection = Action.UP;
+				} catch (InterruptedException e1) {}
+			} else if (heading.getReferenceAngle() != wantedHeading.getReferenceAngle()){
+				int wantedAngle = wantedHeading.getReferenceAngle();
+				int headingAngle = heading.getReferenceAngle();
+				
+				// Normalize angles 
+				wantedAngle = wantedAngle - headingAngle;
+				if (wantedAngle < 0)
+					wantedAngle += 360;
+					
+				int degreeDifference = wantedAngle;
+				try {
+					if (degreeDifference < 180){
+						selectionHandler.put("MOUSE_MOVE:"+Action.LEFT);
+						mouseDirection = Action.LEFT;
+					} else {
+						selectionHandler.put("MOUSE_MOVE:"+Action.RIGHT);
+						mouseDirection = Action.RIGHT;
+					}
+				} catch (InterruptedException e) {}
+			} else {
+				// move forward
+				try {
+					selectionHandler.put("MOUSE_MOVE:"+Action.UP);
+					mouseDirection = Action.UP;
+				} catch (InterruptedException e1) {}
+			}
+		} else {
+			// Normal movement
+			try {
+				selectionHandler.put("MOUSE_MOVE:"+mouseDirection);
+			} catch (InterruptedException e1) {}
+		}
+	}
+	
+	@Override
+	protected MouseListener getMouseClickListener(BlockingQueue<String> selectionHandler_) {
+		javax.swing.Action gotoDirectionAction = new AbstractAction() {
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				performMovement();
+			}
+		};
+		final Timer gotoDirectionTimer = new Timer(200, gotoDirectionAction);
+		return new CallbackMouseListener<String>(selectionHandler_){
+			public void mousePressed(final MouseEvent e) {
+				if (!selectionActive)
+					return;
+				if (e.getButton() == MouseEvent.BUTTON1){
+					mousePosition = e.getPoint();
+					performMovement();
+					gotoDirectionTimer.start();
+				} else if (e.getButton() == MouseEvent.BUTTON3){
+					Position p = translatePosition(e.getPoint().x, e.getPoint().y);
+					try {
+						handler.put("MOUSE:"+p.x+":"+p.y);
+					} catch (InterruptedException e1) {}
+				}
+			}
+
+			public void mouseReleased(MouseEvent e) {
+				mouseDirection = -1;
+				gotoDirectionTimer.stop();
+			}
+			
+			private Position tempRel = new Position(0,0);
+			private Position translatePosition(int x, int y){
+				int bigx = (int)Math.ceil(x/32.0);
+				int bigy = (int)Math.ceil(y/32.0);
+				tempRel.x = bigx-ui().PC_POS.x-1;
+				tempRel.y = bigy-ui().PC_POS.y-1;
+				return Position.add(player.getPosition(), tempRel);
 			}
 		};
 	}

@@ -6,9 +6,13 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -32,9 +36,14 @@ import net.slashie.serf.ui.oryxUI.AddornedBorderTextArea;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.PropertyFilters;
+import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackHandler;
+import net.slashie.utils.swing.CallbackKeyListener;
+import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
+import net.slashie.utils.swing.GFXMenuItem;
+import net.slashie.utils.swing.SimpleGFXMenuItem;
 
 public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	private SwingSystemInterface si;
@@ -194,10 +203,10 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		});
 		
 		Integer choice = null;
-		try {
-			while (choice == null)
+		while (choice == null) {
+			try {
 				choice = titleSelectionHandler.take();
-		} catch (InterruptedException e1) {
+			} catch (InterruptedException e1) {}
 		}
 		
 		si.remove(historyButton);
@@ -267,11 +276,14 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			}
 		});
 		
+		
 		Integer choice = null;
-		try {
-			choice = titleSelectionHandler.take();
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
+		while (choice == null){
+			try {
+				choice = titleSelectionHandler.take();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		}
 		
 		si.remove(theNewWorldButton);
@@ -282,8 +294,33 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	public void showIntro(Expedition e){
 		si.drawImage(uiProperties.getProperty("IMG_THE_NEW_WORLD_INTRO"));
-		si.printAtPixel(30, 500, "Press Space to Continue", Color.WHITE);
-		si.waitKey(CharKey.SPACE);
+		BlockingQueue<String> titleSelectionHandler = new LinkedBlockingQueue<String>();
+		CallbackMouseListener<String> cbml = new CallbackMouseListener<String>(titleSelectionHandler){
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					handler.put("OK");
+				} catch (InterruptedException e1) {}
+			}
+		};
+		si.addMouseListener(cbml);
+		CallbackKeyListener<String> cbkl = new CallbackKeyListener<String>(titleSelectionHandler){
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					handler.put("OK");
+				} catch (InterruptedException e1) {}
+			}
+		};
+		si.addKeyListener(cbkl);
+		String take = null;
+		while (take == null){
+			try {
+				take = titleSelectionHandler.take();
+			} catch (InterruptedException e1) {}
+		};
+		si.removeMouseListener(cbml);
+		si.removeKeyListener(cbkl);
 	}
 
 	public void showHelp(){
@@ -333,7 +370,9 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	public int showSavedGames(File[] saveFiles){
 		si.drawImage(IMG_BLANK);
+		
 		if (saveFiles == null || saveFiles.length == 0){
+			
 			si.print(3,6, "No adventurers available",Color.WHITE);
 			si.print(4,8, "[Space to Cancel]",Color.WHITE);
 			si.refresh();
@@ -342,20 +381,24 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		}
 			
 		si.print(3,6, "Pick an adventurer",Color.WHITE);
+		List<GFXMenuItem> items = new ArrayList<GFXMenuItem>();
 		for (int i = 0; i < saveFiles.length; i++){
 			String saveFileName = saveFiles[i].getName();
-			si.print(5,7+i, (char)(CharKey.a+i+1)+ " - "+ saveFileName.substring(0,saveFileName.indexOf(".sav")), COLOR_BOLD);
+			SimpleGFXMenuItem saveFileItem = new SimpleGFXMenuItem(saveFileName.substring(0,saveFileName.indexOf(".sav")), i);
+			items.add(saveFileItem);
 		}
-		si.print(3,9+saveFiles.length, "[Space to Cancel]", Color.WHITE);
-		si.refresh();
-		CharKey x = si.inkey();
-		while ((x.code < CharKey.a || x.code > CharKey.a+saveFiles.length-1) && x.code != CharKey.SPACE){
-			x = si.inkey();
-		}
-		if (x.code == CharKey.SPACE)
+		
+		BorderedMenuBox menuBox = ((ExpeditionOryxUI)UserInterface.getUI()).createBorderedMenuBox(20,6,9,12,20);
+		menuBox.setLegend("Pick an adventurer");
+		menuBox.setMenuItems(items);
+		menuBox.setItemsPerPage(10);
+		menuBox.setBounds(20,20,400,400);
+		SimpleGFXMenuItem selected = (SimpleGFXMenuItem) menuBox.getSelection();
+		
+		if (selected == null)
 			return -1;
 		else
-			return x.code - CharKey.a;
+			return selected.getValue();
 	}
 	
 	

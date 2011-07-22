@@ -4,9 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
-import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
