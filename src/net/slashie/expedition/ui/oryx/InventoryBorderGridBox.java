@@ -1,6 +1,7 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
@@ -37,5 +38,15 @@ public class InventoryBorderGridBox extends BorderedGridBox{
 	@Override
 	public void draw(boolean refresh) {
 		draw(boxX, boxY, box);
+	}
+	
+	@Override
+	protected Cursor getDefaultCursor() {
+		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).POINTER_CURSOR;
+	}
+	
+	@Override
+	protected Cursor getHandCursor() {
+		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).HAND_CURSOR;
 	}
 }
