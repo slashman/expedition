@@ -1,6 +1,7 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +31,9 @@ import net.slashie.expedition.domain.Weapon;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.AppearanceFactory;
+import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
+import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.swing.BorderedGridBox;
 import net.slashie.utils.swing.CallbackActionListener;
@@ -86,7 +89,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			}
 		});
 		
-		quantitySplitterUp = new CleanButton(new ImageIcon(splitterImgUp));
+		quantitySplitterUp = new CleanButton(new ImageIcon(splitterImgUp), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterUp.setVisible(false);
 		quantitySplitterUp.setBounds(512,152,24,24);
 		final Action increaseQuantityAction = new AbstractAction() {
@@ -127,7 +130,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			}
 		});
 		
-		quantitySplitterDown = new CleanButton(new ImageIcon(splitterImgDown));
+		quantitySplitterDown = new CleanButton(new ImageIcon(splitterImgDown), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
 		quantitySplitterDown.setBounds(512,176,24,24);
 		
@@ -357,7 +360,15 @@ public class StoreBorderGridBox extends BorderedGridBox{
 		//buyButtonEnabled = true;
 	}
 	
+	@Override
+	protected Cursor getDefaultCursor() {
+		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).POINTER_CURSOR;
+	}
 	
+	@Override
+	protected Cursor getHandCursor() {
+		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).HAND_CURSOR;
+	}	
 
 
 }

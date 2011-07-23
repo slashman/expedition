@@ -2,6 +2,7 @@ package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Rectangle;
@@ -21,24 +22,23 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
-import net.slashie.libjcsi.CharKey;
-
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.game.GameFiles.LicenseInfo;
 import net.slashie.expedition.ui.ExpeditionDisplay;
+import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.oryxUI.AddornedBorderTextArea;
+import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.CallbackActionListener;
-import net.slashie.utils.swing.CallbackHandler;
 import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
@@ -58,13 +58,14 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	private static BufferedImage IMG_BORDERS;
 	private static Properties uiProperties;
 	public static Color COLOR_BOLD;
+	private Cursor HAND_CURSOR;
 	
 	private void initProperties(Properties p){
 		uiProperties = p;
 		IMG_TITLE = p.getProperty("IMG_TITLE");
 		IMG_BLANK = p.getProperty("IMG_BLANK");
 		COLOR_BOLD = PropertyFilters.getColor(p.getProperty("COLOR_BOLD"));
-		
+		HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		try {
 			IMG_PICKER = PropertyFilters.getImage(p.getProperty("IMG_PICKER"), p.getProperty("IMG_PICKER_BOUNDS"));
 			IMG_BORDERS = PropertyFilters.getImage(p.getProperty("IMG_BORDERS"), p.getProperty("IMG_BORDERS_BOUNDS"));
@@ -125,6 +126,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		STMusicManagerNew.thus.playKey("TITLE");
 		
 		si.setFont(FNT_TEXT);
+		si.setCursor(GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4));
+
 		si.drawImage(IMG_TITLE);
 		si.printAtPixel(30, 540, "Version "+ExpeditionGame.getVersion()+", Slashware Interactive 2009-2011", Color.WHITE);
 		si.printAtPixel(30, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
@@ -138,14 +141,14 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		} else {
 			si.printAtPixel(30, 586, "Registered for "+licenseInfo.licenseLevel+" "+licenseInfo.licensee+"!", Color.YELLOW);
 		}
-		
-		CleanButton historyButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_HISTORY")));
+
+		CleanButton historyButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_HISTORY")), HAND_CURSOR);
 		historyButton.setBounds(new Rectangle(558, 30, 223, 43));
-		CleanButton expeditionButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXPEDITION")));
+		CleanButton expeditionButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXPEDITION")), HAND_CURSOR);
 		expeditionButton.setBounds(new Rectangle(558, 78, 223, 43));
-		CleanButton resumeButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_CONTINUE")));
+		CleanButton resumeButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_CONTINUE")), HAND_CURSOR);
 		resumeButton.setBounds(new Rectangle(558, 126, 223, 43));
-		CleanButton exitButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXIT")));
+		CleanButton exitButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXIT")), HAND_CURSOR);
 		exitButton.setBounds(new Rectangle(558, 174, 223, 43));
 		
 		
@@ -219,7 +222,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public int selectScenario(){
-		CleanButton theNewWorldButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_THE_NEW_WORLD")));
+		CleanButton theNewWorldButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_THE_NEW_WORLD")), HAND_CURSOR);
 		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
 		si.printAtPixel(30, 440, "Please pick a scenario >>>>>", Color.WHITE);
 		si.refresh();
@@ -259,8 +262,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				si.print(xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
 				
 				si.print(xstart+3, ystart + 17, "Use this scenario?", Color.WHITE);
-				
-				CleanButton okButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_OK")));
+		   		
+				CleanButton okButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_OK")), HAND_CURSOR);
 				okButton.setBounds(286,475,223,43);
 				si.add(okButton);
 				okButton.addActionListener(new CallbackActionListener<Integer>(handler){
