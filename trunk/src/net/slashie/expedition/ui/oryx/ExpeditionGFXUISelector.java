@@ -44,6 +44,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	private CleanButton chopButton;
 	private CleanButton saveButton;
 	private CleanButton quitButton;
+	private Cursor HAND_CURSOR;
 	private JLabel legendLabel;
 	
 	@Override
@@ -59,7 +60,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		legendLabel.setSize(800,15);
 		si.add(legendLabel);
 		
-		Cursor HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2);
+		HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		
 		try {
 			armButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ARM_BOUNDS")), HAND_CURSOR);
@@ -198,6 +199,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 				try {
 					handler.put(option);
 				} catch (InterruptedException e1) {}
+				legendLabel.setVisible(false);
 				si.recoverFocus();
 			}
 		};
