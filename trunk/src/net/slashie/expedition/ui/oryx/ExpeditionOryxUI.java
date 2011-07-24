@@ -1285,4 +1285,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public Cursor getHandCursor() {
 		return HAND_CURSOR;
 	}
+	
+	@Override
+	public void onPlayerDeath() {
+		super.onPlayerDeath();
+		((GFXUISelector)getPlayer().getSelector()).deactivate();
+	}
 }
