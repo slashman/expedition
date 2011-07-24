@@ -551,6 +551,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				deathCause = DEATH_BY_SLAYING;
 			else
 				deathCause = DEATH_BY_STARVATION;
+			UserInterface.getUI().onPlayerDeath();
 			informPlayerEvent (DEATH);
 		}
 	}
