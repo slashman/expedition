@@ -11,6 +11,7 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.expedition.world.agents.ForageAgent;
 import net.slashie.expedition.world.agents.RandomEventAgent;
@@ -471,7 +472,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		if (ret == null && cell.isSea() && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
 			// Get cell to the wind shadow
 			
-			int scale = ExpeditionLevelReader.getLongitudeScale(getExpedition().getLatitude());
+			int scale = GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
 			Position var = Position.mul(getWindDirection().getVectors(), scale);
 			if (tempP.equals(Position.add(getExpedition().getPosition(), var))){
 				if (ret == null)

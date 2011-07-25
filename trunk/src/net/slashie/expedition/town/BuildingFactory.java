@@ -8,6 +8,7 @@ import java.util.Map;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
@@ -73,7 +74,7 @@ public class BuildingFactory {
 		}
 		//Check resources availability 
 		if (builders.getItemCount("WOOD") < woodCostInt){
-			UserInterface.getUI().showMessage("You need at least "+woodCostInt+" wood for the plan.");
+			((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("You need at least "+woodCostInt+" wood to execute the plan.");
 			throw new ActionCancelException();
 		}
 		

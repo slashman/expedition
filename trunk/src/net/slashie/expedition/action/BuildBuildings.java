@@ -1,11 +1,9 @@
 package net.slashie.expedition.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
-import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -14,11 +12,9 @@ import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.game.Player;
 import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.OutParameter;
-import net.slashie.utils.Position;
 
 public class BuildBuildings extends Action{
 	private int netTimeCost;
@@ -33,7 +29,7 @@ public class BuildBuildings extends Action{
 		}
 		Expedition expedition = (Expedition)performer;
 		buildingPlan = ((ExpeditionUserInterface)UserInterface.getUI()).createBuildingPlan();
-		if (buildingPlan.size() == 0){
+		if (buildingPlan == null || buildingPlan.size() == 0){
 			netTimeCost = 0;
 			return;
 		}

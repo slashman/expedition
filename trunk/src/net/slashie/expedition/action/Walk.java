@@ -9,6 +9,7 @@ import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -60,7 +61,7 @@ public class Walk extends Action{
 		Expedition expedition = (Expedition) a;
 		int scale = 1;
 		if (expedition.getLevel() instanceof ExpeditionLevelReader){
-			scale = ExpeditionLevelReader.getLongitudeScale(expedition.getPosition().y());;
+			scale = GlobeMapModel.getLongitudeScale(expedition.getPosition().y());;
 		}
 		
 		//if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
@@ -194,7 +195,7 @@ public class Walk extends Action{
 		
 		int scale = 1;
 		if (expedition.getLevel() instanceof ExpeditionLevelReader){
-			scale = ExpeditionLevelReader.getLongitudeScale(expedition.getPosition().y());
+			scale = GlobeMapModel.getLongitudeScale(expedition.getPosition().y());
 		}
         var = Position.mul(var, scale);
 

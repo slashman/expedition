@@ -10,6 +10,7 @@ import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
 import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -28,6 +29,7 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
+import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
@@ -1236,6 +1238,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	        				message("Land at last!");
 	        			}
 	        			resetDaysAtSea();
+	        			STMusicManagerNew.thus.playKey("LAND");
 	        		} else {
 	        			throw new ActionCancelException();
 	        		}
@@ -1944,7 +1947,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	@Override
 	public void see() {
 		if (getLevel() instanceof ExpeditionLevelReader){
-			fov.setScale(ExpeditionLevelReader.getLongitudeScale(getPosition().y()));
+			fov.setScale(GlobeMapModel.getLongitudeScale(getPosition().y()));
 		} else {
 			fov.setScale(1);
 		}
