@@ -7,6 +7,7 @@ import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserInterface;
 
 public class ShipCache extends GoodsCache{
@@ -75,6 +76,7 @@ public class ShipCache extends GoodsCache{
 					((Expedition)a).addAllItems(getItems());
 					((Expedition)a).getLevel().destroyFeature(this);
 					a.setPosition(getPosition());
+					STMusicManagerNew.thus.playKey("SEA");
 				} else {
 					UserInterface.getUI().showMessage("The ships are too full!");
 				}

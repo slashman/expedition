@@ -9,8 +9,8 @@ import java.util.List;
 import net.slashie.expedition.data.ExpeditionDAO;
 import net.slashie.expedition.domain.NativeTown;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.Culture;
-import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.game.SworeGame;
@@ -31,6 +31,8 @@ public class WorldGenerator {
 					String[] row = line.split(",");
 					Culture c = ExpeditionDAO.getCulture(row[2]);
 					Position p = new Position(Integer.parseInt(row[0]),Integer.parseInt(row[1]));
+					// Translate position to lat-long
+					GlobeMapModel.transformIntoLatLong(p);
 					cultureCenters.add(new Pair<Position, Culture>(p,c));
 					line = r.readLine();
 				}

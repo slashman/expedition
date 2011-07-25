@@ -330,7 +330,7 @@ public class NativeTown extends Town{
 							if (townOffer == null || townOffer.size() == 0){
 								showBlockingMessage("We can offer you nothing for that.");
 							} else {
-								if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it? [Y/N]")){
+								if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it?")){
 									expedition.reduceAllItems(offer);
 									expedition.addAllItems(townOffer);
 									nativeTown.reduceAllItems(townOffer);

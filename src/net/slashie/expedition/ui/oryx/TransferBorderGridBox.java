@@ -314,7 +314,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			si.printAtPixel(x+146, y + 106, container.getWaterDays()+"", Color.WHITE);
 		}
 		
-		if (to instanceof ShipCache){
+		if (container instanceof ShipCache){
 			si.printAtPixel(x+41, y + 17, "Sea Expedition", OryxExpeditionDisplay.COLOR_BOLD);
 			si.printAtPixel(x+41, y + 32, "Ships", OryxExpeditionDisplay.COLOR_BOLD);
 			si.printAtPixel(x+41, y + 47, "Cargo", OryxExpeditionDisplay.COLOR_BOLD);

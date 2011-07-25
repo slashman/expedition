@@ -9,7 +9,6 @@ import net.slashie.expedition.town.NPCFactory;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.serf.action.AwareActor;
 import net.slashie.serf.level.AbstractCell;
-import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.level.GridLevelReader;
 import net.slashie.utils.Position;
 
@@ -40,63 +39,55 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 */
 	@Override
 	public AbstractCell getMapCell(int x, int y, int z) {
-		int gridX = transformLongIntoX(x);
-		int gridY = transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		int gridY = GlobeMapModel.transformLatIntoY(y);
 		return super.getMapCell(gridX, gridY, z);
 	}
 	
 	protected void darken(int x, int y, int z) {
-		int gridX = transformLongIntoX(x);
-		int gridY = transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		int gridY = GlobeMapModel.transformLatIntoY(y);
 		super.darken(gridX, gridY, z);
 	}
 	
 	public boolean isVisible(int x, int y, int z) {
-		int gridX = transformLongIntoX(x);
-		int gridY = transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		int gridY = GlobeMapModel.transformLatIntoY(y);
 		return super.isVisible(gridX, gridY, z);
 	}
 	
 	protected void markLit(int x, int y, int z) {
-		int gridX = transformLongIntoX(x);
-		int gridY = transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		int gridY = GlobeMapModel.transformLatIntoY(y);
 		super.markLit(gridX, gridY, z);
 	}
 
 	@Override
 	protected void markRemembered(int x, int y, int z) {
-		int gridX = transformLongIntoX(x);
-		int gridY = transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		int gridY = GlobeMapModel.transformLatIntoY(y);
 		super.markRemembered(gridX, gridY, z);
 	}
 
 	@Override
 	protected void markVisible(int x, int y, int z) {
-		int gridX = transformLongIntoX(x);
-		int gridY = transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		int gridY = GlobeMapModel.transformLatIntoY(y);
 		super.markVisible(gridX, gridY, z);	
 	}
 
 	@Override
 	protected boolean remembers(int x, int y, int z) {
-		int gridX = transformLongIntoX(x);
-		int gridY = transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		int gridY = GlobeMapModel.transformLatIntoY(y);
 		return super.remembers(gridX, gridY, z);	
 	}
 	
 	@Override
 	protected boolean isLit(Position p) {
-		p.x = transformLongIntoX(p.x());
-		p.y = transformLatIntoY(p.y());
+		p.x = GlobeMapModel.transformLongIntoX(p.x());
+		p.y = GlobeMapModel.transformLatIntoY(p.y());
 		return super.isLit(p);	
-	}
-	
-	public static int transformLongIntoX(int longMinutes){
-		return (int)Math.round((double)longMinutes * 0.3324d) + 3377; 
-	}
-	
-	public static int transformLatIntoY(int latMinutes){
-		return (int)Math.round((double)latMinutes * -0.3338d) + 1580; 
 	}
 	
 	public boolean isValidCoordinate(int longMinutes, int latMinutes){
@@ -116,7 +107,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			int longMinutes,
 			int latMinutes, 
 			int z, int xspan, int yspan) {
-		int magnification = getLongitudeScale(latMinutes);
+		int magnification = GlobeMapModel.getLongitudeScale(latMinutes);
 		int xstart = longMinutes - xspan * magnification;
 		int ystart = latMinutes - yspan * magnification;
 		int xend = longMinutes + xspan * magnification;
@@ -139,20 +130,6 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		return ret;
 	}
 	
-	
-	//public final static int TEMP_SCALE = 3;
-	
-
-	/**
-	 * Steps left and right are 3 minutes at equator, and more minutes as aproaching the poles
-	 */
-	public static int getLongitudeScale(int latitudeMinutes) {
-		double latitudeDegrees = latitudeMinutes / 60.0d;
-		//return 3;
-		return (int) Math.floor(3.0d / Math.cos(latitudeDegrees * (Math.PI / 180.0d)));
-	}
-
-
 	@Override
 	public void handleSpecialRenderCommand(Position where, String[] cmds,
 			int xoff, int yoff) {
