@@ -1,14 +1,10 @@
 package net.slashie.expedition.domain;
 
-import java.util.ArrayList;
-
 import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
-import net.slashie.serf.ai.RangedActionSpec;
 import net.slashie.serf.ai.SimpleAI;
-import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.util.Util;
 
 public class ExpeditionFactory {

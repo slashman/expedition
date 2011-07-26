@@ -1,12 +1,14 @@
 package net.slashie.expedition.level;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.domain.NPC;
 import net.slashie.expedition.town.NPCFactory;
 import net.slashie.expedition.world.ExpeditionLevel;
+import net.slashie.serf.action.Actor;
 import net.slashie.serf.action.AwareActor;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.GridLevelReader;
@@ -168,4 +170,22 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	}
 	
 	
+	/**
+	 * Returns the actor *around* x.
+	 * An actor may ocuppy more than one cells wide, based on the magnification level
+	 * determined by his latitude. 
+	 */
+	private Position recyclablePosition = new Position(0,0);
+	public Actor getActorAt(Position x){
+		int magnificationLevel = GlobeMapModel.getLongitudeScale(x.y());
+		int start = x.x() - (int)Math.round(magnificationLevel/2.0d);
+		recyclablePosition.y = x.y();
+		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
+			recyclablePosition.x = xrow;
+			Actor a = super.getActorAt(recyclablePosition);
+			if (a != null)
+				return a;
+		}
+		return null;
+	}
 }

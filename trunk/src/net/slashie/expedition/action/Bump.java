@@ -1,30 +1,19 @@
 package net.slashie.expedition.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.slashie.expedition.domain.BattleManager;
 import net.slashie.expedition.domain.Expedition;
-import net.slashie.expedition.domain.ExpeditionUnit;
-import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.NonPrincipalExpedition;
-import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
-import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.game.Equipment;
-import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
-import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.ActionCancelException;
-import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
-import net.slashie.utils.Util;
 
 public class Bump extends Action {
 
@@ -34,9 +23,15 @@ public class Bump extends Action {
 		if (targetDirection == Action.SELF){
 			return;
 		}
+		int scale = 1;
+		if (expedition.getLevel() instanceof ExpeditionLevelReader){
+			scale = GlobeMapModel.getLongitudeScale(expedition.getPosition().y());;
+		}
         Position var = directionToVariation(targetDirection);
+        var = Position.mul(var, scale);
         Position destinationPoint = Position.add(performer.getPosition(), var);
-        
+		
+		
         AbstractCell absCell = performer.getLevel().getMapCell(destinationPoint);
         if (absCell instanceof ExpeditionCell){
 	        ExpeditionCell cell = (ExpeditionCell)absCell;
@@ -84,7 +79,6 @@ public class Bump extends Action {
 		return "Bump";
 	}
 
-	
 	@Override
 	public int getCost() {
 		if (performer instanceof NonPrincipalExpedition)
