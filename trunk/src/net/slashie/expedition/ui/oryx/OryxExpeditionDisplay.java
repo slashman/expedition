@@ -273,9 +273,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 					public void actionPerformed(ActionEvent ev2) {
 						try {
 							handler.put(0);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						} catch (InterruptedException e) {}
 						si.remove((Component) ev2.getSource());
 					};
 				});
@@ -287,9 +285,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		while (choice == null){
 			try {
 				choice = titleSelectionHandler.take();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			} catch (InterruptedException e1) {}
 		}
 		
 		si.remove(theNewWorldButton);
@@ -502,6 +498,9 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String defaultName = "Colombus";
+					for (int i = 0; i < 10; i++){
+						inputQueue.put(CharKey.BACKSPACE);
+					}
 					for (char c: defaultName.toCharArray()){
 						Integer code = SwingSystemInterface.charCode(c);
 						if (code != null){

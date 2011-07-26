@@ -289,9 +289,11 @@ public class NativeTown extends Town{
 		NativeTown nativeTown = (NativeTown) this;
 		switch (switchChat){
 		case 0:
-			nativeTown.setUnfriendly(true);
-			String battleName = "You raid the "+nativeTown.getDescription();
-    		BattleManager.battle(battleName, expedition, nativeTown);
+			if (nativeTown.isUnfriendly() || UserInterface.getUI().promptChat("Raid "+nativeTown.getDescription()+"? Are you Sure?")){
+				nativeTown.setUnfriendly(true);
+				String battleName = "You raid the "+nativeTown.getDescription();
+	    		BattleManager.battle(battleName, expedition, nativeTown);
+			}
 			break;
 		case 1:
 			if (nativeTown.wantsToTradeWith(expedition)){

@@ -113,20 +113,21 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		saveButton.setVisible(false);
 		quitButton.setVisible(false);
 		
-		resetButton.setBounds(111, 77, 24, 24);
+		resetButton.setBounds(171, 77, 24, 24);
 		
-		armButton.setBounds(24, 240, 24, 24);
-		mountButton.setBounds(52, 240, 24, 24);
-		dropButton.setBounds(80, 240, 24, 24);
-		chopButton.setBounds(108, 240, 24, 24);
-		
-		buildButton.setBounds(24, 268, 24, 24);
-		repairButton.setBounds(52, 268, 24, 24);
-		inventoryButton.setBounds(80, 268, 24, 24);
-		lookButton.setBounds(108, 268, 24, 24);
-		
-		saveButton.setBounds(24, 304, 24, 24);
-		quitButton.setBounds(52, 304, 24, 24);
+		int ypos = 420;
+		armButton.setBounds(24, ypos, 24, 24);
+		mountButton.setBounds(52, ypos, 24, 24);
+		dropButton.setBounds(80, ypos, 24, 24);
+		chopButton.setBounds(108, ypos, 24, 24);
+		ypos += 28;
+		buildButton.setBounds(24, ypos, 24, 24);
+		repairButton.setBounds(52, ypos, 24, 24);
+		inventoryButton.setBounds(80, ypos, 24, 24);
+		lookButton.setBounds(108, ypos, 24, 24);
+		ypos += 28;
+		saveButton.setBounds(24, ypos, 24, 24);
+		quitButton.setBounds(52, ypos, 24, 24);
 		
 		si.add(armButton);
 		si.add(mountButton);
