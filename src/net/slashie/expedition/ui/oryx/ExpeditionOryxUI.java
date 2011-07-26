@@ -104,7 +104,18 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private AbstractItem HORSES_ITEM;
 	
 	public BorderedMenuBox createBorderedMenuBox(int borderWidth, int outsideBound, int inBound, int insideBound, int itemHeight){
-		BorderedMenuBox ret = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderWidth, outsideBound, inBound, insideBound, itemHeight, null);;
+		final ExpeditionOryxUI this_ = this;
+		BorderedMenuBox ret = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderWidth, outsideBound, inBound, insideBound, itemHeight, null){
+			@Override
+			protected Cursor getHandCursor() {
+				return this_.getHandCursor();
+			}
+			
+			@Override
+			protected Cursor getDefaultCursor() {
+				return this_.getDefaultCursor();
+			}
+		};
 		ret.setCursor(si.getCursor());
 		return ret;
 	}
@@ -473,18 +484,29 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	
 	public void transferFromExpedition(GoodsCache goodsCache, int minUnits) {
+		// Create the button to confirm transfer and add it to the UI
+		CleanButton transferButton = new CleanButton(new ImageIcon(BTN_TRANSFER), HAND_CURSOR);
+		transferButton.setSize(BTN_TRANSFER.getWidth(null),BTN_TRANSFER.getHeight(null));
 		ItemTransferFunctionality transferFromExpeditionFunctionality = new TransferFromExpeditionFunctionality(minUnits);
-		transferItems(getExpedition(), goodsCache, transferFromExpeditionFunctionality, true, false);
+		transferItems(getExpedition(), goodsCache, transferFromExpeditionFunctionality, true, false, transferButton);
 	}
 	
 	public void transferFromCache(GoodsCache goodsCache) {
+		CleanButton transferButton = new CleanButton(new ImageIcon(BTN_TRANSFER), HAND_CURSOR);
+		transferButton.setSize(BTN_TRANSFER.getWidth(null),BTN_TRANSFER.getHeight(null));
 		ItemTransferFunctionality transferFromCacheFunctionality = new TransferFromCacheFunctionality();
-		transferItems(goodsCache, getExpedition(), transferFromCacheFunctionality, false, false);
+		transferItems(goodsCache, getExpedition(), transferFromCacheFunctionality, false, false, transferButton);
 		if (goodsCache.destroyOnEmpty() && goodsCache.getItems().size() == 0)
 			level.destroyFeature(goodsCache);
 	}
 	
 	public List<Equipment> selectItemsFromExpedition(String prompt, String verb) {
+		CleanButton selectButton = new CleanButton(new ImageIcon(BTN_SIZE3), HAND_CURSOR);
+		selectButton.setSize(BTN_SIZE3.getWidth(null),BTN_SIZE3.getHeight(null));
+		selectButton.setFont(si.getFont());
+		selectButton.setForeground(Color.WHITE);
+		selectButton.setText("SELECT");
+		
 		List<Equipment> selection = new ArrayList<Equipment>();
 		ItemTransferFunctionality selectItemsFunctionality = new SelectFromExpeditionFunctionality(selection, prompt, verb);
 		ItemContainer tempItemContainer = new GoodsCache((ExpeditionGame)getPlayer().getGame()){
@@ -494,7 +516,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 		};
 		
-		transferItems(getExpedition(), tempItemContainer, selectItemsFunctionality, true, true);
+		transferItems(getExpedition(), tempItemContainer, selectItemsFunctionality, true, true, selectButton);
 		return selection;
 	}
 
@@ -507,7 +529,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	 * @param cloneEquipment Prevents alterations over the original equipments by cloning them. Used for selectItems
 	 */
 	public void transferItems(ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality, 
-			boolean fromExpedition, boolean cloneEquipment) {
+			boolean fromExpedition, boolean cloneEquipment, CleanButton transferButton) {
 		// Change UI Mode
    		Equipment.eqMode = true;
    		((GFXUISelector)getPlayer().getSelector()).deactivate();
@@ -535,9 +557,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.add(closeButton);
 
 		
-		// Create the button to confirm transfer and add it to the UI
-		CleanButton transferButton = new CleanButton(new ImageIcon(BTN_TRANSFER), HAND_CURSOR);
-		transferButton.setSize(BTN_TRANSFER.getWidth(null),BTN_TRANSFER.getHeight(null));
+
 		
 		// Create the blockingqueue
 		BlockingQueue<String> transferFromExpeditionHandler = new LinkedBlockingQueue<String>(1);
@@ -939,6 +959,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void showBattleScene(String battleTitle, List<Equipment> attackingUnits,
 			List<Equipment> defendingUnits) {
 		clearTextBox();
+		((GFXUISelector)getPlayer().getSelector()).deactivate();
+
 		si.drawImage(168, 72, BATTLE_BACKGROUND);
 		int xBase = 192;
 		int yBase = 96; 
@@ -971,7 +993,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 		}
 		si.refresh();
-		si.waitKey(CharKey.SPACE);
+		
+		si.waitKeyOrClick(CharKey.SPACE);
 	}
 	@Override
 	public void showBattleResults(
