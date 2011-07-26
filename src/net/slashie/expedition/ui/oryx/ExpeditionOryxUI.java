@@ -62,6 +62,7 @@ import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.ImageUtils;
+import net.slashie.utils.Position;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.swing.BorderedGridBox;
 import net.slashie.utils.swing.BorderedMenuBox;
@@ -102,6 +103,19 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public Cursor POINTER_CURSOR;
 	private SimplifiedUnitGFXMenuItem mainUnitMenuItem;
 	private AbstractItem HORSES_ITEM;
+	
+	@Override
+	protected Position getRelativePosition(Position position, Position offset) {
+		int scale = 1;
+		if (getPlayer().getLevel() instanceof ExpeditionLevelReader){
+			scale = GlobeMapModel.getLongitudeScale(getPlayer().getPosition().y());
+			offset = Position.mul(offset, scale);
+			offset.y *= -1;
+			return Position.add(player.getPosition(), offset);
+		} else {
+			return super.getRelativePosition(position, offset);
+		}
+	}
 	
 	public BorderedMenuBox createBorderedMenuBox(int borderWidth, int outsideBound, int inBound, int insideBound, int itemHeight){
 		final ExpeditionOryxUI this_ = this;
