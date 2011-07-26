@@ -5,8 +5,10 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -21,6 +23,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
@@ -261,7 +264,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				si.print(xstart+20, ystart + 9, "Unexperienced", Color.WHITE);
 				si.print(xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
 				
-				si.print(xstart+3, ystart + 17, "Use this scenario?", Color.WHITE);
+				//si.print(xstart+3, ystart + 17, "Use this scenario?", Color.WHITE);
 		   		
 				CleanButton okButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_OK")), HAND_CURSOR);
 				okButton.setBounds(286,475,223,43);
@@ -486,11 +489,37 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	@Override
 	public Expedition createExpedition(ExpeditionGame game) {
+		CleanButton defaultButton = new CleanButton(ExpeditionOryxUI.BTN_SIZE4, HAND_CURSOR);
+		defaultButton.setText("DEFAULT");
+		defaultButton.setFont(si.getFont());
+		defaultButton.setForeground(Color.WHITE);
+		defaultButton.setSize(ExpeditionOryxUI.BTN_SIZE4.getWidth(null), ExpeditionOryxUI.BTN_SIZE4.getHeight(null));
+		defaultButton.setLocation(230, 495);
+		
+		final BlockingQueue<Integer> inputQueue = si.getInputQueue();
+		defaultButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String defaultName = "Colombus";
+					for (char c: defaultName.toCharArray()){
+						Integer code = SwingSystemInterface.charCode(c);
+						if (code != null){
+							inputQueue.put(code);
+						}
+					}
+					inputQueue.put(CharKey.ENTER);
+				} catch (InterruptedException e1) {}
+			}
+		});
+		si.add(defaultButton);
+		
 		String name = "";
 		while (name.trim().equals("")){
 			si.printAtPixel(128, 428, "Enter a name for the expedition log", Color.WHITE);
 			name = si.input(222, 463, Color.WHITE, 10);
 		}
+		si.remove(defaultButton);
 		return ExpeditionFactory.createPlayerExpedition(name, game);
 	}
 	

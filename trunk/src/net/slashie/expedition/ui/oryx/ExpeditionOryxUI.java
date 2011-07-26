@@ -89,8 +89,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private Image BTN_SPLIT_UP;
 	private Image BTN_SPLIT_DOWN;
 	private Image BTN_BUY;
-	private Image BTN_TRANSFER;
-	private Image BTN_BUILD;
+	private static Image BTN_TRANSFER;
+	private static Image BTN_BUILD;
+	
+	public static Image BTN_SIZE2;
+	public static Image BTN_SIZE3;
+	public static Image BTN_SIZE4;
+	
+	
 	private BufferedImage IMG_BOX;
 	public Cursor HAND_CURSOR;
 	public Cursor POINTER_CURSOR;
@@ -894,6 +900,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			BTN_BUY = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_BUY_BOUNDS"));
 			BTN_TRANSFER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_TRANSFER_BOUNDS"));
 			BTN_BUILD = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_DOBUILD_BOUNDS"));
+			BTN_SIZE2 = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SIZE2_BOUNDS"));
+			BTN_SIZE3 = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SIZE3_BOUNDS"));
+			BTN_SIZE4 = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SIZE4_BOUNDS"));
 			IMG_BOX = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
 		} catch (IOException e) {
 			e.printStackTrace();
