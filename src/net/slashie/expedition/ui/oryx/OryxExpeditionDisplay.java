@@ -30,6 +30,7 @@ import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.game.GameFiles.LicenseInfo;
+import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.SworeGame;
@@ -296,6 +297,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	public void showIntro(Expedition e){
 		si.drawImage(uiProperties.getProperty("IMG_THE_NEW_WORLD_INTRO"));
+		/*
 		BlockingQueue<String> titleSelectionHandler = new LinkedBlockingQueue<String>();
 		CallbackMouseListener<String> cbml = new CallbackMouseListener<String>(titleSelectionHandler){
 			@Override
@@ -322,7 +324,12 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			} catch (InterruptedException e1) {}
 		};
 		si.removeMouseListener(cbml);
-		si.removeKeyListener(cbkl);
+		si.removeKeyListener(cbkl);*/
+		
+		String message = CommonUI.getIntroText();
+		message = message.replaceAll("XXX", "\n");
+		((ExpeditionOryxUI)UserInterface.getUI()).showTextBox(message, 16, 216, 776, 376);
+		
 	}
 
 	public void showHelp(){
@@ -331,7 +338,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
 		
 		si.cls();
-		si.print(3, 1, "== HELP ==", Color.CYAN);
+		si.print(3, 1, "== Keyboard Reference ==", Color.CYAN);
 		si.print(3, 2, "== Movement ==", Color.CYAN);
 		si.print(3, 3, " On Foot ", Color.CYAN);
 		si.print(3, 4, "Move Around using the numpad ", Color.WHITE);

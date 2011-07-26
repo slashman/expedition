@@ -236,5 +236,15 @@ public class CommonUI {
 		}
 		return townInfo;
 	}
+
+	public static String getIntroText() {
+		return "The Portuguese get closer every year to finding an African route to the Indies. " +
+		"They have mapped half the coast of that unknown land of jungle and desert, " +
+		"and they have established outposts to strengthen their presence. They have perfected " +
+		"their ships and nautical techniques. It is now only a matter of time before they reach their goal. \n\n" +
+		"My son, I have seen you sitting at the docks of the port of Palos, looking west into the vastness of " +
+		"the Ocean. When you were a child, you once asked me what was beyond the horizon, where the ships " +
+		"can no longer be seen. Now history has given you a chance to find out the answer for yourself.";
+	}
 	
 }
