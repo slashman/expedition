@@ -206,6 +206,8 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	}
 
 	private void performMovement() {
+		if (!selectionActive)
+			return;
 		int quadrant = defineQuadrant(mousePosition.x, mousePosition.y);
 		mouseDirection = QDIRECTIONS[quadrant-1];
 		
