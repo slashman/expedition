@@ -1310,8 +1310,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		try {
 			landOn(getPosition());
 		} catch (ActionCancelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
 		super.doNothing();
 	}
