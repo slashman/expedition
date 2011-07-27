@@ -198,8 +198,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				else
 					changeSpeed = (int) Math.ceil((initialQuantity - selectedQuantity)/ 5.0d); 
 				selectedQuantity -= changeSpeed;
-				if (selectedQuantity < 1)
-					selectedQuantity = 1;
+				if (selectedQuantity < 0)
+					selectedQuantity = 0;
 			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
 			}
 		};
@@ -213,8 +213,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				initialQuantity = selectedQuantity;
 				
 				selectedQuantity --;
-				if (selectedQuantity < 1)
-					selectedQuantity = 1;
+				if (selectedQuantity < 0)
+					selectedQuantity = 0;
 			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
 			    decreaseQuantityTimer.start();
 			}

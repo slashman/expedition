@@ -271,6 +271,8 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			public void mousePressed(final MouseEvent e) {
 				if (!selectionActive)
 					return;
+				if (e.getY() <= 26 && e.getX() >= 800 - 26)
+					return;
 				if (e.getButton() == MouseEvent.BUTTON1){
 					mousePosition = e.getPoint();
 					performMovement();
