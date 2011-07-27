@@ -250,7 +250,7 @@ public class Walk extends Action{
 
 	@Override
 	public String getSFX() {
-		if (ExpeditionGame.getCurrentGame().getExpedition().getMovementMode() == MovementMode.FOOT)
+		if (ExpeditionGame.getCurrentGame().getExpedition().getMovementMode().isLandMovement())
 			return "wav/shaktool_yowzer_footstep_1.wav";
 		else
 			return "wav/shaktool_yowzer_footstep_2.wav";
