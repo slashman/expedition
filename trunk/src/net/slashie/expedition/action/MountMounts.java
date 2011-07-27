@@ -52,16 +52,8 @@ public class MountMounts extends Action{
 					}
 				}
 			}
-			
 			getExpedition().setMounted(true);
-			
-			if (getExpedition().getMovementMode() == MovementMode.FOOT){
-				if (getExpedition().getUnmountedUnits().size() == 0){
-					getExpedition().setMovementMode(MovementMode.HORSE);
-				}
-			}
-
-			
+			getExpedition().validateMounted();
 		} else {
 			if (isPlayer && !UserInterface.getUI().promptChat("Dismount your units: Are you sure?")){
 				actionCancelled = true;

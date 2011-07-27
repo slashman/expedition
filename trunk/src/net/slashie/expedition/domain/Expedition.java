@@ -251,6 +251,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 			return "None";
 		}
+
+		public boolean isLandMovement() {
+			return this == FOOT || this == HORSE;
+		}
 	}
 	
 	private MovementMode movementMode = MovementMode.FOOT;
@@ -426,7 +430,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 
 	public int getCarryCapacity(){
-		if (getMovementMode() != MovementMode.FOOT){
+		if (getMovementMode() == MovementMode.SHIP){
 			int carryCapacity = 0;
 			List<Vehicle> inventory = getCurrentVehicles();
 			for (Vehicle vehicle: inventory){
@@ -451,7 +455,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 	
 	private int getCurrentWeight(){
-		if (getMovementMode() != MovementMode.FOOT){
+		if (getMovementMode() == MovementMode.SHIP){
 			// All expedition aboard vehicles. Vehicles must carry the weight of all the units along with the goods
 			int currentlyCarrying = 0;
 			List<Equipment> inventory = getInventory();
@@ -460,11 +464,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 			return currentlyCarrying;
 		} else {
-			// On foot, vehicles (including units) take care of carrying themselves around
+			// On foot, vehicles (including units) and mounts take care of carrying themselves around
 			int currentlyCarrying = 0;
 			List<Equipment> inventory = getInventory();
 			for (Equipment equipment: inventory){
-				if (!(equipment.getItem() instanceof Vehicle)){
+				if (!(equipment.getItem() instanceof Vehicle || equipment.getItem() instanceof Mount)){
 					currentlyCarrying += ((ExpeditionItem)equipment.getItem()).getWeight() * equipment.getQuantity();
 				}
 				//If the equipment is an unit, and it has equipment, they must carry the weight of their equipment!
@@ -494,6 +498,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public int getCarryable(ExpeditionItem item){
 		if (getMovementMode() != MovementMode.SHIP && item instanceof ExpeditionUnit) // All units welcome into a land expedition
 			return -1;
+		if (getMovementMode() != MovementMode.SHIP && item.getFullID().equals("HORSE")){
+			// All horses are welcome, as long as there's a man to ride them
+			if (getTotalUnits() > 0)
+				return -1;
+			else
+				return 0;
+		}
 		return (int)Math.floor((getCarryCapacity()-getCurrentWeight())/item.getWeight());
 	}
 	
@@ -588,8 +599,12 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public boolean canCarry(AbstractItem item, int quantity) {
 		if (!(item instanceof ExpeditionItem))
 			return false;
-		if (getMovementMode() == MovementMode.FOOT && item instanceof Vehicle)
+		if (getMovementMode().isLandMovement() && item instanceof Vehicle )
 			return true;
+		if (item instanceof Mount){
+			if (getMovementMode().isLandMovement() && getTotalUnits() > 0)
+				return true;
+		}
 		ExpeditionItem expItem = (ExpeditionItem) item;
 		return getCurrentWeight() + (expItem.getWeight() * quantity) <= getCarryCapacity();
 	}
@@ -1309,6 +1324,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	@Override
 	public void addItem(ExpeditionItem item, int quantity) {
 		super.addItem(item, quantity);
+		validateMounted();
 	}
 	
 	public void addAllItems(List<Equipment> items){
@@ -1327,6 +1343,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public void reduceUnits(ExpeditionUnit unit, int quantity) {
 		reduceQuantityOf(unit, quantity);
 		checkDeath();
+		
 	}
 
 	
@@ -1973,5 +1990,22 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		} else {
 			return "Expedition";
 		}
+	}
+
+	public void validateMounted() {
+		if (movementMode.isLandMovement()){
+			if (getUnmountedUnits().size() == 0){
+				setMovementMode(MovementMode.HORSE);
+			} else {
+				setMovementMode(MovementMode.FOOT);
+			}
+		}
+	}
+	
+	@Override
+	public void reduceQuantityOf(AbstractItem what, int quantity) {
+		super.reduceQuantityOf(what, quantity);
+		if (what instanceof ExpeditionUnit)
+			validateMounted();
 	}
 }
