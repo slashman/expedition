@@ -158,19 +158,18 @@ public class ExpeditionGame extends SworeGame {
 			}
 		}
 		if (level.getID().equals("WORLD")){
-			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar Test
+			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar
 			level.getPlayer().setPosition(-4330, 732, 0); // Cabo dela vela
 			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atlántico
-			*/
-			//TODO: Add back Palos?
-			level.getPlayer().setPosition(-329, 2158, 0);
+			level.getPlayer().setPosition(-4362, 689, 0); // Near the Tairona
+			*/ 
 		}
 
 		
 	}
 	
 	public static String getVersion(){
-		return "v0.2.2";
+		return "v0.3 RC1";
 	}
 	
 	public Expedition getExpedition(){
