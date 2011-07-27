@@ -38,6 +38,7 @@ import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.item.Mount;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
@@ -96,6 +97,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image BTN_SIZE2;
 	public static Image BTN_SIZE3;
 	public static Image BTN_SIZE4;
+	
+	public static Image BTN_MOVE;
 	
 	
 	private BufferedImage IMG_BOX;
@@ -886,6 +889,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			Collections.sort(expeditionUnitItems, ITEMS_COMPARATOR);
 			unitsMenuBox.draw();
 		}
+		
+		si.drawImage(774, 2, BTN_MOVE);
 	}
 	private List<GFXMenuItem> expeditionUnitItems = new ArrayList<GFXMenuItem>();
 	private List<GFXMenuItem> vehicleUnitItems = new ArrayList<GFXMenuItem>();
@@ -938,6 +943,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			BTN_SIZE2 = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SIZE2_BOUNDS"));
 			BTN_SIZE3 = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SIZE3_BOUNDS"));
 			BTN_SIZE4 = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SIZE4_BOUNDS"));
+			BTN_MOVE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_MOVE_BOUNDS"));
 			IMG_BOX = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -947,7 +953,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		HORSES_ITEM = ItemFactory.createItem("HORSE");
 		addornedTextArea.setCursor(si.getCursor());
 		this.UIProperties = UIProperties;
-		
 	}
 	
 	private int readQuantity(int x, int y, String spaces, int inputLength){
@@ -1245,9 +1250,23 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			
 			from.reduceQuantityOf(choice.getItem(), quantity);
 		
-			if (choice.getItem() instanceof ExpeditionUnit && from.getCurrentlyCarrying()>100){
+			if (choice.getItem() instanceof ExpeditionUnit){
+				if (from.getTotalUnits() == 0){
+					from.addItem((ExpeditionItem) choice.getItem(), quantity);
+					showBlockingMessage("At least a unit should remain in the expedition.");
+					return false;
+				} else if (from.getCurrentlyCarrying()>100){
+					from.addItem((ExpeditionItem) choice.getItem(), quantity);
+					showBlockingMessage("The expedition can't carry the goods! Be sure to leave enough men on the expedition.");
+					return false;
+				}
+			}  else if (choice.getItem() instanceof Mount && from.getCurrentlyCarrying()>100){
 				from.addItem((ExpeditionItem) choice.getItem(), quantity);
-				showBlockingMessage("The expedition can't carry the goods! Be sure to leave enough men on the expedition.");
+				if (quantity == 1){
+					showBlockingMessage("The expedition can't carry the goods without that horse!");
+				} else {
+					showBlockingMessage("The expedition can't carry the goods without these horses!");
+				}
 				return false;
 			}
 		
