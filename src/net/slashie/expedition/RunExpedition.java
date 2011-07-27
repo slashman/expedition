@@ -387,6 +387,17 @@ public class RunExpedition {
 		case SWING_GFX:
 			SwingSystemInterface ssi = (SwingSystemInterface)si;
 			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2010", userCommands, UIconfiguration, null);
+			if (((ExpeditionOryxUI)ui).promptChat("Do you want to enable the experimental full screen mode?",140,388,520,200)){
+				si = new SwingSystemInterface(true);
+				ssi = (SwingSystemInterface)si;
+				System.out.println("Initializing Oryx GFX User Interface");
+				UserInterface.setSingleton(new ExpeditionOryxUI());
+				ExpeditionDisplay.thus = new OryxExpeditionDisplay(ssi, UIconfiguration);
+				ui = UserInterface.getUI();
+				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2010", userCommands, UIconfiguration, null);
+				
+			}
+			
 			uiSelector = new ExpeditionGFXUISelector();
 			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings);
 			break;
