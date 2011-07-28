@@ -11,6 +11,7 @@ import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.action.AwareActor;
 import net.slashie.serf.level.AbstractCell;
+import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.level.GridLevelReader;
 import net.slashie.utils.Position;
 
@@ -148,6 +149,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			NPC npc = NPCFactory.createNPC(cmds[2]);
 			npc.setPosition(where.x+xoff,where.y+yoff,where.z);
 			addActor(npc);
+		} else if (cmds[1].equals("EXIT_GLOBE_COORDINATES")){
+			addExit(new Position(GlobeMapModel.transformXIntoLong(where.x+xoff),GlobeMapModel.transformYIntoLat(where.y+yoff),where.z), cmds[2]);
 		}
 	}
 	
@@ -185,6 +188,20 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			Actor a = super.getActorAt(recyclablePosition);
 			if (a != null)
 				return a;
+		}
+		return null;
+	}
+	
+	@Override
+	public String getExitOn(Position pos) {
+		int magnificationLevel = GlobeMapModel.getLongitudeScale(pos.y());
+		int start = pos.x() - (int)Math.round(magnificationLevel/2.0d);
+		recyclablePosition.y = pos.y();
+		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
+			recyclablePosition.x = xrow;
+			String exit = super.getExitOn(recyclablePosition);
+			if (exit != null)
+				return exit;
 		}
 		return null;
 	}

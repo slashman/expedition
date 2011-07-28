@@ -13,7 +13,6 @@ import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 
 public class LevelMaster {
-
 	public static AbstractLevel createLevel(String levelID,
 			Expedition expedition) {
 		
@@ -61,8 +60,8 @@ public class LevelMaster {
 			/*ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
 			"world", 150,150,50,50, pattern.getCharMap(), new Pair<String, Position>("_START", new Position(3198,801)));*/
 			
-			ExpeditionMacroLevel ret = new ExpeditionMacroLevel(
-					"scenarios/theNewWorld/world", 3374,2939,50,50, pattern.getCharMap(), new Position(3236,834));
+			//ExpeditionMacroLevel ret = new ExpeditionMacroLevel("scenarios/theNewWorld/world", 3374,2939,50,50, pattern.getCharMap(), new Position(3236,834));
+			ExpeditionMacroLevel ret = new ExpeditionMacroLevel("scenarios/theNewWorld/world", 3374,2939,50,50, pattern.getCharMap(), new Position(-427,2235));
 			ret.setDescription(pattern.getDescription());
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());
@@ -77,5 +76,4 @@ public class LevelMaster {
 		}
 		return null;
 	}
-
 }
