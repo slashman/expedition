@@ -54,22 +54,23 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 	}
 	
 	@Override
-	public void drawTooltip(SwingSystemInterface si, int x, int y) {
+	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Get some info
 		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
 		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
 		String itemDescription = item.getItem().getDescription();
-		int quantity = item.getQuantity();
 		
 		// Draw a cute border
-		si.getGraphics2D().setColor(new Color(82,79,34));
-		si.getGraphics2D().fillRect(x+1, y+1, 350 - 2, 60 - 2);
-		si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getGraphics2D().drawRect(x+1, y+1, 350 - 2, 60 - 2);
-		si.getGraphics2D().drawRect(x+2, y+2, 350 - 4, 60 - 4);
+		if (eitem instanceof ExpeditionUnit){
+			si.getGraphics2D().setColor(new Color(82,79,34));
+			si.getGraphics2D().fillRect(x+1, y+1, 350 - 2, 60 - 2);
+			si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+			si.getGraphics2D().drawRect(x+1, y+1, 350 - 2, 60 - 2);
+			si.getGraphics2D().drawRect(x+2, y+2, 350 - 4, 60 - 4);
+		}
 		
 		si.drawImage(x + 12, y + 12, unitImage);
-		si.printAtPixel(x+5, y + 55, quantity + " " + itemDescription, Color.WHITE);
+		si.printAtPixel(x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		
 		// Unit status
 		if (eitem instanceof ExpeditionUnit){
@@ -85,6 +86,12 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.printAtPixel(x+198, y + 15, "ATK: " + unit.getAttack().getString(), Color.WHITE);
 			si.printAtPixel(x+198, y + 28, "DEF: " + unit.getDefense().getString(), Color.WHITE);
 			si.printAtPixel(x+198, y + 42, "Weight: "+unit.getWeight(), Color.WHITE);
+		} else {
+			int inventory = item.getQuantity();
+			String current = to.getItemCountBasic(item.getItem().getFullID())+"";
+			si.printAtPixel(x+48, y + 15, from.getDescription()+": "+inventory, Color.WHITE);
+			si.printAtPixel(x+48, y + 28, to.getDescription()+": "+current, Color.WHITE);
+			si.printAtPixel(x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 		}
 	}
 	

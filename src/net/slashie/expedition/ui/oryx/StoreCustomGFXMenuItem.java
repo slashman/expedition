@@ -55,7 +55,7 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 	}
 	
 	@Override
-	public void drawTooltip(SwingSystemInterface si, int x, int y) {
+	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Get some info
 		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
 		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
@@ -78,7 +78,7 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 		}
 		
 		si.drawImage(x + 12, y + 12, unitImage);
-		si.printAtPixel(x+5, y + 55, itemDescription, Color.WHITE);
+		si.printAtPixel(x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		
 		// Unit status
 		if (eitem instanceof ExpeditionUnit){
