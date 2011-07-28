@@ -55,6 +55,7 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.sound.STMusicManagerNew;
+import net.slashie.serf.ui.CommandListener;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
@@ -1322,6 +1323,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				e.setQuantity(e.getQuantity()+quantity);
 			}
 			return true;
+		}
+	}
+	
+	@Override
+	public void processSave(){
+		if (promptChat("Save your game in journal \""+getPlayer().getName()+"\"?")){
+			super.processSave();
 		}
 	}
 
