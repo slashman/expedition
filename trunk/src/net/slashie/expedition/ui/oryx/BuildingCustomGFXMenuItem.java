@@ -64,7 +64,7 @@ public class BuildingCustomGFXMenuItem implements CustomGFXMenuItem{
 	}
 	
 	@Override
-	public void drawTooltip(SwingSystemInterface si, int x, int y) {
+	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Draw a cute border
 		si.getGraphics2D().setColor(new Color(82,79,34));
 		si.getGraphics2D().fillRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 2);

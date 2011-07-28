@@ -64,7 +64,7 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 	}
 	
 	@Override
-	public void drawTooltip(SwingSystemInterface si, int x, int y) {
+	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Get some info
 		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
 		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
@@ -72,11 +72,13 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 		int quantity = item.getQuantity();
 		
 		// Draw a cute border
-		si.getGraphics2D().setColor(new Color(82,79,34));
-		si.getGraphics2D().fillRect(x+1, y+1, 350 - 2, 60 - 2);
-		si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getGraphics2D().drawRect(x+1, y+1, 350 - 2, 60 - 2);
-		si.getGraphics2D().drawRect(x+2, y+2, 350 - 4, 60 - 4);
+		if (eitem instanceof ExpeditionUnit){
+			si.getGraphics2D().setColor(new Color(82,79,34));
+			si.getGraphics2D().fillRect(x+1, y+1, 350 - 2, 60 - 2);
+			si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+			si.getGraphics2D().drawRect(x+1, y+1, 350 - 2, 60 - 2);
+			si.getGraphics2D().drawRect(x+2, y+2, 350 - 4, 60 - 4);
+		}
 		
 		si.drawImage(x + 12, y + 12, unitImage);
 		si.printAtPixel(x+5, y + 55, quantity + " " + itemDescription, Color.WHITE);
