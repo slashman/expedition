@@ -59,10 +59,6 @@ public class Walk extends Action{
 	@Override
 	public boolean canPerform(Actor a) {
 		Expedition expedition = (Expedition) a;
-		int scale = 1;
-		if (expedition.getLevel() instanceof ExpeditionLevelReader){
-			scale = GlobeMapModel.getLongitudeScale(expedition.getPosition().y());;
-		}
 		
 		//if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
 		if (expedition.getLevel() instanceof ExpeditionMicroLevel ){
@@ -96,7 +92,9 @@ public class Walk extends Action{
 			}
 		}
         
-        var = Position.mul(var, scale);
+        if (expedition.getLevel() instanceof ExpeditionLevelReader){
+			var = GlobeMapModel.scaleVar(var, expedition.getPosition().y());
+		}
         
         Position destinationPoint = Position.add(a.getPosition(), var);
         
@@ -193,13 +191,11 @@ public class Walk extends Action{
 			}
 		}
 		
-		int scale = 1;
-		if (expedition.getLevel() instanceof ExpeditionLevelReader){
-			scale = GlobeMapModel.getLongitudeScale(expedition.getPosition().y());
-		}
-        var = Position.mul(var, scale);
-
 		
+		if (expedition.getLevel() instanceof ExpeditionLevelReader){
+			var = GlobeMapModel.scaleVar(var, expedition.getPosition().y());
+		}
+	
 		Position destinationPoint = Position.add(performer.getPosition(), var);
 
 		
