@@ -613,10 +613,14 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public int getDarkSightRange() {
 		return getBaseSightRange();
 	}
+
+	
+	// TODO: This is not symetric on expedition! Lat is fixed, Long changes
 	
 	public int getBaseSightRange(){
-		return 27; // Changed to degrees TODO: Vary by scale
-		
+		int scale = GlobeMapModel.getLongitudeScale(getPosition().y());
+		return scale * 9;
+		//return 27;
 	}
 
 	@Override
@@ -1963,9 +1967,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	@Override
 	public void see() {
 		if (getLevel() instanceof ExpeditionLevelReader){
-			fov.setScale(GlobeMapModel.getLongitudeScale(getPosition().y()));
+			fov.setScale(GlobeMapModel.getLongitudeScale(getPosition().y()), GlobeMapModel.getLatitudeHeight());
 		} else {
-			fov.setScale(1);
+			fov.setScale(1,1);
 		}
 		super.see();
 	}
@@ -2006,5 +2010,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		super.reduceQuantityOf(what, quantity);
 		if (what instanceof ExpeditionUnit)
 			validateMounted();
+	}
+
+	public boolean hasMarineChronometer() {
+		return true;
 	}
 }
