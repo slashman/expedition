@@ -99,7 +99,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.addMouseListener(getPopupMouseListener("Reset Dead' Reckon"));
 		chopButton.addMouseListener(getPopupMouseListener("Chop Woods"));
 		saveButton.addMouseListener(getPopupMouseListener("Save Game"));
-		quitButton.addMouseListener(getPopupMouseListener("Exit to DOS"));
+		quitButton.addMouseListener(getPopupMouseListener("Quit Game"));
 		
 		armButton.setVisible(false);
 		buildButton.setVisible(false);

@@ -110,10 +110,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	@Override
 	protected Position getRelativePosition(Position position, Position offset) {
-		int scale = 1;
 		if (getPlayer().getLevel() instanceof ExpeditionLevelReader){
-			scale = GlobeMapModel.getLongitudeScale(getPlayer().getPosition().y());
-			offset = Position.mul(offset, scale);
+			offset = GlobeMapModel.scaleVar(offset, getPlayer().getPosition().y());
 			offset.y *= -1;
 			return Position.add(player.getPosition(), offset);
 		} else {
@@ -175,7 +173,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.add(livestockButton);
 		si.add(closeButton);
 
-		BlockingQueue<String> inventorySelectionQueue = new LinkedBlockingQueue<String>(1);
+		BlockingQueue<String> inventorySelectionQueue = new LinkedBlockingQueue<String>();
 		
 		peopleButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "0"));
 		suppliesButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "1"));
@@ -292,7 +290,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					handler.put(option);
+					if (handler.size() == 0)
+						handler.put(option);
 				} catch (InterruptedException e1) {}
 				si.recoverFocus();
 			}
@@ -485,9 +484,15 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	public void showBlockingMessage(String message) {
-		((GFXUISelector)getPlayer().getSelector()).deactivate();
+		if (getPlayer() != null)
+			((GFXUISelector)getPlayer().getSelector()).deactivate();
 		message = message.replaceAll("XXX", "\n");
 		showTextBox(message, 140, 300, 520, 250);
+	}
+	
+	@Override
+	public void showSystemMessage(String x) {
+		showBlockingMessage(x);
 	}
 	
 	@Override
@@ -573,12 +578,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.add(armoryButton);
 		si.add(livestockButton);
 		si.add(closeButton);
-
-		
-
 		
 		// Create the blockingqueue
-		BlockingQueue<String> transferFromExpeditionHandler = new LinkedBlockingQueue<String>(1);
+		BlockingQueue<String> transferFromExpeditionHandler = new LinkedBlockingQueue<String>();
 		
 		// Add callback listeners for good type selection
 		peopleButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:0"));
@@ -693,8 +695,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  				continue;
   	  			}
   	  		} else if (commandParts[0].equals("BREAK")){
-  	  			if (!itemTransferFunctionality.validateBreak(from, to))
+  	  			if (!itemTransferFunctionality.validateBreak(from, to)){
+  	  				transferFromExpeditionHandler.clear();
 	  	  			continue;
+  	  			}
 				break;
   	  		} else if (commandParts[0].equals("SELECT_UNIT")){
   	  			selectedIndex = Integer.parseInt(commandParts[1]);
@@ -702,15 +706,18 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  		} else if (commandParts[0].equals("CONFIRM_TRANSFER")){
   	  			Equipment choice = menuBox.getSelectedUnit();
   	  			int quantity = menuBox.getQuantity();
-  	  			if (quantity == 0)
+  	  			if (quantity == 0){
   	  				continue;
+  	  			}
   	  			
 				if (quantity > choice.getQuantity()){
 					showBlockingMessage("Not enough "+choice.getItem().getDescription());
+					transferFromExpeditionHandler.clear();
 					continue;
 				}
 				
 				if (!itemTransferFunctionality.validateAndPerformTransfer(from, to, expeditionGoodsMap, choice, quantity)){
+					transferFromExpeditionHandler.clear();
 					continue;
 				}
 				
@@ -980,10 +987,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			List<Equipment> defendingUnits) {
 		clearTextBox();
 		((GFXUISelector)getPlayer().getSelector()).deactivate();
-
-		si.drawImage(168, 72, BATTLE_BACKGROUND);
+				
 		int xBase = 192;
-		int yBase = 96; 
+		int yBase = 48;
+		si.drawImage(168, yBase - 24, BATTLE_BACKGROUND);
 		int gridX = 0;
 		int gridY = 0;
 		for (Equipment equipment: attackingUnits){
@@ -1014,8 +1021,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 		si.refresh();
 		
-		si.waitKeyOrClick(CharKey.SPACE);
+		//si.waitKeyOrClick(CharKey.SPACE);
 	}
+	
 	@Override
 	public void showBattleResults(
 			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits,
@@ -1023,9 +1031,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
-		String message = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits, battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome, attackerScore, defenderScore);
-		message = message.replaceAll("XXX", "\n");
-		showTextBox(message, 16, 16, 776, 576);
+		List<String> messages = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits, battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome, attackerScore, defenderScore);
+		for (String message: messages){
+			message = message.replaceAll("XXX", "\n");
+			showTextBox(message, 16, 380, 776, 200);
+		}
 	}
 	
 	@Override
@@ -1137,7 +1147,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public int getYScale() {
 		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
-			return -GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
+			//return -GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
+			return -GlobeMapModel.getLatitudeHeight();
 		else
 			return 1;
 	}

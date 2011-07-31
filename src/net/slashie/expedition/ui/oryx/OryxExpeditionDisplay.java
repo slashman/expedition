@@ -5,12 +5,9 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +20,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
@@ -37,14 +33,13 @@ import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.oryxUI.AddornedBorderTextArea;
+import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.CallbackActionListener;
-import net.slashie.utils.swing.CallbackKeyListener;
-import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
 import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.SimpleGFXMenuItem;
@@ -165,9 +160,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		BlockingQueue<Integer> titleSelectionHandler = new LinkedBlockingQueue<Integer>();
 
-		/*CallbackHandler titleSelectionHandler = new CallbackHandler();
-		titleSelectionHandler.setCallback(null);*/
-		
 		historyButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -213,8 +205,15 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		while (choice == null) {
 			try {
 				choice = titleSelectionHandler.take();
+				if (choice.intValue() == 1){
+					UserInterface.getUI().showSystemMessage("This mode isn't yet available.");
+					choice = null;
+				}
+				
 			} catch (InterruptedException e1) {}
 		}
+		
+		
 		
 		si.remove(historyButton);
 		si.remove(expeditionButton);
@@ -334,6 +333,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 
 	public void showHelp(){
 		si.saveBuffer();
+		((GFXUISelector)UserInterface.getUI().getPlayer().getSelector()).deactivate();
 		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
 		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
 		
@@ -376,7 +376,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si = syst;
 	}
 	
-	
 	public int showSavedGames(File[] saveFiles){
 		si.drawImage(IMG_BLANK);
 		
@@ -409,7 +408,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		else
 			return selected.getValue();
 	}
-	
 	
 	public void showTextBox(String text, int consoleX, int consoleY, int consoleW, int consoleH){
 		addornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
