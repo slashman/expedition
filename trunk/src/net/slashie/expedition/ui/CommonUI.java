@@ -1,6 +1,7 @@
 package net.slashie.expedition.ui;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,18 +92,20 @@ public class CommonUI {
 		}
 	}
 
-	public static String getBattleResultsString(
+	public static List<String> getBattleResultsString(
 			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits, String battleName,
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
-		String message = battleName+" XXX ";
+		List<String> ret = new ArrayList<String>();
 		
+		String message = battleName+" XXX ";
 		message += ExpeditionUnit.getUnitsStringFromEquipment(originalAttackingUnits).getA()+" XXX ";
 		message += "    ... engage with ... XXX ";
 		message += ExpeditionUnit.getUnitsStringFromEquipment(originalDefendingUnits).getA()+" XXX ";
-		message += "XXX ";
+		ret.add(message);
+		message = "";
 		boolean nothingHappened = true;
 		// Ranged Phase
 		if (attackerRangedAttackOutcome.hasEvents()){
@@ -116,6 +119,9 @@ public class CommonUI {
 		if (attackerRangedAttackOutcome.hasWounds()){
 			message += attackerRangedAttackOutcome.getWoundsString()+" XXX ";
 		}
+		if (!message.equals(""))
+			ret.add(message);
+		message = "";
 
 		if (defenderRangedAttackOutcome.hasEvents()){
 			message += "    >> Ranged Retaliation << XXX ";
@@ -128,7 +134,9 @@ public class CommonUI {
 		if (defenderRangedAttackOutcome.hasWounds()){
 			message += defenderRangedAttackOutcome.getWoundsString()+" XXX ";
 		}
-		
+		if (!message.equals(""))
+			ret.add(message);
+		message = "";
 		
 		// Charge Phase
 		if (mountedAttackOutcome[0].hasEvents()){
@@ -147,6 +155,9 @@ public class CommonUI {
 			message += "    >> Mounted charge losses << XXX " ;
 			nothingHappened = false;
 		}
+		if (!message.equals(""))
+			ret.add(message);
+		message = "";
 		
 		if (mountedAttackOutcome[1].hasDeaths()){
 			message += mountedAttackOutcome[1].getDeathsString()+" XXX ";
@@ -154,6 +165,9 @@ public class CommonUI {
 		if (mountedAttackOutcome[1].hasWounds()){
 			message += mountedAttackOutcome[1].getWoundsString()+" XXX ";
 		}
+		if (!message.equals(""))
+			ret.add(message);
+		message = "";
 		
 		// Melee Phase
 		if (meleeAttackOutcome[0].hasEvents()){
@@ -168,6 +182,9 @@ public class CommonUI {
 		if (meleeAttackOutcome[0].hasWounds()){
 			message += meleeAttackOutcome[0].getWoundsString()+" XXX ";
 		}
+		if (!message.equals(""))
+			ret.add(message);
+		message = "";
 		
 		if (meleeAttackOutcome[1].hasEvents()){
 			message += "    >> Melee losses << XXX ";
@@ -180,6 +197,9 @@ public class CommonUI {
 		if (meleeAttackOutcome[1].hasWounds()){
 			message += meleeAttackOutcome[1].getWoundsString()+" XXX ";
 		}
+		if (!message.equals(""))
+			ret.add(message);
+		message = "";
 		
 		if (nothingHappened) {
 			message += "No losses for both sides XXX ";
@@ -189,7 +209,10 @@ public class CommonUI {
 		} else {
 			message += "The defending party wins the battle XXX ";
 		}
-		return message;
+		if (!message.equals(""))
+			ret.add(message);
+		message = "";
+		return ret;
 	}
 
 	public static String getTownDescription(Town town) {
