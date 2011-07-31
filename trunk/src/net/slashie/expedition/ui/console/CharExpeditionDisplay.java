@@ -76,14 +76,13 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		
 		csi.print(18, 4, "EXPEDITION", ConsoleSystemInterface.CYAN);
 		csi.print(20, 5, "The New World", ConsoleSystemInterface.BLUE);
-		csi.print(20,12, "a. Create Expedition", ConsoleSystemInterface.WHITE);
-		csi.print(20,13, "b. Create Expedition", ConsoleSystemInterface.WHITE);
+		csi.print(20,12, "a. Historic Scenario", ConsoleSystemInterface.WHITE);
+		csi.print(20,13, "b. Create Expedition", ConsoleSystemInterface.GRAY);
 		csi.print(20,14, "c. Resume Expedition", ConsoleSystemInterface.WHITE);
 		csi.print(20,15, "d. Quit", ConsoleSystemInterface.WHITE);
-		csi.print(8,17, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2010", ConsoleSystemInterface.CYAN);
+		csi.print(8,17, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2011", ConsoleSystemInterface.CYAN);
 		csi.print(8,18, "Music by Roguebards Mingos and Jice", ConsoleSystemInterface.CYAN);
 		
-		csi.print(8,18, "Music by Roguebards Mingos and Jice", ConsoleSystemInterface.CYAN);
 		if (registrant == null || registrant.equals("unregistered")){
 			csi.print(8, 20, "Unregistered Version", ConsoleSystemInterface.WHITE);
 		} else {
@@ -95,7 +94,6 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
     	STMusicManagerNew.thus.playKey("TITLE");
     	CharKey x = new CharKey(CharKey.NONE);
 		while (x.code != CharKey.A && x.code != CharKey.a &&
-				x.code != CharKey.B && x.code != CharKey.b &&
 				x.code != CharKey.C && x.code != CharKey.c &&
 				x.code != CharKey.D && x.code != CharKey.d
 				)
@@ -105,6 +103,7 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		case CharKey.A: case CharKey.a:
 			return 0;
 		case CharKey.B: case CharKey.b:
+			
 			return 1;
 		case CharKey.C: case CharKey.c:
 			return 2;
