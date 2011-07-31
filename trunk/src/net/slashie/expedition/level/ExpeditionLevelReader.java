@@ -42,26 +42,36 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 */
 	@Override
 	public AbstractCell getMapCell(int x, int y, int z) {
-		int gridX = GlobeMapModel.transformLongIntoX(x);
+		x = GlobeMapModel.normalizeLong(y, x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		// The map may be incomplete
+		if (gridY < 0 || gridY > super.getHeight())
+			return null;
 		return super.getMapCell(gridX, gridY, z);
 	}
 	
 	protected void darken(int x, int y, int z) {
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
+		if (gridY < 0 || gridY > super.getHeight())
+			return;
 		super.darken(gridX, gridY, z);
 	}
 	
 	public boolean isVisible(int x, int y, int z) {
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
+		if (gridY < 0 || gridY > super.getHeight())
+			return false;
 		return super.isVisible(gridX, gridY, z);
 	}
 	
 	protected void markLit(int x, int y, int z) {
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
+		if (gridY < 0 || gridY > super.getHeight())
+			return;
 		super.markLit(gridX, gridY, z);
 	}
 
@@ -69,6 +79,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	protected void markRemembered(int x, int y, int z) {
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
+		if (gridY < 0 || gridY > super.getHeight())
+			return;
 		super.markRemembered(gridX, gridY, z);
 	}
 
@@ -76,6 +88,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	protected void markVisible(int x, int y, int z) {
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
+		if (gridY < 0 || gridY > super.getHeight())
+			return;
 		super.markVisible(gridX, gridY, z);	
 	}
 
@@ -83,6 +97,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	protected boolean remembers(int x, int y, int z) {
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
+		if (gridY < 0 || gridY > super.getHeight())
+			return false;
 		return super.remembers(gridX, gridY, z);	
 	}
 	
@@ -90,6 +106,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	protected boolean isLit(Position p) {
 		p.x = GlobeMapModel.transformLongIntoX(p.x());
 		p.y = GlobeMapModel.transformLatIntoY(p.y());
+		if (p.y < 0 || p.y > super.getHeight())
+			return false;
 		return super.isLit(p);	
 	}
 	
@@ -110,20 +128,30 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			int longMinutes,
 			int latMinutes, 
 			int z, int xspan, int yspan) {
-		int magnification = GlobeMapModel.getLongitudeScale(latMinutes);
-		int xstart = longMinutes - xspan * magnification;
-		int ystart = latMinutes - yspan * magnification;
-		int xend = longMinutes + xspan * magnification;
-		int yend = latMinutes + yspan * magnification;
+		int longitudeScale = GlobeMapModel.getLongitudeScale(latMinutes);
+		int latitudeScale= GlobeMapModel.getLatitudeHeight();
+		
+		int xstart = longMinutes - xspan * longitudeScale;
+		int xend = longMinutes + xspan * longitudeScale;
+		
+		int ystart = latMinutes - yspan * latitudeScale;
+		int yend = latMinutes + yspan * latitudeScale;
+		
 		AbstractCell [][] ret = new AbstractCell [2 * xspan + 1][2 * yspan + 1];
 		int px = 0;
-		for (int ilong = xstart; ilong <=xend; ilong+=magnification){
+		for (int ilong = xstart; ilong <=xend; ilong+=longitudeScale){
 			int py = 0;
-			//int ix = transformLongIntoX(ilong);
-			for (int ilat =  ystart ; ilat <= yend; ilat+=magnification){
-				//int iy = transformLatIntoY(ilat);
-				if (isVisible(ilong, ilat, z)){
-					ret[px][(2 * yspan) - py] = getMapCell(ilong, ilat, z);
+			for (int ilat =  ystart ; ilat <= yend; ilat+=latitudeScale){
+				int iilong = ilong;
+				int iilat = ilat;
+				
+				/* Pole Mirror */
+				/*if (ilat < 0){
+					iilat = ilat * -1;
+					iilong = (ilong + 180*60) % (360*60); 
+				}*/
+				if (isVisible(iilong, iilat, z)){
+					ret[px][(2 * yspan) - py] = getMapCell(iilong, iilat, z);
 					watcher.seeMapCell(ret[px][py]);
 				}
 				py++;
@@ -205,4 +233,19 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		}
 		return null;
 	}
+	
+	@Override
+	public List<AbstractFeature> getFeaturesAt(Position pos){
+		int magnificationLevel = GlobeMapModel.getLongitudeScale(pos.y());
+		int start = pos.x() - (int)Math.round(magnificationLevel/2.0d);
+		recyclablePosition.y = pos.y();
+		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
+			recyclablePosition.x = xrow;
+			List<AbstractFeature> ret = super.getFeaturesAt(pos);
+			if (ret != null)
+				return ret;
+		}
+		return null;
+	}
+
 }
