@@ -23,12 +23,12 @@ public class Bump extends Action {
 		if (targetDirection == Action.SELF){
 			return;
 		}
-		int scale = 1;
+		Position var = directionToVariation(targetDirection);
+		
 		if (expedition.getLevel() instanceof ExpeditionLevelReader){
-			scale = GlobeMapModel.getLongitudeScale(expedition.getPosition().y());;
+			var = GlobeMapModel.scaleVar(var, expedition.getPosition().y());
 		}
-        Position var = directionToVariation(targetDirection);
-        var = Position.mul(var, scale);
+        
         Position destinationPoint = Position.add(performer.getPosition(), var);
 		
 		
