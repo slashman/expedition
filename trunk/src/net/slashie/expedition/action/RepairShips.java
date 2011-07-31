@@ -8,7 +8,6 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.serf.action.Action;
-import net.slashie.serf.action.Actor;
 import net.slashie.serf.ui.UserInterface;
 
 /**
@@ -22,7 +21,8 @@ import net.slashie.serf.ui.UserInterface;
  *
  */
 public class RepairShips extends Action{
-
+	private static final long serialVersionUID = 1L;
+	
 	private static final double RECOVERY_INDEX = 0.1;
 	private static final int WOOD_PER_REPAIRMEN = 1;
 	private static final int CARPENTER_MULTIPLIER = 10;
@@ -63,7 +63,7 @@ public class RepairShips extends Action{
 			
 		int maxRepairmen = availableWood / WOOD_PER_REPAIRMEN;
 		int remainingRepairmen = maxRepairmen;
-		int carpenters = expedition.getItemCount("CARPENTER");
+		int carpenters = expedition.getItemCountBasic("CARPENTER");
 		int normalCrew = expedition.getTotalUnits() - carpenters;
 		
 		if (carpenters >= remainingRepairmen){
