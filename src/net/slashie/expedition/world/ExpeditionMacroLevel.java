@@ -92,11 +92,14 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		
 		handyReusableObject.setA(Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
 		//This is the real longitude calculation:
-		//handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
-		if (getExpedition().getDeducedReckonWest()>0)
-			handyReusableObject.setB(getExpedition().getDeducedReckonWest()+"nl");
-		else
-			handyReusableObject.setB((-getExpedition().getDeducedReckonWest())+"nl");
+		if (getExpedition().hasMarineChronometer()){
+			handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
+		} else {
+			if (getExpedition().getDeducedReckonWest()>0)
+				handyReusableObject.setB(getExpedition().getDeducedReckonWest()+"nl");
+			else
+				handyReusableObject.setB((-getExpedition().getDeducedReckonWest())+"nl");
+		}
 		return handyReusableObject;
 	}
 	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
@@ -469,11 +472,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		
 		// Ship shadow
 		OverworldExpeditionCell cell = (OverworldExpeditionCell) getMapCell(tempP);
-		if (ret == null && cell.isSea() && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
+		if (ret == null && cell != null && cell.isSea() && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
 			// Get cell to the wind shadow
 			
-			int scale = GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
-			Position var = Position.mul(getWindDirection().getVectors(), scale);
+			//int scale = GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
+			// xx Position var = Position.mul(getWindDirection().getVectors(), scale);
+			Position var = new Position(getWindDirection().getVectors());
+			var = GlobeMapModel.scaleVar(var, getExpedition().getLatitude());
 			if (tempP.equals(Position.add(getExpedition().getPosition(), var))){
 				if (ret == null)
 					ret = new ArrayList<AbstractFeature>();
