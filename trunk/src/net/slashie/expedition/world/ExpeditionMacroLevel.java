@@ -175,6 +175,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 		return cache;
 	}
+	
 	public void addAllEquipment(Expedition expedition, Position where) {
 		if (((OverworldExpeditionCell) getMapCell(where)).isLand()){
 			GoodsCache cache = getOrCreateCache(where);
@@ -472,7 +473,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		
 		// Ship shadow
 		OverworldExpeditionCell cell = (OverworldExpeditionCell) getMapCell(tempP);
-		if (ret == null && cell != null && cell.isSea() && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
+		//if (ret == null && cell != null && cell.isSea() && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
+		if (ret == null && cell != null && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
 			// Get cell to the wind shadow
 			
 			//int scale = GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
