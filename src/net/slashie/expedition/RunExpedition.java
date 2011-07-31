@@ -253,9 +253,7 @@ public class RunExpedition {
 			selectScenario();
 			break;
 		case 1:
-			System.out.println("Expedition "+ExpeditionGame.getVersion()+", clean Exit");
-			System.out.println("Thank you for playing!");
-			System.exit(0);
+			UserInterface.getUI().showSystemMessage("This mode isn't yet available.");
 			break;
 		case 2:
 			loadGame();
@@ -397,7 +395,6 @@ public class RunExpedition {
 				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2010", userCommands, UIconfiguration, null);
 				
 			}
-			
 			uiSelector = new ExpeditionGFXUISelector();
 			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings);
 			break;
