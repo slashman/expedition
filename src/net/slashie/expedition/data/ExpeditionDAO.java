@@ -86,7 +86,9 @@ public class ExpeditionDAO {
 		guild.addItem(5000, new StoreItemInfo("SOLDIER"));
 		guild.addItem(1500, new StoreItemInfo("ARCHER"));
 		guild.addItem(1000, new StoreItemInfo("CARPENTER"));
+		guild.addItem(1000, new StoreItemInfo("DOCTOR"));
 		guild.addItem(200, new StoreItemInfo("EXPLORER"));
+		
 
 		
 		return new AbstractCell[]{
@@ -238,6 +240,7 @@ public class ExpeditionDAO {
 			new CharAppearance("EXPLORER", 'e', ConsoleSystemInterface.BLUE),
 			new CharAppearance("CARPENTER", 'c', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("COLONIST", 'c', ConsoleSystemInterface.YELLOW),
+			new CharAppearance("DOCTOR", 'D', ConsoleSystemInterface.BLUE),
 			
 			new CharAppearance("EAGLE_WARRIOR", 'w', ConsoleSystemInterface.GREEN),
 			new CharAppearance("JAGUAR_WARRIOR", 'w', ConsoleSystemInterface.YELLOW),
@@ -246,6 +249,7 @@ public class ExpeditionDAO {
 			new CharAppearance("NATIVE_ARCHER", 'a', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("NATIVE_COMMONER", 'c', ConsoleSystemInterface.BLUE),
 			new CharAppearance("NATIVE_SHAMAN", 'S', ConsoleSystemInterface.CYAN),
+			
 			
 			
 			new CharAppearance("NATIVE_VILLAGE", '^', ConsoleSystemInterface.DARK_RED),
@@ -413,6 +417,15 @@ public class ExpeditionDAO {
 					1,
 					new String[]{"STEEL_SPEAR","WOODEN_MACE"},
 					new String[]{""}, 10, 10),
+			new ExpeditionUnit("DOCTOR",  "Doctor",  "Doctors",  "Heals expedition units quickly", UNIT_WEIGHT, 300, 
+					new Roll("1D1"),
+					new Roll("1D1"),
+					1,
+					50,5,
+					1,
+					new String[]{"STEEL_SPEAR","WOODEN_MACE"},
+					new String[]{""}, 10, 10),
+							
 			//Native Units
 			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", "Trained to defend his tribe", UNIT_WEIGHT, 200, 
 					new Roll("1D3"),
@@ -470,6 +483,7 @@ public class ExpeditionDAO {
 					2,
 					new String[]{"PLUMED_BOW", "COMPOSITE_BOW", "SIMPLE_BOW","WOODEN_MACE"},
 					new String[]{}, 200, 300),
+			
 			//Goods
 			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 40,50, FOOD_PACK),
 			new Food("BREAD", "Bread", "Bread", "Food Ration", 3, 1, 100, 200, FOOD_PACK),

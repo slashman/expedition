@@ -7,8 +7,10 @@ import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.action.Actor;
 
 public class WeeklyAgent extends Actor{
+	private static final long serialVersionUID = 1L;
 
 	protected static final Action BEAT = new Action() {
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void execute() {
@@ -31,7 +33,7 @@ public class WeeklyAgent extends Actor{
 		
 	};
 	private static final ActionSelector SELECTOR = new ActionSelector(){
-
+		private static final long serialVersionUID = 1L;
 		public ActionSelector derive() {
 			return null;
 		}

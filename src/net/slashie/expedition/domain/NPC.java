@@ -97,6 +97,8 @@ public class NPC extends AwareActor implements Cloneable{
 					m("Explorers are weak but indispensable in your journey; they extend the field of view of your expedition, and that may save your life. They can only wear basic weapons");
 					m("Carpenters specialize on fixing your ships, they make much better use of wood, and having a healthy ship greatly increases your chances of success.");
 					m("They also construct buildings twice as fast, in case you are settling in a colony.");
+					m("Doctors can only wear basic gear, but they help your units to heal quickly.");
+					m("A wounded unit can't perform its functions and is subject to die in battle, so they can be a great help in your expedition.");
 					m("Finally, you can also bring colonists with you, they are people willing to strengthen the presence of the crown in foreign lands.");
 					break;
 				case 3:

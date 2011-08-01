@@ -201,6 +201,8 @@ public class GFXAppearances {
 				createAppearance("QUETZAL_ARCHER", 8 ,19),
 				createAppearance("EAGLE_WARRIOR", 9 ,19),
 				createAppearance("JAGUAR_WARRIOR", 10 ,19),
+				
+				createAppearance("DOCTOR", 11, 19),
 
 				createAppearance("BOOKSHELF_L", 1, 20),
 				createAppearance("BOOKSHELF", 2, 20),

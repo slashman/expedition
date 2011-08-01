@@ -11,10 +11,12 @@ import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.action.Actor;
 
 public class DayShiftAgent extends Actor{
+	private static final long serialVersionUID = 1L;
 
 	public static final int TICKS_PER_DAY = 275;
 	
 	protected static final Action BEAT = new Action() {
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void execute() {
@@ -46,6 +48,7 @@ public class DayShiftAgent extends Actor{
 		
 	};
 	private static final ActionSelector SELECTOR = new ActionSelector(){
+		private static final long serialVersionUID = 1L;
 
 		public ActionSelector derive() {
 			return null;
