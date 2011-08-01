@@ -2085,4 +2085,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 		}
 	}
+	
+	public int getDaysOnSea() {
+		return daysOnSea;
+	}
 }

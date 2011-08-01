@@ -794,7 +794,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		else
 			ui_carrying = "Carrying "+statsExpedition.getCurrentlyCarrying()+"%";
 		String ui_morale = statsExpedition.getMoraleDescription();
-		String ui_armed = statsExpedition.isArmed()?"(Armed)":"";
+		String ui_armed = statsExpedition.isArmed()?" (Armed)":"";
 		String ui_locationDescription = getExpedition().getLocation().getDescription();
 		String ui_terrainDescription = currentCell.getDescription();
 		String ui_debug = "Scale "+GlobeMapModel.getLongitudeScale(statsExpedition.getPosition().y);
@@ -823,6 +823,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String ui_windStrength = "<Strenght>";
 		String ui_currentDirection = "<D>";
 		String ui_currentStrength = "<Strength>";
+		String ui_seaDays = statsExpedition.getMovementMode() == MovementMode.SHIP ? statsExpedition.getDaysOnSea()+" days on sea": "";
 		
 		// Draw
 		si.setColor(Color.WHITE);
@@ -837,10 +838,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.print(2, 4, locationLabels.getB(), TITLE_COLOR);
 		si.print(8, 4, locationDescription.getB());
 		si.print(2, 5, ui_food + ui_foodModifier);
-		si.print(2, 6, ui_water);
-		si.print(2, 7, ui_morale + ui_armed);
-		si.print(2, 8, ui_carrying);
-		si.print(2, 9, ui_gold);
+		si.print(2, 6, ui_seaDays);
+		si.print(2, 7, ui_water);
+		si.print(2, 8, ui_morale + ui_armed);
+		si.print(2, 9, ui_carrying);
+		si.print(2,10, ui_gold);
+		
 		
 		// Right Column
 		int line2 = 63;
