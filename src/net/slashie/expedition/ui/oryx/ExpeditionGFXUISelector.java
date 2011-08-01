@@ -3,6 +3,7 @@ package net.slashie.expedition.ui.oryx;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,8 +20,10 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.CardinalDirection;
+import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
+import net.slashie.serf.action.Actor;
 import net.slashie.serf.ui.UserAction;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
@@ -44,6 +47,11 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	private CleanButton chopButton;
 	private CleanButton saveButton;
 	private CleanButton quitButton;
+	private Image unmountImage;
+	private Image disarmImage;
+	private Image mountImage;
+	private Image armImage;
+	
 	private Cursor HAND_CURSOR;
 	private JLabel legendLabel;
 	
@@ -63,12 +71,19 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		
 		try {
-			armButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ARM_BOUNDS")), HAND_CURSOR);
 			buildButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_BUILD_BOUNDS")), HAND_CURSOR);
 			dropButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DROP_BOUNDS")), HAND_CURSOR);
 			inventoryButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_INVENTORY_BOUNDS")), HAND_CURSOR);
 			lookButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_LOOK_BOUNDS")), HAND_CURSOR);
-			mountButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MOUNT_BOUNDS")), HAND_CURSOR);
+			
+			armImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ARM_BOUNDS"));
+			mountImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MOUNT_BOUNDS"));
+			unmountImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_UNMOUNT_BOUNDS"));
+			disarmImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DISARM_BOUNDS"));
+			
+			armButton = new CleanButton(armImage, HAND_CURSOR);			
+			mountButton = new CleanButton(mountImage, HAND_CURSOR);
+			
 			repairButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_REPAIR_BOUNDS")), HAND_CURSOR);
 			resetButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")), HAND_CURSOR);
 			chopButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")), HAND_CURSOR);
@@ -89,17 +104,29 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		saveButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.S));
 		quitButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.Q));
 		
-		armButton.addMouseListener(getPopupMouseListener("Arm Expedition"));
-		buildButton.addMouseListener(getPopupMouseListener("Build Settlement"));
-		dropButton.addMouseListener(getPopupMouseListener("Transfer Equipment"));
-		inventoryButton.addMouseListener(getPopupMouseListener("Inventory"));
-		lookButton.addMouseListener(getPopupMouseListener("Examine Surroundings"));
-		mountButton.addMouseListener(getPopupMouseListener("Ride Mounts"));
-		repairButton.addMouseListener(getPopupMouseListener("Repair Ships"));
-		resetButton.addMouseListener(getPopupMouseListener("Reset Dead' Reckon"));
-		chopButton.addMouseListener(getPopupMouseListener("Chop Woods"));
-		saveButton.addMouseListener(getPopupMouseListener("Save Game"));
-		quitButton.addMouseListener(getPopupMouseListener("Quit Game"));
+		armButton.setPopupText("Arm Expedition");
+		buildButton.setPopupText("Build Settlement");
+		dropButton.setPopupText("Transfer Equipment");
+		inventoryButton.setPopupText("Inventory");
+		lookButton.setPopupText("Examine Surroundings");
+		mountButton.setPopupText("Ride Mounts");
+		repairButton.setPopupText("Repair Ships");
+		resetButton.setPopupText("Reset Dead' Reckon");
+		chopButton.setPopupText("Chop Woods");
+		saveButton.setPopupText("Save");
+		quitButton.setPopupText("Quit");
+		
+		armButton.addMouseListener(getPopupMouseListener(armButton));
+		buildButton.addMouseListener(getPopupMouseListener(buildButton));
+		dropButton.addMouseListener(getPopupMouseListener(dropButton));
+		inventoryButton.addMouseListener(getPopupMouseListener(inventoryButton));
+		lookButton.addMouseListener(getPopupMouseListener(lookButton));
+		mountButton.addMouseListener(getPopupMouseListener(mountButton));
+		repairButton.addMouseListener(getPopupMouseListener(repairButton));
+		resetButton.addMouseListener(getPopupMouseListener(resetButton));
+		chopButton.addMouseListener(getPopupMouseListener(chopButton));
+		saveButton.addMouseListener(getPopupMouseListener(saveButton));
+		quitButton.addMouseListener(getPopupMouseListener(quitButton));
 		
 		armButton.setVisible(false);
 		buildButton.setVisible(false);
@@ -142,13 +169,13 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		si.add(resetButton);
 	}
 	
-	private MouseListener getPopupMouseListener(final String popupText) {
+	private MouseListener getPopupMouseListener(final CleanButton cleanButton) {
 		return new MouseAdapter(){
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				//setSelectionActive(false);
 				Component b = (Component) e.getSource();
-				legendLabel.setText(popupText);
+				legendLabel.setText(cleanButton.getPopupText());
 				legendLabel.setLocation(b.getX()+24, b.getY()+12);
 				legendLabel.setVisible(true);
 			}
@@ -165,14 +192,14 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	public void activate() {
 		super.activate();
 		armButton.setVisible(true);
-		buildButton.setVisible(true);
-		dropButton.setVisible(true);
+		//buildButton.setVisible(true);
+		//dropButton.setVisible(true);
 		inventoryButton.setVisible(true);
 		lookButton.setVisible(true);
-		mountButton.setVisible(true);
-		repairButton.setVisible(true);
-		resetButton.setVisible(true);
-		chopButton.setVisible(true);
+		//mountButton.setVisible(true);
+		//repairButton.setVisible(true);
+		//resetButton.setVisible(true);
+		//chopButton.setVisible(true);
 		saveButton.setVisible(true);
 		quitButton.setVisible(true);
 	}
@@ -204,6 +231,60 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 				si.recoverFocus();
 			}
 		};
+	}
+	
+	@Override
+	public Action selectAction(Actor who) {
+		updateButtonStatus();
+		return super.selectAction(who);
+	}
+	
+	private void updateButtonStatus(){
+		Expedition expedition = (Expedition) getUI().getPlayer();
+		
+		if (expedition.isMounted()){
+			mountButton.setVisible(true);
+			mountButton.setBackgroundImage(unmountImage);
+			mountButton.setPopupText("Unmount");
+			si.revalidate();
+		} else if (expedition.getItemCountBasic("HORSE") > 0){
+			mountButton.setVisible(true);
+			mountButton.setBackgroundImage(mountImage);
+			mountButton.setPopupText("Ride Mounts");
+			si.revalidate();
+		} else {
+			mountButton.setVisible(false);
+		}
+		
+		if (expedition.isArmed()){
+			armButton.setBackgroundImage(disarmImage);
+			armButton.setPopupText("Disarm Expedition");
+			si.revalidate();
+		} else {
+			armButton.setBackgroundImage(armImage);
+			armButton.setPopupText("Arm Expedition");
+			si.revalidate();
+		}
+		
+		if (expedition.getLevel() instanceof ExpeditionMicroLevel){
+			buildButton.setVisible(false);
+			dropButton.setVisible(false);
+			repairButton.setVisible(false);
+			resetButton.setVisible(false);
+			chopButton.setVisible(false);
+		} else if (expedition.getMovementMode().isLandMovement()){
+			buildButton.setVisible(true);
+			dropButton.setVisible(true);
+			repairButton.setVisible(false);
+			resetButton.setVisible(true);
+			chopButton.setVisible(true);
+		} else {
+			buildButton.setVisible(false);
+			dropButton.setVisible(true);
+			repairButton.setVisible(true);
+			resetButton.setVisible(true);
+			chopButton.setVisible(false);
+		}
 	}
 
 	private void performMovement() {
