@@ -1776,7 +1776,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 						choice = UserInterface.getUI().switchChat("Treacherous Murder!", "You found a "+murderer.getDescription()+" to be the culprit! XXX What will you do?", "Punish the "+murderer.getDescription()+".", "Execute the "+murderer.getDescription()+".");
 						if (choice == 0){
 							getLevel().addMessage("You flog the "+murderer.getDescription()+".");
-							setCounter("KILLER_ALIVE", 100);
+							if (Util.chance(33)){
+								setCounter("KILLER_ALIVE", 100);
+							} else {
+								removeCounter("KILLER_ALIVE");
+							}
 						} else {
 							reduceQuantityOf(murderer);
 							getLevel().addMessage("You execute the "+murderer.getDescription()+". May this serve as an example");
