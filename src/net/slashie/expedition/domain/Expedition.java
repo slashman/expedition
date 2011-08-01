@@ -611,17 +611,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 	@Override
 	public int getDarkSightRange() {
-		return getBaseSightRange();
+		return getSightRange();
 	}
 
-	
-	// TODO: This is not symetric on expedition! Lat is fixed, Long changes
-	
-	public int getBaseSightRange(){
-		int scale = GlobeMapModel.getLongitudeScale(getPosition().y());
-		return scale * 9;
-		//return 27;
-	}
 
 	@Override
 	public List<AbstractItem> getEquippedItems() {
@@ -675,14 +667,22 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			break;
 		}
 		
-		int ret = getBaseSightRange() + bonus - malus;
-		if (ret >= 1 && ret <= getBaseSightRange())
+		int BASE_SIGHT = 9;
+		//int scale = GlobeMapModel.getLongitudeScale(getPosition().y());
+		int scale = 1; // Map shouldn't required this to be scaled
+		int base = BASE_SIGHT * scale;
+		int mod = (bonus - malus) * scale;
+		
+		int ret = base + mod;
+		if (ret >= 1 && ret <= base)
 			return ret;
 		else if (ret < 1)
 			return 1;
 		else
-			return getBaseSightRange();
+			return base;
 	}
+	
+	
 
 	@Override
 	public String getStatusString() {
@@ -1991,7 +1991,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		if (movementMode == MovementMode.SHIP){
 			return "Ships";
 		} else {
-			return "Expedition";
+			return "Exped";
 		}
 	}
 
