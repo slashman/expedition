@@ -67,6 +67,18 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		return super.isVisible(gridX, gridY, z);
 	}
 	
+	private Position tempSeen = new Position(0,0);
+
+	public void setSeen(int x, int y) {
+		tempSeen.x = x; tempSeen.y = y; tempSeen.z = getPlayer().getPosition().z;
+		markVisible(x, y, getPlayer().getPosition().z);
+		markRemembered(x, y, getPlayer().getPosition().z);
+		Actor m = getActorAt(tempSeen);
+		if (m != null){
+			m.setWasSeen(true);
+		}
+	}
+	
 	protected void markLit(int x, int y, int z) {
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
@@ -119,7 +131,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	}
 	
 	/**
-	 * Bold move, this acts as a proxy where x and y are translated into lat and long
+	 * This acts as a proxy where x and y are translated into lat and long
+	 * 
 	 * @param x Expedition references entities with longitude instead of x
 	 * @param y Expedition references entities with latitude instead of y
 	 */
@@ -136,28 +149,32 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		
 		int ystart = latMinutes - yspan * latitudeScale;
 		int yend = latMinutes + yspan * latitudeScale;
-		
+
 		AbstractCell [][] ret = new AbstractCell [2 * xspan + 1][2 * yspan + 1];
 		int px = 0;
+		int visible = 0;
 		for (int ilong = xstart; ilong <=xend; ilong+=longitudeScale){
 			int py = 0;
 			for (int ilat =  ystart ; ilat <= yend; ilat+=latitudeScale){
 				int iilong = ilong;
 				int iilat = ilat;
 				
-				/* Pole Mirror */
+				/* TODO: Pole Mirror */
 				/*if (ilat < 0){
 					iilat = ilat * -1;
 					iilong = (ilong + 180*60) % (360*60); 
 				}*/
+				
 				if (isVisible(iilong, iilat, z)){
 					ret[px][(2 * yspan) - py] = getMapCell(iilong, iilat, z);
 					watcher.seeMapCell(ret[px][py]);
+					visible++;
 				}
 				py++;
 			}
 			px++;
 		}
+		System.out.println("Visible "+visible);
 		return ret;
 	}
 	
@@ -241,7 +258,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		recyclablePosition.y = pos.y();
 		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
 			recyclablePosition.x = xrow;
-			List<AbstractFeature> ret = super.getFeaturesAt(pos);
+			List<AbstractFeature> ret = super.getFeaturesAt(recyclablePosition);
 			if (ret != null)
 				return ret;
 		}
