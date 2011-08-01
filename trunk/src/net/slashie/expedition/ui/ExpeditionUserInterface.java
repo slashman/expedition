@@ -20,7 +20,7 @@ public interface ExpeditionUserInterface {
 
 	public void showBlockingMessage(String message);
 	
-	static final String[] months = new String[]{
+	public static final String[] months = new String[]{
 			"Janvary",
 			"Febrvary",
 			"March",

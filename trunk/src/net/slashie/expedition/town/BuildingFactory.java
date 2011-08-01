@@ -19,12 +19,7 @@ public class BuildingFactory {
 	private static List<Building> buildingsList = new ArrayList<Building>();
 	
 	public static Building createBuilding(String id){
-		try {
-			return (Building)buildingsMap.get(id).clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-			return null;
-		}
+		return (Building)buildingsMap.get(id).clone();
 	}
 	
 	public static void executeConstructionPlan(Town town, 
@@ -42,7 +37,8 @@ public class BuildingFactory {
 			throw new ActionCancelException();
 		}
 		
-		for (Building building: plan){
+		for (Building plannedBuilding: plan){
+			Building building = createBuilding(plannedBuilding.getId());
 			town.addBuilding(building);
 			if (building instanceof Farm){
 				((Farm)building).plant(ExpeditionGame.getCurrentGame().getGameTime());
@@ -51,7 +47,6 @@ public class BuildingFactory {
 		
 		builders.reduceGood("WOOD", woodCost);
 	}
-
 
 	public static void setBuildings(Building[] buildings) {
 		for (Building building: buildings){
