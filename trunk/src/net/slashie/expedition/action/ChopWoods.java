@@ -55,7 +55,8 @@ public class ChopWoods extends Action{
 			
 			int wood = ((Forest)f).substractWood(expedition);
 			ExpeditionItem woodSample = ItemFactory.createItem("WOOD");
-			level.addMessage("You chop "+wood+" wood.");
+			int currentWood = expedition.getItemCount("WOOD");
+			level.addMessage("You chop "+wood+" wood. ("+currentWood+" in expedition)");
 			if (expedition.canCarry(woodSample, wood)){
 				
 				expedition.addItem(woodSample, wood);
