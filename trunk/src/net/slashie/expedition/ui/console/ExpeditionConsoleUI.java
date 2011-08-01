@@ -22,6 +22,8 @@ import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.level.ExpeditionLevelReader;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
@@ -1090,5 +1092,20 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	public void afterTownAction() {
 		csi.restore();
 	}
+
+	@Override
+	public int getXScale() {
+		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
+			return GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
+		else
+			return 1;
+	}
 	
+	@Override
+	public int getYScale() {
+		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
+			return -GlobeMapModel.getLatitudeHeight();
+		else
+			return 1;
+	}
 }
