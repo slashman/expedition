@@ -1719,7 +1719,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		// Unease
 		if (getMorale() < 4){
 			if (Util.chance(5)){
-				int choice = UserInterface.getUI().switchChat("Unease in your expedition", "Enough of this mindless journey! Let's head back home!XXX What will you do?", "Preach about the importance of this mission.", "Give away 100 gold.");
+				int choice = UserInterface.getUI().switchChat("Unease in your expedition", "Enough of this mindless journey! Let's head back home! XXX What will you do?", "Preach about the importance of this mission.", "Give away 100 gold.");
 				if (choice == 0){
 					int shot = Util.rand(0, 100);
 					if (shot < 30){
