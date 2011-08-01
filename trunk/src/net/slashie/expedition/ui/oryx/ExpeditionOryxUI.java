@@ -497,7 +497,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	@Override
 	public boolean promptChat(String message) {
-		((GFXUISelector)getPlayer().getSelector()).deactivate();
+		if (getPlayer() != null)
+			((GFXUISelector)getPlayer().getSelector()).deactivate();
 		message = message.replaceAll("XXX", "\n");
 		return promptChat(message, 140,388,520,200);
 	}
@@ -1128,7 +1129,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void showCityInfo(Town town) {
 		String townInfo = CommonUI.getTownDescription(town);
 		townInfo = townInfo.replaceAll("XXX", "\n");
-   		printTextBox(townInfo, 80, 20, 600, 200);
+   		printTextBox(townInfo, 80, 20, 600, 260);
 	}
 	
 	@Override
@@ -1339,8 +1340,16 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	@Override
 	public void processSave(){
+		if (!player.getGame().canSave()){
+			level.addMessage("You cannot save your game here!");
+			return;
+		}
+		
 		if (promptChat("Save your game in journal \""+getPlayer().getName()+"\"?")){
-			super.processSave();
+			messageBox.setText("Saving... ");
+			si.refresh();
+			informPlayerCommand(CommandListener.SAVE);
+			enterScreen();
 		}
 	}
 
