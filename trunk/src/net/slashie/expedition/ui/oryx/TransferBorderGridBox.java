@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -51,6 +53,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private int maximumQuantity;
 	private int changeSpeed;
 	private int initialQuantity;
+	private KeyListener splitterArrowsListener;
+	private boolean kbLaunchedTimer = false;
 	
 	public TransferBorderGridBox(
 			// Standard parameters, sent to super()
@@ -109,10 +113,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 					return;
 				try {
 					int code = SwingSystemInterface.charCode(e);
-					if (code == CharKey.UARROW || code == CharKey.N8){
+					if (code == CharKey.PAGEUP){
 						rePag();
 						handler.put("CHANGE_PAGE");
-					} else if (code == CharKey.DARROW || code == CharKey.N2){
+					} else if (code == CharKey.PAGEDOWN) {
 						avPag();
 						handler.put("CHANGE_PAGE");
 					} else if (code >= CharKey.A && code <= CharKey.A + pageElements-1) {
@@ -185,6 +189,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			}
 		});
 		
+		
 		quantitySplitterDown = new CleanButton(new ImageIcon(splitterImgDown), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
 		quantitySplitterDown.setBounds(512,243,24,24);
@@ -226,7 +231,52 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		});
 		si.add(quantitySplitterUp);
 		si.add(quantitySplitterDown);
-		
+		splitterArrowsListener = new KeyAdapter(){
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (highlight == null)
+					return;
+				if (kbLaunchedTimer)
+					return;
+				int code = SwingSystemInterface.charCode(e);
+				if (code == CharKey.UARROW || code == CharKey.N8){
+					initialQuantity = selectedQuantity;
+					selectedQuantity ++;
+					if (selectedQuantity > maximumQuantity)
+						selectedQuantity = maximumQuantity;
+				    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
+					increaseQuantityTimer.start();
+					kbLaunchedTimer = true;
+				} else if (code == CharKey.DARROW || code == CharKey.N2){
+					if (highlight == null)
+						return;
+					initialQuantity = selectedQuantity;
+					
+					selectedQuantity --;
+					if (selectedQuantity < 0)
+						selectedQuantity = 0;
+				    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
+				    decreaseQuantityTimer.start();
+				    kbLaunchedTimer = true;
+				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (highlight == null)
+					return;
+				int code = SwingSystemInterface.charCode(e);
+				if (code == CharKey.UARROW || code == CharKey.N8){
+					increaseQuantityTimer.stop();
+					kbLaunchedTimer = false;
+				} else if (code == CharKey.DARROW || code == CharKey.N2){
+					decreaseQuantityTimer.stop();
+					kbLaunchedTimer = false;
+
+				}
+			}
+		}; 
+		si.addKeyListener(splitterArrowsListener);
 	}
 
 	private ExpeditionItem lastChoice;
@@ -354,6 +404,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		si.remove(transferButton);
 		si.remove(quantityLabel);
 		si.removeKeyListener(cbkl);
+		si.removeKeyListener(splitterArrowsListener);
 		si.removeMouseListener(cbml);
 	}
 
