@@ -1780,6 +1780,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 						} else {
 							reduceQuantityOf(murderer);
 							getLevel().addMessage("You execute the "+murderer.getDescription()+". May this serve as an example");
+							removeCounter("KILLER_ALIVE");
 						}
 					} else {
 						getLevel().addMessage("You found no culprit.");
