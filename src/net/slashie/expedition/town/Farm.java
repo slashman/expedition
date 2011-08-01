@@ -7,6 +7,7 @@ import java.util.Map;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.utils.Util;
 
@@ -27,7 +28,7 @@ public class Farm extends Building {
 	}
 	
 	public boolean checkCrop(Calendar date, Town t){
-		if (nextCrop.before(date)){
+		if (nextCrop != null && nextCrop.before(date)){
 			String food = "WHEAT";
 			ExpeditionItem foodSample = ItemFactory.createItem(food);
 			t.addItem(foodSample, 5000);
@@ -36,6 +37,29 @@ public class Farm extends Building {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public String getDescription() {
+		if (nextCrop != null){
+			return super.getDescription() + " (Crop: "+ExpeditionOryxUI.months[nextCrop.get(Calendar.MONTH)]+" "+nextCrop.get(Calendar.YEAR)+")";
+		} else {
+			return super.getDescription();
+		}
+	}
+	
+	@Override
+	public String getId() {
+		if (nextCrop != null){
+			return super.getId()+ " (Crop: "+ExpeditionOryxUI.months[nextCrop.get(Calendar.MONTH)]+" "+nextCrop.get(Calendar.YEAR)+")";
+		} else {
+			return super.getId();
+		}
+	}
+	
+	@Override
+	public boolean isPluralizableDescription() {
+		return false;
 	}
 
 }

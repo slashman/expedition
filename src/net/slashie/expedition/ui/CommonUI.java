@@ -252,7 +252,10 @@ public class CommonUI {
 		}
 		int i = 1;
 		for (Pair<Building, Integer> pair: buildingsMap.values()){
-			townInfo += pair.getB()+" "+EnglishGrammar.plural(pair.getA().getDescription(),pair.getB());
+			if (pair.getA().isPluralizableDescription())
+				townInfo += pair.getB()+" "+EnglishGrammar.plural(pair.getA().getDescription(),pair.getB());
+			else
+				townInfo += pair.getB()+" "+pair.getB()+" "+pair.getA().getDescription();
 			if (i < buildingsMap.values().size())
 				townInfo += ", ";
 			i++;

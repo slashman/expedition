@@ -42,9 +42,16 @@ public class Building implements Cloneable, Serializable{
 	}
 	
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		return super.clone();
+	protected Building clone(){
+		try {
+			Building ret = (Building) super.clone();
+			return ret;
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
+	
 	public String getId() {
 		return id;
 	}
@@ -58,4 +65,8 @@ public class Building implements Cloneable, Serializable{
 	public Object getSpecialCapability(SpecialCapability capabilityId){
 		return specialCapabilities.get(capabilityId);
 	}
+	public boolean isPluralizableDescription() {
+		return true;
+	}
+	
 }
