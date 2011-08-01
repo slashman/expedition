@@ -30,6 +30,7 @@ import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.sound.STMusicManagerNew;
+import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
@@ -1291,7 +1292,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		if (Util.chance(chance)){
 			ExpeditionUnit randomUnit = getRandomUnitFair();
 			message("Accident! A "+randomUnit.getDescription()+" is injured!");
-			reduceUnits(randomUnit, 1);
+			reduceUnits(randomUnit, 1, false);
 			ExpeditionUnit woundedUnit = (ExpeditionUnit) randomUnit.clone();
 			woundedUnit.setWounded(true);
 			addUnits(woundedUnit, 1);
@@ -1344,10 +1345,17 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	@Override
 	public void reduceUnits(ExpeditionUnit unit, int quantity) {
+		reduceUnits(unit, quantity, true);
+	}
+
+	public void reduceUnits(ExpeditionUnit unit, int quantity, boolean checkDeath) {
 		reduceQuantityOf(unit, quantity);
-		checkDeath();
+		if (checkDeath)
+			checkDeath();
 		
 	}
+	
+	
 
 	
 	public List<Equipment> getTools(boolean clone) {
@@ -1540,6 +1548,18 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		return ret;
 	}
+	
+	public List<Equipment> getWoundedUnits() {
+		List<Equipment> units = getGoods(GoodType.PEOPLE);
+		List<Equipment> ret = new ArrayList<Equipment>();
+		for (Equipment unit: units){
+			if (((ExpeditionUnit)unit.getItem()).isWounded()){
+				ret.add(unit);
+			}
+		}
+		return ret;
+	}
+
 	
 	/**
 	 * 0 to 10, 5 is normal
@@ -1864,6 +1884,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		if (Util.chance(50))
 			modifyPerceivedLuck(1);
+		
+		// Heal units
+		heal();
 
 	}
 	
@@ -2018,6 +2041,48 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 
 	public boolean hasMarineChronometer() {
-		return true;
+		return false;
+	}
+
+	
+	/**
+	 * Heals wounded units at the expedition, this should be called
+	 * daily
+	 */
+	public void heal() {
+		int chance = 4; // At sea, an unit recovers in one month (1/28=4%)
+		if (getMovementMode().isLandMovement())
+			chance = 5; // At sea, an unit recovers in three weeks (1/21=5%)
+		
+		List<Equipment> woundedUnits = getWoundedUnits();
+		
+		// Doctors Bonus
+		/* For each 20 wounded units, each unwounded doctor adds a 5% chance*/
+		int doctors = getUnwoundedUnitCountBasic("DOCTOR");
+		if (doctors > 0){
+			int woundedUnitsCount = 0;
+			for (Equipment woundedEquipment: woundedUnits){
+				woundedUnitsCount += woundedEquipment.getQuantity();
+			}
+			int requiredDoctors = (int)Math.ceil( woundedUnitsCount / 20);
+			if (requiredDoctors > doctors){
+				chance += 2;
+			} else {
+				chance += 5; 
+			}
+		}
+		
+		for (Equipment woundedEquipment: woundedUnits){
+			if (Util.chance(chance)){
+				// Some units will heal
+				ExpeditionUnit unit = (ExpeditionUnit) woundedEquipment.getItem();
+				int units = Util.rand(1, woundedEquipment.getQuantity());
+				message(units+" "+EnglishGrammar.plural(unit.getDescription(), units)+" have recovered");
+				reduceUnits((ExpeditionUnit)woundedEquipment.getItem(), units, false);
+				ExpeditionUnit unwoundedUnit = (ExpeditionUnit) unit.clone();
+				unwoundedUnit.setWounded(false);
+				addUnits(unwoundedUnit, units);	
+			}
+		}
 	}
 }
