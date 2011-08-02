@@ -24,7 +24,7 @@ public class BattleManager {
 			NativeTown town = (NativeTown) defender;
 			if (town.getTotalUnits() == 0){
 				if (attacker == ExpeditionGame.getCurrentGame().getPlayer()){
-					((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(town);
+					((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the goods to plunder", null, town);
 				}
 				return;
 			} else {

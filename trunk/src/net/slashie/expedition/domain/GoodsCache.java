@@ -51,6 +51,17 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		return goodCount;
 	}
 	
+	public List<Equipment> getItemsWithBaseID(String baseId) {
+		List<Equipment> ret = new ArrayList<Equipment>();
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (((ExpeditionItem)equipment.getItem()).getBaseID().equals(baseId)){
+				ret.add(equipment);
+			}
+		}
+		return ret;
+	}
+	
 	public List<Equipment> getItems() {
 		return items;
 	}
@@ -130,7 +141,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
 			switch (UserInterface.getUI().switchChat("Goods Cache","What do you want to do?", "Fetch Equipment", "Caché Equipment")){
 			case 0:
-				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(this);
+				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the goods to transfer", null, this);
     			break;
 			case 1:
 				((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(this);

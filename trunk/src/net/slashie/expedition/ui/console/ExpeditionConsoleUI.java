@@ -15,6 +15,7 @@ import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.LandingParty;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
@@ -406,7 +407,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		return super.promptChat(message, 22,1,34,8);
 	}
 
-	public void transferFromCache(GoodsCache cache) {
+	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache cache) {
 		List<Equipment> cacheEquipment = cache.getItems();
 		//List<Equipment> expeditionEquipment = getExpedition().getInventory();
     	
@@ -423,7 +424,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   		cacheBox.setMenuItems(menuItems);
   		cacheBox.setPromptSize(2);
   		cacheBox.setBorder(true);
-  		cacheBox.setPrompt("Transfer from "+cache.getDescription()+" to Expedition [Space to exit]");
+  		cacheBox.setPrompt(prompt+" [Space to exit]");
   		//cacheBox.setTitle("On Ship...");
   		cacheBox.setForeColor(ConsoleSystemInterface.RED);
   		cacheBox.setBorderColor(ConsoleSystemInterface.TEAL);
@@ -1110,5 +1111,21 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			return -GlobeMapModel.getLatitudeHeight();
 		else
 			return 1;
+	}
+	
+	@Override
+	public LandingParty selectLandingParty() {
+		List<LandingParty> landingParties = CommonUI.getLandingParties();
+		String[] landingPartiesDescription = new String[landingParties.size()];
+		int i = 0;
+		for (LandingParty landingParty: landingParties){
+			landingPartiesDescription[i] = landingParty.getName();
+			i++;
+		}
+		int choice = switchChat("Landing Parties", "Select a landing party", landingPartiesDescription);
+		if (choice != -1)
+			return landingParties.get(choice);
+		else
+			return null;
 	}
 }

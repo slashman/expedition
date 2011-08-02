@@ -2,9 +2,10 @@ package net.slashie.expedition.ui;
 
 import java.util.List;
 
-import net.slashie.expedition.action.BuildBuildings;
 import net.slashie.expedition.domain.AssaultOutcome;
+import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.LandingParty;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.town.Building;
@@ -13,7 +14,7 @@ import net.slashie.serf.game.Equipment;
 public interface ExpeditionUserInterface {
 	public void launchStore(Store store);
 	public boolean depart();
-	public void transferFromCache(GoodsCache ship);
+	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache ship);
 	
 	public void transferFromExpedition(GoodsCache ship);
 	public void transferFromExpedition(GoodsCache ship, int minUnits);
@@ -35,10 +36,6 @@ public interface ExpeditionUserInterface {
 			"December"
 		};
 	
-
-	
-
-			
 	public void showBattleResults(
 			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits, String battleTitle,
 			AssaultOutcome attackerRangedAttackOutcome,
@@ -55,4 +52,5 @@ public interface ExpeditionUserInterface {
 	public List<Building> createBuildingPlan();
 	public void showCityInfo(Town town);
 	public void afterTownAction();
+	public LandingParty selectLandingParty();
 }

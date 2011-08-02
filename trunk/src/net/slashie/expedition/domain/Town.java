@@ -82,7 +82,7 @@ public class Town extends GoodsCache{
 			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(this);
 			break;
 		case 1:
-			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(this);
+			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the goods to transfer", null, this);
 			break;
 		case 2:
 			// Build
@@ -122,7 +122,6 @@ public class Town extends GoodsCache{
 	public boolean isInfiniteCapacity() {
 		return false;
 	}
-
 	
 	public int getSize(){
 		return (getPopulation() / 1000)+1;

@@ -64,7 +64,7 @@ public class ShipCache extends GoodsCache{
 		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
 			switch (UserInterface.getUI().switchChat("Ships","What do you want to do?", "Transfer To Expedition", "Transfer To Ship", "Board Ship")){
 			case 0:
-				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(this);
+				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the goods to transfer", null, this);
     			break;
 			case 1:
 				((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(this);
@@ -76,6 +76,7 @@ public class ShipCache extends GoodsCache{
 					((Expedition)a).addAllItems(getItems());
 					((Expedition)a).getLevel().destroyFeature(this);
 					a.setPosition(getPosition());
+					((Expedition)a).setAnchored(true);
 					STMusicManagerNew.thus.playKey("SEA");
 				} else {
 					UserInterface.getUI().showMessage("The ships are too full!");
