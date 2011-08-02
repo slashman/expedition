@@ -150,6 +150,14 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		CleanButton exitButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXIT")), HAND_CURSOR);
 		exitButton.setBounds(new Rectangle(558, 174, 223, 43));
 		
+		expeditionButton.setVisible(false);
+		
+		File saveDirectory = new File("savegame");
+		File[] saves = saveDirectory.listFiles(new GameFiles.SaveGameFilenameFilter() );
+		
+		if (saves.length == 0){
+			resumeButton.setVisible(false);
+		}
 		
 		si.add(historyButton);
 		si.add(expeditionButton);
@@ -200,6 +208,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				}
 			}
 		});
+
+
 		
 		Integer choice = null;
 		while (choice == null) {
@@ -209,7 +219,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 					UserInterface.getUI().showSystemMessage("This mode isn't yet available.");
 					choice = null;
 				}
-				
 			} catch (InterruptedException e1) {}
 		}
 		

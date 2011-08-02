@@ -2,8 +2,10 @@ package net.slashie.expedition.game;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
@@ -108,5 +110,15 @@ public class GameFiles {
 	
 	public static void main (String [] args){
 		System.out.println(encode("-","Unregistered"));
+	}
+	
+	public static class SaveGameFilenameFilter implements FilenameFilter {
+		public boolean accept(File arg0, String arg1) {
+			if (arg1.endsWith(".sav"))
+				return true;
+			else
+				return false;
+		}
+		
 	}
 }

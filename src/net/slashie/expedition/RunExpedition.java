@@ -2,7 +2,6 @@ package net.slashie.expedition;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
@@ -26,6 +25,7 @@ import net.slashie.expedition.data.ExpeditionDAO;
 import net.slashie.expedition.data.GFXAppearances;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.GameFiles;
+import net.slashie.expedition.game.GameFiles.SaveGameFilenameFilter;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.town.NPCFactory;
@@ -86,7 +86,7 @@ public class RunExpedition {
 	private static void init(){
 		if (createNew){
 			System.out.println("Expedition "+ExpeditionGame.getVersion());
-			System.out.println("Slash ~ 2009-2010");
+			System.out.println("Slash ~ 2009-2011");
 			System.out.println("Powered By Serf "+SworeGame.getVersion());
 			System.out.println("Reading configuration");
 	    	readConfiguration();
@@ -388,7 +388,7 @@ public class RunExpedition {
 		switch (mode){
 		case SWING_GFX:
 			SwingSystemInterface ssi = (SwingSystemInterface)si;
-			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2010", userCommands, UIconfiguration, null);
+			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, null);
 			if (((ExpeditionOryxUI)ui).promptChat("Do you want to enable the experimental full screen mode?",140,388,520,200)){
 				si = new SwingSystemInterface(true);
 				ssi = (SwingSystemInterface)si;
@@ -396,7 +396,7 @@ public class RunExpedition {
 				UserInterface.setSingleton(new ExpeditionOryxUI());
 				ExpeditionDisplay.thus = new OryxExpeditionDisplay(ssi, UIconfiguration);
 				ui = UserInterface.getUI();
-				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2010", userCommands, UIconfiguration, null);
+				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, null);
 				
 			}
 			uiSelector = new ExpeditionGFXUISelector();
@@ -533,16 +533,4 @@ public class RunExpedition {
         System.exit(-1);
     }
     
-}
-
-class SaveGameFilenameFilter implements FilenameFilter {
-
-	public boolean accept(File arg0, String arg1) {
-		//if (arg0.getName().endsWith(".sav"))
-		if (arg1.endsWith(".sav"))
-			return true;
-		else
-			return false;
-	}
-	
 }
