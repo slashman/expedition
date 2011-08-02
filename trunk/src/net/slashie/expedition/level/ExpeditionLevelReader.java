@@ -174,7 +174,6 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			}
 			px++;
 		}
-		System.out.println("Visible "+visible);
 		return ret;
 	}
 	
