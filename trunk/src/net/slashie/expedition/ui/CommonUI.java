@@ -12,10 +12,12 @@ import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.LandingParty;
 import net.slashie.expedition.domain.NativeTown;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Town;
+import net.slashie.expedition.domain.LandingParty.LandingSpec;
 import net.slashie.expedition.town.Building;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.text.EnglishGrammar;
@@ -271,6 +273,67 @@ public class CommonUI {
 		"My son, I have seen you sitting at the docks of the port of Palos, looking west into the vastness of " +
 		"the Ocean. When you were a child, you once asked me what was beyond the horizon, where the ships " +
 		"can no longer be seen. Now history has given you a chance to find out the answer for yourself.";
+	}
+
+	
+	private static List<LandingParty> STANDARD_LANDING_PARTIES;
+	static
+	{
+		STANDARD_LANDING_PARTIES = new ArrayList<LandingParty>();
+		
+		LandingParty singleExplorerParty = new LandingParty();
+		singleExplorerParty.setExplorers(LandingSpec.ONE);
+		singleExplorerParty.setHorses(LandingSpec.ONE);
+		singleExplorerParty.setName("Single Explorer");
+		singleExplorerParty.setMounted(true);
+		STANDARD_LANDING_PARTIES.add(singleExplorerParty);
+		
+		LandingParty explorationParty = new LandingParty();
+		explorationParty.setExplorers(LandingSpec.HALF);
+		explorationParty.setHorses(LandingSpec.ALL);
+		explorationParty.setDoctors(LandingSpec.ALL);
+		explorationParty.setName("Exploration Party");
+		explorationParty.setMounted(true);
+		STANDARD_LANDING_PARTIES.add(explorationParty);
+
+		LandingParty lumberParty = new LandingParty();
+		lumberParty.setExplorers(LandingSpec.ONE);
+		lumberParty.setCarpenters(LandingSpec.ALL);
+		lumberParty.setHorses(LandingSpec.ALL);
+		lumberParty.setName("Lumberjacking Group");
+		lumberParty.setMounted(false);
+		STANDARD_LANDING_PARTIES.add(lumberParty);
+		
+		LandingParty battleParty = new LandingParty();
+		battleParty.setExplorers(LandingSpec.ONE);
+		battleParty.setHorses(LandingSpec.ALL);
+		battleParty.setSoldiers(LandingSpec.HALF);
+		battleParty.setDoctors(LandingSpec.ALL);
+		battleParty.setName("Assault Expedition");
+		battleParty.setMounted(true);
+		STANDARD_LANDING_PARTIES.add(battleParty);
+		
+		LandingParty allButCrewParty = new LandingParty();
+		allButCrewParty.setExplorers(LandingSpec.ALL);
+		allButCrewParty.setHorses(LandingSpec.ALL);
+		allButCrewParty.setSoldiers(LandingSpec.ALL);
+		allButCrewParty.setDoctors(LandingSpec.ALL);
+		allButCrewParty.setName("All but ships crew");
+		allButCrewParty.setMounted(false);
+		STANDARD_LANDING_PARTIES.add(allButCrewParty);
+		
+		LandingParty allParty = new LandingParty();
+		allParty.setExplorers(LandingSpec.ALL);
+		allParty.setHorses(LandingSpec.ALL);
+		allParty.setSoldiers(LandingSpec.ALL);
+		allParty.setDoctors(LandingSpec.ALL);
+		allParty.setCrew(LandingSpec.ALL);
+		allParty.setName("Everybody");
+		allParty.setMounted(false);
+		STANDARD_LANDING_PARTIES.add(allParty);
+	}
+	public static List<LandingParty> getLandingParties() {
+		return STANDARD_LANDING_PARTIES;
 	}
 	
 }
