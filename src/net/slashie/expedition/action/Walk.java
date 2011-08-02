@@ -83,9 +83,8 @@ public class Walk extends Action{
 		}
         
         if (expedition.getMovementMode() == MovementMode.SHIP){
-			
 			//Don't walk, sail instead!
-			if (var.x() == 0){
+			if (var.x() == 0 && !expedition.isAnchored()){
 				var = expedition.getHeading().getVectors();
 			} else {
 				return true;
@@ -98,12 +97,6 @@ public class Walk extends Action{
         
         Position destinationPoint = Position.add(a.getPosition(), var);
         
-    	Actor actor = expedition.getLevel().getActorAt(destinationPoint);
-    	/*if (actor != null){
-    		invalidationMessage = "You can't walk there";
-    		return false;
-    	}*/
-    	
         AbstractCell absCell = a.getLevel().getMapCell(destinationPoint);
         if (absCell instanceof ExpeditionCell){
 	        ExpeditionCell cell = (ExpeditionCell)absCell;
@@ -165,13 +158,18 @@ public class Walk extends Action{
 				turnShip.setPerformer(performer);
 				turnShip.execute();
 			}
-			if (expedition.getSailingPoint() == SailingPoint.BEATING){
+			if (expedition.isAnchored()){
+				stalled = true;
+				if (var.x() == 0){
+					expedition.getLevel().addMessage("We must weigh 'A'nchors to sail forward!");
+				}
+
+			} else if (expedition.getSailingPoint() == SailingPoint.BEATING){
 				if (Util.chance(60)) {
 					expedition.getLevel().addMessage("You are on irons!");
 					stalled = true;
 				}
-			}
-			if (expedition.getLocation().getWindDirection()== CardinalDirection.NULL){
+			} else if (expedition.getLocation().getWindDirection()== CardinalDirection.NULL){
 				expedition.getLevel().addMessage("No wind propels your ship!");
 				stalled = true;
 			}

@@ -138,7 +138,10 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		csi.print(54, 8, "Heading", CSIColor.YELLOW);
 			csi.print(54+9, 8, getExpedition().getHeading().getAbbreviation());
 		if (getExpedition().getMovementMode() == MovementMode.SHIP){
-			csi.print(54+2, 9, getExpedition().getSailingPoint().getDescription());
+			if (getExpedition().isAnchored())
+				csi.print(54+2, 9, "Anchored");
+			else
+				csi.print(54+2, 9, getExpedition().getSailingPoint().getDescription());
 		} else {
 			csi.print(54+2, 9, statsExpedition.getMovementMode().getDescription());
 		}
