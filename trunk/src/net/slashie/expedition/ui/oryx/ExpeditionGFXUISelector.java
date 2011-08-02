@@ -47,6 +47,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	private CleanButton chopButton;
 	private CleanButton saveButton;
 	private CleanButton quitButton;
+	private CleanButton anchorButton;
 	private Image unmountImage;
 	private Image disarmImage;
 	private Image mountImage;
@@ -87,6 +88,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			repairButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_REPAIR_BOUNDS")), HAND_CURSOR);
 			resetButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")), HAND_CURSOR);
 			chopButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")), HAND_CURSOR);
+			anchorButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ANCHOR_BOUNDS")), HAND_CURSOR);
 			saveButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), HAND_CURSOR);
 			quitButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), HAND_CURSOR);
 		} catch (IOException e) {
@@ -101,6 +103,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		repairButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.r));
 		resetButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.R));
 		chopButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.w));
+		anchorButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.A));
 		saveButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.S));
 		quitButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.Q));
 		
@@ -113,6 +116,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		repairButton.setPopupText("Repair Ships");
 		resetButton.setPopupText("Reset Dead' Reckon");
 		chopButton.setPopupText("Chop Woods");
+		anchorButton.setPopupText("Anchor Ships");
 		saveButton.setPopupText("Save");
 		quitButton.setPopupText("Quit");
 		
@@ -125,6 +129,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		repairButton.addMouseListener(getPopupMouseListener(repairButton));
 		resetButton.addMouseListener(getPopupMouseListener(resetButton));
 		chopButton.addMouseListener(getPopupMouseListener(chopButton));
+		anchorButton.addMouseListener(getPopupMouseListener(anchorButton));
 		saveButton.addMouseListener(getPopupMouseListener(saveButton));
 		quitButton.addMouseListener(getPopupMouseListener(quitButton));
 		
@@ -137,6 +142,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		repairButton.setVisible(false);
 		resetButton.setVisible(false);
 		chopButton.setVisible(false);
+		anchorButton.setVisible(false);
 		saveButton.setVisible(false);
 		quitButton.setVisible(false);
 		
@@ -153,8 +159,9 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		inventoryButton.setBounds(80, ypos, 24, 24);
 		lookButton.setBounds(108, ypos, 24, 24);
 		ypos += 28;
-		saveButton.setBounds(24, ypos, 24, 24);
-		quitButton.setBounds(52, ypos, 24, 24);
+		anchorButton.setBounds(24, ypos, 24, 24);
+		saveButton.setBounds(52, ypos, 24, 24);
+		quitButton.setBounds(80, ypos, 24, 24);
 		
 		si.add(armButton);
 		si.add(mountButton);
@@ -164,6 +171,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		si.add(repairButton);
 		si.add(inventoryButton);
 		si.add(lookButton);
+		si.add(anchorButton);
 		si.add(saveButton);
 		si.add(quitButton);
 		si.add(resetButton);
@@ -266,24 +274,34 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			si.revalidate();
 		}
 		
+		if (expedition.isAnchored()){
+			anchorButton.setPopupText("Weigh Anchors");
+		} else {
+			anchorButton.setPopupText("Drop Anchors");
+		}
+		
+		
 		if (expedition.getLevel() instanceof ExpeditionMicroLevel){
 			buildButton.setVisible(false);
 			dropButton.setVisible(false);
 			repairButton.setVisible(false);
 			resetButton.setVisible(false);
 			chopButton.setVisible(false);
+			anchorButton.setVisible(false);
 		} else if (expedition.getMovementMode().isLandMovement()){
 			buildButton.setVisible(true);
 			dropButton.setVisible(true);
 			repairButton.setVisible(false);
 			resetButton.setVisible(true);
 			chopButton.setVisible(true);
+			anchorButton.setVisible(false);
 		} else {
 			buildButton.setVisible(false);
 			dropButton.setVisible(true);
 			repairButton.setVisible(true);
 			resetButton.setVisible(true);
 			chopButton.setVisible(false);
+			anchorButton.setVisible(true);
 		}
 	}
 

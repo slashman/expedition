@@ -804,7 +804,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String ui_headingDirection = getExpedition().getHeading().getAbbreviation();
 		String ui_bearing;
 		if (getExpedition().getMovementMode() == MovementMode.SHIP){
-			ui_bearing = getExpedition().getSailingPoint().getDescription();
+			if (getExpedition().isAnchored()){
+				ui_bearing = "Anchored";
+			} else {
+				ui_bearing = getExpedition().getSailingPoint().getDescription();
+			}
 		} else {
 			ui_bearing = statsExpedition.getMovementMode().getDescription();
 		}

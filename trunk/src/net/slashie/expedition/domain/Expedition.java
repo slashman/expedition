@@ -386,6 +386,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 	public void setMovementMode(MovementMode movementMode) {
 		this.movementMode = movementMode;
+		if (movementMode.isLandMovement()){
+			setAnchored(false);
+		}
 	}
 
 	public int getAccountedGold() {
@@ -1206,9 +1209,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        			} else {
 		        				setMovementMode(MovementMode.SHIP);
 		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
-		        				//expedition.setCurrentVehicles(expedition.getShips());
 		        				destinationPoint = new Position(getPosition());
 		        				destinationPoint.x--;
+		        				setAnchored(true);
 		        		        super.landOn(destinationPoint);
 				        		throw new ActionCancelException();
 
@@ -1241,27 +1244,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	        		wearOutShips(30, true);
 	        	}
 	        	if (cell.isLand() && !cell.isRiver()){
-	        		if (UserInterface.getUI().promptChat("Do you want to land?")){
-	        			GoodsCache ship = new ShipCache((ExpeditionGame)getGame(), getCurrentVehicles());
-	        			ship.addAllGoods(this);
-	        			removeAllGoods();
-	        			setMovementMode(MovementMode.FOOT);
-	        			
-        				setCurrentVehicles(new ArrayList<Vehicle>());
-	        			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache(ship);
-	        			ship.setPosition(new Position(getPosition()));
-	        			getLevel().addFeature(ship);
-	        			if (getUnmountedUnits().size() == 0){
-	    					setMovementMode(MovementMode.HORSE);
-	    				}
-	        			if (daysOnSea > 20){
-	        				message("Land at last!");
-	        			}
-	        			resetDaysAtSea();
-	        			STMusicManagerNew.thus.playKey("LAND");
-	        		} else {
-	        			throw new ActionCancelException();
-	        		}
+	        		//TODO: Crash!
+	        		throw new ActionCancelException();
 	        	}
 	        }
 	        /*
@@ -1306,7 +1290,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		return (ExpeditionUnit) randomEquipment.getItem();
 	}
 
-	private void resetDaysAtSea() {
+	public void resetDaysAtSea() {
 		daysOnSea = 0;
 	}
 
@@ -2088,5 +2072,35 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	public int getDaysOnSea() {
 		return daysOnSea;
+	}
+	
+	/**
+	 * Determines if the expedition is anchored.
+	 */
+	private boolean anchored;
+	
+	public boolean isAnchored() {
+		return anchored;
+	}
+	
+	public void setAnchored(boolean anchored) {
+		this.anchored = anchored;
+	}
+
+	/**
+	 * Determines if the expedition can disembark.
+	 * The expedition must be adjacent to land in order to disembark.
+	 * @return
+	 */
+	public boolean canDisembark() {
+		AbstractCell[][] around = getVisibleCellsAround(1, 1);
+		for (int x = 0; x < around.length; x++){
+			for (int y = 0; y < around[0].length; y++){
+				if (((OverworldExpeditionCell)around[x][y]).isLand()){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
