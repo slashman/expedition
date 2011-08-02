@@ -30,12 +30,14 @@ import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ItemContainer;
+import net.slashie.expedition.domain.LandingParty;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
+import net.slashie.expedition.domain.LandingParty.LandingSpec;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
@@ -512,14 +514,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		CleanButton transferButton = new CleanButton(new ImageIcon(BTN_TRANSFER), HAND_CURSOR);
 		transferButton.setSize(BTN_TRANSFER.getWidth(null),BTN_TRANSFER.getHeight(null));
 		ItemTransferFunctionality transferFromExpeditionFunctionality = new TransferFromExpeditionFunctionality(minUnits);
-		transferItems(getExpedition(), goodsCache, transferFromExpeditionFunctionality, true, false, transferButton);
+		transferItems("Select the goods to transfer", null, getExpedition(), goodsCache, transferFromExpeditionFunctionality, true, false, transferButton);
 	}
 	
-	public void transferFromCache(GoodsCache goodsCache) {
+	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache goodsCache) {
 		CleanButton transferButton = new CleanButton(new ImageIcon(BTN_TRANSFER), HAND_CURSOR);
 		transferButton.setSize(BTN_TRANSFER.getWidth(null),BTN_TRANSFER.getHeight(null));
 		ItemTransferFunctionality transferFromCacheFunctionality = new TransferFromCacheFunctionality();
-		transferItems(goodsCache, getExpedition(), transferFromCacheFunctionality, false, false, transferButton);
+		transferItems(prompt, preselectedGoodType, goodsCache, getExpedition(), transferFromCacheFunctionality, false, false, transferButton);
 		if (goodsCache.destroyOnEmpty() && goodsCache.getItems().size() == 0)
 			level.destroyFeature(goodsCache);
 	}
@@ -540,19 +542,21 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 		};
 		
-		transferItems(getExpedition(), tempItemContainer, selectItemsFunctionality, true, true, selectButton);
+		transferItems(prompt, GoodType.TRADE_GOODS, getExpedition(), tempItemContainer, selectItemsFunctionality, true, true, selectButton);
 		return selection;
 	}
 
 	/**
 	 * 
+	 * @param preselectedGoodType 
+	 * @param prompt 
 	 * @param from
 	 * @param to
 	 * @param itemTransferFunctionality
 	 * @param fromExpedition
 	 * @param cloneEquipment Prevents alterations over the original equipments by cloning them. Used for selectItems
 	 */
-	public void transferItems(ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality, 
+	public void transferItems(String prompt, GoodType preselectedGoodType, ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality, 
 			boolean fromExpedition, boolean cloneEquipment, CleanButton transferButton) {
 		// Change UI Mode
    		Equipment.eqMode = true;
@@ -624,11 +628,19 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		
   		
   		menuBox.setTitle(itemTransferFunctionality.getTitle(from, to));
-  		menuBox.setLegend("Select the units or goods to transfer");
+  		menuBox.setLegend(prompt);
   		
   		int typeChoice = 0;
   		int selectedIndex;
   		GoodType[] goodTypes = GoodType.getGoodTypes();
+  		if (preselectedGoodType != null){
+  			int index = 0;
+  			for (GoodType goodType: goodTypes){
+  				if (preselectedGoodType.equals(goodType))
+  					typeChoice = index;
+  				index++;
+  			}
+  		}
   		
 		Map<GoodType, List<Equipment>> expeditionGoodsMap = null;
 		
@@ -1360,6 +1372,22 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			informPlayerCommand(CommandListener.SAVE);
 			enterScreen();
 		}
+	}
+	
+	@Override
+	public LandingParty selectLandingParty() {
+		List<LandingParty> landingParties = CommonUI.getLandingParties();
+		String[] landingPartiesDescription = new String[landingParties.size()];
+		int i = 0;
+		for (LandingParty landingParty: landingParties){
+			landingPartiesDescription[i] = landingParty.getName();
+			i++;
+		}
+		int choice = switchChat("Landing Parties", "Select a landing party", landingPartiesDescription);
+		if (choice != -1)
+			return landingParties.get(choice);
+		else
+			return null;
 	}
 
 }
