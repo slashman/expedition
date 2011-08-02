@@ -29,31 +29,7 @@ public class MountMounts extends Action{
 				actionCancelled = true;
 				return;
 			}
-			
-			List<Equipment> mounts = getExpedition().getMounts();
-			for (Equipment mount: mounts){
-				// For each kind of mount, try to mount all unmounted units
-				List<Equipment> units = getExpedition().getUnmountedUnits();
-				Collections.sort(units, new Comparator<Equipment>() {
-					public int compare(Equipment arg0, Equipment arg1) {
-						return ((ExpeditionUnit)arg1.getItem()).getAttack().getMax() - ((ExpeditionUnit)arg0.getItem()).getAttack().getMax();
-					}
-				});
-				for (Equipment unit: units){
-					int available = mount.getQuantity();
-					int unitsToMount = available > unit.getQuantity() ? unit.getQuantity() : available;
-					getExpedition().reduceQuantityOf(mount.getItem(), unitsToMount);
-					//Split equipment in mounted and unmounted
-					if (unitsToMount > 0){
-						getExpedition().reduceQuantityOf(unit.getItem(), unitsToMount);
-						ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
-						newUnit.setMount((Mount)mount.getItem());
-						getExpedition().addItem(newUnit, unitsToMount);
-					}
-				}
-			}
-			getExpedition().setMounted(true);
-			getExpedition().validateMounted();
+			getExpedition().mount();
 		} else {
 			if (isPlayer && !UserInterface.getUI().promptChat("Dismount your units: Are you sure?")){
 				actionCancelled = true;
