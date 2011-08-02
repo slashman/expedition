@@ -3,6 +3,8 @@ package net.slashie.expedition.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import net.slashie.expedition.action.Hibernate;
@@ -2093,14 +2095,110 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	 * @return
 	 */
 	public boolean canDisembark() {
+		return getLandCellAround() != null;
+	}
+
+	public Position getLandCellAround() {
+		List<Position> cells = getLandCellsAround();
+		if (cells.size() == 0)
+			return null;
+		else {
+			for (Position cell: cells){
+				if (cell.x == getLongitude() || cell.y == getLatitude())
+					return cell;
+			}
+			return cells.get(0);
+		}
+	}
+	
+	public List<Position> getLandCellsAround() {
+		List<Position> ret = new ArrayList<Position>();
+		int longitudeScale = GlobeMapModel.getLongitudeScale(getLatitude());
+		int latitudeScale= GlobeMapModel.getLatitudeHeight();
 		AbstractCell[][] around = getVisibleCellsAround(1, 1);
-		for (int x = 0; x < around.length; x++){
-			for (int y = 0; y < around[0].length; y++){
+		for (int x = 0; x < around[0].length; x++){
+			for (int y = 0; y < around.length; y++){
 				if (((OverworldExpeditionCell)around[x][y]).isLand()){
-					return true;
+					ret.add(new Position(getLongitude() + (x-1) * longitudeScale,getLatitude() + (y-1) * -latitudeScale));
 				}
 			}
 		}
-		return false;
+		return ret;
+	}
+
+	public void arm() {
+		List<Equipment> units = getUnarmedUnits();
+		Collections.sort(units, new Comparator<Equipment>() {
+			public int compare(Equipment arg0, Equipment arg1) {
+				return ((ExpeditionUnit)arg1.getItem()).getAttack().getMax() - ((ExpeditionUnit)arg0.getItem()).getAttack().getMax();
+			}
+		});
+		for (Equipment unit: units){
+			String[] preferredWeapons = ((ExpeditionUnit)unit.getItem()).getWeaponTypes();
+			for (String weaponType: preferredWeapons){
+				int available = getItemCount(weaponType);
+				int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
+				reduceGood(weaponType, unitsToArm);
+				//Split equipment in armed and disarmed
+				if (unitsToArm > 0){
+					reduceQuantityOf(unit.getItem(), unitsToArm);
+					//ExpeditionUnit newUnit = (ExpeditionUnit)ItemFactory.createItem(unit.getItem().getFullID());
+					ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
+					newUnit.setArm((Weapon)ItemFactory.createItem(weaponType));
+					addItem(newUnit, unitsToArm);
+				}
+			}
+		}
+		
+		units = getUnarmoredUnits();
+		Collections.sort(units, new Comparator<Equipment>() {
+			public int compare(Equipment arg0, Equipment arg1) {
+				return ((ExpeditionUnit)arg1.getItem()).getDefense().getMax() - ((ExpeditionUnit)arg0.getItem()).getDefense().getMax();
+			}
+		});
+		for (Equipment unit: units){
+			String[] preferredArmors = ((ExpeditionUnit)unit.getItem()).getArmorTypes();
+			for (String armorType: preferredArmors){
+				int available = getItemCount(armorType);
+				int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
+				reduceGood(armorType, unitsToArm);
+				//Split equipment in armored and unarmored
+				if (unitsToArm > 0){
+					reduceQuantityOf(unit.getItem(), unitsToArm);
+					//ExpeditionUnit newUnit = (ExpeditionUnit)ItemFactory.createItem(unit.getItem().getFullID());
+					ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
+					newUnit.setArmor((Armor)ItemFactory.createItem(armorType));
+					addItem(newUnit, unitsToArm);
+				}
+			}
+		}
+		setArmed(true);
+	}
+
+	public void mount() {
+		List<Equipment> mounts = getMounts();
+		for (Equipment mount: mounts){
+			// For each kind of mount, try to mount all unmounted units
+			List<Equipment> units = getUnmountedUnits();
+			Collections.sort(units, new Comparator<Equipment>() {
+				public int compare(Equipment arg0, Equipment arg1) {
+					return ((ExpeditionUnit)arg1.getItem()).getAttack().getMax() - ((ExpeditionUnit)arg0.getItem()).getAttack().getMax();
+				}
+			});
+			for (Equipment unit: units){
+				int available = mount.getQuantity();
+				int unitsToMount = available > unit.getQuantity() ? unit.getQuantity() : available;
+				reduceQuantityOf(mount.getItem(), unitsToMount);
+				//Split equipment in mounted and unmounted
+				if (unitsToMount > 0){
+					reduceQuantityOf(unit.getItem(), unitsToMount);
+					ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
+					newUnit.setMount((Mount)mount.getItem());
+					addItem(newUnit, unitsToMount);
+				}
+			}
+		}
+		setMounted(true);
+		validateMounted();
 	}
 }
