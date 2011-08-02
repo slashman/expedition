@@ -27,53 +27,8 @@ public class ArmExpedition extends Action{
 				actionCancelled = true;
 				return;
 			}
+			getExpedition().arm();
 			
-			List<Equipment> units = getExpedition().getUnarmedUnits();
-			Collections.sort(units, new Comparator<Equipment>() {
-				public int compare(Equipment arg0, Equipment arg1) {
-					return ((ExpeditionUnit)arg1.getItem()).getAttack().getMax() - ((ExpeditionUnit)arg0.getItem()).getAttack().getMax();
-				}
-			});
-			for (Equipment unit: units){
-				String[] preferredWeapons = ((ExpeditionUnit)unit.getItem()).getWeaponTypes();
-				for (String weaponType: preferredWeapons){
-					int available = getExpedition().getItemCount(weaponType);
-					int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
-					getExpedition().reduceGood(weaponType, unitsToArm);
-					//Split equipment in armed and disarmed
-					if (unitsToArm > 0){
-						getExpedition().reduceQuantityOf(unit.getItem(), unitsToArm);
-						//ExpeditionUnit newUnit = (ExpeditionUnit)ItemFactory.createItem(unit.getItem().getFullID());
-						ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
-						newUnit.setArm((Weapon)ItemFactory.createItem(weaponType));
-						getExpedition().addItem(newUnit, unitsToArm);
-					}
-				}
-			}
-			
-			units = getExpedition().getUnarmoredUnits();
-			Collections.sort(units, new Comparator<Equipment>() {
-				public int compare(Equipment arg0, Equipment arg1) {
-					return ((ExpeditionUnit)arg1.getItem()).getDefense().getMax() - ((ExpeditionUnit)arg0.getItem()).getDefense().getMax();
-				}
-			});
-			for (Equipment unit: units){
-				String[] preferredArmors = ((ExpeditionUnit)unit.getItem()).getArmorTypes();
-				for (String armorType: preferredArmors){
-					int available = getExpedition().getItemCount(armorType);
-					int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
-					getExpedition().reduceGood(armorType, unitsToArm);
-					//Split equipment in armored and unarmored
-					if (unitsToArm > 0){
-						getExpedition().reduceQuantityOf(unit.getItem(), unitsToArm);
-						//ExpeditionUnit newUnit = (ExpeditionUnit)ItemFactory.createItem(unit.getItem().getFullID());
-						ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
-						newUnit.setArmor((Armor)ItemFactory.createItem(armorType));
-						getExpedition().addItem(newUnit, unitsToArm);
-					}
-				}
-			}
-			getExpedition().setArmed(true);
 		} else {
 			if (isPlayer && !UserInterface.getUI().promptChat("Disarm Expedition: Are you sure?")){
 				actionCancelled = true;
