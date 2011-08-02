@@ -78,7 +78,15 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.print(20, 5, "The New World", ConsoleSystemInterface.BLUE);
 		csi.print(20,12, "a. Historic Scenario", ConsoleSystemInterface.WHITE);
 		csi.print(20,13, "b. Create Expedition", ConsoleSystemInterface.GRAY);
-		csi.print(20,14, "c. Resume Expedition", ConsoleSystemInterface.WHITE);
+		File saveDirectory = new File("savegame");
+		File[] saves = saveDirectory.listFiles(new GameFiles.SaveGameFilenameFilter() );
+		boolean loadDisabled = false;
+		if (saves.length == 0){
+			csi.print(20,14, "c. Resume Expedition", ConsoleSystemInterface.GRAY);
+			loadDisabled = true;
+		} else {
+			csi.print(20,14, "c. Resume Expedition", ConsoleSystemInterface.WHITE);
+		}
 		csi.print(20,15, "d. Quit", ConsoleSystemInterface.WHITE);
 		csi.print(8,17, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2011", ConsoleSystemInterface.CYAN);
 		csi.print(8,18, "Music by Roguebards Mingos and Jice", ConsoleSystemInterface.CYAN);
@@ -96,14 +104,16 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		while (x.code != CharKey.A && x.code != CharKey.a &&
 				x.code != CharKey.C && x.code != CharKey.c &&
 				x.code != CharKey.D && x.code != CharKey.d
-				)
+				){
 			x = csi.inkey();
+			if (loadDisabled && (x.code == CharKey.C || x.code == CharKey.c))
+				x.code = CharKey.NONE;
+		}
 		csi.cls();
 		switch (x.code){
 		case CharKey.A: case CharKey.a:
 			return 0;
 		case CharKey.B: case CharKey.b:
-			
 			return 1;
 		case CharKey.C: case CharKey.c:
 			return 2;
