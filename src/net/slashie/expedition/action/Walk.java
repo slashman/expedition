@@ -20,6 +20,7 @@ import net.slashie.serf.action.Actor;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.ActionCancelException;
+import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
@@ -159,12 +160,16 @@ public class Walk extends Action{
 				turnShip.execute();
 			}
 			if (expedition.isAnchored()){
-				stalled = true;
 				if (var.x() == 0){
-					expedition.getLevel().addMessage("We must weigh 'A'nchors to sail forward!");
+					if (UserInterface.getUI().promptChat("We must weigh anchors to sail forward, should we do it?")){
+						expedition.setAnchored(false);
+					}
 				}
 
-			} else if (expedition.getSailingPoint() == SailingPoint.BEATING){
+			} 
+			if (expedition.isAnchored()){
+				stalled = true;
+			}else if (expedition.getSailingPoint() == SailingPoint.BEATING){
 				if (Util.chance(60)) {
 					expedition.getLevel().addMessage("You are on irons!");
 					stalled = true;

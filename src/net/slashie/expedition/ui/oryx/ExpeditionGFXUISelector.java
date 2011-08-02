@@ -223,6 +223,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		mountButton.setVisible(false);
 		repairButton.setVisible(false);
 		resetButton.setVisible(false);
+		anchorButton.setVisible(false);
 		chopButton.setVisible(false);
 		saveButton.setVisible(false);
 		quitButton.setVisible(false);
@@ -291,6 +292,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		} else if (expedition.getMovementMode().isLandMovement()){
 			buildButton.setVisible(true);
 			dropButton.setVisible(true);
+			dropButton.setPopupText("Caché Equipment");
 			repairButton.setVisible(false);
 			resetButton.setVisible(true);
 			chopButton.setVisible(true);
@@ -298,6 +300,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		} else {
 			buildButton.setVisible(false);
 			dropButton.setVisible(true);
+			dropButton.setPopupText("Landfall / Drop");
 			repairButton.setVisible(true);
 			resetButton.setVisible(true);
 			chopButton.setVisible(false);
