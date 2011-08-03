@@ -31,6 +31,7 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
+import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.ActionCancelException;
@@ -1246,7 +1247,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	        		wearOutShips(30, true);
 	        	}
 	        	if (cell.isLand() && !cell.isRiver()){
-	        		//TODO: Crash!
+	        		getLevel().addMessage("You are too close to land!");
+	        		wearOutShips(60, true);
 	        		throw new ActionCancelException();
 	        	}
 	        }
