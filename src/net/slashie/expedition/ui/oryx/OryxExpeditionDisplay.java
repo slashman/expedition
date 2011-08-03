@@ -270,7 +270,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				si.print(xstart+20, ystart + 5, "Cristoforo Colombo", Color.WHITE);
 				si.print(xstart+3, ystart + 6, "Navigation", COLOR_BOLD);
 				si.print(xstart+3, ystart + 7, "Cartography", COLOR_BOLD);
-				si.print(xstart+3, ystart + 8, "Negociation", COLOR_BOLD);
+				si.print(xstart+3, ystart + 8, "Negotiation", COLOR_BOLD);
 				si.print(xstart+3, ystart + 9, "Land Combat", COLOR_BOLD);
 				si.print(xstart+3, ystart + 10, "Sea Combat", COLOR_BOLD);
 				
