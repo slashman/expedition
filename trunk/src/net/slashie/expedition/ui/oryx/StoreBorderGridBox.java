@@ -70,7 +70,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			Color borderOut, int borderWidth, int outsideBound, int inBound,
 			int insideBound, int itemHeight, int itemWidth, int gridX,
 			int gridY, BufferedImage box,
-			final Store store, Expedition offShoreExpedition, CleanButton buyButton, final BlockingQueue<Integer> buyButtonSelectionHandler_, Image splitterImgUp, Image splitterImgDown, CleanButton closeButton) {
+			final Store store, Expedition offShoreExpedition, CleanButton buyButton, final BlockingQueue<Integer> buyButtonSelectionHandler_, CleanButton closeButton) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
 				itemWidth, gridX, gridY, box, closeButton);
@@ -89,9 +89,10 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			}
 		});
 		
-		quantitySplitterUp = new CleanButton(splitterImgUp, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterUp = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+
 		quantitySplitterUp.setVisible(false);
-		quantitySplitterUp.setBounds(512,152,24,24);
+		quantitySplitterUp.setLocation(512,149);
 		final Action increaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -130,9 +131,9 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			}
 		});
 		
-		quantitySplitterDown = new CleanButton(splitterImgDown, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterDown = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
-		quantitySplitterDown.setBounds(512,176,24,24);
+		quantitySplitterDown.setLocation(512,176);
 		
 		final Action decreaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;

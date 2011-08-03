@@ -45,12 +45,12 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 				Color borderOut, int borderWidth, int outsideBound, int inBound,
 				int insideBound, final int itemHeight, final int itemWidth, int gridX, int gridY, 
 				BlockingQueue<String> selectionHandler,
-				Image splitterImgUp, Image splitterImgDown, CleanButton closeButton
+				CleanButton closeButton
 				) {
 			super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 					borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
 					itemWidth, gridX, gridY, null, closeButton);
-			initializeSplitters(splitterImgUp, splitterImgDown);
+			initializeSplitters();
 			
 			/*quantityLabel = new JLabel();
 			quantityLabel.setFont(si.getFont());
@@ -105,7 +105,7 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 						// Move splitters and count label
 						int xpos = selectedItem.cursorX * itemWidth + getLocation().x + getBorderWidth();
 						int ypos = selectedItem.cursorY * itemHeight + getLocation().y + getBorderWidth() + (legendLines + 1) * lineHeight;
-						quantitySplitterUp.setLocation(xpos + ExpeditionOryxUI.STANDARD_ITEM_WIDTH + 3, ypos + 20);
+						quantitySplitterUp.setLocation(xpos + ExpeditionOryxUI.STANDARD_ITEM_WIDTH + 3, ypos + 17);
 						quantitySplitterDown.setLocation(xpos + ExpeditionOryxUI.STANDARD_ITEM_WIDTH + 3, ypos + 44);
 						/*quantityLabel.setLocation(xpos + ExpeditionOryxUI.STANDARD_ITEM_WIDTH + 43, ypos + 30);
 						quantityLabel.setText(selectedBuilding.getQuantity()+"");
@@ -129,10 +129,10 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 			si.addMouseMotionListener(mml);
 		}
 
-		private void initializeSplitters(Image splitterImgUp, Image splitterImgDown) {
-			quantitySplitterUp = new CleanButton(splitterImgUp, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		private void initializeSplitters() {
+			quantitySplitterUp = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 			quantitySplitterUp.setVisible(false);
-			quantitySplitterUp.setBounds(512,221,24,24);
+			quantitySplitterUp.setLocation(512,221);
 			final Action increaseQuantityAction = new AbstractAction() {
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -159,9 +159,9 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 				}
 			});
 			
-			quantitySplitterDown = new CleanButton(splitterImgDown, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+			quantitySplitterDown = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 			quantitySplitterDown.setVisible(false);
-			quantitySplitterDown.setBounds(512,243,24,24);
+			quantitySplitterDown.setLocation(512,243);
 			
 			final Action decreaseQuantityAction = new AbstractAction() {
 				private static final long serialVersionUID = 1L;

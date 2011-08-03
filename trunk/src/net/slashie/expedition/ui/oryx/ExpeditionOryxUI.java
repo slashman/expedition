@@ -91,8 +91,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private Color TITLE_COLOR = new Color(224,226,108);
 	private Color TEXT_COLOR = Color.WHITE;
 	private Image BATTLE_BACKGROUND;
-	private Image BTN_SPLIT_UP;
-	private Image BTN_SPLIT_DOWN;
+	public static Image BTN_SPLIT_UP;
+	public static Image BTN_SPLIT_DOWN;
+	public static Image BTN_SPLIT_UP_HOVER;
+	public static Image BTN_SPLIT_DOWN_HOVER;
 	
 	public static Image BTN_MOVE;
 	
@@ -102,6 +104,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image BTN_WEAPONS;
 	public static Image BTN_LIVESTOCK;
 	public static Image BTN_CLOSE;
+	public static Image IMG_SMALL_BUTTON_BACK;
+	public static Image IMG_SMALL_BUTTON_HOVER_BACK;
+
 	
 	private BufferedImage IMG_BOX;
 	public Cursor HAND_CURSOR;
@@ -151,20 +156,23 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void showInventory() {
 		Equipment.eqMode = true;
 		((GFXUISelector)getPlayer().getSelector()).deactivate();
+		
+		int startX = 480;
+		int gapX = 40;
 
 		// Create the good type buttons
-		CleanButton peopleButton = new CleanButton(BTN_PEOPLE, HAND_CURSOR);
-		peopleButton.setLocation(540,41);	
-		CleanButton suppliesButton = new CleanButton(BTN_SUPPLIES, HAND_CURSOR);
-		suppliesButton.setLocation(569,41);	
-		CleanButton tradeGoodsButton = new CleanButton(BTN_MERCHANDISE, HAND_CURSOR);
-		tradeGoodsButton.setLocation(598,41);	
-		CleanButton armoryButton = new CleanButton(BTN_WEAPONS, HAND_CURSOR);
-		armoryButton.setLocation(627,41);	
-		CleanButton livestockButton = new CleanButton(BTN_LIVESTOCK, HAND_CURSOR);
-		livestockButton.setLocation(656,41);	
-		CleanButton closeButton = new CleanButton(BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(730,41);
+		CleanButton peopleButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_PEOPLE, HAND_CURSOR);
+		peopleButton.setLocation(startX,41);	
+		CleanButton suppliesButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_SUPPLIES, HAND_CURSOR);
+		suppliesButton.setLocation(startX + gapX * 1,41);	
+		CleanButton tradeGoodsButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_MERCHANDISE, HAND_CURSOR);
+		tradeGoodsButton.setLocation(startX + gapX * 2,41);	
+		CleanButton armoryButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_WEAPONS, HAND_CURSOR);
+		armoryButton.setLocation(startX + gapX * 3,41);	
+		CleanButton livestockButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_LIVESTOCK, HAND_CURSOR);
+		livestockButton.setLocation(startX + gapX * 4,41);	
+		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
+		closeButton.setLocation(startX + gapX * 6,41);
 		
 		
 		si.add(peopleButton);
@@ -242,7 +250,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	  			menuBox.setCurrentPage(currentPage);
 	  		}
   	  		si.restore();
-  	  		int boxX = 540 + typeChoice * 29 - 24;
+  	  		int boxX = startX + typeChoice * gapX - 21;
 			int boxY = 41 - 24;
   	  		menuBox.draw(boxX, boxY, IMG_BOX);
   	  		
@@ -372,15 +380,15 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
     	}
    		Equipment.eqMode = true;
    		((GFXUISelector)getPlayer().getSelector()).deactivate();
-   		CleanButton closeButton = new CleanButton(BTN_CLOSE, HAND_CURSOR);
-		closeButton.setBounds(730,41, 24,24);
+   		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
+		closeButton.setLocation(730,41);
 		
 		ExpeditionCleanButton buyButton = new ExpeditionCleanButton(2, "BUY");
 		buyButton.setSize(96,48);
 		BlockingQueue<Integer> buyButtonSelectionHandler = new LinkedBlockingQueue<Integer>();
 
    		StoreBorderGridBox menuBox = new StoreBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62,202,2,5,null,
-   				store, getExpedition(), buyButton, buyButtonSelectionHandler, BTN_SPLIT_UP, BTN_SPLIT_DOWN, closeButton);
+   				store, getExpedition(), buyButton, buyButtonSelectionHandler, closeButton);
    		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		
@@ -555,20 +563,20 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		((GFXUISelector)getPlayer().getSelector()).deactivate();
    		clearTextBox();
    		// Create the close button and add it to the UI
-   		CleanButton closeButton = new CleanButton(BTN_CLOSE, HAND_CURSOR);
-		closeButton.setBounds(730,41, 24,24);
+   		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
+		closeButton.setLocation(730,41);
 		
    		// Create the buttons for good type selection and add them to the UI
-   		CleanButton peopleButton = new CleanButton(BTN_PEOPLE, HAND_CURSOR);
-		peopleButton.setBounds(540,41, 24,24);	
-		CleanButton suppliesButton = new CleanButton(BTN_SUPPLIES, HAND_CURSOR);
-		suppliesButton.setBounds(569,41, 24,24);	
-		CleanButton tradeGoodsButton = new CleanButton(BTN_MERCHANDISE, HAND_CURSOR);
-		tradeGoodsButton.setBounds(598,41, 24,24);	
-		CleanButton armoryButton = new CleanButton(BTN_WEAPONS, HAND_CURSOR);
-		armoryButton.setBounds(627,41, 24,24);	
-		CleanButton livestockButton = new CleanButton(BTN_LIVESTOCK, HAND_CURSOR);
-		livestockButton.setBounds(656,41, 24,24);
+   		CleanButton peopleButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_PEOPLE, HAND_CURSOR);
+		peopleButton.setLocation(540,41);	
+		CleanButton suppliesButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_SUPPLIES, HAND_CURSOR);
+		suppliesButton.setLocation(569,41);	
+		CleanButton tradeGoodsButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_MERCHANDISE, HAND_CURSOR);
+		tradeGoodsButton.setLocation(598,41);	
+		CleanButton armoryButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_WEAPONS, HAND_CURSOR);
+		armoryButton.setLocation(627,41);	
+		CleanButton livestockButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_LIVESTOCK, HAND_CURSOR);
+		livestockButton.setLocation(656,41);
 		si.add(peopleButton);
 		si.add(suppliesButton);
 		si.add(tradeGoodsButton);
@@ -614,7 +622,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    				BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
    				62,202,2,6, IMG_BOX, null, transferButton,
    				from, to, 
-   				transferFromExpeditionHandler, BTN_SPLIT_UP, BTN_SPLIT_DOWN);
+   				transferFromExpeditionHandler);
    		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		
@@ -960,6 +968,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			BATTLE_BACKGROUND = ImageUtils.createImage(UIProperties.getProperty("BATTLE_BACKGROUND"));
 			BTN_SPLIT_UP = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_UP_BOUNDS"));
 			BTN_SPLIT_DOWN = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_DOWN_BOUNDS"));
+			BTN_SPLIT_UP_HOVER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_UP_HOVER_BOUNDS"));
+			BTN_SPLIT_DOWN_HOVER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_DOWN_HOVER_BOUNDS"));
 			BTN_MOVE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_MOVE_BOUNDS"));
 			IMG_BOX = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
 			BTN_PEOPLE = ImageUtils.createImage(UIProperties.getProperty("BTN_PEOPLE"));
@@ -968,6 +978,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			BTN_WEAPONS = ImageUtils.createImage(UIProperties.getProperty("BTN_WEAPONS"));
 			BTN_LIVESTOCK = ImageUtils.createImage(UIProperties.getProperty("BTN_LIVESTOCK"));
 			BTN_CLOSE = ImageUtils.createImage(UIProperties.getProperty("BTN_CLOSE"));
+			IMG_SMALL_BUTTON_BACK = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_BACK_BOUNDS"));
+			IMG_SMALL_BUTTON_HOVER_BACK  = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_HOVER_BACK_BOUNDS"));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			ExpeditionGame.crash("Error loading images", e);
@@ -1096,14 +1109,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			buildingMenuItems.add(new BuildingCustomGFXMenuItem(building));
 		}
 		
-		CleanButton closeButton = new CleanButton(BTN_CLOSE, HAND_CURSOR);
-		closeButton.setBounds(730,41, 24,24);
+		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
+		closeButton.setLocation(730,41);
 		
 		BlockingQueue<String> selectionHandler = new LinkedBlockingQueue<String>();
 		closeButton.addActionListener(getStringCallBackActionListener(selectionHandler, "CANCEL"));
 		
 		BuildingPlanBorderGridBox menuBox = new BuildingPlanBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
-				STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH+43, 3, 5, selectionHandler, BTN_SPLIT_UP, BTN_SPLIT_DOWN, closeButton);
+				STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH+43, 3, 5, selectionHandler, closeButton);
 		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Building Plan");
