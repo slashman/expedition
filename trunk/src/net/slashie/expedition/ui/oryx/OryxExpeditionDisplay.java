@@ -243,22 +243,20 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		}
 		CleanButton theNewWorldButton = new CleanButton(image, HAND_CURSOR);
 		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
-		si.printAtPixel(30, 440, "Please pick a scenario >>>>>", Color.WHITE);
-		si.refresh();
-
+		ExpeditionCleanButton useButton = new ExpeditionCleanButton(2, "Use");
+		useButton.setLocation(622,291);
+		
 		si.add(theNewWorldButton);
+		si.add(useButton);
 		
 		BlockingQueue<Integer> titleSelectionHandler = new LinkedBlockingQueue<Integer>();
 
-		/*CallbackHandler titleSelectionHandler = new CallbackHandler();
-		titleSelectionHandler.setCallback(null);*/
-		
 		theNewWorldButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				((JButton)e.getSource()).removeActionListener(this);
 				int xstart = 3;
-				int ystart = 4;
+				int ystart = 5;
 				si.drawImage(uiProperties.getProperty("IMG_BLANK2"));
 				si.print(xstart, ystart + 1, "The New World", COLOR_BOLD);
 				si.print(xstart+3, ystart + 2, "Official Scenario by Slashware Interactive", Color.WHITE);
@@ -267,7 +265,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				si.print(xstart, ystart + 4, "Location", COLOR_BOLD);
 				si.print(xstart+20, ystart + 4, "Palos de la Frontera, Spain", Color.WHITE);
 				si.print(xstart, ystart + 5, "Expeditionary", COLOR_BOLD);
-				si.print(xstart+20, ystart + 5, "Cristoforo Colombo", Color.WHITE);
+				si.print(xstart+20, ystart + 5, "Christopher Colombus", Color.WHITE);
 				si.print(xstart+3, ystart + 6, "Navigation", COLOR_BOLD);
 				si.print(xstart+3, ystart + 7, "Cartography", COLOR_BOLD);
 				si.print(xstart+3, ystart + 8, "Negotiation", COLOR_BOLD);
@@ -279,23 +277,18 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				si.print(xstart+20, ystart + 8, "Normal", Color.WHITE);
 				si.print(xstart+20, ystart + 9, "Unexperienced", Color.WHITE);
 				si.print(xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
-				
-				//si.print(xstart+3, ystart + 17, "Use this scenario?", Color.WHITE);
-		   		
-				ExpeditionCleanButton okButton = new ExpeditionCleanButton(8, "Ok");
-				okButton.setBounds(286,475,223,43);
-				si.add(okButton);
-				okButton.addActionListener(new CallbackActionListener<Integer>(handler){
-					public void actionPerformed(ActionEvent ev2) {
-						try {
-							handler.put(0);
-						} catch (InterruptedException e) {}
-						si.remove((Component) ev2.getSource());
-					};
-				});
 			}
 		});
 		
+		useButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
+			public void actionPerformed(ActionEvent ev2) {
+				si.drawImage(uiProperties.getProperty("IMG_BLANK2"));
+				try {
+					handler.put(0);
+				} catch (InterruptedException e) {}
+				si.remove((Component) ev2.getSource());
+			};
+		});
 		
 		Integer choice = null;
 		while (choice == null){
@@ -305,6 +298,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		}
 		
 		si.remove(theNewWorldButton);
+		si.remove(useButton);
 		si.recoverFocus();
 		return choice;
 		
