@@ -260,10 +260,12 @@ public class RunExpedition {
 			loadGame();
 			break;
 		case 3:
-			System.out.println("Expedition "+ExpeditionGame.getVersion()+", clean Exit");
-			System.out.println("Thank you for playing!");
-			System.exit(0);
-			break;
+			if (UserInterface.getUI().promptChat("Quit: Are you sure")){
+				System.out.println("Expedition "+ExpeditionGame.getVersion()+", clean Exit");
+				System.out.println("Thank you for playing!");
+				System.exit(0);
+				break;
+			}
 		}
 		
 	}

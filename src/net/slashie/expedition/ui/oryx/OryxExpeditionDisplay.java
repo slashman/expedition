@@ -9,6 +9,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +42,7 @@ import net.slashie.utils.ImageUtils;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.CallbackActionListener;
+import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CleanButton;
 import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.SimpleGFXMenuItem;
@@ -154,7 +156,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		expeditionButton.setVisible(false); // This isn't yet implemented
 		
 		File saveDirectory = new File("savegame");
-		File[] saves = saveDirectory.listFiles(new GameFiles.SaveGameFilenameFilter() );
+		final File[] saves = saveDirectory.listFiles(new GameFiles.SaveGameFilenameFilter() );
 		
 		if (saves.length == 0){
 			resumeButton.setVisible(false);
@@ -210,6 +212,24 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			}
 		});
 
+		CallbackKeyListener<Integer> cbkl = new CallbackKeyListener<Integer>(titleSelectionHandler){
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					int code = SwingSystemInterface.charCode(e);
+					if (code == CharKey.a || code == CharKey.A)
+						handler.put(0);
+					if (saves.length != 0 && (code == CharKey.c || code == CharKey.C))
+						handler.put(2);
+					if (code == CharKey.d || code == CharKey.D || code == CharKey.ESC){
+						handler.put(3);
+					}
+				} catch (InterruptedException e1) {
+				}
+			}
+		};
+		
+		si.addKeyListener(cbkl);
 
 		
 		Integer choice = null;
@@ -229,6 +249,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.remove(expeditionButton);
 		si.remove(resumeButton);
 		si.remove(exitButton);
+		si.removeKeyListener(cbkl);
 		si.recoverFocus();
 		return choice;
 		
