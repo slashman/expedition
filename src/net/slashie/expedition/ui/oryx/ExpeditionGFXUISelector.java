@@ -51,6 +51,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	private CleanButton saveButton;
 	private CleanButton quitButton;
 	private CleanButton anchorButton;
+	private CleanButton musicButton;
 	private Image unmountImage;
 	private Image disarmImage;
 	private Image mountImage;
@@ -97,6 +98,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			resetButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")), HAND_CURSOR);
 			chopButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")), HAND_CURSOR);
 			anchorButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ANCHOR_BOUNDS")), HAND_CURSOR);
+			musicButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MUSIC_BOUNDS")), HAND_CURSOR);
 			saveButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), HAND_CURSOR);
 			quitButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), HAND_CURSOR);
 		} catch (IOException e) {
@@ -112,6 +114,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.R));
 		chopButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.w));
 		anchorButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.A));
+		musicButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.T));
 		saveButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.S));
 		quitButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.Q));
 		
@@ -125,6 +128,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.setPopupText("Reset Dead' Reckon");
 		chopButton.setPopupText("Chop Woods");
 		anchorButton.setPopupText("Anchor Ships");
+		musicButton.setPopupText("Switch Music");
 		saveButton.setPopupText("Save");
 		quitButton.setPopupText("Quit");
 		
@@ -138,6 +142,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.addMouseListener(getPopupMouseListener(resetButton));
 		chopButton.addMouseListener(getPopupMouseListener(chopButton));
 		anchorButton.addMouseListener(getPopupMouseListener(anchorButton));
+		musicButton.addMouseListener(getPopupMouseListener(musicButton));
 		saveButton.addMouseListener(getPopupMouseListener(saveButton));
 		quitButton.addMouseListener(getPopupMouseListener(quitButton));
 		
@@ -151,6 +156,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.setVisible(false);
 		chopButton.setVisible(false);
 		anchorButton.setVisible(false);
+		musicButton.setVisible(false);
 		saveButton.setVisible(false);
 		quitButton.setVisible(false);
 		
@@ -175,39 +181,13 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		buttonsPanel.add(repairButton);
 		buttonsPanel.add(resetButton);
 		buttonsPanel.add(anchorButton);
+		
+		buttonsPanel.add(musicButton);
 		buttonsPanel.add(saveButton);
 		buttonsPanel.add(quitButton);
 		
 		
 		si.add(buttonsPanel);
-		/*
-		int ypos = 420;
-		armButton.setLocation(24, ypos);
-		mountButton.setLocation(52, ypos);
-		dropButton.setLocation(80, ypos);
-		chopButton.setLocation(108, ypos);
-		ypos += 28;
-		buildButton.setLocation(24, ypos);
-		repairButton.setLocation(52, ypos);
-		inventoryButton.setLocation(80, ypos);
-		lookButton.setLocation(108, ypos);
-		ypos += 28;
-		anchorButton.setLocation(24, ypos);
-		saveButton.setLocation(52, ypos);
-		quitButton.setLocation(80, ypos);
-		
-		si.add(armButton);
-		si.add(mountButton);
-		si.add(dropButton);
-		si.add(chopButton);
-		si.add(buildButton);
-		si.add(repairButton);
-		si.add(inventoryButton);
-		si.add(lookButton);
-		si.add(anchorButton);
-		si.add(saveButton);
-		si.add(quitButton);
-		si.add(resetButton);*/
 	}
 	
 	private MouseListener getPopupMouseListener(final CleanButton cleanButton) {
@@ -223,7 +203,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				//setSelectionActive(true);
 				legendLabel.setVisible(false);
 			}
 		};
@@ -233,11 +212,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	public void activate() {
 		super.activate();
 		buttonsPanel.setVisible(true);
-		/*buttonsPanel.add(armButton);
-		buttonsPanel.add(inventoryButton);
-		buttonsPanel.add(lookButton);
-		buttonsPanel.add(saveButton);
-		buttonsPanel.add(quitButton);*/
 		
 		armButton.setVisible(true);
 		//buildButton.setVisible(true);
@@ -248,6 +222,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		//repairButton.setVisible(true);
 		//resetButton.setVisible(true);
 		//chopButton.setVisible(true);
+		musicButton.setVisible(true);
 		saveButton.setVisible(true);
 		quitButton.setVisible(true);
 		
@@ -257,7 +232,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	public void deactivate() {
 		super.deactivate();
 		buttonsPanel.setVisible(false);
-		//buttonsPanel.removeAll();
 
 		armButton.setVisible(false);
 		buildButton.setVisible(false);
@@ -297,13 +271,11 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		
 		if (expedition.isMounted()){
 			mountButton.setVisible(true);
-			//buttonsPanel.add(mountButton);
 			mountButton.setFace(unmountImage);
 			mountButton.setPopupText("Unmount");
 			si.revalidate();
 		} else if (expedition.getItemCountBasic("HORSE") > 0){
 			mountButton.setVisible(true);
-			//buttonsPanel.add(mountButton);
 			mountButton.setFace(mountImage);
 			mountButton.setPopupText("Ride Mounts");
 			si.revalidate();
