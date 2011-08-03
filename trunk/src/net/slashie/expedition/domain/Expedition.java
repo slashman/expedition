@@ -1216,6 +1216,20 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        				destinationPoint.x--;
 		        				setAnchored(true);
 		        		        super.landOn(destinationPoint);
+		        		        if (!getFlag("SAILING_EXPLAINED")){
+		        		        	setFlag("SAILING_EXPLAINED", true);
+		    		        		if (UserInterface.getUI().promptChat("Do you want me to explain you the basics of sailing?")){
+		    		        			m("Your ships are currently anchored in front of the port. You can rotate them around to set your bearing, then you must weigh anchors to sail ahead");
+		    		        			m("For sailing ships, speed is greatly influenced by the direction and strength of the wind, as well as the morale of your crew.");
+		    		        			m("The integrity of both hull and tacking (>75%), and having enough hands on board (15 sailors and a captain per ship), are also critical for sailing at decent speeds.");
+		    		        			m("If you are sailing against the wind you will commonly find yourself \"On Irons\", that means that your crew was unable to outmaneuver the wind and so the ship didn't advance.");
+		    		        			m("Likewise, you may find your expedition on a becalmed sea; unless all of your ships are oar powered, you won't be able to move around..");
+		    		        			m("As your expedition is not equiped with a marine chronometer, there's no way to know your exact longitudinal position. That's where the Dead' Reckon counter comes");
+		    		        			m("The Dead' Reckon is your aproximate calculus of longitudinal distance from a reference point, based on the distance travelled every day. You can reset the reference point anytime.");
+		    		        			m("God bless your voyage! Remember you can check the game manual for detailed instructions any time!");
+		    		        		}
+
+		        		        }
 				        		throw new ActionCancelException();
 
 		        			}
@@ -2202,5 +2216,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		setMounted(true);
 		validateMounted();
+	}
+	
+	private void m(String string) {
+		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string);		
 	}
 }
