@@ -151,7 +151,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	}
 
 	private void initializeSplitters(Image splitterImgUp, Image splitterImgDown) {
-		quantitySplitterUp = new CleanButton(new ImageIcon(splitterImgUp), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterUp = new CleanButton(splitterImgUp, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterUp.setVisible(false);
 		quantitySplitterUp.setBounds(512,221,24,24);
 		final Action increaseQuantityAction = new AbstractAction() {
@@ -190,7 +190,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		});
 		
 		
-		quantitySplitterDown = new CleanButton(new ImageIcon(splitterImgDown), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterDown = new CleanButton(splitterImgDown, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
 		quantitySplitterDown.setBounds(512,243,24,24);
 		

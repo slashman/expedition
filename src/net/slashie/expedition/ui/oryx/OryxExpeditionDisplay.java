@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -141,16 +142,16 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			si.printAtPixel(30, 586, "Registered for "+licenseInfo.licenseLevel+" "+licenseInfo.licensee+"!", Color.YELLOW);
 		}
 
-		CleanButton historyButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_HISTORY")), HAND_CURSOR);
-		historyButton.setBounds(new Rectangle(558, 30, 223, 43));
-		CleanButton expeditionButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXPEDITION")), HAND_CURSOR);
-		expeditionButton.setBounds(new Rectangle(558, 78, 223, 43));
-		CleanButton resumeButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_CONTINUE")), HAND_CURSOR);
-		resumeButton.setBounds(new Rectangle(558, 126, 223, 43));
-		CleanButton exitButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_EXIT")), HAND_CURSOR);
-		exitButton.setBounds(new Rectangle(558, 174, 223, 43));
+		ExpeditionCleanButton historyButton = new ExpeditionCleanButton(8, "Historic Scenario");
+		historyButton.setLocation(558, 30);
+		ExpeditionCleanButton expeditionButton = new ExpeditionCleanButton(8, "New Expedition");
+		expeditionButton.setLocation(558, 82);
+		ExpeditionCleanButton resumeButton = new ExpeditionCleanButton(8, "Continue Journey");
+		resumeButton.setLocation(558, 134);
+		ExpeditionCleanButton exitButton = new ExpeditionCleanButton(8, "Exit");
+		exitButton.setLocation(558, 186);
 		
-		expeditionButton.setVisible(false);
+		expeditionButton.setVisible(false); // This isn't yet implemented
 		
 		File saveDirectory = new File("savegame");
 		File[] saves = saveDirectory.listFiles(new GameFiles.SaveGameFilenameFilter() );
@@ -234,7 +235,13 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public int selectScenario(){
-		CleanButton theNewWorldButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_THE_NEW_WORLD")), HAND_CURSOR);
+		Image image = null;
+		try {
+			image = ImageUtils.createImage(uiProperties.getProperty("BTN_THE_NEW_WORLD"));
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		CleanButton theNewWorldButton = new CleanButton(image, HAND_CURSOR);
 		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
 		si.printAtPixel(30, 440, "Please pick a scenario >>>>>", Color.WHITE);
 		si.refresh();
@@ -275,7 +282,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				
 				//si.print(xstart+3, ystart + 17, "Use this scenario?", Color.WHITE);
 		   		
-				CleanButton okButton = new CleanButton(new ImageIcon(uiProperties.getProperty("BTN_OK")), HAND_CURSOR);
+				ExpeditionCleanButton okButton = new ExpeditionCleanButton(8, "Ok");
 				okButton.setBounds(286,475,223,43);
 				si.add(okButton);
 				okButton.addActionListener(new CallbackActionListener<Integer>(handler){
@@ -499,11 +506,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	@Override
 	public Expedition createExpedition(ExpeditionGame game) {
-		CleanButton defaultButton = new CleanButton(ExpeditionOryxUI.BTN_SIZE4, HAND_CURSOR);
-		defaultButton.setText("DEFAULT");
-		defaultButton.setFont(si.getFont());
-		defaultButton.setForeground(Color.WHITE);
-		defaultButton.setSize(ExpeditionOryxUI.BTN_SIZE4.getWidth(null), ExpeditionOryxUI.BTN_SIZE4.getHeight(null));
+		ExpeditionCleanButton defaultButton = new ExpeditionCleanButton(4, "Default");
 		defaultButton.setLocation(230, 495);
 		
 		final BlockingQueue<Integer> inputQueue = si.getInputQueue();
