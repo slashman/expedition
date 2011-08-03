@@ -270,7 +270,10 @@ public class RunExpedition {
 	
 	private static void selectScenario() {
 		int choice = ExpeditionDisplay.thus.selectScenario();
-		newGame();
+		if (choice == 0)
+			newGame();
+		else
+			return;
 		
 	}
 
