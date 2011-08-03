@@ -68,15 +68,12 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			
 			ItemContainer from, ItemContainer to, 
 			
-			BlockingQueue<String> transferSelectionHandler, 
-			
-			Image splitterImgUp, Image splitterImgDown
-			) {
+			BlockingQueue<String> transferSelectionHandler) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
 				itemWidth, gridX, gridY, box, closeButton);
 		
-		initializeSplitters(splitterImgUp, splitterImgDown);
+		initializeSplitters();
 		this.goodTypeBox = box;
 		this.from = from;
 		this.to = to;
@@ -150,10 +147,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		si.addKeyListener(cbkl);
 	}
 
-	private void initializeSplitters(Image splitterImgUp, Image splitterImgDown) {
-		quantitySplitterUp = new CleanButton(splitterImgUp, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+	private void initializeSplitters() {
+		quantitySplitterUp = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterUp.setVisible(false);
-		quantitySplitterUp.setBounds(512,221,24,24);
+		quantitySplitterUp.setLocation(512,218);
 		final Action increaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -190,9 +187,9 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		});
 		
 		
-		quantitySplitterDown = new CleanButton(splitterImgDown, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterDown = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
-		quantitySplitterDown.setBounds(512,243,24,24);
+		quantitySplitterDown.setLocation(512,243);
 		
 		final Action decreaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;

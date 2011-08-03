@@ -3,6 +3,8 @@ package net.slashie.expedition.ui.oryx;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -14,6 +16,7 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractAction;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import net.slashie.expedition.domain.Expedition;
@@ -55,6 +58,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	
 	private Cursor HAND_CURSOR;
 	private JLabel legendLabel;
+	private JPanel buttonsPanel;
 	
 	@Override
 	public void init(SwingSystemInterface psi, UserAction[] gameActions,
@@ -72,25 +76,29 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		
 		try {
-			buildButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_BUILD_BOUNDS")), HAND_CURSOR);
-			dropButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DROP_BOUNDS")), HAND_CURSOR);
-			inventoryButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_INVENTORY_BOUNDS")), HAND_CURSOR);
-			lookButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_LOOK_BOUNDS")), HAND_CURSOR);
+			Image smallButtonBack = PropertyFilters.getImage(uiProperties.getProperty("IMG_SMALL_BUTTON"), uiProperties.getProperty("IMG_SMALL_BUTTON_BACK_BOUNDS"));
+			Image smallButtonHover = PropertyFilters.getImage(uiProperties.getProperty("IMG_SMALL_BUTTON"), uiProperties.getProperty("IMG_SMALL_BUTTON_HOVER_BACK_BOUNDS"));
+
+			
+			buildButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_BUILD_BOUNDS")), HAND_CURSOR);
+			dropButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DROP_BOUNDS")), HAND_CURSOR);
+			inventoryButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_INVENTORY_BOUNDS")), HAND_CURSOR);
+			lookButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_LOOK_BOUNDS")), HAND_CURSOR);
 			
 			armImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ARM_BOUNDS"));
 			mountImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MOUNT_BOUNDS"));
 			unmountImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_UNMOUNT_BOUNDS"));
 			disarmImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DISARM_BOUNDS"));
 			
-			armButton = new CleanButton(armImage, HAND_CURSOR);			
-			mountButton = new CleanButton(mountImage, HAND_CURSOR);
+			armButton = new CleanButton(smallButtonBack, smallButtonHover, armImage, HAND_CURSOR);			
+			mountButton = new CleanButton(smallButtonBack, smallButtonHover, mountImage, HAND_CURSOR);
 			
-			repairButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_REPAIR_BOUNDS")), HAND_CURSOR);
-			resetButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")), HAND_CURSOR);
-			chopButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")), HAND_CURSOR);
-			anchorButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ANCHOR_BOUNDS")), HAND_CURSOR);
-			saveButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), HAND_CURSOR);
-			quitButton = new CleanButton(PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), HAND_CURSOR);
+			repairButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_REPAIR_BOUNDS")), HAND_CURSOR);
+			resetButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")), HAND_CURSOR);
+			chopButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")), HAND_CURSOR);
+			anchorButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ANCHOR_BOUNDS")), HAND_CURSOR);
+			saveButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), HAND_CURSOR);
+			quitButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), HAND_CURSOR);
 		} catch (IOException e) {
 			ExpeditionGame.crash("Error loading buttons", e);
 		}
@@ -146,22 +154,47 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		saveButton.setVisible(false);
 		quitButton.setVisible(false);
 		
-		resetButton.setBounds(171, 77, 24, 24);
+		buttonsPanel = new JPanel();
+		buttonsPanel.setOpaque(false);
+		//buttonsPanel.setLayout(new GridLayout(3,4));
+		buttonsPanel.setLayout(new FlowLayout());
+		buttonsPanel.setLocation(12,350);
+		buttonsPanel.setSize(144,178);
 		
+		
+		buttonsPanel.add(inventoryButton);
+		buttonsPanel.add(lookButton);
+		buttonsPanel.add(dropButton);
+		
+		buttonsPanel.add(armButton);
+		buttonsPanel.add(mountButton);
+		
+		buttonsPanel.add(chopButton);
+		buttonsPanel.add(buildButton);
+		
+		buttonsPanel.add(repairButton);
+		buttonsPanel.add(resetButton);
+		buttonsPanel.add(anchorButton);
+		buttonsPanel.add(saveButton);
+		buttonsPanel.add(quitButton);
+		
+		
+		si.add(buttonsPanel);
+		/*
 		int ypos = 420;
-		armButton.setBounds(24, ypos, 24, 24);
-		mountButton.setBounds(52, ypos, 24, 24);
-		dropButton.setBounds(80, ypos, 24, 24);
-		chopButton.setBounds(108, ypos, 24, 24);
+		armButton.setLocation(24, ypos);
+		mountButton.setLocation(52, ypos);
+		dropButton.setLocation(80, ypos);
+		chopButton.setLocation(108, ypos);
 		ypos += 28;
-		buildButton.setBounds(24, ypos, 24, 24);
-		repairButton.setBounds(52, ypos, 24, 24);
-		inventoryButton.setBounds(80, ypos, 24, 24);
-		lookButton.setBounds(108, ypos, 24, 24);
+		buildButton.setLocation(24, ypos);
+		repairButton.setLocation(52, ypos);
+		inventoryButton.setLocation(80, ypos);
+		lookButton.setLocation(108, ypos);
 		ypos += 28;
-		anchorButton.setBounds(24, ypos, 24, 24);
-		saveButton.setBounds(52, ypos, 24, 24);
-		quitButton.setBounds(80, ypos, 24, 24);
+		anchorButton.setLocation(24, ypos);
+		saveButton.setLocation(52, ypos);
+		quitButton.setLocation(80, ypos);
 		
 		si.add(armButton);
 		si.add(mountButton);
@@ -174,7 +207,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		si.add(anchorButton);
 		si.add(saveButton);
 		si.add(quitButton);
-		si.add(resetButton);
+		si.add(resetButton);*/
 	}
 	
 	private MouseListener getPopupMouseListener(final CleanButton cleanButton) {
@@ -184,7 +217,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 				//setSelectionActive(false);
 				Component b = (Component) e.getSource();
 				legendLabel.setText(cleanButton.getPopupText());
-				legendLabel.setLocation(b.getX()+24, b.getY()+12);
+				legendLabel.setLocation(b.getX()+36+12, b.getY()+18+350);
 				legendLabel.setVisible(true);
 			}
 			
@@ -199,6 +232,13 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	@Override
 	public void activate() {
 		super.activate();
+		buttonsPanel.setVisible(true);
+		/*buttonsPanel.add(armButton);
+		buttonsPanel.add(inventoryButton);
+		buttonsPanel.add(lookButton);
+		buttonsPanel.add(saveButton);
+		buttonsPanel.add(quitButton);*/
+		
 		armButton.setVisible(true);
 		//buildButton.setVisible(true);
 		//dropButton.setVisible(true);
@@ -210,11 +250,15 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		//chopButton.setVisible(true);
 		saveButton.setVisible(true);
 		quitButton.setVisible(true);
+		
 	}
 	
 	@Override
 	public void deactivate() {
 		super.deactivate();
+		buttonsPanel.setVisible(false);
+		//buttonsPanel.removeAll();
+
 		armButton.setVisible(false);
 		buildButton.setVisible(false);
 		dropButton.setVisible(false);
@@ -253,12 +297,14 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		
 		if (expedition.isMounted()){
 			mountButton.setVisible(true);
-			mountButton.setBackgroundImage(unmountImage);
+			//buttonsPanel.add(mountButton);
+			mountButton.setFace(unmountImage);
 			mountButton.setPopupText("Unmount");
 			si.revalidate();
 		} else if (expedition.getItemCountBasic("HORSE") > 0){
 			mountButton.setVisible(true);
-			mountButton.setBackgroundImage(mountImage);
+			//buttonsPanel.add(mountButton);
+			mountButton.setFace(mountImage);
 			mountButton.setPopupText("Ride Mounts");
 			si.revalidate();
 		} else {
@@ -266,11 +312,11 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		}
 		
 		if (expedition.isArmed()){
-			armButton.setBackgroundImage(disarmImage);
+			armButton.setFace(disarmImage);
 			armButton.setPopupText("Disarm Expedition");
 			si.revalidate();
 		} else {
-			armButton.setBackgroundImage(armImage);
+			armButton.setFace(armImage);
 			armButton.setPopupText("Arm Expedition");
 			si.revalidate();
 		}
