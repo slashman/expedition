@@ -89,7 +89,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			}
 		});
 		
-		quantitySplitterUp = new CleanButton(new ImageIcon(splitterImgUp), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterUp = new CleanButton(splitterImgUp, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterUp.setVisible(false);
 		quantitySplitterUp.setBounds(512,152,24,24);
 		final Action increaseQuantityAction = new AbstractAction() {
@@ -130,7 +130,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			}
 		});
 		
-		quantitySplitterDown = new CleanButton(new ImageIcon(splitterImgDown), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterDown = new CleanButton(splitterImgDown, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
 		quantitySplitterDown.setBounds(512,176,24,24);
 		

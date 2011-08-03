@@ -28,7 +28,7 @@ import net.slashie.utils.swing.CleanButton;
 
 public class BuildingPlanBorderGridBox extends BorderedGridBox{
 		private static final long serialVersionUID = 1L;
-		private CleanButton okButton;
+		private ExpeditionCleanButton okButton;
 		private BuildingCustomGFXMenuItem selectedBuilding;
 		
 		// Splitter attributes
@@ -45,7 +45,6 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 				Color borderOut, int borderWidth, int outsideBound, int inBound,
 				int insideBound, final int itemHeight, final int itemWidth, int gridX, int gridY, 
 				BlockingQueue<String> selectionHandler,
-				Image imgBuild,
 				Image splitterImgUp, Image splitterImgDown, CleanButton closeButton
 				) {
 			super(border1, border2, border3, border4, g, backgroundColor, borderIn,
@@ -60,10 +59,9 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 			quantityLabel.setForeground(Color.WHITE);
 			si.add(quantityLabel);*/
 			
-			okButton = new CleanButton(imgBuild, getHandCursor());
+			okButton = new ExpeditionCleanButton(4, "Build");
 			okButton.setVisible(true);
 			okButton.setLocation(615,370);
-			okButton.setSize(imgBuild.getWidth(null),imgBuild.getHeight(null));
 			si.add(okButton);
 			
 			okButton.addActionListener(new CallbackActionListener<String>(selectionHandler){
@@ -132,7 +130,7 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 		}
 
 		private void initializeSplitters(Image splitterImgUp, Image splitterImgDown) {
-			quantitySplitterUp = new CleanButton(new ImageIcon(splitterImgUp), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+			quantitySplitterUp = new CleanButton(splitterImgUp, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 			quantitySplitterUp.setVisible(false);
 			quantitySplitterUp.setBounds(512,221,24,24);
 			final Action increaseQuantityAction = new AbstractAction() {
@@ -161,7 +159,7 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 				}
 			});
 			
-			quantitySplitterDown = new CleanButton(new ImageIcon(splitterImgDown), ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+			quantitySplitterDown = new CleanButton(splitterImgDown, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 			quantitySplitterDown.setVisible(false);
 			quantitySplitterDown.setBounds(512,243,24,24);
 			
