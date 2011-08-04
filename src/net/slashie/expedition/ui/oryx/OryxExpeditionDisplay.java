@@ -448,14 +448,14 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		if (saveFiles == null || saveFiles.length == 0){
 			
-			si.print(3,6, "No adventurers available",Color.WHITE);
+			si.print(3,6, "No e available",Color.WHITE);
 			si.print(4,8, "[Space to Cancel]",Color.WHITE);
 			si.refresh();
 			si.waitKey(CharKey.SPACE);
 			return -1;
 		}
 			
-		si.print(3,6, "Pick an adventurer",Color.WHITE);
+		si.print(3,6, "Pick an Expedition",Color.WHITE);
 		List<GFXMenuItem> items = new ArrayList<GFXMenuItem>();
 		for (int i = 0; i < saveFiles.length; i++){
 			String saveFileName = saveFiles[i].getName();
@@ -464,7 +464,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		}
 		
 		BorderedMenuBox menuBox = ((ExpeditionOryxUI)UserInterface.getUI()).createBorderedMenuBox(20,6,9,12,20);
-		menuBox.setLegend("Pick an adventurer");
+		menuBox.setLegend("Pick an Expedition");
 		menuBox.setMenuItems(items);
 		menuBox.setItemsPerPage(10);
 		menuBox.setBounds(20,20,400,400);
@@ -557,36 +557,47 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	@Override
 	public Expedition createExpedition(ExpeditionGame game) {
-		ExpeditionCleanButton defaultButton = new ExpeditionCleanButton(4, "Default");
-		defaultButton.setLocation(230, 495);
+		/*ExpeditionCleanButton defaultButton = new ExpeditionCleanButton(4, "Default");
+		defaultButton.setLocation(215, 495);*/
+		ExpeditionCleanButton okButton = new ExpeditionCleanButton(4, "Ok");
+		okButton.setLocation(350, 495);
 		
 		final BlockingQueue<Integer> inputQueue = si.getInputQueue();
-		defaultButton.addActionListener(new ActionListener(){
+		
+		String defaultName = "West Indias";
+		try {
+			for (int i = 0; i < 10; i++){
+				inputQueue.put(CharKey.BACKSPACE);
+			}
+			for (char c: defaultName.toCharArray()){
+				Integer code = SwingSystemInterface.charCode(c);
+				if (code != null){
+					inputQueue.put(code);
+				}
+			}
+		} catch (InterruptedException e1) {}
+		
+		okButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					String defaultName = "Colombus";
-					for (int i = 0; i < 10; i++){
-						inputQueue.put(CharKey.BACKSPACE);
-					}
-					for (char c: defaultName.toCharArray()){
-						Integer code = SwingSystemInterface.charCode(c);
-						if (code != null){
-							inputQueue.put(code);
-						}
-					}
 					inputQueue.put(CharKey.ENTER);
 				} catch (InterruptedException e1) {}
 			}
 		});
-		si.add(defaultButton);
+		
+		si.add(okButton);
 		
 		String name = "";
 		while (name.trim().equals("")){
-			si.printAtPixel(128, 428, "Enter a name for the expedition log", Color.WHITE);
-			name = si.input(222, 463, Color.WHITE, 10);
+			si.printAtPixel(128, 428, "Enter a name for the Expedition", Color.WHITE);
+			name = si.input(222, 463, Color.WHITE, 20);
+			if (name.trim().equals("")){
+				UserInterface.getUI().showSystemMessage("Please enter a name for the Expedition.");
+				si.refresh();
+			}
 		}
-		si.remove(defaultButton);
+		si.remove(okButton);
 		return ExpeditionFactory.createPlayerExpedition(name, game);
 	}
 	
