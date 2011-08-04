@@ -384,7 +384,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		closeButton.setLocation(730,41);
 		
 		ExpeditionCleanButton buyButton = new ExpeditionCleanButton(2, "BUY");
-		buyButton.setSize(96,48);
 		BlockingQueue<Integer> buyButtonSelectionHandler = new LinkedBlockingQueue<Integer>();
 
    		StoreBorderGridBox menuBox = new StoreBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62,202,2,5,null,
