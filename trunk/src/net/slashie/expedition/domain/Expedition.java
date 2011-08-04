@@ -1333,6 +1333,35 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		super.addItem(item, quantity);
 		validateMounted();
 	}
+
+	/**
+	 * Add the item without validating if the expedition can carry it.
+	 * 
+	 * The expedition may become stranded afterwards
+	 * @param toAdd
+	 * @param quantity
+	 */
+	public void addItemForced(AbstractItem toAdd, int quantity){
+		String toAddID = toAdd.getFullID();
+		Equipment equipmentx = inventory.get(toAddID);
+		if (equipmentx == null)
+			inventory.put(toAddID, new Equipment(toAdd, quantity));
+		else
+			equipmentx.increaseQuantity(quantity);
+	}
+	
+	/**
+	 * Adds all these items without validating if the expedition can carry them.
+	 * 
+	 * The expedition may become stranded afterwards.
+	 * 
+	 * @param items
+	 */
+	public void addAllItemsForced(List<Equipment> items){
+		for (Equipment equipment: items){
+			addItemForced(equipment.getItem(), equipment.getQuantity());
+		}
+	}
 	
 	public void addAllItems(List<Equipment> items){
 		for (Equipment equipment: items){

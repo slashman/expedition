@@ -24,9 +24,12 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		setAppearanceId("GOODS_CACHE");
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		game.addFoodConsumer(this);
+		setSolid(true);
 	}
 	
 	public GoodsCache() {
+		super();
+		setSolid(true);
 	}
 
 	public int getItemCount(String string) {
@@ -139,13 +142,20 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	@Override
 	public void onStep(Actor a) {
 		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
-			switch (UserInterface.getUI().switchChat("Goods Cache","What do you want to do?", "Fetch Equipment", "Caché Equipment")){
+			switch (UserInterface.getUI().switchChat("Goods Cache","What do you want to do?", "Fetch Equipment", "Caché Equipment", "Carry all")){
 			case 0:
 				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the goods to transfer", null, this);
     			break;
 			case 1:
 				((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(this);
 				break;
+			case 2:
+				Expedition expedition = (Expedition)a;
+				expedition.addAllItemsForced(getInventory());
+				removeAllItems();
+				if (destroyOnEmpty())
+					getLevel().destroyFeature(this);
+				setSolid(false);
 			}
 		}
 	}
@@ -171,11 +181,6 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	@Override
 	public String getDescription() {
 		return "Ground";
-	}
-
-	@Override
-	public boolean isSolid() {
-		return true;
 	}
 
 	@Override
@@ -376,6 +381,11 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 			reduceQuantityOf(equipment.getItem().getFullID(), equipment.getQuantity());
 		}
 	}
+	
+	protected void removeAllItems(){
+		items.clear();
+	}
+	
 	
 	public int getFoodDays(){
 		return foodConsumerDelegate.getFoodDays();

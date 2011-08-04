@@ -225,7 +225,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		musicButton.setVisible(true);
 		saveButton.setVisible(true);
 		quitButton.setVisible(true);
-		
+		updateButtonStatus();
 	}
 	
 	@Override
