@@ -13,21 +13,14 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JSlider;
 import javax.swing.Timer;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
-import net.slashie.expedition.domain.Weapon;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.AppearanceFactory;
@@ -41,7 +34,6 @@ import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
 import net.slashie.utils.swing.GFXMenuItem;
-import net.slashie.utils.swing.BorderedGridBox.SelectedItem;
 
 public class StoreBorderGridBox extends BorderedGridBox{
 	private static final long serialVersionUID = 1L;
@@ -58,12 +50,6 @@ public class StoreBorderGridBox extends BorderedGridBox{
 	private Store store;
 	boolean buyButtonEnabled = true;
 	
-	@Override
-	public GFXMenuItem getSelection() {
-		
-		return super.getSelection();
-	}
-
 	public StoreBorderGridBox(BufferedImage border1, BufferedImage border2,
 			BufferedImage border3, BufferedImage border4,
 			SwingSystemInterface g, Color backgroundColor, Color borderIn,
@@ -230,6 +216,12 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				maximumQuantity = stock < inventory ? stock : inventory;
 				selectedQuantity = 1;
 			    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
+			    
+			    if (eitem instanceof ExpeditionUnit){
+			    	buyButton.setText("Hire");
+			    } else {
+			    	buyButton.setText("Buy");
+			    }
 
 				// Pop components up
 			    quantitySplitterUp.setVisible(true);
