@@ -183,7 +183,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		livestockButton.setPopupText("Livestock");
 		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
 		closeButton.setLocation(startX + gapX * 6,41);
-		closeButton.setPopupText("Close");
 		
 		si.add(peopleButton);
 		si.add(suppliesButton);
@@ -571,27 +570,36 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		Equipment.eqMode = true;
    		((GFXUISelector)getPlayer().getSelector()).deactivate();
    		clearTextBox();
-   		// Create the close button and add it to the UI
-   		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(730,41);
 		
-   		// Create the buttons for good type selection and add them to the UI
-   		CleanButton peopleButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_PEOPLE, HAND_CURSOR);
-		peopleButton.setLocation(540,41);	
+		int startX = 480;
+		int gapX = 40;
+
+		// Create the good type buttons
+		CleanButton peopleButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_PEOPLE, HAND_CURSOR);
+		peopleButton.setPopupText("People");
+		peopleButton.setLocation(startX,41);	
 		CleanButton suppliesButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_SUPPLIES, HAND_CURSOR);
-		suppliesButton.setLocation(569,41);	
+		suppliesButton.setLocation(startX + gapX * 1,41);
+		suppliesButton.setPopupText("Supplies");
 		CleanButton tradeGoodsButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_MERCHANDISE, HAND_CURSOR);
-		tradeGoodsButton.setLocation(598,41);	
+		tradeGoodsButton.setLocation(startX + gapX * 2,41);
+		tradeGoodsButton.setPopupText("Trade Goods");
 		CleanButton armoryButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_WEAPONS, HAND_CURSOR);
-		armoryButton.setLocation(627,41);	
+		armoryButton.setLocation(startX + gapX * 3,41);
+		armoryButton.setPopupText("Armory");
 		CleanButton livestockButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_LIVESTOCK, HAND_CURSOR);
-		livestockButton.setLocation(656,41);
+		livestockButton.setLocation(startX + gapX * 4,41);
+		livestockButton.setPopupText("Livestock");
+		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
+		closeButton.setLocation(startX + gapX * 6,41);
+		
 		si.add(peopleButton);
 		si.add(suppliesButton);
 		si.add(tradeGoodsButton);
 		si.add(armoryButton);
 		si.add(livestockButton);
 		si.add(closeButton);
+		
 		
 		// Create the blockingqueue
 		BlockingQueue<String> transferFromExpeditionHandler = new LinkedBlockingQueue<String>();
