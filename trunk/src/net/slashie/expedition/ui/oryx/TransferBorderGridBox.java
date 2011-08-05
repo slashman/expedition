@@ -153,7 +153,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private void initializeSplitters() {
 		quantitySplitterUp = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterUp.setVisible(false);
-		quantitySplitterUp.setLocation(512,218);
+		quantitySplitterUp.setLocation(512,223);
 		final Action increaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -189,7 +189,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		
 		quantitySplitterDown = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
-		quantitySplitterDown.setLocation(512,243);
+		quantitySplitterDown.setLocation(512,248);
 		
 		final Action decreaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
