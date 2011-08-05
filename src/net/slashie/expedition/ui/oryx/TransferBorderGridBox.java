@@ -20,8 +20,10 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import net.slashie.expedition.domain.ExpeditionItem;
+import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.ItemContainer;
 import net.slashie.expedition.domain.ShipCache;
+import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.UserInterface;
@@ -51,6 +53,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private JLabel quantityLabel;
 	private int selectedQuantity;
 	private int maximumQuantity;
+	private String transferUnit;
 	private int changeSpeed;
 	private int initialQuantity;
 	private KeyListener splitterArrowsListener;
@@ -162,7 +165,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				selectedQuantity += changeSpeed;
 				if (selectedQuantity > maximumQuantity)
 					selectedQuantity = maximumQuantity;
-			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
+			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity+transferUnit);
 			}
 		};
 		final Timer increaseQuantityTimer = new Timer(100, increaseQuantityAction);
@@ -173,11 +176,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				if (highlight == null)
 					return;
 				initialQuantity = selectedQuantity;
-				selectedQuantity ++;
-				if (selectedQuantity > maximumQuantity)
-					selectedQuantity = maximumQuantity;
-			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
-				increaseQuantityTimer.start();
+				increaseQuantityAction.actionPerformed(null);
+			    increaseQuantityTimer.start();
 			}
 			
 			@Override
@@ -202,7 +202,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				selectedQuantity -= changeSpeed;
 				if (selectedQuantity < 0)
 					selectedQuantity = 0;
-			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
+			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity+transferUnit);
 			}
 		};
 		final Timer decreaseQuantityTimer = new Timer(100, decreaseQuantityAction);
@@ -213,11 +213,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				if (highlight == null)
 					return;
 				initialQuantity = selectedQuantity;
-				
-				selectedQuantity --;
-				if (selectedQuantity < 0)
-					selectedQuantity = 0;
-			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
+				decreaseQuantityAction.actionPerformed(null);
 			    decreaseQuantityTimer.start();
 			}
 			
@@ -238,21 +234,14 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				int code = SwingSystemInterface.charCode(e);
 				if (code == CharKey.UARROW || code == CharKey.N8){
 					initialQuantity = selectedQuantity;
-					selectedQuantity ++;
-					if (selectedQuantity > maximumQuantity)
-						selectedQuantity = maximumQuantity;
-				    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
+					increaseQuantityAction.actionPerformed(null);
 					increaseQuantityTimer.start();
 					kbLaunchedTimer = true;
 				} else if (code == CharKey.DARROW || code == CharKey.N2){
 					if (highlight == null)
 						return;
 					initialQuantity = selectedQuantity;
-					
-					selectedQuantity --;
-					if (selectedQuantity < 0)
-						selectedQuantity = 0;
-				    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
+					decreaseQuantityAction.actionPerformed(null);
 				    decreaseQuantityTimer.start();
 				    kbLaunchedTimer = true;
 				}
@@ -278,6 +267,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 
 	private ExpeditionItem lastChoice;
 	private int boxX;
+	private boolean daysFoodTransfer = false;
 	
 	public void draw(Equipment highlight, int boxX) {
 		si.restore();
@@ -318,9 +308,38 @@ public class TransferBorderGridBox extends BorderedGridBox{
 					if (maximumQuantity > highlight.getQuantity())
 						maximumQuantity = highlight.getQuantity();
 				}
+  	  			if (eitem instanceof Food){
+  	  				if (to instanceof FoodConsumer){
+  	  					FoodConsumer toFoodConsumer = (FoodConsumer) to;
+  	  					int dailyFoodConsumption = toFoodConsumer.getDailyFoodConsumption();
+  	  					if (dailyFoodConsumption == 0){
+  	  						// Destination has no units, transfer by quantity
+  	  						transferUnit = "";
+	  						daysFoodTransfer = false;
+  	  					} else {
+	  	  	  				// Player picks supply days, not item quantity, scale things
+	  	  					int unitMaximumQuantity = maximumQuantity;
+	  	  					maximumQuantity = (int) Math.floor((double)unitMaximumQuantity / (double)dailyFoodConsumption);
+	  	  					if (maximumQuantity == 0){
+	  	  						maximumQuantity = unitMaximumQuantity;
+	  	  						transferUnit = "";
+	  	  						daysFoodTransfer = false;
+	  	  					} else {
+	  	  						transferUnit = " days";
+	  	  						daysFoodTransfer = true;
+	  	  					}
+  	  					}
+  	  				} else {
+  	  					maximumQuantity = -1;
+  	  				}
+  	  			} else {
+  	  				transferUnit = "";
+  	  				daysFoodTransfer  = false;
+  	  			}
 
 				selectedQuantity = 0;
-			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity);
+			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity+transferUnit);
+
 
 				// Pop components up
 			    quantitySplitterUp.setVisible(true);
@@ -449,5 +468,9 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	@Override
 	protected Cursor getHandCursor() {
 		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).HAND_CURSOR;
+	}
+
+	public boolean isDaysFoodTransfer() {
+		return daysFoodTransfer;
 	}
 }

@@ -32,6 +32,7 @@ import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
+import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ItemContainer;
@@ -53,6 +54,7 @@ import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
+import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
@@ -740,6 +742,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  			int quantity = menuBox.getQuantity();
   	  			if (quantity == 0 || choice == null){
   	  				continue;
+  	  			}
+  	  			
+  	  			if (choice.getItem() instanceof Food){
+  	  				if (menuBox.isDaysFoodTransfer()){
+  	  					FoodConsumer toFoodConsumer = (FoodConsumer) to;
+  	  					// Player picked supply days, not item quantity, scaleback
+  	  	  				quantity = quantity * toFoodConsumer.getDailyFoodConsumption();
+  	  				}
   	  			}
   	  			
 				if (quantity > choice.getQuantity()){
