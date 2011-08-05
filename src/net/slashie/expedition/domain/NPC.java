@@ -13,6 +13,7 @@ import net.slashie.utils.Util;
 public class NPC extends AwareActor implements Cloneable{
 	private ExpeditionUnit unit;
 	private String[] talkLines;
+	private boolean unique;
 	@Override
 	public String getClassifierID() {
 		return unit.getFullID()+super.toString();
@@ -28,10 +29,11 @@ public class NPC extends AwareActor implements Cloneable{
 		return unit.getAppearance();
 	}
 	
-	public NPC(ExpeditionUnit unit, boolean nullSelector, String... talkLines) {
+	public NPC(ExpeditionUnit unit, boolean nullSelector, boolean unique, String... talkLines) {
 		super();
 		this.unit = unit;
-		if (unit.getBaseID().equals("GUARD") || unit.getBaseID().equals("DOMINIK")){
+		this.unique = unique;
+		if (nullSelector){
 			selector = new NullSelector();
 		} else {
 			selector = new SimpleAI(null, new NPCWalk());
@@ -151,10 +153,12 @@ public class NPC extends AwareActor implements Cloneable{
 	}
 
 	private boolean isUnique() {
+		/*
 		return unit.getBaseID().equals("SANTIAGO") ||
 		unit.getBaseID().equals("CRISTOFORO") ||
 		unit.getBaseID().equals("BIZCOCHO")
-		;
+		;*/
+		return unique;
 	}
 
 	public String getUnitId(){
