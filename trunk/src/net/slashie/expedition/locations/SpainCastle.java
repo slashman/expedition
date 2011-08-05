@@ -114,7 +114,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 
 	@Override
 	public String getDescription() {
-		return "Spain Castle";
+		return "Alcazar of Córdova";
 	}
 
 	@Override
