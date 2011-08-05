@@ -204,6 +204,9 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			if (eitem != lastChoice){		
 				// Just Selected
 				maximumQuantity = stock < inventory ? stock : inventory;
+				int maxBuy = (int)Math.floor((double)offShoreExpedition.getAccountedGold() / (double)itemInfo.getPrice());
+				if (maximumQuantity > maxBuy)
+					maximumQuantity = maxBuy;
 				selectedQuantity = 1;
 			    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
 			    
