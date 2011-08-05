@@ -1,11 +1,15 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,6 +26,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
@@ -162,18 +167,23 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 
 		// Create the good type buttons
 		CleanButton peopleButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_PEOPLE, HAND_CURSOR);
+		peopleButton.setPopupText("People");
 		peopleButton.setLocation(startX,41);	
 		CleanButton suppliesButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_SUPPLIES, HAND_CURSOR);
-		suppliesButton.setLocation(startX + gapX * 1,41);	
+		suppliesButton.setLocation(startX + gapX * 1,41);
+		suppliesButton.setPopupText("Supplies");
 		CleanButton tradeGoodsButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_MERCHANDISE, HAND_CURSOR);
-		tradeGoodsButton.setLocation(startX + gapX * 2,41);	
+		tradeGoodsButton.setLocation(startX + gapX * 2,41);
+		tradeGoodsButton.setPopupText("Trade Goods");
 		CleanButton armoryButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_WEAPONS, HAND_CURSOR);
-		armoryButton.setLocation(startX + gapX * 3,41);	
+		armoryButton.setLocation(startX + gapX * 3,41);
+		armoryButton.setPopupText("Armory");
 		CleanButton livestockButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_LIVESTOCK, HAND_CURSOR);
-		livestockButton.setLocation(startX + gapX * 4,41);	
+		livestockButton.setLocation(startX + gapX * 4,41);
+		livestockButton.setPopupText("Livestock");
 		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
 		closeButton.setLocation(startX + gapX * 6,41);
-		
+		closeButton.setPopupText("Close");
 		
 		si.add(peopleButton);
 		si.add(suppliesButton);
@@ -933,6 +943,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
 		super.init(psi, title, gameCommands, UIProperties, target);
 		ExpeditionCleanButton.init(si, UIProperties);
+		
 		try {
 			FNT_TEXT = PropertyFilters.getFont(UIProperties.getProperty("FNT_TEXT"), UIProperties.getProperty("FNT_TEXT_SIZE"));
 		} catch (FileNotFoundException e1) {
@@ -943,6 +954,15 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			e1.printStackTrace();
 		}
 		psi.setFont(FNT_TEXT);
+		
+		JLabel legendLabel = new JLabel();
+		legendLabel.setFont(si.getFont());
+		legendLabel.setVisible(false);
+		legendLabel.setForeground(Color.WHITE);
+		legendLabel.setSize(800,15);
+		si.add(legendLabel);
+		CleanButton.init(legendLabel, si);
+		
 		
 		HAND_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		POINTER_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4);
@@ -1394,5 +1414,4 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		else
 			return null;
 	}
-
 }

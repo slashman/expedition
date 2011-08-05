@@ -58,7 +58,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	private Image armImage;
 	
 	private Cursor HAND_CURSOR;
-	private JLabel legendLabel;
+	
 	private JPanel buttonsPanel;
 	
 	@Override
@@ -67,13 +67,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			Action attack, GFXUserInterface ui, Properties keyBindings) {
 		super.init(psi, gameActions, uiProperties, advance, target, attack, ui,
 				keyBindings);
-		legendLabel = new JLabel();
-		legendLabel.setFont(si.getFont());
-		legendLabel.setVisible(false);
-		legendLabel.setForeground(Color.WHITE);
-		legendLabel.setSize(800,15);
-		si.add(legendLabel);
-		
 		HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		
 		try {
@@ -132,20 +125,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		saveButton.setPopupText("Save");
 		quitButton.setPopupText("Quit");
 		
-		armButton.addMouseListener(getPopupMouseListener(armButton));
-		buildButton.addMouseListener(getPopupMouseListener(buildButton));
-		dropButton.addMouseListener(getPopupMouseListener(dropButton));
-		inventoryButton.addMouseListener(getPopupMouseListener(inventoryButton));
-		lookButton.addMouseListener(getPopupMouseListener(lookButton));
-		mountButton.addMouseListener(getPopupMouseListener(mountButton));
-		repairButton.addMouseListener(getPopupMouseListener(repairButton));
-		resetButton.addMouseListener(getPopupMouseListener(resetButton));
-		chopButton.addMouseListener(getPopupMouseListener(chopButton));
-		anchorButton.addMouseListener(getPopupMouseListener(anchorButton));
-		musicButton.addMouseListener(getPopupMouseListener(musicButton));
-		saveButton.addMouseListener(getPopupMouseListener(saveButton));
-		quitButton.addMouseListener(getPopupMouseListener(quitButton));
-		
 		armButton.setVisible(false);
 		buildButton.setVisible(false);
 		dropButton.setVisible(false);
@@ -189,7 +168,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		
 		si.add(buttonsPanel);
 	}
-	
+	/*
 	private MouseListener getPopupMouseListener(final CleanButton cleanButton) {
 		return new MouseAdapter(){
 			@Override
@@ -206,7 +185,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 				legendLabel.setVisible(false);
 			}
 		};
-	}
+	}*/
 
 	@Override
 	public void activate() {
@@ -254,7 +233,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 				try {
 					handler.put(option);
 				} catch (InterruptedException e1) {}
-				legendLabel.setVisible(false);
+				// legendLabel.setVisible(false); HERE
 				si.recoverFocus();
 			}
 		};
