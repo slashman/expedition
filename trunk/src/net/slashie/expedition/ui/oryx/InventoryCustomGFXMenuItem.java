@@ -86,16 +86,9 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 		// Unit status
 		if (eitem instanceof ExpeditionUnit){
 			ExpeditionUnit unit = (ExpeditionUnit)eitem;
-			Weapon weapon = unit.getWeapon();
-			String weaponDescription = weapon != null ? weapon.getFullDescription() : "Unarmed";
-			Armor armor = unit.getArmor();
-			String armorDescription = armor != null ? armor.getFullDescription() : "Clothes";
-			String status = unit.getStatusModifiersString();
-			si.printAtPixel(x+48, y + 15, weaponDescription, Color.WHITE);
-			si.printAtPixel(x+48, y + 28, armorDescription, Color.WHITE);
-			si.printAtPixel(x+48, y + 42, status, Color.WHITE);
-			si.printAtPixel(x+198, y + 15, "ATK: " + unit.getAttack().getString(), Color.WHITE);
-			si.printAtPixel(x+198, y + 28, "DEF: " + unit.getDefense().getString(), Color.WHITE);
+			si.printAtPixel(x+48, y + 15, unit.getLongDescription(), Color.WHITE);
+			si.printAtPixel(x+48, y + 28, "ATK: " + unit.getAttack().getString(), Color.WHITE);
+			si.printAtPixel(x+48, y + 42, "DEF: " + unit.getDefense().getString(), Color.WHITE);
 			si.printAtPixel(x+198, y + 42, "Weight: "+unit.getWeight(), Color.WHITE);
 		}
 		
