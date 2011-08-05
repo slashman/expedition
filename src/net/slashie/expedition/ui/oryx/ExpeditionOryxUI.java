@@ -695,7 +695,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  			menuBox.setCurrentPage(currentPage);
   	  		}
   	  		
-  	  		int boxX = 540 + typeChoice * 29 - 24;
+  	  		int boxX = startX + typeChoice * gapX - 21;
   	  		menuBox.draw(true, boxX);
   	  		
   	  		// Wait for item or command selection
@@ -1258,10 +1258,16 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		@Override
 		public boolean validateBreak(ItemContainer from, ItemContainer to) {
 			if (from instanceof ShipCache){
-				if (to.getTotalUnits() > 0)
-					return true;
+				if (to.getTotalUnits() > 0){
+					if (to.getFoodDays() == 0){
+						showBlockingMessage("You must transfer supplies for the expedition.");
+			  	  		return false;
+					} else {
+						return true;
+					}
+				}
 				else {
-					showBlockingMessage("You must first disembark.");
+					showBlockingMessage("You must disembark with at least one unit.");
 		  	  		return false;
 				}
 			} else {
