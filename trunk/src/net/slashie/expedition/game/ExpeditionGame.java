@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
-import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -14,7 +13,6 @@ import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.LevelMaster;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractLevel;
@@ -87,7 +85,7 @@ public class ExpeditionGame extends SworeGame {
 
 	@Override
 	public String getFirstMessage(Actor player) {
-		return "Welcome to Spain, "+getExpedition().getExpeditionary()+". Press F1 for help.";
+		return "Welcome!";
 	}
 
 	@Override
@@ -163,13 +161,14 @@ public class ExpeditionGame extends SworeGame {
 			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atlántico
 			level.getPlayer().setPosition(-4362, 689, 0); // Near the Tairona
 			*/ 
+			//level.getPlayer().setPosition(-430, 2235, 0); // Gotta put this to load the piece around the starting place, must find a better way..
 		}
 
 		
 	}
 	
 	public static String getVersion(){
-		return "v0.3 RC1";
+		return "v0.3 RC3";
 	}
 	
 	public Expedition getExpedition(){
