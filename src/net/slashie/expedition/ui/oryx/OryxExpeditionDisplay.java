@@ -559,6 +559,16 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	public Expedition createExpedition(ExpeditionGame game) {
 		/*ExpeditionCleanButton defaultButton = new ExpeditionCleanButton(4, "Default");
 		defaultButton.setLocation(215, 495);*/
+		Image image = null;
+		try {
+			image = ImageUtils.createImage(uiProperties.getProperty("BTN_THE_NEW_WORLD"));
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		CleanButton theNewWorldButton = new CleanButton(image, HAND_CURSOR);
+		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
+		si.add(theNewWorldButton);
+		
 		ExpeditionCleanButton okButton = new ExpeditionCleanButton(4, "Ok");
 		okButton.setLocation(350, 495);
 		
@@ -598,6 +608,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			}
 		}
 		si.remove(okButton);
+		si.remove(theNewWorldButton);
 		return ExpeditionFactory.createPlayerExpedition(name, game);
 	}
 	
