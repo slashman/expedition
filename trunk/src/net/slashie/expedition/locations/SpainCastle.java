@@ -16,9 +16,10 @@ import net.slashie.serf.level.Unleasher;
 import net.slashie.serf.levelGeneration.StaticPattern;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
-import net.slashie.utils.Util;
 
 public class SpainCastle extends StaticPattern implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	public SpainCastle () {
 		this.cellMap = new String [][]{{
 			/*"#cc#+#cc###C###cc#+#cc#",
@@ -42,12 +43,12 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			"#........#.....#.................o......+..=F-I=..+.......#",
 			"#........#.....#...........s...............=---=..#.......#",
 			"#........#.....#........................#..=---=..#....J..#",
-			"#........#.....#.....#..................+..=---=..+.......#",
+			"#........#.....#.....#..................+..=-_-=..+.......#",
 			"#........#.##.##########....#############..=---=..#.......#",
 			"#........#.#....a.....s...m.....s.......#..=---=..###...###",
 			"#..........#.............Z..............W..=---=..W.......W",
 			"#....o...###..#.#..#...#....#...#..#.#..#.........#...g...W",
-			"#........#..............................###g._.g###.......#",
+			"#........#..............................###g...g###.......#",
 			"#........#....#.,,,,,,,,,,,,,,,,,,,,.#..#.........#.......#",
 			"#........###....,,,t,,,,,,,t,,,,,,,,....#.................#",
 			"#........#......,,,,,,,,,,,,,,,,,,,,..............#.......#",
@@ -90,8 +91,8 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		charMap.put("W", "CASTLE_WINDOW");
 		charMap.put("S", "CASTLE_FLOOR EXIT SPAIN");
 		charMap.put("T", "THRONE");
-		charMap.put("F", "RED_CARPET ITEM KING_FERDINAND");
-		charMap.put("I", "RED_CARPET ITEM QUEEN_ISABELLE");
+		charMap.put("F", "RED_CARPET NPC KING_FERDINAND");
+		charMap.put("I", "RED_CARPET NPC QUEEN_ISABELLE");
 		charMap.put("L", "BOOKSHELF");
 		charMap.put("E", "BOOKSHELF_L");
 		charMap.put("R", "BOOKSHELF_R");
@@ -106,7 +107,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		charMap.put("o", "CASTLE_FLOOR NPC COLONIST");
 		charMap.put("C", "SPAIN_CREST");
 		charMap.put("c", "CASTLE_CURTAIN");
-		charMap.put("_", "CASTLE_FLOOR EXIT _START");
+		charMap.put("_", "RED_CARPET EXIT _START");
 		charMap.put("X", "SPAIN_GRASS_BLOCKED");
 		unleashers = new Unleasher[]{new KingsChat()};
 	}
@@ -122,14 +123,18 @@ public class SpainCastle extends StaticPattern implements Serializable {
 	}
 
 	class KingsChat extends Unleasher {
+		private static final long serialVersionUID = 1L;
 		Position CREST_POSITION = new Position(45,0);
+		private int previousPlayerY = 0;
 		@Override
 		public void unleash(AbstractLevel level, SworeGame game) {
 			Actor p = level.getPlayer();
 			int distance = net.slashie.utils.Position.distance(p.getPosition(), CREST_POSITION);
-			if (distance <= 5){
+			if (distance <= 8){
 				interactWithKings(level);
 			}
+			previousPlayerY = level.getPlayer().getPosition().y;
+
 		}
 		
 		private void interactWithKings(AbstractLevel level) {
@@ -185,7 +190,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				
 				m("We have also instructed Friar Domenico to answer your questions about this journey, you will find him next to the Alcazar entrance.");
 				m("May God be with you in your journey, we await your safe return. XXX XXX You are dismissed.");
-				
+				level.addMessage("You see the exit of the Alcazar to the south");
 			} else {
 				boolean earnedTitle = false;
 				for (Title title: Expedition.Title.values()){
@@ -205,17 +210,20 @@ public class SpainCastle extends StaticPattern implements Serializable {
 					if (exp.getFlag("DISCOVERED_NEW_WORLD")){
 						((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We await your safe return from the New World. XXX XXX  You are dismissed.");
 					} else {
-						((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We await your safe return.  XXX XXX You are dismissed.");
+						if (level.getPlayer().getPosition().y < previousPlayerY){
+							// Advancing toward the kings
+							((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We await your safe return.  XXX XXX You are dismissed.");
+						}
 					}
 				}
 			}
 			
-			 
+			/*
 			level.getPlayer().setPosition(new Position(level.getExitFor("SPAIN")));
 			level.getPlayer().getPosition().y --;
 			((Player)level.getPlayer()).darken();
 			((Player)level.getPlayer()).see();
-			UserInterface.getUI().refresh();
+			UserInterface.getUI().refresh();*/
 		}
 		
 

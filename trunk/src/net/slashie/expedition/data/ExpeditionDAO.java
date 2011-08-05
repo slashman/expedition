@@ -787,15 +787,17 @@ public class ExpeditionDAO {
 	
 	public static NPC[] getNPCs(){
 		return new NPC[]{
-				new NPC((ExpeditionUnit)ItemFactory.createItem("DOMINIK"), true),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("BIZCOCHO"), false, "WOOF-WOOF!", "GRRRR!!!"),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("CRISTOFORO"), false, "The Cave is gushing...", "I play my lute and receive the good wishes of the people.", "The song goes: Ho eyo he hum!"),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("SANTIAGO"), false, "The World is changing!", "All things have a true nature!"),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("SOLDIER"), false, "The moors are gone. Long live the King and Queen!"),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("MARINE"), false, "Our fleet is strong"),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("ARCHER"), false, "Gunpowder weapons will never replace the keen archer", "May I go with you? You have my bow."),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("GUARD"), true),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("COLONIST"), false, "Many a grave has been unjustly filled in the name of justice.", "I will not speak of my sin!"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("DOMINIK"), true, true),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("BIZCOCHO"), false, true, "WOOF-WOOF!", "GRRRR!!!"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("CRISTOFORO"), false, true, "The Cave is gushing...", "I play my lute and receive the good wishes of the people.", "The song goes: Ho eyo he hum!"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("SANTIAGO"), false, true, "The World is changing!", "All things have a true nature!"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("SOLDIER"), false, false, "The moors are gone. Long live the King and Queen!"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("MARINE"), false, false, "Our fleet is strong"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("ARCHER"), false, false, "Gunpowder weapons will never replace the keen archer", "May I go with you? You have my bow."),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("GUARD"), true, false),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("COLONIST"), false, false, "Many a grave has been unjustly filled in the name of justice.", "I will not speak of my sin!"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("KING_FERDINAND"), true, true, "I am glad we could fetch you before leaving Córdova!", "You have my blessing, may you have success in your journey"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("QUEEN_ISABELLE"), true, true, "I hope our Holy mother Mary blesses your trip", "Please spread our faith around the world")
 			};
 	}
 }
