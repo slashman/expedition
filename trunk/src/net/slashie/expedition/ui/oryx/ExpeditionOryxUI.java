@@ -871,7 +871,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Draw
 		si.setColor(Color.WHITE);
 		
-		si.print(20, 1, ui_debug);
+		// si.print(20, 1, ui_debug);
 		
 		// Left Column
 		si.print(2, 1, ui_date);
@@ -882,7 +882,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.print(8, 4, locationDescription.getB());
 		si.print(2, 5, ui_food + ui_foodModifier);
 		si.print(2, 6, ui_seaDays);
-		si.print(2, 7, ui_water);
+		// si.print(2, 7, ui_water); TODO: Implement
 		si.print(2, 8, ui_morale + ui_armed);
 		si.print(2, 9, ui_carrying);
 		si.print(2,10, ui_gold);
@@ -898,10 +898,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			
 		si.print(line2, 5, "WIND", TITLE_COLOR);
 			si.print(line2+9, 5, ui_windDirection);
-		si.print(line2+2, 6, ui_windStrength);
-		si.print(line2, 7, "CURRENT", TITLE_COLOR);
-			si.print(line2+9, 7, ui_currentDirection);
-		si.print(line2+2, 8, ui_currentStrength);
+		// si.print(line2+2, 6, ui_windStrength); TODO: Implement
+		//si.print(line2, 7, "CURRENT", TITLE_COLOR); TODO: Implement
+			//si.print(line2+9, 7, ui_currentDirection); TODO: Implement
+		//si.print(line2+2, 8, ui_currentStrength); TODO: Implement
 		
 		si.print(line2, 9, "HEADING", TITLE_COLOR);
 			si.print(line2+9, 9, ui_headingDirection);
