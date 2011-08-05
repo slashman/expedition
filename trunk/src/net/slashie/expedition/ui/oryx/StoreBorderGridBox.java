@@ -33,10 +33,10 @@ import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
-import net.slashie.utils.swing.GFXMenuItem;
 
 public class StoreBorderGridBox extends BorderedGridBox{
 	private static final long serialVersionUID = 1L;
+	
 	private Expedition offShoreExpedition;
 	private Equipment highlight;
 	private CleanButton quantitySplitterUp;
@@ -48,15 +48,15 @@ public class StoreBorderGridBox extends BorderedGridBox{
 	private int changeSpeed;
 	private int initialQuantity;
 	private Store store;
-	boolean buyButtonEnabled = true;
-	
+	private boolean buyButtonEnabled = true;
+		
 	public StoreBorderGridBox(BufferedImage border1, BufferedImage border2,
 			BufferedImage border3, BufferedImage border4,
 			SwingSystemInterface g, Color backgroundColor, Color borderIn,
 			Color borderOut, int borderWidth, int outsideBound, int inBound,
 			int insideBound, int itemHeight, int itemWidth, int gridX,
 			int gridY, BufferedImage box,
-			final Store store, Expedition offShoreExpedition, CleanButton buyButton, final BlockingQueue<Integer> buyButtonSelectionHandler_, CleanButton closeButton) {
+			final Store store, final Expedition offShoreExpedition, CleanButton buyButton, final BlockingQueue<Integer> buyButtonSelectionHandler_, CleanButton closeButton) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
 				itemWidth, gridX, gridY, box, closeButton);
@@ -82,8 +82,8 @@ public class StoreBorderGridBox extends BorderedGridBox{
 		final Action increaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)highlight.getItem());
+			public void actionPerformed(ActionEvent xxx) {
+				StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
 				if (initialQuantity - selectedQuantity == 0)
 					changeSpeed = 1;
 				else
@@ -91,7 +91,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				selectedQuantity += changeSpeed;
 				if (selectedQuantity > maximumQuantity)
 					selectedQuantity = maximumQuantity;
-			    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
+			    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
 			}
 		};
 		final Timer increaseQuantityTimer = new Timer(100, increaseQuantityAction);
@@ -102,12 +102,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				if (highlight == null)
 					return;
 				initialQuantity = selectedQuantity;
-				
-				StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)highlight.getItem());
-				selectedQuantity ++;
-				if (selectedQuantity > maximumQuantity)
-					selectedQuantity = maximumQuantity;
-			    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
+				increaseQuantityAction.actionPerformed(null);
 				increaseQuantityTimer.start();
 			}
 			
@@ -125,7 +120,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)highlight.getItem());
+				StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
 				if (initialQuantity - selectedQuantity == 0)
 					changeSpeed = 1;
 				else
@@ -133,7 +128,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				selectedQuantity -= changeSpeed;
 				if (selectedQuantity < 1)
 					selectedQuantity = 1;
-			    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
+			    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
 			}
 		};
 		final Timer decreaseQuantityTimer = new Timer(100, decreaseQuantityAction);
@@ -144,12 +139,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				if (highlight == null)
 					return;
 				initialQuantity = selectedQuantity;
-				
-				StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)highlight.getItem());
-				selectedQuantity --;
-				if (selectedQuantity < 1)
-					selectedQuantity = 1;
-			    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
+				decreaseQuantityAction.actionPerformed(null);
 			    decreaseQuantityTimer.start();
 			}
 			
@@ -192,7 +182,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			int inventory = highlight.getQuantity();
 			int stock = offShoreExpedition.getOffshoreCarryable(eitem);
 			int current = offShoreExpedition.getItemCountBasic(eitem.getFullID());
-			StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)highlight.getItem());
+			StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
 
 			// Draw a cute border
 			int x = 450;
@@ -215,7 +205,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				// Just Selected
 				maximumQuantity = stock < inventory ? stock : inventory;
 				selectedQuantity = 1;
-			    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
+			    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
 			    
 			    if (eitem instanceof ExpeditionUnit){
 			    	buyButton.setText("Hire");
@@ -361,6 +351,14 @@ public class StoreBorderGridBox extends BorderedGridBox{
 	@Override
 	protected Cursor getHandCursor() {
 		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).HAND_CURSOR;
+	}
+
+	public boolean isBuyButtonEnabled() {
+		return buyButtonEnabled;
+	}
+
+	public void setBuyButtonEnabled(boolean buyButtonEnabled) {
+		this.buyButtonEnabled = buyButtonEnabled;
 	}	
 
 

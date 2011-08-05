@@ -9,8 +9,12 @@ import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 
-
 public class Store implements Serializable, Cloneable{
+	private static final long serialVersionUID = 1L;
+	
+	public final static int FOOD_PACK = 200;
+	public final static int LIQUID_PACK = 500;
+	public final static int WOOD_PACK = 50;
 	
 	private Hashtable<String, StoreItemInfo> prices = new Hashtable<String, StoreItemInfo>();
 	private List<Equipment> inventory = new ArrayList<Equipment>();
@@ -40,9 +44,22 @@ public class Store implements Serializable, Cloneable{
 	public void setOwnerAppearance(Appearance ownerAppearance) {
 		this.ownerAppearance = ownerAppearance;
 	}
-	
-	public StoreItemInfo getPriceFor(ExpeditionItem item){
+
+	public StoreItemInfo getBasicInfo(ExpeditionItem item, Expedition expedition){
 		return prices.get(item.getFullID());
+	}
+		
+	public StoreItemInfo getBuyInfo(ExpeditionItem item, Expedition expedition){
+		if (item instanceof Food){
+			StoreItemInfo ret = prices.get(item.getFullID()).clone();
+			double unitPrice = (double)ret.getPrice() / (double)ret.getPack();
+			ret.setPack(expedition.getDailyFoodConsumption());
+			ret.setPackDescription("days");
+			ret.setPrice((int)Math.round(unitPrice*ret.getPack()));
+			return ret;
+		} else {
+			return prices.get(item.getFullID());
+		}
 	}
 	
 	public void addItem(int quantity, StoreItemInfo info){

@@ -62,7 +62,7 @@ public class CommonUI {
 		int inventory = item.getQuantity();
 		int stock = offShore.getOffshoreCarryable((ExpeditionItem)item.getItem());
 		int current = offShore.getItemCountBasic(item.getItem().getFullID());
-		StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
+		StoreItemInfo itemInfo = store.getBasicInfo((ExpeditionItem)item.getItem(), offShore);
 		if (item.getItem() instanceof ExpeditionUnit){
 			if (stock < 0)
 				stock = 0;

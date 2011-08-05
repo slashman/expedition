@@ -34,19 +34,15 @@ import net.slashie.util.Pair;
 import net.slashie.utils.roll.Roll;
 
 public class ExpeditionDAO {
-	final static int FOOD_PACK = 200;
-	final static int LIQUID_PACK = 500;
-	final static int WOOD_PACK = 50;
-	
 	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
 		
 		Store goodsStore = new Store();
 		goodsStore.setOwnerName("Goods Store");
-		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", FOOD_PACK, "half-barrels"));
-		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", LIQUID_PACK, "barrels"));
-		goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", FOOD_PACK, "half-barrels"));
-		goodsStore.addItem(500, new StoreItemInfo("RUM", LIQUID_PACK, "barrels"));
-		goodsStore.addItem(10000, new StoreItemInfo("WOOD", WOOD_PACK, "packs"));
+		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", Store.FOOD_PACK, "barrels"));
+		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", Store.LIQUID_PACK, "barrels"));
+		goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", Store.FOOD_PACK, "barrels"));
+		goodsStore.addItem(500, new StoreItemInfo("RUM", Store.LIQUID_PACK, "barrels"));
+		goodsStore.addItem(10000, new StoreItemInfo("WOOD", Store.WOOD_PACK, "packs"));
 		
 		//Weapons Store
 		Store weaponsStore = new Store();
@@ -485,18 +481,18 @@ public class ExpeditionDAO {
 					new String[]{}, 200, 300),
 			
 			//Goods
-			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 40,50, FOOD_PACK),
-			new Food("BREAD", "Bread", "Bread", "Food Ration", 3, 1, 100, 200, FOOD_PACK),
-			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 3, 1, 400,50, FOOD_PACK),
-			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 3, 1, 400,50, FOOD_PACK),
+			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 40,50, Store.FOOD_PACK),
+			new Food("BREAD", "Bread", "Bread", "Food Ration", 3, 1, 100, 200, Store.FOOD_PACK),
+			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 3, 1, 400,50, Store.FOOD_PACK),
+			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 3, 1, 400,50, Store.FOOD_PACK),
 			
-			new Food("BEANS", "Beans", "Beans", "Food Ration", 3, 1, 800,100, FOOD_PACK),
-			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 400,50, FOOD_PACK),
-			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 20,40, FOOD_PACK),
-			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 3, 1, 800,200, FOOD_PACK),
-			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 3, 1, 800,200, FOOD_PACK),
-			new Food("FISH", "Fish", "Fish", "Food Ration", 3, 1, 100, 200, FOOD_PACK),
-			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 100, 100, FOOD_PACK),
+			new Food("BEANS", "Beans", "Beans", "Food Ration", 3, 1, 800,100, Store.FOOD_PACK),
+			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 400,50, Store.FOOD_PACK),
+			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 20,40, Store.FOOD_PACK),
+			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 3, 1, 800,200, Store.FOOD_PACK),
+			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 3, 1, 800,200, Store.FOOD_PACK),
+			new Food("FISH", "Fish", "Fish", "Food Ration", 3, 1, 100, 200, Store.FOOD_PACK),
+			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 100, 100, Store.FOOD_PACK),
 			
 			new ExpeditionItem("FRESHWATER", "Freshwater", "Freshwater", "Liquid of Life", "FRESHWATER", 2, GoodType.SUPPLIES, 20,5),
 			new ExpeditionItem("RUM", "Rum", "Rum", "Liquid of Life", "RUM", 2, GoodType.SUPPLIES, 400,500),

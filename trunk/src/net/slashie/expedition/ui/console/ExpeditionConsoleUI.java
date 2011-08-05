@@ -314,7 +314,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				break;
 			Equipment choice = itemChoice.getEquipment();
 			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			StoreItemInfo storeItemInfo = store.getPriceFor(item);
+			StoreItemInfo storeItemInfo = store.getBuyInfo(item, getExpedition());
 			if (storeItemInfo.getPack() > 1)
 				menuBox.setPrompt("How many "+storeItemInfo.getPackDescription()+" of "+item.getPluralDescription()+"?");
 			else

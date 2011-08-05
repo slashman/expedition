@@ -402,7 +402,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		
   		List<StoreCustomGFXMenuItem> invMenuItems = new Vector<StoreCustomGFXMenuItem> ();
   		for (Equipment item: merchandise){
-  			invMenuItems.add(new StoreCustomGFXMenuItem(item, store));
+  			invMenuItems.add(new StoreCustomGFXMenuItem(item, store, getExpedition()));
   		}
   		//Collections.sort(invMenuItems, inventoryCustomItemsComparator);
   		
@@ -419,7 +419,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			/*menuBox.draw(null);*/
 			menuBox.setLegend(prompt);
 			//si.refresh();
-			menuBox.buyButtonEnabled = true;
+			menuBox.setBuyButtonEnabled(true);
 
 			if (!keepItemChoice)
 				itemChoice = ((StoreCustomGFXMenuItem)menuBox.getSelection());
@@ -431,7 +431,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			// Pick quantity
 			Equipment choice = itemChoice.getEquipment();
 			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			StoreItemInfo storeItemInfo = store.getPriceFor(item);
+			StoreItemInfo storeItemInfo = store.getBuyInfo(item, getExpedition());
 			
 			if(!keepItemChoice){
 				if (storeItemInfo.getPack() > 1)

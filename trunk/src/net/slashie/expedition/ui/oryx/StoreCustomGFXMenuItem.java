@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 
 import net.slashie.expedition.domain.Armor;
+import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Store;
@@ -20,12 +21,13 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 	private static final long serialVersionUID = 1L;
 	
 	private Equipment item;
-
 	private Store store;
+	private Expedition expedition;
 
-	public StoreCustomGFXMenuItem(Equipment item, Store store) {
+	public StoreCustomGFXMenuItem(Equipment item, Store store, Expedition expedition) {
 		this.item = item;
 		this.store = store;
+		this.expedition = expedition;
 	}
 	
 	public Equipment getEquipment(){
@@ -60,7 +62,7 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
 		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
 		String itemDescription = item.getItem().getDescription();
-		StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
+		StoreItemInfo itemInfo = store.getBasicInfo((ExpeditionItem)item.getItem(), expedition);
 	
 		// Draw a cute border
 		if (eitem instanceof ExpeditionUnit){
@@ -94,7 +96,9 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 			}
 		} else {
 			si.printAtPixel(x+48, y + 15, "Weight "+eitem.getWeight(), Color.WHITE);
-			si.printAtPixel(x+48, y + 28, "Pack x "+eitem.getValuePack(), Color.WHITE);
+			if (itemInfo.getPack() != 1){
+				si.printAtPixel(x+48, y + 28, itemInfo.getPackDescription()+"x"+itemInfo.getPack(), Color.WHITE);
+			}
 			si.printAtPixel(x+48, y + 42, "$"+itemInfo.getPrice(), Color.WHITE);
 		}
 		
@@ -106,7 +110,7 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
 		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
 		String itemDescription = item.getItem().getDescription();
-		StoreItemInfo itemInfo = store.getPriceFor((ExpeditionItem)item.getItem());
+		StoreItemInfo itemInfo = store.getBasicInfo((ExpeditionItem)item.getItem(), expedition);
 		
 		// Draw a cute border
 		if (highlight){
@@ -133,7 +137,9 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.printAtPixel(x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		} else {
 			si.printAtPixel(x+48, y + 15, "Weight "+eitem.getWeight(), Color.WHITE);
-			si.printAtPixel(x+48, y + 28, "Pack x "+eitem.getValuePack(), Color.WHITE);
+			if (itemInfo.getPack() != 1){
+				si.printAtPixel(x+48, y + 28, itemInfo.getPackDescription()+"x"+itemInfo.getPack(), Color.WHITE);
+			}
 			si.printAtPixel(x+48, y + 42, "$"+itemInfo.getPrice(), Color.WHITE);
 			si.printAtPixel(x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 		}
