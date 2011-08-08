@@ -455,12 +455,12 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return super.getFeatureAt(position);
 	}
 	
-	//private Position tempP = new Position(0,0);
 	@Override
 	public List<AbstractFeature> getFeaturesAt(Position tempP) {
-		/*tempP.x = ExpeditionLevelReader.transformLongIntoX(originalP.x());
-		tempP.y = ExpeditionLevelReader.transformLatIntoY(originalP.y());*/
+		// Base list
 		List<AbstractFeature> ret = super.getFeaturesAt(tempP);
+		
+		// Stormlets
 		if (hasStorm(tempP)){
 			if (ret == null)
 				ret = new ArrayList<AbstractFeature>();
@@ -473,14 +473,10 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			}
 		}
 		
-		// Ship shadow
+		// Ship shadow (Consider removing this as a feature, should be just an UI thing)
 		OverworldExpeditionCell cell = (OverworldExpeditionCell) getMapCell(tempP);
-		//if (ret == null && cell != null && cell.isSea() && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
 		if (ret == null && cell != null && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
 			// Get cell to the wind shadow
-			
-			//int scale = GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
-			// xx Position var = Position.mul(getWindDirection().getVectors(), scale);
 			Position var = new Position(getWindDirection().getVectors());
 			var = GlobeMapModel.scaleVar(var, getExpedition().getLatitude());
 			if (tempP.equals(Position.add(getExpedition().getPosition(), var))){
@@ -496,8 +492,9 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return false;
 	}
 
-	
 	class StormletFeature extends AbstractFeature {
+		private static final long serialVersionUID = 1L;
+
 		public StormletFeature() {
 			setAppearanceId("STORM");
 		}
