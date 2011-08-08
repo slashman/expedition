@@ -26,6 +26,8 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class ExpeditionMacroLevel extends ExpeditionLevelReader{
+	private static final long serialVersionUID = 1L;
+	
 	private Actor currentWindAgent;
 	private Actor currentDayShiftAgent;
 	private Actor currentForageAgent;
@@ -538,7 +540,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		if (formerWeather != weather){
 			addMessage(weather.getChangeMessage(formerWeather));
 			if (weather.isWindy() && getWindDirection() == CardinalDirection.NULL){
-				getDispatcher().callActor(currentWindAgent);
+				//getDispatcher().callActor(currentWindAgent);
+				setWindDirection(getWindDirection().rotate(1));
 			}
 		}
 		
