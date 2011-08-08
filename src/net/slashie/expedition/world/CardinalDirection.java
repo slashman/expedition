@@ -67,32 +67,62 @@ public enum CardinalDirection {
 	}
 
 	
-	public static CardinalDirection getGeneralDirection(Position from,
-			Position to) {
-		int angle = (int) Math.round( Math.atan2(to.y-from.y, to.x-from.x) / (Math.PI / 180.0d));
+	public static CardinalDirection getGeneralDirection(Position from, Position to) {
+		int angle = (int) Math.round( Math.atan2((to.y-from.y)*-1, to.x-from.x) / (Math.PI / 180.0d)); // Invert y because of the globe model
 		/*
-		 *   270
-		 *180    0
 		 *    90
+		 *180    0
+		 *   270
 		 */
+		if (angle < 0)
+			angle += 360;
 		if (angle > 338)
 			return CardinalDirection.EAST;
 		else if (angle > 293)
-			return CardinalDirection.NORTHEAST;
+			return CardinalDirection.SOUTHEAST;
 		else if (angle > 248)
-			return CardinalDirection.NORTH;
+			return CardinalDirection.SOUTH;
 		else if (angle > 203)
-			return CardinalDirection.NORTHWEST;
+			return CardinalDirection.SOUTHWEST;
 		else if (angle > 158)
 			return CardinalDirection.WEST;
 		else if (angle > 113)
-			return CardinalDirection.SOUTHWEST;
+			return CardinalDirection.NORTHWEST;
 		else if (angle > 68)
-			return CardinalDirection.SOUTH;
+			return CardinalDirection.NORTH;
 		else if (angle > 23)
-			return CardinalDirection.SOUTHEAST;
+			return CardinalDirection.NORTHEAST;
 		else 
 			return CardinalDirection.EAST;
+	}
+	
+	public static void main(String[] args){
+		Position origin = new Position(0,0);
+		Position test = new Position(0,0);
+		test.x = -10;
+		test.y = 0;
+		System.out.println(test.x+":"+test.y+" "+getGeneralDirection(origin, test).getDescription());
+		test.x = -10;
+		test.y = -10;
+		System.out.println(test.x+":"+test.y+" "+getGeneralDirection(origin, test).getDescription());
+		test.x = 0;
+		test.y = -10;
+		System.out.println(test.x+":"+test.y+" "+getGeneralDirection(origin, test).getDescription());
+		test.x = 10;
+		test.y = -10;
+		System.out.println(test.x+":"+test.y+" "+getGeneralDirection(origin, test).getDescription());
+		test.x = 10;
+		test.y = 0;
+		System.out.println(test.x+":"+test.y+" "+getGeneralDirection(origin, test).getDescription());
+		test.x = 10;
+		test.y = 10;
+		System.out.println(test.x+":"+test.y+" "+getGeneralDirection(origin, test).getDescription());
+		test.x = 0;
+		test.y = 10;
+		System.out.println(test.x+":"+test.y+" "+getGeneralDirection(origin, test).getDescription());
+		test.x = -10;
+		test.y = 10;
+		System.out.println(test.x+":"+test.y+" "+getGeneralDirection(origin, test).getDescription());
 	}
 
 	public static CardinalDirection getRandomDirection() {
