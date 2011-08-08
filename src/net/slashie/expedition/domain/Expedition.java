@@ -1900,7 +1900,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		// Randomly sight land
 		if (getMovementMode() == MovementMode.SHIP){
 			boolean sawLand = false;
-			if (daysOnSea > 30 && onOpenSea()){
+			if (daysOnSea > 15 && onOpenSea()){
 				sawLand = sightLand(getSightRange() + 1) || sightLand(getSightRange() + 2);
 				if (!sawLand && Util.chance(50) && getSightRange() > 4){
 					sawLand = nearLandSignals(18) || nearLandSignals(19) || nearLandSignals(20);
@@ -1908,9 +1908,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				// Wrong Land sight
 				if (!sawLand && getMorale() < 4 && Util.chance(5)){
 					CardinalDirection d = CardinalDirection.getRandomDirection();
+					if (d == CardinalDirection.NULL)
+						d = CardinalDirection.WEST;
 					switch (Util.rand(0, 1)){
 					case 0:
-						message("You see land to the "+d.getDescription()+"!");
+						message("There seems to be land to the "+d.getDescription());
 						break;
 					case 1:
 						message("You see a cloud block to the "+d.getDescription());
@@ -1955,7 +1957,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		for (Position point: points){
 			if (Util.chance(15)){
 				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLocation().getMapCell(point);
-				if (cell != null && !cell.isWater()){
+				if (cell != null && cell.isLand()){
 					CardinalDirection d = CardinalDirection.getGeneralDirection(getPosition(), point);
 					message("You see land to the "+d.getDescription()+"!");
 					return true;
@@ -1976,7 +1978,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			if (Util.chance(5)){
 				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLocation().getMapCell(point);
 				if (cell != null && !cell.isWater()){
-					switch (Util.rand(0, 2)){
+					switch (Util.rand(0, 3)){
 					case 0:
 						message("You see some tufts of grass floating on the sea!");
 						return true;
@@ -1987,6 +1989,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					case 2:
 						d = CardinalDirection.getGeneralDirection(getPosition(), point);
 						message("You see a cloud block to the "+d.getDescription());
+						return true;
+					case 3:
+						d = CardinalDirection.getGeneralDirection(getPosition(), point);
+						message("There seems to be land to the "+d.getDescription());
 						return true;
 					}
 				}
