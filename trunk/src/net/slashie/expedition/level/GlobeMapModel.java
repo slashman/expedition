@@ -1,9 +1,15 @@
 package net.slashie.expedition.level;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.slashie.utils.Position;
 
 public class GlobeMapModel {
+	private final static int LONGITUDE_EQUATOR_NAUTICAL_MILES = 60; 
+	
 	// Note: This is calibrated for the 8colorsAmericaAndAtlantic map
+	private static Map<Integer, Integer> _transformLongIntoX = new HashMap<Integer, Integer>(); 
 	public static int transformLongIntoX(int longMinutes){
 		return (int)Math.round((double)longMinutes * 0.3324d) + 3377; 
 	}
@@ -16,11 +22,18 @@ public class GlobeMapModel {
 	/**
 	 * Steps left and right are 3 minutes at equator, and more minutes as aproaching the poles
 	 */
+	private static Map<Integer, Integer> _getLongitudeScaleCache = new HashMap<Integer, Integer>(); 
 	public static int getLongitudeScale(int latitudeMinutes) {
 		double latitudeDegrees = latitudeMinutes / 60.0d;
-		return (int) Math.floor(3.0d / Math.cos(latitudeDegrees * (Math.PI / 180.0d)));
+		Integer ret = _getLongitudeScaleCache.get(latitudeMinutes); 
+		if (ret == null){
+			//ret = (int) Math.floor(3.0d / Math.cos(latitudeDegrees * (Math.PI / 180.0d)));
+			ret = (int) Math.round(3.0d / Math.cos(latitudeDegrees * (Math.PI / 180.0d)));
+			_getLongitudeScaleCache.put(latitudeMinutes, ret);
+		}
+		return ret;
 	}
-
+	
 	public static void transformIntoLatLong(Position p) {
 		p.x = transformXIntoLong(p.x);
 		p.y = transformYIntoLat(p.y);
@@ -50,6 +63,22 @@ public class GlobeMapModel {
 
 	public static Position scaleVar(Position var, int latitudeMinutes) {
 		return new Position(var.x * getLongitudeScale(latitudeMinutes), var.y * getLatitudeHeight());
+	}
+
+	
+	/**
+	 * Transform a longitude minutes value into a distance in nautical miles
+	 * @param q
+	 * @return
+	 */
+	
+	public static double transformLongIntoNauticalMiles(int latitudeMinutesPosition, int longitudeMinutesValue) {
+		double latitudeDegrees = latitudeMinutesPosition / 60.0d;
+		double nauticalMiles = Math.cos(latitudeDegrees * (Math.PI / 180.0d));
+		nauticalMiles *= LONGITUDE_EQUATOR_NAUTICAL_MILES;
+		nauticalMiles /= 60.0d;
+		nauticalMiles *= longitudeMinutesValue;
+		return nauticalMiles;
 	}
 
 }
