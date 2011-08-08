@@ -516,7 +516,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	@Override
 	public boolean promptChat(String message) {
-		if (getPlayer() != null)
+		if (getPlayer() != null && getPlayer().getSelector() != null)
 			((GFXUISelector)getPlayer().getSelector()).deactivate();
 		message = message.replaceAll("XXX", "\n");
 		return promptChat(message, 140,388,520,200);
@@ -871,7 +871,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Draw
 		si.setColor(Color.WHITE);
 		
-		// si.print(20, 1, ui_debug);
+		//si.print(20, 1, ui_debug);
 		
 		// Left Column
 		si.print(2, 1, ui_date);
