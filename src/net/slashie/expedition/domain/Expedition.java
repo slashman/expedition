@@ -138,20 +138,24 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		"Victorious"
 	};
 
-	private int deducedReckonWest;
+	private double deducedReckonWest;
 	
 	public void resetDeducedReckonWest(){
 		deducedReckonWest = 0;
 	}
 	
+	/**
+	 * Quantity in degree minutes
+	 * @param q
+	 */
 	public void increaseDeducedReckonWest(int q){
-		deducedReckonWest += q;
+		deducedReckonWest += GlobeMapModel.transformLongIntoNauticalMiles(getPosition().y, q);
 	}
 	
 	private FoodConsumerDelegate foodConsumerDelegate;
 	
 	public int getDeducedReckonWest() {
-		return deducedReckonWest;
+		return (int) Math.round(deducedReckonWest);
 	}
 
 	public MovementSpeed getMovementSpeed() {
@@ -580,16 +584,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		//Should I refresh the stats on demand instead of always calculating them??
 	}
 	
-	//private Pair<Integer, Integer> spainLocation = new Pair<Integer, Integer>(37,-6);
 	public ExpeditionLevel getLocation(){
-		/*if (getLevel().getID().equals("SPAIN")){
-			return spainLocation;
-		}
-		return null;*/
 		return (ExpeditionLevel) getLevel();
 	}
-	
-
 	
 	@Override
 	public void beforeItemsAddition(AbstractItem item, int quantity) {
@@ -620,7 +617,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public int getDarkSightRange() {
 		return getSightRange();
 	}
-
 
 	@Override
 	public List<AbstractItem> getEquippedItems() {
@@ -1213,7 +1209,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        				setMovementMode(MovementMode.SHIP);
 		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
 		        				destinationPoint = new Position(getPosition());
-		        				destinationPoint.x--;
+		        				destinationPoint.x -= GlobeMapModel.getLongitudeScale(getPosition().y);
 		        				setAnchored(true);
 		        		        super.landOn(destinationPoint);
 		        		        if (!getFlag("SAILING_EXPLAINED")){
@@ -1247,14 +1243,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	        }
         } else {
 	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
-	        /*if (!cell.isLand()&& !(getMovementMode() == MovementMode.SHIP)){
-	        	// Walking into the sea, just check for features (ships) to board
-	        	AbstractFeature feature = getLevel().getFeatureAt(destinationPoint);
-	            if (feature != null && feature.isSolid()){
-	            	feature.onStep(this);
-	            }
-	            throw new ActionCancelException();
-	        }*/
 	        
 	        switch(getMovementMode()){
 	        case SHIP:
@@ -1267,27 +1255,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	        		throw new ActionCancelException();
 	        	}
 	        }
-	        /*
-	         * Dead Reckon Calculation
-	         *  @ latitude 0 (apply for all latitudes to simplify the model)
-				cells	592
-				longitude degrees	30
-				degrees / cell	0,050675676
-				mt / degree 111321  (http://books.google.com.co/books?id=wu7zHtd2LO4C&hl=en)
-				mt / cell	5641,266892
-				nautical leagues / mt	0,000179
-				nautical leagues / cell	1,009786774
-
-	         */
-	        
 	        if (Util.chance(95)) {
 	        	//Simulate the lack of precision
 	        	increaseDeducedReckonWest(getPosition().x()-destinationPoint.x());
-	        	//increaseDeducedReckonWest(-var.x());
 	        }
         }
-        
-
         super.landOn(destinationPoint);
 	}
 	
