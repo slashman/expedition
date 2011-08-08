@@ -6,10 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class Storm implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private Position position;
 	private List<Position> stormlets = new ArrayList<Position>();
 	private Map<Position, Position> stormletsMap = new HashMap<Position, Position>();
@@ -34,20 +37,22 @@ public class Storm implements Serializable{
 	}
 	
 	public void grow(){
+		int xScale = GlobeMapModel.getLongitudeScale(position.y);
+		int yScale = GlobeMapModel.getLatitudeHeight();
 		usedFuel += 10;
 		List<Position> newStormlets = new ArrayList<Position>();
 		for (Position stormlet: stormlets){
 			if (Util.chance(80)){
-				newStormlets.add(new Position(stormlet.x-1,stormlet.y));
+				newStormlets.add(new Position(stormlet.x-1*xScale,stormlet.y));
 			}
 			if (Util.chance(80)){
-				newStormlets.add(new Position(stormlet.x+1,stormlet.y));
+				newStormlets.add(new Position(stormlet.x+1*xScale,stormlet.y));
 			}
 			if (Util.chance(80)){
-				newStormlets.add(new Position(stormlet.x,stormlet.y-1));
+				newStormlets.add(new Position(stormlet.x,stormlet.y-1*yScale));
 			}
 			if (Util.chance(80)){
-				newStormlets.add(new Position(stormlet.x,stormlet.y+1));
+				newStormlets.add(new Position(stormlet.x,stormlet.y+1*yScale));
 			}
 		}
 		for (Position stormlet: newStormlets ){
@@ -56,27 +61,29 @@ public class Storm implements Serializable{
 	}
 	
 	public void shrink(){
+		int xScale = GlobeMapModel.getLongitudeScale(position.y);
+		int yScale = GlobeMapModel.getLatitudeHeight();
 		List<Position> removableStormlets = new ArrayList<Position>();
 		Position runner = new Position(0,0);
 		for (Position stormlet: stormlets){
 			int surrounding = 0;
-			runner.x = stormlet.x+1;
+			runner.x = stormlet.x+1*xScale;
 			runner.y = stormlet.y;
 			if (stormletsMap.get(runner) != null){
 				surrounding++;
 			}
-			runner.x = stormlet.x-1;
+			runner.x = stormlet.x-1*xScale;
 			runner.y = stormlet.y;
 			if (stormletsMap.get(runner) != null){
 				surrounding++;
 			}
 			runner.x = stormlet.x;
-			runner.y = stormlet.y+1;
+			runner.y = stormlet.y+1*yScale;
 			if (stormletsMap.get(runner) != null){
 				surrounding++;
 			}
 			runner.x = stormlet.x;
-			runner.y = stormlet.y-1;
+			runner.y = stormlet.y-1*yScale;
 			if (stormletsMap.get(runner) != null){
 				surrounding++;
 			}
@@ -112,6 +119,7 @@ public class Storm implements Serializable{
 	private int getGrowChance() {
 		return 100-usedFuel;
 	}
+	
 	public void move(CardinalDirection windDirection) {
 		position.x += windDirection.getVectors().x;
 		position.y += windDirection.getVectors().y;
