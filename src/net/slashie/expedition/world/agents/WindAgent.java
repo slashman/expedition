@@ -11,10 +11,12 @@ import net.slashie.serf.action.Actor;
 import net.slashie.utils.Util;
 
 public class WindAgent extends Actor{
+	private static final long serialVersionUID = 1L;
 
 	protected static final int WIND_BEAT = 500;
 	
 	protected static final Action BEAT = new Action() {
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void execute() {
@@ -27,8 +29,12 @@ public class WindAgent extends Actor{
 			if (currentWind == CardinalDirection.NULL){
 				// In the doldrums
 				isOnITZ = true;
-				if (Util.chance(50)){
-					rotate = Util.rand(0, 2);
+				if (level.getWeather().isWindy()){
+					rotate = 1;
+				} else {
+					if (Util.chance(50)){
+						rotate = Util.rand(0, 1);
+					}
 				}  
 			} else if (!level.getWeather().isWindy() && Util.chance(15)) {
 				rotate = 0;
@@ -57,6 +63,7 @@ public class WindAgent extends Actor{
 		
 	};
 	private static final ActionSelector WIND_SELECTOR = new ActionSelector(){
+		private static final long serialVersionUID = 1L;
 
 		public ActionSelector derive() {
 			return null;
