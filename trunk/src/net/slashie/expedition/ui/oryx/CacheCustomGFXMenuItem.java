@@ -62,15 +62,15 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 		
 		// Draw a cute border
 		if (eitem instanceof ExpeditionUnit){
-			si.getDrawingGraphics().setColor(new Color(82,79,34));
-			si.getDrawingGraphics().fillRect(x+1, y+1, 350 - 2, 60 - 2);
-			si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-			si.getDrawingGraphics().drawRect(x+1, y+1, 350 - 2, 60 - 2);
-			si.getDrawingGraphics().drawRect(x+2, y+2, 350 - 4, 60 - 4);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(new Color(82,79,34));
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 350 - 2, 60 - 2);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(OryxExpeditionDisplay.COLOR_BOLD);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 350 - 2, 60 - 2);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 350 - 4, 60 - 4);
 		}
 		
-		si.drawImage(x + 12, y + 12, unitImage);
-		si.printAtPixel(x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
+		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 12, unitImage);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		
 		// Unit status
 		if (eitem instanceof ExpeditionUnit){
@@ -80,18 +80,18 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 			Armor armor = unit.getArmor();
 			String armorDescription = armor != null ? armor.getFullDescription() : "Clothes";
 			String status = unit.getStatusModifiersString();
-			si.printAtPixel(x+48, y + 15, weaponDescription, Color.WHITE);
-			si.printAtPixel(x+48, y + 28, armorDescription, Color.WHITE);
-			si.printAtPixel(x+48, y + 42, status, Color.WHITE);
-			si.printAtPixel(x+198, y + 15, "ATK: " + unit.getAttack().getString(), Color.WHITE);
-			si.printAtPixel(x+198, y + 28, "DEF: " + unit.getDefense().getString(), Color.WHITE);
-			si.printAtPixel(x+198, y + 42, "Weight: "+unit.getWeight(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, weaponDescription, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, armorDescription, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, status, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 15, "ATK: " + unit.getAttack().getString(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 28, "DEF: " + unit.getDefense().getString(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 42, "Weight: "+unit.getWeight(), Color.WHITE);
 		} else {
 			int inventory = item.getQuantity();
 			String current = to.getItemCountBasic(item.getItem().getFullID())+"";
-			si.printAtPixel(x+48, y + 15, from.getDescription()+": "+inventory, Color.WHITE);
-			si.printAtPixel(x+48, y + 28, to.getDescription()+": "+current, Color.WHITE);
-			si.printAtPixel(x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getDescription()+": "+inventory, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getDescription()+": "+current, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 		}
 	}
 	
@@ -105,19 +105,19 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 
 		// Draw a cute border
 		if (highlight){
-			si.getDrawingGraphics().setColor(new Color(82,79,34));
-			si.getDrawingGraphics().fillRect(x+1, y+1, 200 - 2, 60 - 2);
-			si.getDrawingGraphics().fillRect(x+2, y+2, 200 - 4, 60 - 4);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(new Color(82,79,34));
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 200 - 2, 60 - 2);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+2, y+2, 200 - 4, 60 - 4);
 		} 
-		si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getDrawingGraphics().drawRect(x+1, y+1, 200 - 2, 60 - 2);
-		si.getDrawingGraphics().drawRect(x+2, y+2, 200 - 4, 60 - 4);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(OryxExpeditionDisplay.COLOR_BOLD);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 200 - 2, 60 - 2);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 200 - 4, 60 - 4);
 		
-		si.drawImage(x + 12, y + 12, unitImage);
+		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 12, unitImage);
 		
-		si.printAtPixel(x+48, y + 15, from.getDescription()+": "+inventory, Color.WHITE);
-		si.printAtPixel(x+48, y + 28, to.getDescription()+": "+current, Color.WHITE);
-		si.printAtPixel(x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getDescription()+": "+inventory, Color.WHITE);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getDescription()+": "+current, Color.WHITE);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 	}
 	
 	

@@ -25,19 +25,23 @@ public class InventoryBorderGridBox extends BorderedGridBox{
 				itemWidth, gridX, gridY, box, null);
 	}
 
-	
 	public void draw(int boxX, int boxY, Image box) {
 		this.boxX = boxX;
 		this.boxY = boxY;
 		this.box = box;
 		super.draw(false);
-		si.drawImage(boxX, boxY, box);
-		si.refresh();
+		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, boxX, boxY, box);
+		si.commitLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
 	}
 	
 	@Override
 	public void draw(boolean refresh) {
 		draw(boxX, boxY, box);
+	}
+	
+	@Override
+	public int getDrawingLayer() {
+		return ExpeditionOryxUI.UI_WIDGETS_LAYER;
 	}
 	
 	@Override

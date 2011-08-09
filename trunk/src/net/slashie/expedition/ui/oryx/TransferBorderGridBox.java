@@ -83,7 +83,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		this.transferButton = transferButton;
 		
 		quantityLabel = new JLabel();
-		quantityLabel.setFont(si.getFont());
+		quantityLabel.setFont(si.getFont(ExpeditionOryxUI.UI_WIDGETS_LAYER));
 		quantityLabel.setVisible(false);
 		quantityLabel.setBounds(540,231,200,27);
 		quantityLabel.setForeground(Color.WHITE);
@@ -270,16 +270,16 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private boolean daysFoodTransfer = false;
 	
 	public void draw(Equipment highlight, int boxX) {
-		si.loadLayer();
-		si.saveLayer();
+		si.loadLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
+		si.saveLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
 		this.highlight = highlight;
 		super.draw(false);
 		// Draw a cute border
 		int x = 450;
 		int y = 75;
-		si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getDrawingGraphics().drawRect(x+1, y+1, 310 - 2, 390 - 2);
-		si.getDrawingGraphics().drawRect(x+2, y+2, 310 - 4, 390 - 4);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(OryxExpeditionDisplay.COLOR_BOLD);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 310 - 2, 390 - 2);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 310 - 4, 390 - 4);
 
 		drawContainerInfo(x, 85, from);
 		drawContainerInfo(x, 323, to);
@@ -294,8 +294,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			y = 210;
 
 			// Draw the unit info
-			si.drawImage(x + 12, y + 17, unitImage);
-			si.printAtPixel(x+41, y + 17, "How many "+itemDescription, OryxExpeditionDisplay.COLOR_BOLD);
+			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, unitImage);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, "How many "+itemDescription, OryxExpeditionDisplay.COLOR_BOLD);
 
 			if (eitem != lastChoice){
 				// Just Selected
@@ -358,48 +358,48 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		
 		// Draw Box
 		int boxY = 41 - 24;
-		si.drawImage(boxX, boxY, goodTypeBox);
+		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, boxX, boxY, goodTypeBox);
 		
 		
-		si.refresh();
+		si.commitLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
 	}
 	
 	private void drawContainerInfo(int x, int y, ItemContainer container) {
 		GFXAppearance containerAppearance = (GFXAppearance)container.getAppearance();
 		if (containerAppearance != null){
-			si.drawImage(x + 12, y + 17, containerAppearance.getImage());
+			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, containerAppearance.getImage());
 		}
 		int foodDays = container.getFoodDays();
 		if (foodDays != -1){
-			si.printAtPixel(x+12, y + 92, "Food Days", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+146, y + 92, container.getFoodDays()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 92, "Food Days", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 92, container.getFoodDays()+"", Color.WHITE);
 		}
 		int waterDays = container.getWaterDays();
 		if (waterDays != -1){
-			si.printAtPixel(x+12, y + 106, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+146, y + 106, container.getWaterDays()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 106, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 106, container.getWaterDays()+"", Color.WHITE);
 		}
 		
 		if (container instanceof ShipCache){
-			si.printAtPixel(x+41, y + 17, "Sea Expedition", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+41, y + 32, "Ships", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+41, y + 47, "Cargo", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+12, y + 62, "Max Cargo", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+12, y + 77, "Crew", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+146, y + 32, container.getTotalShips()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 47, container.getCurrentlyCarrying()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 62, container.getCarryCapacity()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 77, container.getTotalUnits()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, "Sea Expedition", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 32, "Ships", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 47, "Cargo", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 62, "Max Cargo", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 77, "Crew", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 32, container.getTotalShips()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, container.getCurrentlyCarrying()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, container.getCarryCapacity()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 77, container.getTotalUnits()+"", Color.WHITE);
 		} else {
-			si.printAtPixel(x+41, y + 17, container.getDescription(), OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, container.getDescription(), OryxExpeditionDisplay.COLOR_BOLD);
 			if (container.getCarryCapacity() != -1){
-				si.printAtPixel(x+12, y + 62, "Capacity", OryxExpeditionDisplay.COLOR_BOLD);
-				si.printAtPixel(x+146, y + 62, container.getCarryCapacity()+"", Color.WHITE);
-				si.printAtPixel(x+41, y + 47, "Carrying", OryxExpeditionDisplay.COLOR_BOLD);
-				si.printAtPixel(x+146, y + 47, container.getCurrentlyCarrying()+"%", Color.WHITE);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 62, "Capacity", OryxExpeditionDisplay.COLOR_BOLD);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, container.getCarryCapacity()+"", Color.WHITE);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 47, "Carrying", OryxExpeditionDisplay.COLOR_BOLD);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, container.getCurrentlyCarrying()+"%", Color.WHITE);
 			}
-			si.printAtPixel(x+12, y + 77, "People", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+146, y + 77, container.getTotalUnits()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 77, "People", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 77, container.getTotalUnits()+"", Color.WHITE);
 		}
 	}
 
@@ -472,5 +472,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 
 	public boolean isDaysFoodTransfer() {
 		return daysFoodTransfer;
+	}
+	
+	@Override
+	public int getDrawingLayer() {
+		return ExpeditionOryxUI.UI_WIDGETS_LAYER;
 	}
 }

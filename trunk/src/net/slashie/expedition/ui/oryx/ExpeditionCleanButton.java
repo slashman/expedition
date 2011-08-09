@@ -37,7 +37,7 @@ public class ExpeditionCleanButton extends CleanButton{
 
 	public ExpeditionCleanButton(int blockSize, String text) {
 		super(buttonImages.get(blockSize), ((ExpeditionOryxUI)UserInterface.getUI()).HAND_CURSOR, text);
-		setFont(si.getFont());
+		setFont(si.getFont(ExpeditionOryxUI.UI_WIDGETS_LAYER));
 		setForeground(Color.WHITE);
 		setHover(hoverButtonImages.get(blockSize));
 	}

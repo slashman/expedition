@@ -213,4 +213,9 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 		protected Cursor getHandCursor() {
 			return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).HAND_CURSOR;
 		}
+		
+		@Override
+		public int getDrawingLayer() {
+			return ExpeditionOryxUI.UI_WIDGETS_LAYER;
+		}
 	}

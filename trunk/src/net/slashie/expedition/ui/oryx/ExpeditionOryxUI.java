@@ -86,6 +86,9 @@ import net.slashie.utils.swing.MenuBox;
 
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
 	public static final int STANDARD_ITEM_WIDTH = 202;
+	public static final int UI_WIDGETS_LAYER = 2;
+	public static final int SFX_LAYER = 1;
+	public static final int MAP_LAYER = 0;
 
 	private final class ItemsComparator implements Comparator<GFXMenuItem> {
 		@Override
@@ -232,7 +235,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Examine Expedition Inventory");
-  		si.saveLayer();
+  		si.saveLayer(getUILayer());
   		int typeChoice = 0;
   		while (true){
   			GoodType[] goodTypes = GoodType.getGoodTypes();
@@ -261,7 +264,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	  			currentPage = menuBox.getPages() - 1;
 	  			menuBox.setCurrentPage(currentPage);
 	  		}
-  	  		si.loadLayer();
+  	  		si.loadLayer(getUILayer());
   	  		int boxX = startX + typeChoice * gapX - 21;
 			int boxY = 41 - 24;
   	  		menuBox.draw(boxX, boxY, IMG_BOX);
@@ -300,8 +303,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.remove(livestockButton);
 		si.remove(closeButton);
 		si.removeKeyListener(cbkl);
-  		si.loadLayer();
- 		si.refresh();
+  		si.loadLayer(getUILayer());
+ 		si.commitLayer(getUILayer());
  		//((GFXUISelector)getPlayer().getSelector()).setMouseMovementActive(false);
  		Equipment.eqMode = false;
 	}
@@ -362,11 +365,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				6,9,12 );
 
 		p.setBounds(x, y, w, h);
-		p.paintAt(si.getDrawingGraphics(), x, y);
-		si.setColor(TEXT_COLOR);
-		si.printAtPixel(x+tileSize, y+tileSize*2, prompt);
+		p.paintAt(si.getDrawingGraphics(getUILayer()), x, y);
+		si.setColor(getUILayer(), TEXT_COLOR);
+		si.printAtPixel(getUILayer(), x+tileSize, y+tileSize*2, prompt);
 		
-		String ret = si.input(xp,yp,TEXT_COLOR,length);
+		String ret = si.input(getUILayer(), xp,yp,TEXT_COLOR,length);
 		
 		return ret;
 	}
@@ -421,7 +424,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		while (true) {
 			/*menuBox.draw(null);*/
 			menuBox.setLegend(prompt);
-			//si.refresh();
+			//si.commitLayer(getUILayer());
 			menuBox.setBuyButtonEnabled(true);
 
 			if (!keepItemChoice)
@@ -783,8 +786,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		si.removeKeyListener(cbkl);
 		menuBox.kill();
 		Equipment.eqMode = false;
-		si.loadLayer();
- 		si.refresh();
+		si.loadLayer(getUILayer());
+ 		si.commitLayer(getUILayer());
 	}
 	
 	public void beforeDrawLevel() {
@@ -870,46 +873,46 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String ui_seaDays = statsExpedition.getMovementMode() == MovementMode.SHIP ? statsExpedition.getDaysOnSea()+" days on sea": "";
 		
 		// Draw
-		si.setColor(Color.WHITE);
+		si.setColor(getUILayer(), Color.WHITE);
 		
 		//si.print(20, 1, ui_debug);
 		
 		// Left Column
-		si.print(2, 1, ui_date);
-		si.print(2, 2, ui_locationDescription);
-		si.print(2, 3, locationLabels.getA(), TITLE_COLOR);
-		si.print(8, 3, locationDescription.getA());
-		si.print(2, 4, locationLabels.getB(), TITLE_COLOR);
-		si.print(8, 4, locationDescription.getB());
-		si.print(2, 5, ui_food + ui_foodModifier);
-		si.print(2, 6, ui_seaDays);
+		si.print(getUILayer(), 2, 1, ui_date);
+		si.print(getUILayer(), 2, 2, ui_locationDescription);
+		si.print(getUILayer(), 2, 3, locationLabels.getA(), TITLE_COLOR);
+		si.print(getUILayer(), 8, 3, locationDescription.getA());
+		si.print(getUILayer(), 2, 4, locationLabels.getB(), TITLE_COLOR);
+		si.print(getUILayer(), 8, 4, locationDescription.getB());
+		si.print(getUILayer(), 2, 5, ui_food + ui_foodModifier);
+		si.print(getUILayer(), 2, 6, ui_seaDays);
 		// si.print(2, 7, ui_water); TODO: Implement
-		si.print(2, 8, ui_morale + ui_armed);
-		si.print(2, 9, ui_carrying);
-		si.print(2,10, ui_gold);
+		si.print(getUILayer(), 2, 8, ui_morale + ui_armed);
+		si.print(getUILayer(), 2, 9, ui_carrying);
+		si.print(getUILayer(), 2,10, ui_gold);
 		
 		
 		// Right Column
 		int line2 = 63;
 
-		si.print(line2, 1, ui_time);
-		si.print(line2, 2, ui_weatherDescription);
-		si.print(line2, 3, ui_temperatureDescription);
-		si.print(line2, 4, ui_terrainDescription);
+		si.print(getUILayer(), line2, 1, ui_time);
+		si.print(getUILayer(), line2, 2, ui_weatherDescription);
+		si.print(getUILayer(), line2, 3, ui_temperatureDescription);
+		si.print(getUILayer(), line2, 4, ui_terrainDescription);
 			
-		si.print(line2, 5, "WIND", TITLE_COLOR);
-			si.print(line2+9, 5, ui_windDirection);
+		si.print(getUILayer(), line2, 5, "WIND", TITLE_COLOR);
+			si.print(getUILayer(), line2+9, 5, ui_windDirection);
 		// si.print(line2+2, 6, ui_windStrength); TODO: Implement
 		//si.print(line2, 7, "CURRENT", TITLE_COLOR); TODO: Implement
 			//si.print(line2+9, 7, ui_currentDirection); TODO: Implement
 		//si.print(line2+2, 8, ui_currentStrength); TODO: Implement
 		
-		si.print(line2, 9, "HEADING", TITLE_COLOR);
-			si.print(line2+9, 9, ui_headingDirection);
-		si.print(line2+2, 10, ui_bearing);
-		si.print(line2, 11, ui_movementSpeed);
+		si.print(getUILayer(), line2, 9, "HEADING", TITLE_COLOR);
+			si.print(getUILayer(), line2+9, 9, ui_headingDirection);
+		si.print(getUILayer(), line2+2, 10, ui_bearing);
+		si.print(getUILayer(), line2, 11, ui_movementSpeed);
 		
-		si.print(line2, 12, ui_shipStatus);
+		si.print(getUILayer(), line2, 12, ui_shipStatus);
 		
 		
 		if (getExpedition().getMovementMode() == MovementMode.SHIP){
@@ -948,7 +951,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			unitsMenuBox.draw();
 		}
 		
-		si.drawImage(774, 2, BTN_MOVE);
+		si.drawImage(getUILayer(), 774, 2, BTN_MOVE);
 	}
 	private List<GFXMenuItem> expeditionUnitItems = new ArrayList<GFXMenuItem>();
 	private List<GFXMenuItem> vehicleUnitItems = new ArrayList<GFXMenuItem>();
@@ -972,10 +975,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		psi.setFont(FNT_TEXT);
+		psi.setFont(getUILayer(), FNT_TEXT);
+		psi.setFont(getMapLayer(), FNT_TEXT);
 		
 		JLabel legendLabel = new JLabel();
-		legendLabel.setFont(si.getFont());
+		legendLabel.setFont(FNT_TEXT);
 		legendLabel.setVisible(false);
 		legendLabel.setForeground(Color.WHITE);
 		legendLabel.setSize(800,15);
@@ -1037,9 +1041,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private int readQuantity(int x, int y, String spaces, int inputLength){
 		int quantity = -1;
 		while (quantity == -1){
-			si.print(x,y,spaces);
-			si.refresh();
-			String strInput = si.input(x,y,TEXT_COLOR,inputLength);
+			si.print(getUILayer(), x,y,spaces);
+			si.commitLayer(getUILayer());
+			String strInput = si.input(getUILayer(), x,y,TEXT_COLOR,inputLength);
 			if (strInput == null)
 				continue;
 			strInput = strInput.trim();
@@ -1061,13 +1065,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				
 		int xBase = 192;
 		int yBase = 48;
-		si.drawImage(168, yBase - 24, BATTLE_BACKGROUND);
+		si.drawImage(getUILayer(), 168, yBase - 24, BATTLE_BACKGROUND);
 		int gridX = 0;
 		int gridY = 0;
 		for (Equipment equipment: attackingUnits){
 			GFXAppearance appearance = (GFXAppearance) equipment.getItem().getAppearance();
 			for (int i = 0; i < equipment.getQuantity(); i++){
-				si.drawImage(xBase + gridX * 24, yBase + gridY*24, appearance.getImage());
+				si.drawImage(getUILayer(), xBase + gridX * 24, yBase + gridY*24, appearance.getImage());
 				gridY ++;
 				if (gridY > 12){
 					gridX++;
@@ -1082,7 +1086,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			GFXAppearance appearance = (GFXAppearance) equipment.getItem().getAppearance();
 			Image img = ImageUtils.vFlip((BufferedImage)appearance.getImage());
 			for (int i = 0; i < equipment.getQuantity(); i++){
-				si.drawImage(xBase + gridX * 24, yBase + gridY*24, img);
+				si.drawImage(getUILayer(), xBase + gridX * 24, yBase + gridY*24, img);
 				gridY ++;
 				if (gridY > 12){
 					gridX--;
@@ -1090,7 +1094,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				}
 			}
 		}
-		si.refresh();
+		si.commitLayer(getUILayer());
 		
 		//si.waitKeyOrClick(CharKey.SPACE);
 	}
@@ -1179,8 +1183,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 
   		menuBox.kill();
   		
-  		si.loadLayer();
- 		si.refresh();
+  		si.loadLayer(getUILayer());
+ 		si.commitLayer(getUILayer());
  		
   		if (!cancel){
 	  		List<Building> buildingPlan = new ArrayList<Building>();
@@ -1427,7 +1431,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		if (promptChat("Save your game in journal \""+getPlayer().getName()+"\"?")){
 			messageBox.setText("Saving... ");
-			si.refresh();
+			si.commitLayer(getUILayer());
 			informPlayerCommand(CommandListener.SAVE);
 			enterScreen();
 		}
@@ -1447,5 +1451,15 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			return landingParties.get(choice);
 		else
 			return null;
+	}
+	
+	@Override
+	public int getUILayer() {
+		return UI_WIDGETS_LAYER;
+	}
+	
+	@Override
+	public int getMapLayer() {
+		return MAP_LAYER;
 	}
 }
