@@ -563,8 +563,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	@Override
 	public Expedition createExpedition(ExpeditionGame game) {
-		/*ExpeditionCleanButton defaultButton = new ExpeditionCleanButton(4, "Default");
-		defaultButton.setLocation(215, 495);*/
 		Image image = null;
 		try {
 			image = ImageUtils.createImage(uiProperties.getProperty("BTN_THE_NEW_WORLD"));
@@ -582,9 +580,9 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		String defaultName = "West Indias";
 		try {
-			for (int i = 0; i < 10; i++){
+			/*for (int i = 0; i < 10; i++){
 				inputQueue.put(CharKey.BACKSPACE);
-			}
+			}*/
 			for (char c: defaultName.toCharArray()){
 				Integer code = SwingSystemInterface.charCode(c);
 				if (code != null){
@@ -603,11 +601,12 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		});
 		
 		si.add(okButton);
+		si.printAtPixel(0, 128, 428, "Enter a name for the Expedition", Color.WHITE);
+		si.commitLayer(0);
 		
 		String name = "";
 		while (name.trim().equals("")){
-			si.printAtPixel(0, 128, 428, "Enter a name for the Expedition", Color.WHITE);
-			name = si.input(0, 222, 463, Color.WHITE, 20);
+			name = si.input(2, 222, 463, Color.WHITE, 20);
 			if (name.trim().equals("")){
 				UserInterface.getUI().showSystemMessage("Please enter a name for the Expedition.");
 				si.commitLayer(0);
