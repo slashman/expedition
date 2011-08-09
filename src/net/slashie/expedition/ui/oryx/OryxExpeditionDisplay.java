@@ -403,6 +403,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 
 	public void showHelp(){
 		si.saveLayer(0);
+		si.saveLayer(2);
+		si.cleanLayer(2);
 		((GFXUISelector)UserInterface.getUI().getPlayer().getSelector()).deactivate();
 		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
 		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
@@ -434,12 +436,13 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.print(0, 3,18, "  Q: Quit", Color.WHITE);
 		si.print(0, 3,19, "  ", Color.WHITE);
 		si.print(0, 3,20, "  Press Space to continue", Color.CYAN);
+		si.commitLayer(2);
 		si.commitLayer(0);
 
 		si.waitKey(CharKey.SPACE);
 		   
 		si.loadLayer(0);
-		si.commitLayer(0);
+		si.loadLayer(2);
 	}
 	
 	public void init(SwingSystemInterface syst){

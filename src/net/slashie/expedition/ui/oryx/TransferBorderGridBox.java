@@ -270,8 +270,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private boolean daysFoodTransfer = false;
 	
 	public void draw(Equipment highlight, int boxX) {
-		si.loadLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
-		si.saveLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
 		this.highlight = highlight;
 		super.draw(false);
 		// Draw a cute border
