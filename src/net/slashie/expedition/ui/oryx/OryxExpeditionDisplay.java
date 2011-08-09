@@ -127,21 +127,21 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		oui.persistantMessageBox.setVisible(false);
 		STMusicManagerNew.thus.playKey("TITLE");
 		
-		si.setFont(FNT_TEXT);
+		si.setFont(0, FNT_TEXT);
 		si.setCursor(GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4));
 
-		si.drawImage(IMG_TITLE);
-		si.printAtPixel(30, 540, "Version "+ExpeditionGame.getVersion()+", Slashware Interactive 2009-2011", Color.WHITE);
-		si.printAtPixel(30, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
+		si.drawImage(0, IMG_TITLE);
+		si.printAtPixel(0, 30, 540, "Version "+ExpeditionGame.getVersion()+", Slashware Interactive 2009-2011", Color.WHITE);
+		si.printAtPixel(0, 30, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
 		
    	
     	// Read the license info 
     	LicenseInfo licenseInfo = GameFiles.getLicenseInfo();
 		
 		if (licenseInfo.licensee == null || licenseInfo.licensee.equals("unregistered")){
-			si.printAtPixel(30, 586, "Unregistered Version", Color.WHITE);
+			si.printAtPixel(0, 30, 586, "Unregistered Version", Color.WHITE);
 		} else {
-			si.printAtPixel(30, 586, "Registered for "+licenseInfo.licenseLevel+" "+licenseInfo.licensee+"!", Color.YELLOW);
+			si.printAtPixel(0, 30, 586, "Registered for "+licenseInfo.licenseLevel+" "+licenseInfo.licensee+"!", Color.YELLOW);
 		}
 
 		ExpeditionCleanButton historyButton = new ExpeditionCleanButton(8, "Historic Scenario");
@@ -167,7 +167,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.add(resumeButton);
 		si.add(exitButton);
 		
-		si.refresh();
+		si.commitLayer(0);
+		//si.commitLayer(1);
 		
 		BlockingQueue<Integer> titleSelectionHandler = new LinkedBlockingQueue<Integer>();
 
@@ -256,8 +257,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public int selectScenario(){
-		si.drawImage(uiProperties.getProperty("IMG_BLANK2"));
-		si.print(24, 100, "Please select an scenario", COLOR_BOLD);
+		si.drawImage(0, uiProperties.getProperty("IMG_BLANK2"));
+		si.print(0, 24, 100, "Please select an scenario", COLOR_BOLD);
 		
 		Image image = null;
 		try {
@@ -276,7 +277,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.add(theNewWorldButton);
 		si.add(useButton);
 		si.add(backButton);
-		si.refresh();
+		si.commitLayer(0);
 		BlockingQueue<Integer> titleSelectionHandler = new LinkedBlockingQueue<Integer>();
 
 		theNewWorldButton.addActionListener(new CallbackActionListener<Integer>(titleSelectionHandler){
@@ -285,26 +286,26 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 				((JButton)e.getSource()).removeActionListener(this);
 				int xstart = 3;
 				int ystart = 5;
-				si.print(xstart, ystart + 1, "The New World", COLOR_BOLD);
-				si.print(xstart+3, ystart + 2, "Official Scenario by Slashware Interactive", Color.WHITE);
-				si.print(xstart, ystart + 3, "Date", COLOR_BOLD);
-				si.print(xstart+20, ystart + 3, "July 5, 1492", Color.WHITE);
-				si.print(xstart, ystart + 4, "Location", COLOR_BOLD);
-				si.print(xstart+20, ystart + 4, "Palos de la Frontera, Spain", Color.WHITE);
-				si.print(xstart, ystart + 5, "Expeditionary", COLOR_BOLD);
-				si.print(xstart+20, ystart + 5, "Christopher Colombus", Color.WHITE);
-				si.print(xstart+3, ystart + 6, "Navigation", COLOR_BOLD);
-				si.print(xstart+3, ystart + 7, "Cartography", COLOR_BOLD);
-				si.print(xstart+3, ystart + 8, "Negotiation", COLOR_BOLD);
-				si.print(xstart+3, ystart + 9, "Land Combat", COLOR_BOLD);
-				si.print(xstart+3, ystart + 10, "Sea Combat", COLOR_BOLD);
+				si.print(0, xstart, ystart + 1, "The New World", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 2, "Official Scenario by Slashware Interactive", Color.WHITE);
+				si.print(0, xstart, ystart + 3, "Date", COLOR_BOLD);
+				si.print(0, xstart+20, ystart + 3, "July 5, 1492", Color.WHITE);
+				si.print(0, xstart, ystart + 4, "Location", COLOR_BOLD);
+				si.print(0, xstart+20, ystart + 4, "Palos de la Frontera, Spain", Color.WHITE);
+				si.print(0, xstart, ystart + 5, "Expeditionary", COLOR_BOLD);
+				si.print(0, xstart+20, ystart + 5, "Christopher Colombus", Color.WHITE);
+				si.print(0, xstart+3, ystart + 6, "Navigation", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 7, "Cartography", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 8, "Negotiation", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 9, "Land Combat", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 10, "Sea Combat", COLOR_BOLD);
 				
-				si.print(xstart+20, ystart + 6, "Expert", Color.WHITE);
-				si.print(xstart+20, ystart + 7, "Good", Color.WHITE);
-				si.print(xstart+20, ystart + 8, "Normal", Color.WHITE);
-				si.print(xstart+20, ystart + 9, "Unexperienced", Color.WHITE);
-				si.print(xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
-				si.refresh();
+				si.print(0, xstart+20, ystart + 6, "Expert", Color.WHITE);
+				si.print(0, xstart+20, ystart + 7, "Good", Color.WHITE);
+				si.print(0, xstart+20, ystart + 8, "Normal", Color.WHITE);
+				si.print(0, xstart+20, ystart + 9, "Unexperienced", Color.WHITE);
+				si.print(0, xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
+				si.commitLayer(0);
 			}
 		});
 		
@@ -312,26 +313,27 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			public void actionPerformed(ActionEvent ev2) {
 				int xstart = 3;
 				int ystart = 5;
-				si.drawImage(uiProperties.getProperty("IMG_BLANK2"));
-				si.print(xstart, ystart + 1, "The New World", COLOR_BOLD);
-				si.print(xstart+3, ystart + 2, "Official Scenario by Slashware Interactive", Color.WHITE);
-				si.print(xstart, ystart + 3, "Date", COLOR_BOLD);
-				si.print(xstart+20, ystart + 3, "July 5, 1492", Color.WHITE);
-				si.print(xstart, ystart + 4, "Location", COLOR_BOLD);
-				si.print(xstart+20, ystart + 4, "Palos de la Frontera, Spain", Color.WHITE);
-				si.print(xstart, ystart + 5, "Expeditionary", COLOR_BOLD);
-				si.print(xstart+20, ystart + 5, "Christopher Colombus", Color.WHITE);
-				si.print(xstart+3, ystart + 6, "Navigation", COLOR_BOLD);
-				si.print(xstart+3, ystart + 7, "Cartography", COLOR_BOLD);
-				si.print(xstart+3, ystart + 8, "Negotiation", COLOR_BOLD);
-				si.print(xstart+3, ystart + 9, "Land Combat", COLOR_BOLD);
-				si.print(xstart+3, ystart + 10, "Sea Combat", COLOR_BOLD);
+				si.drawImage(0, uiProperties.getProperty("IMG_BLANK2"));
+				si.print(0, xstart, ystart + 1, "The New World", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 2, "Official Scenario by Slashware Interactive", Color.WHITE);
+				si.print(0, xstart, ystart + 3, "Date", COLOR_BOLD);
+				si.print(0, xstart+20, ystart + 3, "July 5, 1492", Color.WHITE);
+				si.print(0, xstart, ystart + 4, "Location", COLOR_BOLD);
+				si.print(0, xstart+20, ystart + 4, "Palos de la Frontera, Spain", Color.WHITE);
+				si.print(0, xstart, ystart + 5, "Expeditionary", COLOR_BOLD);
+				si.print(0, xstart+20, ystart + 5, "Christopher Colombus", Color.WHITE);
+				si.print(0, xstart+3, ystart + 6, "Navigation", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 7, "Cartography", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 8, "Negotiation", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 9, "Land Combat", COLOR_BOLD);
+				si.print(0, xstart+3, ystart + 10, "Sea Combat", COLOR_BOLD);
 				
-				si.print(xstart+20, ystart + 6, "Expert", Color.WHITE);
-				si.print(xstart+20, ystart + 7, "Good", Color.WHITE);
-				si.print(xstart+20, ystart + 8, "Normal", Color.WHITE);
-				si.print(xstart+20, ystart + 9, "Unexperienced", Color.WHITE);
-				si.print(xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
+				si.print(0, xstart+20, ystart + 6, "Expert", Color.WHITE);
+				si.print(0, xstart+20, ystart + 7, "Good", Color.WHITE);
+				si.print(0, xstart+20, ystart + 8, "Normal", Color.WHITE);
+				si.print(0, xstart+20, ystart + 9, "Unexperienced", Color.WHITE);
+				si.print(0, xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
+				si.print(0, xstart+20, ystart + 10, "Unexperienced", Color.WHITE);
 				try {
 					handler.put(0);
 				} catch (InterruptedException e) {}
@@ -362,7 +364,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public void showIntro(Expedition e){
-		si.drawImage(uiProperties.getProperty("IMG_THE_NEW_WORLD_INTRO"));
+		si.drawImage(0, uiProperties.getProperty("IMG_THE_NEW_WORLD_INTRO"));
 		/*
 		BlockingQueue<String> titleSelectionHandler = new LinkedBlockingQueue<String>();
 		CallbackMouseListener<String> cbml = new CallbackMouseListener<String>(titleSelectionHandler){
@@ -395,48 +397,49 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		String message = CommonUI.getIntroText();
 		message = message.replaceAll("XXX", "\n");
 		((ExpeditionOryxUI)UserInterface.getUI()).showTextBox(message, 16, 216, 776, 376);
+		si.commitLayer(0);
 		
 	}
 
 	public void showHelp(){
-		si.saveLayer();
+		si.saveLayer(0);
 		((GFXUISelector)UserInterface.getUI().getPlayer().getSelector()).deactivate();
 		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
 		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
 		
-		si.cls();
-		si.print(3, 1, "== Keyboard Reference ==", Color.CYAN);
-		si.print(3, 2, "== Movement ==", Color.CYAN);
-		si.print(3, 3, " On Foot ", Color.CYAN);
-		si.print(3, 4, "Move Around using the numpad ", Color.WHITE);
-		si.print(3, 5, "or the directional keys", Color.WHITE);
+		si.cls(0);
+		si.print(0, 3, 1, "== Keyboard Reference ==", Color.CYAN);
+		si.print(0, 3, 2, "== Movement ==", Color.CYAN);
+		si.print(0, 3, 3, " On Foot ", Color.CYAN);
+		si.print(0, 3, 4, "Move Around using the numpad ", Color.WHITE);
+		si.print(0, 3, 5, "or the directional keys", Color.WHITE);
 		
-		si.print(40, 3, " Sailing", Color.CYAN);
-		si.print(40, 4, "Rotate your ships using Left/Right", Color.WHITE);
-		si.print(40, 5, "Advance with any other direction", Color.WHITE);
+		si.print(0, 40, 3, " Sailing", Color.CYAN);
+		si.print(0, 40, 4, "Rotate your ships using Left/Right", Color.WHITE);
+		si.print(0, 40, 5, "Advance with any other direction", Color.WHITE);
 		
-		si.print(3, 6, " ", Color.WHITE);
-		si.print(3, 7, "== Commands ==", Color.CYAN);
+		si.print(0, 3, 6, " ", Color.WHITE);
+		si.print(0, 3, 7, "== Commands ==", Color.CYAN);
 		
-		si.print(3, 8, "  a: Arm / Disarm expedition", Color.WHITE);
-		si.print(3, 9, "  b: Build a Settlement", Color.WHITE);
-		si.print(3,10, "  d: Drop equipment", Color.WHITE);
-		si.print(3,11, "  i: Show inventory", Color.WHITE);
-		si.print(3,12, "  l: Look around", Color.WHITE);
-		si.print(3,13, "  m: Ride/Unmount your mounts", Color.WHITE);
-		si.print(3,14, "  r: Repair damaged ships", Color.WHITE);
-		si.print(3,15, "  R: Reset dead' reckon counter", Color.WHITE);
-		si.print(3,16, "  w: Chop wood from forests", Color.WHITE);
-		si.print(3,17, "  S: Save Game", Color.WHITE);
-		si.print(3,18, "  Q: Quit", Color.WHITE);
-		si.print(3,19, "  ", Color.WHITE);
-		si.print(3,20, "  Press Space to continue", Color.CYAN);
-		si.refresh();
+		si.print(0, 3, 8, "  a: Arm / Disarm expedition", Color.WHITE);
+		si.print(0, 3, 9, "  b: Build a Settlement", Color.WHITE);
+		si.print(0, 3,10, "  d: Drop equipment", Color.WHITE);
+		si.print(0, 3,11, "  i: Show inventory", Color.WHITE);
+		si.print(0, 3,12, "  l: Look around", Color.WHITE);
+		si.print(0, 3,13, "  m: Ride/Unmount your mounts", Color.WHITE);
+		si.print(0, 3,14, "  r: Repair damaged ships", Color.WHITE);
+		si.print(0, 3,15, "  R: Reset dead' reckon counter", Color.WHITE);
+		si.print(0, 3,16, "  w: Chop wood from forests", Color.WHITE);
+		si.print(0, 3,17, "  S: Save Game", Color.WHITE);
+		si.print(0, 3,18, "  Q: Quit", Color.WHITE);
+		si.print(0, 3,19, "  ", Color.WHITE);
+		si.print(0, 3,20, "  Press Space to continue", Color.CYAN);
+		si.commitLayer(0);
 
 		si.waitKey(CharKey.SPACE);
 		   
-		si.loadLayer();
-		si.refresh();
+		si.loadLayer(0);
+		si.commitLayer(0);
 	}
 	
 	public void init(SwingSystemInterface syst){
@@ -444,18 +447,18 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public int showSavedGames(File[] saveFiles){
-		si.drawImage(IMG_BLANK);
+		si.drawImage(0, IMG_BLANK);
 		
 		if (saveFiles == null || saveFiles.length == 0){
 			
-			si.print(3,6, "No e available",Color.WHITE);
-			si.print(4,8, "[Space to Cancel]",Color.WHITE);
-			si.refresh();
+			si.print(0, 3,6, "No expeditions available",Color.WHITE);
+			si.print(0, 4,8, "[Space to Cancel]",Color.WHITE);
+			si.commitLayer(0);
 			si.waitKey(CharKey.SPACE);
 			return -1;
 		}
 			
-		si.print(3,6, "Pick an Expedition",Color.WHITE);
+		si.print(0, 3,6, "Pick an Expedition",Color.WHITE);
 		List<GFXMenuItem> items = new ArrayList<GFXMenuItem>();
 		for (int i = 0; i < saveFiles.length; i++){
 			String saveFileName = saveFiles[i].getName();
@@ -534,11 +537,11 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	//private Color TRANSPARENT_BLUE = new Color(100,100,100,200);
 	
 	public void showScreen(Object pScreen){
-		si.saveLayer();
+		si.saveLayer(0);
 		String screenText = (String) pScreen;
 		showTextBox(screenText, 430, 70,340,375);
 		//si.waitKey(CharKey.SPACE);
-		si.loadLayer();
+		si.loadLayer(0);
 	}
 
 	public static JTextArea createTempArea(int xpos, int ypos, int w, int h){
@@ -600,11 +603,11 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		String name = "";
 		while (name.trim().equals("")){
-			si.printAtPixel(128, 428, "Enter a name for the Expedition", Color.WHITE);
-			name = si.input(222, 463, Color.WHITE, 20);
+			si.printAtPixel(0, 128, 428, "Enter a name for the Expedition", Color.WHITE);
+			name = si.input(0, 222, 463, Color.WHITE, 20);
 			if (name.trim().equals("")){
 				UserInterface.getUI().showSystemMessage("Please enter a name for the Expedition.");
-				si.refresh();
+				si.commitLayer(0);
 			}
 		}
 		si.remove(okButton);

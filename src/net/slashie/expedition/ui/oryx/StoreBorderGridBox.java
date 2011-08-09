@@ -153,7 +153,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 		buyButton.setLocation(518,201);
 		
 		quantityLabel = new JLabel();
-		quantityLabel.setFont(si.getFont());
+		quantityLabel.setFont(si.getFont(ExpeditionOryxUI.UI_WIDGETS_LAYER));
 		quantityLabel.setVisible(false);
 		quantityLabel.setBounds(540,160,200,27);
 		quantityLabel.setForeground(Color.WHITE);
@@ -169,6 +169,11 @@ public class StoreBorderGridBox extends BorderedGridBox{
 	private CallbackMouseListener<Integer> cbml;
 	private CallbackKeyListener<Integer> cbkl;
 	private CallbackActionListener<Integer> cbal;
+	
+	@Override
+	public int getDrawingLayer() {
+		return ExpeditionOryxUI.UI_WIDGETS_LAYER;
+	}
 	
 	public void draw(Equipment highlight) {
 		this.highlight = highlight;
@@ -187,19 +192,19 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			// Draw a cute border
 			int x = 450;
 			int y = 75;
-			si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-			si.getDrawingGraphics().drawRect(x+1, y+1, 280 - 2, 390 - 2);
-			si.getDrawingGraphics().drawRect(x+2, y+2, 280 - 4, 390 - 4);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(OryxExpeditionDisplay.COLOR_BOLD);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 280 - 2, 390 - 2);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 280 - 4, 390 - 4);
 			
 			// Draw the unit info
-			si.drawImage(x + 12, y + 17, unitImage);
-			si.printAtPixel(x+41, y + 17, itemDescription, OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+41, y + 32, "On ships", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+41, y + 47, "Max", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+41, y + 62, "In store", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+146, y + 32, current+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 47, stock+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 62, inventory+"", Color.WHITE);
+			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, unitImage);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, itemDescription, OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 32, "On ships", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 47, "Max", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 62, "In store", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 32, current+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, stock+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, inventory+"", Color.WHITE);
 
 			if (eitem != lastChoice){		
 				// Just Selected
@@ -232,22 +237,22 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			
 			// Draw the offshore expedition info
 			
-			si.drawImage(x + 12, y + 17, ((GFXAppearance)AppearanceFactory.getAppearanceFactory().getAppearance("SHIP")).getImage());
-			si.printAtPixel(x+41, y + 17, "Expedition", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+41, y + 32, "Ships", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+41, y + 47, "Cargo", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+12, y + 62, "Max Cargo", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+12, y + 77, "Crew", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+12, y + 92, "Gold", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+12, y + 106, "Food Days", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+12, y + 120, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(x+146, y + 32, offShoreExpedition.getTotalShips()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 47, offShoreExpedition.getCurrentlyCarrying()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 62, offShoreExpedition.getCarryCapacity()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 77, offShoreExpedition.getTotalUnits()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 92, offShoreExpedition.getAccountedGold()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 106, offShoreExpedition.getFoodDays()+"", Color.WHITE);
-			si.printAtPixel(x+146, y + 120, offShoreExpedition.getWaterDays()+"", Color.WHITE);
+			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, ((GFXAppearance)AppearanceFactory.getAppearanceFactory().getAppearance("SHIP")).getImage());
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, "Expedition", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 32, "Ships", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 47, "Cargo", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 62, "Max Cargo", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 77, "Crew", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 92, "Gold", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 106, "Food Days", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 120, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 32, offShoreExpedition.getTotalShips()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, offShoreExpedition.getCurrentlyCarrying()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, offShoreExpedition.getCarryCapacity()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 77, offShoreExpedition.getTotalUnits()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 92, offShoreExpedition.getAccountedGold()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 106, offShoreExpedition.getFoodDays()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 120, offShoreExpedition.getWaterDays()+"", Color.WHITE);
 
 		} else {
 		    quantitySplitterUp.setVisible(false);
@@ -256,7 +261,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			quantityLabel.setVisible(false);
 			lastChoice = null;
 		}
-		si.refresh();
+		si.commitLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
 	}
 	
 	@Override
@@ -362,7 +367,5 @@ public class StoreBorderGridBox extends BorderedGridBox{
 
 	public void setBuyButtonEnabled(boolean buyButtonEnabled) {
 		this.buyButtonEnabled = buyButtonEnabled;
-	}	
-
-
+	}
 }

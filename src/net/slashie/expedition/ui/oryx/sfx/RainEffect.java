@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.ImageUtils;
 
@@ -43,9 +44,9 @@ public class RainEffect implements Runnable{
 				currentFrame = 0;
 			int offset = currentFrame * 3;
 			synchronized (si) {
-				si.cleanLayer(1);
-				si.drawImage(1, offset, 0, RAIN_IMAGE);
-				si.commitLayer(1);
+				si.cleanLayer(ExpeditionOryxUI.SFX_LAYER);
+				si.drawImage(ExpeditionOryxUI.SFX_LAYER, offset, 0, RAIN_IMAGE);
+				si.commitLayer(ExpeditionOryxUI.SFX_LAYER);
 			}
 			try {
 				Thread.sleep(200);
