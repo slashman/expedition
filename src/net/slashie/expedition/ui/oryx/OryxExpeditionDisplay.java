@@ -399,7 +399,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 
 	public void showHelp(){
-		si.saveBuffer();
+		si.saveLayer();
 		((GFXUISelector)UserInterface.getUI().getPlayer().getSelector()).deactivate();
 		((ExpeditionOryxUI)UserInterface.getUI()).messageBox.setVisible(false);
 		((ExpeditionOryxUI)UserInterface.getUI()).persistantMessageBox.setVisible(false);
@@ -435,7 +435,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 
 		si.waitKey(CharKey.SPACE);
 		   
-		si.restore();
+		si.loadLayer();
 		si.refresh();
 	}
 	
@@ -534,11 +534,11 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	//private Color TRANSPARENT_BLUE = new Color(100,100,100,200);
 	
 	public void showScreen(Object pScreen){
-		si.saveBuffer();
+		si.saveLayer();
 		String screenText = (String) pScreen;
 		showTextBox(screenText, 430, 70,340,375);
 		//si.waitKey(CharKey.SPACE);
-		si.restore();
+		si.loadLayer();
 	}
 
 	public static JTextArea createTempArea(int xpos, int ypos, int w, int h){

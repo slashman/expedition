@@ -66,17 +66,17 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 	
 		// Draw a cute border
 		if (eitem instanceof ExpeditionUnit){
-			si.getGraphics2D().setColor(new Color(82,79,34));
-			si.getGraphics2D().fillRect(x+1, y+1, 350 - 2, 60 - 2);
-			si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-			si.getGraphics2D().drawRect(x+1, y+1, 350 - 2, 60 - 2);
-			si.getGraphics2D().drawRect(x+2, y+2, 350 - 4, 60 - 4);
+			si.getDrawingGraphics().setColor(new Color(82,79,34));
+			si.getDrawingGraphics().fillRect(x+1, y+1, 350 - 2, 60 - 2);
+			si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+			si.getDrawingGraphics().drawRect(x+1, y+1, 350 - 2, 60 - 2);
+			si.getDrawingGraphics().drawRect(x+2, y+2, 350 - 4, 60 - 4);
 		} else {
-			si.getGraphics2D().setColor(new Color(82,79,34));
-			si.getGraphics2D().fillRect(x+1, y+1, 200 - 2, 60 - 2);
-			si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-			si.getGraphics2D().drawRect(x+1, y+1, 200 - 2, 60 - 2);
-			si.getGraphics2D().drawRect(x+2, y+2, 200 - 4, 60 - 4);
+			si.getDrawingGraphics().setColor(new Color(82,79,34));
+			si.getDrawingGraphics().fillRect(x+1, y+1, 200 - 2, 60 - 2);
+			si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+			si.getDrawingGraphics().drawRect(x+1, y+1, 200 - 2, 60 - 2);
+			si.getDrawingGraphics().drawRect(x+2, y+2, 200 - 4, 60 - 4);
 		}
 		
 		si.drawImage(x + 12, y + 12, unitImage);
@@ -114,13 +114,13 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 		
 		// Draw a cute border
 		if (highlight){
-			si.getGraphics2D().setColor(new Color(82,79,34));
-			si.getGraphics2D().fillRect(x+1, y+1, 200 - 2, 60 - 2);
-			si.getGraphics2D().fillRect(x+2, y+2, 200 - 4, 60 - 4);
+			si.getDrawingGraphics().setColor(new Color(82,79,34));
+			si.getDrawingGraphics().fillRect(x+1, y+1, 200 - 2, 60 - 2);
+			si.getDrawingGraphics().fillRect(x+2, y+2, 200 - 4, 60 - 4);
 		} 
-		si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getGraphics2D().drawRect(x+1, y+1, 200 - 2, 60 - 2);
-		si.getGraphics2D().drawRect(x+2, y+2, 200 - 4, 60 - 4);
+		si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+		si.getDrawingGraphics().drawRect(x+1, y+1, 200 - 2, 60 - 2);
+		si.getDrawingGraphics().drawRect(x+2, y+2, 200 - 4, 60 - 4);
 		
 		si.drawImage(x + 12, y + 12, unitImage);
 		
