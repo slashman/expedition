@@ -187,9 +187,9 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			// Draw a cute border
 			int x = 450;
 			int y = 75;
-			si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-			si.getGraphics2D().drawRect(x+1, y+1, 280 - 2, 390 - 2);
-			si.getGraphics2D().drawRect(x+2, y+2, 280 - 4, 390 - 4);
+			si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+			si.getDrawingGraphics().drawRect(x+1, y+1, 280 - 2, 390 - 2);
+			si.getDrawingGraphics().drawRect(x+2, y+2, 280 - 4, 390 - 4);
 			
 			// Draw the unit info
 			si.drawImage(x + 12, y + 17, unitImage);

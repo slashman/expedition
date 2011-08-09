@@ -270,16 +270,16 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private boolean daysFoodTransfer = false;
 	
 	public void draw(Equipment highlight, int boxX) {
-		si.restore();
-		si.saveBuffer();
+		si.loadLayer();
+		si.saveLayer();
 		this.highlight = highlight;
 		super.draw(false);
 		// Draw a cute border
 		int x = 450;
 		int y = 75;
-		si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getGraphics2D().drawRect(x+1, y+1, 310 - 2, 390 - 2);
-		si.getGraphics2D().drawRect(x+2, y+2, 310 - 4, 390 - 4);
+		si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+		si.getDrawingGraphics().drawRect(x+1, y+1, 310 - 2, 390 - 2);
+		si.getDrawingGraphics().drawRect(x+2, y+2, 310 - 4, 390 - 4);
 
 		drawContainerInfo(x, 85, from);
 		drawContainerInfo(x, 323, to);

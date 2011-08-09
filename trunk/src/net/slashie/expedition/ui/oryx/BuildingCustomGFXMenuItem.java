@@ -52,9 +52,9 @@ public class BuildingCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawMenuItem(SwingSystemInterface si, int x, int y, int index, boolean highlight) {
 		// Draw a cute border
-		si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getGraphics2D().drawRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 2);
-		si.getGraphics2D().drawRect(x+2, y+2, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 4, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 4);
+		si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+		si.getDrawingGraphics().drawRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 2);
+		si.getDrawingGraphics().drawRect(x+2, y+2, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 4, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 4);
 		
 		// si.drawImage(x + 12, y + 12, unitImage); TODO: Draw building
 		si.printAtPixel(x+5, y + 55, quantity + " " + building.getDescription(), Color.WHITE);
@@ -66,11 +66,11 @@ public class BuildingCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Draw a cute border
-		si.getGraphics2D().setColor(new Color(82,79,34));
-		si.getGraphics2D().fillRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 2);
-		si.getGraphics2D().setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getGraphics2D().drawRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 2);
-		si.getGraphics2D().drawRect(x+2, y+2, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 4, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 4);
+		si.getDrawingGraphics().setColor(new Color(82,79,34));
+		si.getDrawingGraphics().fillRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 2);
+		si.getDrawingGraphics().setColor(OryxExpeditionDisplay.COLOR_BOLD);
+		si.getDrawingGraphics().drawRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 2);
+		si.getDrawingGraphics().drawRect(x+2, y+2, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 4, ExpeditionOryxUI.STANDARD_ITEM_HEIGHT - 4);
 		
 		// si.drawImage(x + 12, y + 12, unitImage); TODO: Draw building
 		si.printAtPixel(x+5, y + 55, quantity + " " + building.getDescription(), Color.WHITE);

@@ -52,6 +52,7 @@ import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.ui.oryx.sfx.EffectsServer;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
@@ -231,7 +232,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Examine Expedition Inventory");
-  		si.saveBuffer();
+  		si.saveLayer();
   		int typeChoice = 0;
   		while (true){
   			GoodType[] goodTypes = GoodType.getGoodTypes();
@@ -260,7 +261,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	  			currentPage = menuBox.getPages() - 1;
 	  			menuBox.setCurrentPage(currentPage);
 	  		}
-  	  		si.restore();
+  	  		si.loadLayer();
   	  		int boxX = startX + typeChoice * gapX - 21;
 			int boxY = 41 - 24;
   	  		menuBox.draw(boxX, boxY, IMG_BOX);
@@ -299,7 +300,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.remove(livestockButton);
 		si.remove(closeButton);
 		si.removeKeyListener(cbkl);
-  		si.restore();
+  		si.loadLayer();
  		si.refresh();
  		//((GFXUISelector)getPlayer().getSelector()).setMouseMovementActive(false);
  		Equipment.eqMode = false;
@@ -361,7 +362,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				6,9,12 );
 
 		p.setBounds(x, y, w, h);
-		p.paintAt(si.getGraphics2D(), x, y);
+		p.paintAt(si.getDrawingGraphics(), x, y);
 		si.setColor(TEXT_COLOR);
 		si.printAtPixel(x+tileSize, y+tileSize*2, prompt);
 		
@@ -782,7 +783,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		si.removeKeyListener(cbkl);
 		menuBox.kill();
 		Equipment.eqMode = false;
-		si.restore();
+		si.loadLayer();
  		si.refresh();
 	}
 	
@@ -794,7 +795,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	
 	@Override
-	public void beforeRefresh() {
+	public synchronized void beforeRefresh() {
 		drawStatus();
 
 	}
@@ -981,7 +982,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.add(legendLabel);
 		CleanButton.init(legendLabel, si);
 		
-		
 		HAND_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		POINTER_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4);
 
@@ -1026,7 +1026,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		HORSES_ITEM = ItemFactory.createItem("HORSE");
 		addornedTextArea.setCursor(si.getCursor());
 		this.UIProperties = UIProperties;
+		
+		sfxQueue = new LinkedBlockingQueue<String>();
+		EffectsServer sfxServer = new EffectsServer(si, sfxQueue);
+		new Thread(sfxServer).start();
 	}
+	
+	private BlockingQueue<String> sfxQueue;
 	
 	private int readQuantity(int x, int y, String spaces, int inputLength){
 		int quantity = -1;
@@ -1173,7 +1179,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 
   		menuBox.kill();
   		
-  		si.restore();
+  		si.loadLayer();
  		si.refresh();
  		
   		if (!cancel){
@@ -1410,6 +1416,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	@Override
 	public void processSave(){
+		try {
+			sfxQueue.put("RAIN");
+		} catch (InterruptedException e) {
+		}
 		if (!player.getGame().canSave()){
 			level.addMessage("You cannot save your game here!");
 			return;
