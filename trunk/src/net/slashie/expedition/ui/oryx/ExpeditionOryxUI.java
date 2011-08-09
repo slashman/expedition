@@ -206,7 +206,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		livestockButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "4"));
 		closeButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "BREAK"));
 		
-		
 		CallbackKeyListener<String> cbkl = new CallbackKeyListener<String>(inventorySelectionQueue){
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -231,11 +230,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		si.addKeyListener(cbkl);
 		
+		saveMapLayer();
+		
 		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62, 202, 3, 6, null);
 		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Examine Expedition Inventory");
-  		si.saveLayer(getUILayer());
+  		
+  		//si.saveLayer(getUILayer());
   		int typeChoice = 0;
   		while (true){
   			GoodType[] goodTypes = GoodType.getGoodTypes();
@@ -303,8 +305,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.remove(livestockButton);
 		si.remove(closeButton);
 		si.removeKeyListener(cbkl);
-  		si.loadLayer(getUILayer());
- 		si.commitLayer(getUILayer());
+  		resetMapLayer();
  		//((GFXUISelector)getPlayer().getSelector()).setMouseMovementActive(false);
  		Equipment.eqMode = false;
 	}
@@ -787,7 +788,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		menuBox.kill();
 		Equipment.eqMode = false;
 		si.loadLayer(getUILayer());
- 		si.commitLayer(getUILayer());
 	}
 	
 	public void beforeDrawLevel() {
@@ -990,14 +990,24 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		POINTER_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4);
 
 		//unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
-		unitsMenuBox = new MenuBox(si, null);
+		unitsMenuBox = new MenuBox(si, null){
+			@Override
+			public int getDrawingLayer() {
+				return getUILayer();
+			}
+		};
 		unitsMenuBox.setGap(36);
 		unitsMenuBox.setPosition(61,14);
 		unitsMenuBox.setWidth(17);
 		unitsMenuBox.setItemsPerPage(6);
   		unitsMenuBox.setShowOptions(false);
   		
-  		vehiclesMenuBox = new MenuBox(si, null);
+  		vehiclesMenuBox = new MenuBox(si, null){
+  			@Override
+  			public int getDrawingLayer() {
+  				return getUILayer();
+  			}
+  		};
   		vehiclesMenuBox.setGap(36);
   		vehiclesMenuBox.setPosition(61,14);
   		vehiclesMenuBox.setWidth(17);
@@ -1129,6 +1139,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    			protected Cursor getHandCursor() {
    				return this_.getHandCursor();
    			}
+   			
+   			@Override
+   			public int getDrawingLayer() {
+   				return getUILayer();
+   			}
    		};
    		cacheBox.setCursor(si.getCursor());
    		cacheBox.setBounds(160, 16, 624,360);
@@ -1184,7 +1199,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		menuBox.kill();
   		
   		si.loadLayer(getUILayer());
- 		si.commitLayer(getUILayer());
  		
   		if (!cancel){
 	  		List<Building> buildingPlan = new ArrayList<Building>();
