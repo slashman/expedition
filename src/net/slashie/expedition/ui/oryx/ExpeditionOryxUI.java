@@ -380,7 +380,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		p.paintAt(si.getDrawingGraphics(getUILayer()), x, y);
 		si.setColor(getUILayer(), TEXT_COLOR);
 		si.printAtPixel(getUILayer(), x+tileSize, y+tileSize*2, prompt);
-		
+		si.commitLayer(getUILayer());
 		String ret = si.input(getUILayer(), xp,yp,TEXT_COLOR,length);
 		
 		return ret;
