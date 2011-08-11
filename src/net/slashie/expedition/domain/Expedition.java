@@ -1790,16 +1790,16 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			if (Util.chance(hasCounter("KILLER_ALIVE")?10:5) && getTotalUnits() > 2){
 				ExpeditionUnit randomUnit = getRandomUnitFair();
 				reduceQuantityOf(randomUnit);
-				int choice = UserInterface.getUI().switchChat("Treacherous Murder!", "A "+randomUnit.getDescription()+" has been murdered! XXX What will you do?", "Investigate the event. (2 days)", "Ignore the event.");
+				int choice = UserInterface.getUI().switchChat("Treacherous Murder!", "A "+randomUnit.getDescription()+" has been murdered! XXX What will you do?", "Investigate the event. (1 day)", "Ignore the event.");
 				if (choice == 0){
 					// Investigate the murder
-					setNextAction(new Hibernate(2, false));
+					setNextAction(new Hibernate(1, false));
 					if (Util.chance(50)){
 						boostMorale(100);
 						ExpeditionUnit murderer = getRandomUnitFair();
 						choice = UserInterface.getUI().switchChat("Treacherous Murder!", "You found a "+murderer.getDescription()+" to be the culprit! XXX What will you do?", "Punish the "+murderer.getDescription()+".", "Execute the "+murderer.getDescription()+".");
 						if (choice == 0){
-							getLevel().addMessage("You flog the "+murderer.getDescription()+".");
+							UserInterface.getUI().showImportantMessage("You flog the "+murderer.getDescription()+", hoping this doesn't happen again.");
 							if (Util.chance(33)){
 								setCounter("KILLER_ALIVE", 100);
 							} else {
@@ -1807,16 +1807,20 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 							}
 						} else {
 							reduceQuantityOf(murderer);
-							getLevel().addMessage("You execute the "+murderer.getDescription()+". May this serve as an example");
+							UserInterface.getUI().showImportantMessage("You execute the "+murderer.getDescription()+". May this serve as an example");
 							removeCounter("KILLER_ALIVE");
 						}
 					} else {
-						getLevel().addMessage("You found no culprit.");
-						setCounter("KILLER_ALIVE", 50);
+						UserInterface.getUI().showImportantMessage("You found no culprit. You hope the murderer won't show up again...");
+						if (Util.chance(66)){
+							setCounter("KILLER_ALIVE", 50);
+						} else {
+							removeCounter("KILLER_ALIVE");
+						}
 					}
 				} else {
 					// Ignore the event
-					getLevel().addMessage("You hope the murderer won't show up again.");
+					UserInterface.getUI().showImportantMessage("You hope the murderer won't show up again...");
 					decreaseMorale(100);
 					setCounter("KILLER_ALIVE", 200);
 				}
