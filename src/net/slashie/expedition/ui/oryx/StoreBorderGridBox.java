@@ -107,7 +107,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 		quantitySplitterUp = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 
 		quantitySplitterUp.setVisible(false);
-		quantitySplitterUp.setLocation(512,149);
+		quantitySplitterUp.setLocation(512+55,149);
 		final Action increaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -135,7 +135,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 		
 		quantitySplitterDown = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
-		quantitySplitterDown.setLocation(512,176);
+		quantitySplitterDown.setLocation(512+55,176);
 		
 		final Action decreaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
@@ -163,12 +163,12 @@ public class StoreBorderGridBox extends BorderedGridBox{
 		});
 		
 		buyButton.setVisible(false);
-		buyButton.setLocation(518,201);
+		buyButton.setLocation(518+100,201);
 		
 		quantityLabel = new JLabel();
 		quantityLabel.setFont(si.getFont(ExpeditionOryxUI.UI_WIDGETS_LAYER));
 		quantityLabel.setVisible(false);
-		quantityLabel.setBounds(540,160,200,27);
+		quantityLabel.setBounds(540+55,160,200,27);
 		quantityLabel.setForeground(Color.WHITE);
 		
 		si.add(quantitySplitterUp);
@@ -203,11 +203,13 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
 
 			// Draw a cute border
-			int x = 450;
+			int x = 540; //55
 			int y = 75;
-			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(OryxExpeditionDisplay.COLOR_BOLD);
-			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 280 - 2, 390 - 2);
-			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 280 - 4, 390 - 4);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_COLOR);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 225 - 2, 390 - 2);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 225 - 2, 390 - 2);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 225 - 4, 390 - 4);
 			
 			// Draw the unit info
 			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, unitImage);
@@ -245,10 +247,8 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			}
 			
 			
-			// Draw a cute border
-			x = 450;
+			x = 540;
 			y = 263;
-			
 			
 			// Draw the offshore expedition info
 			

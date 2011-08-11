@@ -1,15 +1,11 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +21,6 @@ import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import net.slashie.expedition.domain.AssaultOutcome;
@@ -43,7 +38,6 @@ import net.slashie.expedition.domain.StoreItemInfo;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
-import net.slashie.expedition.domain.LandingParty.LandingSpec;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.item.ItemFactory;
@@ -66,7 +60,6 @@ import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
-import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.CommandListener;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
@@ -87,11 +80,15 @@ import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.MenuBox;
 
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
-	public static final int STANDARD_ITEM_WIDTH = 202;
+	public static final int STANDARD_ITEM_WIDTH = 237;
+	public static final int STANDARD_ITEM_HEIGHT = 62;
 	public static final int UI_WIDGETS_LAYER = 2;
 	public static final int SFX_LAYER = 1;
 	public static final int MAP_LAYER = 0;
-
+	public static final Color ITEM_BOX_COLOR = new Color(90,51,7);
+	public static final Color ITEM_BOX_BORDER_COLOR = new Color(188,158,76);
+	public static final Color ITEM_BOX_HIGHLIGHT_COLOR = new Color(140,76,12);
+	
 	private final class ItemsComparator implements Comparator<GFXMenuItem> {
 		@Override
 		public int compare(GFXMenuItem arg0, GFXMenuItem arg1) {
@@ -99,7 +96,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 	}
 	
-	public static final int STANDARD_ITEM_HEIGHT = 62;
+	
 	private ItemsComparator ITEMS_COMPARATOR = new ItemsComparator();
 	private Color TITLE_COLOR = new Color(224,226,108);
 	private Color TEXT_COLOR = Color.WHITE;
@@ -185,21 +182,21 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Create the good type buttons
 		CleanButton peopleButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_PEOPLE, HAND_CURSOR);
 		peopleButton.setPopupText("People");
-		peopleButton.setLocation(startX,41);	
+		peopleButton.setLocation(startX,31);	
 		CleanButton suppliesButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_SUPPLIES, HAND_CURSOR);
-		suppliesButton.setLocation(startX + gapX * 1,41);
+		suppliesButton.setLocation(startX + gapX * 1,31);
 		suppliesButton.setPopupText("Supplies");
 		CleanButton tradeGoodsButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_MERCHANDISE, HAND_CURSOR);
-		tradeGoodsButton.setLocation(startX + gapX * 2,41);
+		tradeGoodsButton.setLocation(startX + gapX * 2,31);
 		tradeGoodsButton.setPopupText("Trade Goods");
 		CleanButton armoryButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_WEAPONS, HAND_CURSOR);
-		armoryButton.setLocation(startX + gapX * 3,41);
+		armoryButton.setLocation(startX + gapX * 3,31);
 		armoryButton.setPopupText("Armory");
 		CleanButton livestockButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_LIVESTOCK, HAND_CURSOR);
-		livestockButton.setLocation(startX + gapX * 4,41);
+		livestockButton.setLocation(startX + gapX * 4,31);
 		livestockButton.setPopupText("Livestock");
 		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(startX + gapX * 6,41);
+		closeButton.setLocation(startX + gapX * 6,31);
 		
 		si.add(peopleButton);
 		si.add(suppliesButton);
@@ -243,7 +240,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		saveMapLayer();
 		
-		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62, 202, 3, 6, null);
+		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH, 3, 6, null);
 		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Examine Expedition Inventory");
@@ -408,12 +405,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		Equipment.eqMode = true;
    		((GFXUISelector)getPlayer().getSelector()).deactivate();
    		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(730,41);
+		closeButton.setLocation(730,31);
 		
 		ExpeditionCleanButton buyButton = new ExpeditionCleanButton(2, "BUY");
 		BlockingQueue<Integer> buyButtonSelectionHandler = new LinkedBlockingQueue<Integer>();
 
-   		StoreBorderGridBox menuBox = new StoreBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,62,202,2,5,null,
+   		StoreBorderGridBox menuBox = new StoreBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT,STANDARD_ITEM_WIDTH,2,5,null,
    				store, getExpedition(), buyButton, buyButtonSelectionHandler, closeButton);
    		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
@@ -606,21 +603,21 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Create the good type buttons
 		CleanButton peopleButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_PEOPLE, HAND_CURSOR);
 		peopleButton.setPopupText("People");
-		peopleButton.setLocation(startX,41);	
+		peopleButton.setLocation(startX,31);	
 		CleanButton suppliesButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_SUPPLIES, HAND_CURSOR);
-		suppliesButton.setLocation(startX + gapX * 1,41);
+		suppliesButton.setLocation(startX + gapX * 1,31);
 		suppliesButton.setPopupText("Supplies");
 		CleanButton tradeGoodsButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_MERCHANDISE, HAND_CURSOR);
-		tradeGoodsButton.setLocation(startX + gapX * 2,41);
+		tradeGoodsButton.setLocation(startX + gapX * 2,31);
 		tradeGoodsButton.setPopupText("Trade Goods");
 		CleanButton armoryButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_WEAPONS, HAND_CURSOR);
-		armoryButton.setLocation(startX + gapX * 3,41);
+		armoryButton.setLocation(startX + gapX * 3,31);
 		armoryButton.setPopupText("Armory");
 		CleanButton livestockButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_LIVESTOCK, HAND_CURSOR);
-		livestockButton.setLocation(startX + gapX * 4,41);
+		livestockButton.setLocation(startX + gapX * 4,31);
 		livestockButton.setPopupText("Livestock");
 		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(startX + gapX * 6,41);
+		closeButton.setLocation(startX + gapX * 6,31);
 		
 		si.add(peopleButton);
 		si.add(suppliesButton);
@@ -666,7 +663,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Create the gridbox component. Send the transferFromExpeditionHandler to allow item selection with both mouse and keyb
    		TransferBorderGridBox menuBox = new TransferBorderGridBox(
    				BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
-   				62,202,2,6, IMG_BOX, null, transferButton,
+   				STANDARD_ITEM_HEIGHT,STANDARD_ITEM_WIDTH,2,6, IMG_BOX, null, transferButton,
    				from, to, 
    				transferFromExpeditionHandler);
    		menuBox.setCursor(si.getCursor());
@@ -1198,7 +1195,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 		
 		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(730,41);
+		closeButton.setLocation(730,31);
 		
 		BlockingQueue<String> selectionHandler = new LinkedBlockingQueue<String>();
 		closeButton.addActionListener(getStringCallBackActionListener(selectionHandler, "CANCEL"));
