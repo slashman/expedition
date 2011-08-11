@@ -1310,7 +1310,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		public boolean validateBreak(ItemContainer from, ItemContainer to) {
 			if (from instanceof ShipCache){
 				if (to.getTotalUnits() > 0){
-					if (to.getFoodDays() == 0){
+					if (to.getFoodDays() == 0 && from.getFoodDays() > 0){
 						showBlockingMessage("You must transfer supplies for the expedition.");
 			  	  		return false;
 					} else {
