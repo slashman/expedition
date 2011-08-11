@@ -533,7 +533,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 	}
 
-
+	private long lastPlayedLevelTune = -1;
+	private long LEVEL_MUSIC_TUNE_PLAYBACK_GAP = 120 * 1000; 
 	public void setWeather(Weather weather) {
 		Weather formerWeather = this.weather;
 		this.weather = weather;
@@ -547,11 +548,23 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			if (weather.getMusicKey() != null){
 				ExpeditionMusicManager.playTune(weather.getMusicKey());
 			} else {
-				//ExpeditionMusicManager.stopWeather();
-				ExpeditionMusicManager.playTune(getMusicKey());
+				if (System.currentTimeMillis() > lastPlayedLevelTune + LEVEL_MUSIC_TUNE_PLAYBACK_GAP) {
+					ExpeditionMusicManager.playTune(getMusicKey());
+					lastPlayedLevelTune = System.currentTimeMillis();
+				} else {
+					ExpeditionMusicManager.stopWeather();
+				}
 			}
 		}
 		
+	}
+	
+	@Override
+	public String getMusicKey() {
+		if (((OverworldExpeditionCell)getMapCell(getPlayer().getPosition())).isSea())
+			return "SEA";
+		else
+			return "LAND";
 	}
 
 	public boolean isOnITZ() {

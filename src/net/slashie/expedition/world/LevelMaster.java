@@ -67,7 +67,6 @@ public class LevelMaster {
 				ret.setUnleashers(pattern.getUnleashers());
 			}
 			WorldGenerator.addNativeSettlements(ret);
-			ret.getHelper().setMusicKey("SEA");
 			ret.setID("WORLD");
 			ret.setWindDirection(CardinalDirection.WEST);
 			return ret;

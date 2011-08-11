@@ -151,10 +151,10 @@ public enum Weather {
 		return null;
 	}
 
-	
 	public boolean isRainy() {
 		switch (this) {
 		case HURRICANE:
+		case GALE_WIND:
 		case RAIN:
 		case STORM:
 			return true;
@@ -167,6 +167,7 @@ public enum Weather {
 		switch (this) {
 		case HURRICANE:
 		case RAIN:
+		case GALE_WIND:
 		case STORM:
 			return true;
 		default:

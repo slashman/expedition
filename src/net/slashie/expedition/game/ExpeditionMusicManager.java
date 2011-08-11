@@ -1,5 +1,8 @@
 package net.slashie.expedition.game;
 
+import net.slashie.expedition.world.ExpeditionMacroLevel;
+import net.slashie.expedition.world.Weather;
+import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.sound.STMusicManagerNew;
 
 public class ExpeditionMusicManager {
@@ -9,18 +12,35 @@ public class ExpeditionMusicManager {
 		weatherMusicManager = new STMusicManagerNew();
 	}
 
+	private static boolean playingWeather;
 	public static void playTune(String tune){
 		if (tune.startsWith("WEATHER")){
 			STMusicManagerNew.thus.stopMusic();
 			weatherMusicManager.playKey(tune);
+			playingWeather = true;
 		} else {
-			weatherMusicManager.stopMusic();
-			STMusicManagerNew.thus.playKey(tune);
+			if (!playingWeather){
+				stopWeather();
+				STMusicManagerNew.thus.playKey(tune);
+			} else {
+				AbstractLevel level = ExpeditionGame.getCurrentGame().getExpedition().getLevel();
+				if (level instanceof ExpeditionMacroLevel){
+					Weather weather = ((ExpeditionMacroLevel)level).getWeather();
+					if (weather.getMusicKey() != null){
+						// Ignore the tune since weather is better 
+					} else {
+						stopWeather();
+						STMusicManagerNew.thus.playKey(tune);
+						
+					}
+				}
+			}
 		}
 	}
 
 	public static void stopWeather() {
 		weatherMusicManager.stopMusic();
+		playingWeather = false;
 	}
 
 	public static void addTune(String tuneKey, String file) {
