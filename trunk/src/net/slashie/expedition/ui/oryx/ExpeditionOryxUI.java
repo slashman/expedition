@@ -531,6 +531,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		showBlockingMessage(x, false);
 	}
 	
+	public void showImportantMessage(String message){
+		showBlockingMessage(message);
+	}
+		
+	
 	@Override
 	public boolean promptChat(String message) {
 		if (getPlayer() != null && getPlayer().getSelector() != null)
