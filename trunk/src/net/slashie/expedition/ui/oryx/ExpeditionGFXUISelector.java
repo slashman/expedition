@@ -122,7 +122,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		chopButton.setPopupText("Chop Woods");
 		anchorButton.setPopupText("Anchor Ships");
 		musicButton.setPopupText("Switch Music");
-		saveButton.setPopupText("Save");
+		saveButton.setPopupText("Save and Quit");
 		quitButton.setPopupText("Quit");
 		
 		armButton.setVisible(false);
