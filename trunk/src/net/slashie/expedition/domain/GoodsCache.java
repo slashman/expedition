@@ -20,6 +20,11 @@ import net.slashie.util.Pair;
 public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitContainer, ItemContainer{
 	private FoodConsumerDelegate foodConsumerDelegate; 
 	
+	public GoodsCache(boolean abstractCache) {
+		setAppearanceId("GOODS_CACHE");
+		foodConsumerDelegate = new FoodConsumerDelegate(this);
+	}
+	
 	public GoodsCache(ExpeditionGame game) {
 		setAppearanceId("GOODS_CACHE");
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
@@ -406,5 +411,10 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 
 	public int getWaterDays() {
 		return 0;
+	}
+	
+	@Override
+	public boolean isPeopleContainer() {
+		return true;
 	}
 }

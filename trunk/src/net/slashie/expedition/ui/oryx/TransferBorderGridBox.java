@@ -363,6 +363,9 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	}
 	
 	private void drawContainerInfo(int x, int y, ItemContainer container) {
+		if (!container.isPeopleContainer())
+			return;
+
 		GFXAppearance containerAppearance = (GFXAppearance)container.getAppearance();
 		if (containerAppearance != null){
 			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, containerAppearance.getImage());
