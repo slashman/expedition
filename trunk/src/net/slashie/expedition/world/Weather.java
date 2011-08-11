@@ -150,5 +150,35 @@ public enum Weather {
 		}
 		return null;
 	}
+
+	
+	public boolean isRainy() {
+		switch (this) {
+		case HURRICANE:
+		case RAIN:
+		case STORM:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
+	public boolean hasMusic() {
+		switch (this) {
+		case HURRICANE:
+		case RAIN:
+		case STORM:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public String getMusicKey() {
+		if (hasMusic())
+			return "WEATHER_"+name();
+		else
+			return null;
+	}
 	
 }

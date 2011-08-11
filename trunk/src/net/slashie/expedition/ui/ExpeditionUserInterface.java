@@ -9,6 +9,7 @@ import net.slashie.expedition.domain.LandingParty;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.town.Building;
+import net.slashie.expedition.world.Weather;
 import net.slashie.serf.game.Equipment;
 
 public interface ExpeditionUserInterface {
@@ -20,6 +21,7 @@ public interface ExpeditionUserInterface {
 	public void transferFromExpedition(GoodsCache ship, int minUnits);
 
 	public void showBlockingMessage(String message);
+	public void showBlockingMessage(String message, boolean keepMessage);
 	
 	public static final String[] months = new String[]{
 			"Janvary",
@@ -53,4 +55,5 @@ public interface ExpeditionUserInterface {
 	public void showCityInfo(Town town);
 	public void afterTownAction();
 	public LandingParty selectLandingParty();
+	public void notifyWeatherChange(Weather weather);
 }

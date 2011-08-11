@@ -99,7 +99,8 @@ public class ExpeditionGame extends SworeGame {
 		currentGame = this;
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
 		if (expeditionLevel.getMusicKey() != null)
-			STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
+			//STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
+			ExpeditionMusicManager.playTune(expeditionLevel.getMusicKey());
 	}
 
 	@Override
@@ -143,7 +144,7 @@ public class ExpeditionGame extends SworeGame {
 	public void onLevelLoad(AbstractLevel level) {
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)level;
 		if (expeditionLevel.getMusicKey() != null)
-			STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
+			ExpeditionMusicManager.playTune(expeditionLevel.getMusicKey());
 		if (level instanceof ExpeditionMicroLevel)
 			getExpedition().setMovementMode(MovementMode.FOOT);
 		if (level.getID().equals("SPAIN")){

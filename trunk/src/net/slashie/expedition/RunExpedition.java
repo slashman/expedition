@@ -24,6 +24,7 @@ import net.slashie.expedition.action.navigation.ResetDeadReckon;
 import net.slashie.expedition.data.ExpeditionDAO;
 import net.slashie.expedition.data.GFXAppearances;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.game.GameFiles.SaveGameFilenameFilter;
 import net.slashie.expedition.item.ItemFactory;
@@ -169,9 +170,10 @@ public class RunExpedition {
             	crash("Error initializing", crle);
             }
             STMusicManagerNew.initManager();
+            ExpeditionMusicManager.init();
         	if (configuration.getProperty("enableSound") != null && configuration.getProperty("enableSound").equals("true")){ // Sound
         		if (configuration.getProperty("enableMusic") == null || !configuration.getProperty("enableMusic").equals("true")){ // Music
-    	    		STMusicManagerNew.thus.setEnabled(false);
+        			ExpeditionMusicManager.setEnabled(false);
     		    } else {
     		    	System.out.println("Initializing Midi Sequencer");
     	    		try {
@@ -182,7 +184,7 @@ public class RunExpedition {
     	    		} catch(MidiUnavailableException mue) {
     	            	SworeGame.addReport("Midi device unavailable");
     	            	System.out.println("Midi Device Unavailable");
-    	            	STMusicManagerNew.thus.setEnabled(false);
+    	            	ExpeditionMusicManager.setEnabled(false);
     	            	return;
     	            }
     	    		System.out.println("Initializing Music Manager");
@@ -193,10 +195,10 @@ public class RunExpedition {
     	    	    	String key = (String) keys.nextElement();
     	    	    	if (key.startsWith("mus_")){
     	    	    		String music = key.substring(4);
-    	    	    		STMusicManagerNew.thus.addMusic(music, configuration.getProperty(key));
+    	    	    		ExpeditionMusicManager.addTune(music, configuration.getProperty(key));
     	    	    	}
     	    	    }
-    	    	    STMusicManagerNew.thus.setEnabled(true);
+    	    	    ExpeditionMusicManager.setEnabled(true);
     		    }
     	    	if (configuration.getProperty("enableSFX") == null || !configuration.getProperty("enableSFX").equals("true")){
     		    	SFXManager.setEnabled(false);

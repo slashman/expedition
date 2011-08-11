@@ -23,6 +23,7 @@ import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
@@ -31,6 +32,7 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.TemperatureRules;
+import net.slashie.expedition.world.Weather;
 import net.slashie.libjcsi.CSIColor;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
@@ -245,7 +247,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	public void onMusicOn() {
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
 		if (expeditionLevel.getMusicKey() != null)
-			STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
+			ExpeditionMusicManager.playTune(expeditionLevel.getMusicKey());
 	}
 
 	private Expedition getExpedition(){
@@ -386,6 +388,10 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			return true;
 		} else
 			return false;
+	}
+	
+	public void showBlockingMessage(String message, boolean keep) {
+		showBlockingMessage(message);
 	}
 	
 	public void showBlockingMessage(String message) {
@@ -1127,5 +1133,10 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			return landingParties.get(choice);
 		else
 			return null;
+	}
+	
+	@Override
+	public void notifyWeatherChange(Weather weather) {
+		// TODO
 	}
 }
