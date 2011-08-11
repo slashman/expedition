@@ -542,8 +542,11 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(weather);
 			addMessage(weather.getChangeMessage(formerWeather));
 			if (weather.isWindy() && getWindDirection() == CardinalDirection.NULL){
-				//getDispatcher().callActor(currentWindAgent);
 				setWindDirection(getWindDirection().rotate(1));
+			}
+			if (formerWeather.isStormy() && !weather.isStormy()){
+				// Remove all storms
+				storms.clear();
 			}
 			if (weather.getMusicKey() != null){
 				ExpeditionMusicManager.playTune(weather.getMusicKey());
