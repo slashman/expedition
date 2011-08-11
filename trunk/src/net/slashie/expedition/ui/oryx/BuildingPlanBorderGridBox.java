@@ -107,19 +107,12 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 						int ypos = selectedItem.cursorY * itemHeight + getLocation().y + getBorderWidth() + (legendLines + 1) * lineHeight;
 						quantitySplitterUp.setLocation(xpos + ExpeditionOryxUI.STANDARD_ITEM_WIDTH + 3, ypos + 17);
 						quantitySplitterDown.setLocation(xpos + ExpeditionOryxUI.STANDARD_ITEM_WIDTH + 3, ypos + 44);
-						/*quantityLabel.setLocation(xpos + ExpeditionOryxUI.STANDARD_ITEM_WIDTH + 43, ypos + 30);
-						quantityLabel.setText(selectedBuilding.getQuantity()+"");
-						quantityLabel.setVisible(true);*/
 						quantitySplitterUp.setVisible(true);
 						quantitySplitterDown.setVisible(true);
-						
-						
-						
 					} else {
 						// No grid selected
 						quantitySplitterUp.setVisible(false);
 						quantitySplitterDown.setVisible(false);
-						//quantityLabel.setVisible(false);
 					}
 				}
 				

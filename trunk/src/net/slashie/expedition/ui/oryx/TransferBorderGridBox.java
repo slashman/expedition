@@ -85,12 +85,12 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		quantityLabel = new JLabel();
 		quantityLabel.setFont(si.getFont(ExpeditionOryxUI.UI_WIDGETS_LAYER));
 		quantityLabel.setVisible(false);
-		quantityLabel.setBounds(540,231,200,27);
+		quantityLabel.setBounds(540+90,231,200,27);
 		quantityLabel.setForeground(Color.WHITE);
 		si.add(quantityLabel);
 		
 		transferButton.setVisible(false);
-		transferButton.setLocation(515,270);
+		transferButton.setLocation(515+90,270);
 		si.add(transferButton);
 		transferButton.addActionListener(new CallbackActionListener<String>(transferSelectionHandler){
 			@Override
@@ -153,7 +153,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private void initializeSplitters() {
 		quantitySplitterUp = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterUp.setVisible(false);
-		quantitySplitterUp.setLocation(512,223);
+		quantitySplitterUp.setLocation(512+90,223);
 		final Action increaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -189,7 +189,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		
 		quantitySplitterDown = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterDown.setVisible(false);
-		quantitySplitterDown.setLocation(512,248);
+		quantitySplitterDown.setLocation(512+90,248);
 		
 		final Action decreaseQuantityAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
@@ -272,13 +272,16 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	public void draw(Equipment highlight, int boxX) {
 		this.highlight = highlight;
 		super.draw(false);
+		
 		// Draw a cute border
-		int x = 450;
+		int x = 540; //55
 		int y = 75;
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(OryxExpeditionDisplay.COLOR_BOLD);
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 310 - 2, 390 - 2);
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 310 - 4, 390 - 4);
-
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_COLOR);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 225 - 2, 390 - 2);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 225 - 2, 390 - 2);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 225 - 4, 390 - 4);
+		
 		drawContainerInfo(x, 85, from);
 		drawContainerInfo(x, 323, to);
 		
@@ -293,7 +296,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 
 			// Draw the unit info
 			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, unitImage);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, "How many "+itemDescription, OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, "How many ?", OryxExpeditionDisplay.COLOR_BOLD);
 
 			if (eitem != lastChoice){
 				// Just Selected

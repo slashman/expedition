@@ -73,11 +73,17 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 		
 		// Draw a cute border
 		if (eitem instanceof ExpeditionUnit){
-			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(new Color(82,79,34));
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_HIGHLIGHT_COLOR);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 350 - 2, 60 - 2);
-			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(OryxExpeditionDisplay.COLOR_BOLD);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 350 - 2, 60 - 2);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 350 - 4, 60 - 4);
+		} else {
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_HIGHLIGHT_COLOR);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 200 - 2, 60 - 2);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 200 - 2, 60 - 2);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 200 - 4, 60 - 4);
 		}
 		
 		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 12, unitImage);
@@ -104,11 +110,13 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 		
 		// Draw a cute border
 		if (highlight){
-			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(new Color(82,79,34));
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_HIGHLIGHT_COLOR);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 200 - 2, 60 - 2);
-			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+2, y+2, 200 - 4, 60 - 4);
-		} 
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(OryxExpeditionDisplay.COLOR_BOLD);
+		} else {
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_COLOR);
+			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 200 - 2, 60 - 2);
+		}
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 200 - 2, 60 - 2);
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 200 - 4, 60 - 4);
 		
