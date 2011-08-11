@@ -119,7 +119,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image BTN_CLOSE;
 	public static Image IMG_SMALL_BUTTON_BACK;
 	public static Image IMG_SMALL_BUTTON_HOVER_BACK;
-
+	public static Image[] MORALE_IMAGES;
 	
 	private BufferedImage IMG_BOX;
 	public Cursor HAND_CURSOR;
@@ -434,15 +434,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		StoreCustomGFXMenuItem itemChoice = null;
   		boolean keepItemChoice = false;
 		while (true) {
-			/*menuBox.draw(null);*/
 			menuBox.setLegend(prompt);
-			//si.commitLayer(getUILayer());
 			menuBox.setBuyButtonEnabled(true);
 
 			if (!keepItemChoice)
 				itemChoice = ((StoreCustomGFXMenuItem)menuBox.getSelection());
 			
-
 			if (itemChoice == null)
 				break;
 			
@@ -902,7 +899,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.print(getUILayer(), 2, 5, ui_food + ui_foodModifier);
 		si.print(getUILayer(), 2, 6, ui_seaDays);
 		// si.print(2, 7, ui_water); TODO: Implement
-		si.print(getUILayer(), 2, 8, ui_morale + ui_armed);
+		si.drawImage(getUILayer(), 22, 171, MORALE_IMAGES[statsExpedition.getMorale()]);
+		si.print(getUILayer(), 5, 8, ui_morale);
 		si.print(getUILayer(), 2, 9, ui_carrying);
 		si.print(getUILayer(), 2,10, ui_gold);
 		
@@ -1045,8 +1043,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			BTN_LIVESTOCK = ImageUtils.createImage(UIProperties.getProperty("BTN_LIVESTOCK"));
 			BTN_CLOSE = ImageUtils.createImage(UIProperties.getProperty("BTN_CLOSE"));
 			IMG_SMALL_BUTTON_BACK = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_BACK_BOUNDS"));
-			IMG_SMALL_BUTTON_HOVER_BACK  = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_HOVER_BACK_BOUNDS"));
-			
+			IMG_SMALL_BUTTON_HOVER_BACK = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_HOVER_BACK_BOUNDS"));
+			MORALE_IMAGES = new Image[11];
+			for (int i = 0; i <= 10; i++){
+				MORALE_IMAGES[i]= PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("IMG_MORALE_"+i));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			ExpeditionGame.crash("Error loading images", e);
