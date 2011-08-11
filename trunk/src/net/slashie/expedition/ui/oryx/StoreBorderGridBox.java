@@ -71,6 +71,8 @@ public class StoreBorderGridBox extends BorderedGridBox{
 		selectedQuantity -= changeSpeed;
 		if (selectedQuantity < 1)
 			selectedQuantity = 1;
+		if (selectedQuantity > maximumQuantity)
+			selectedQuantity = maximumQuantity;
 	    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
 	}
 	
@@ -224,6 +226,8 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				if (maximumQuantity > maxBuy)
 					maximumQuantity = maxBuy;
 				selectedQuantity = 1;
+				if (selectedQuantity > maximumQuantity)
+					selectedQuantity = maximumQuantity;
 			    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
 			    
 			    if (eitem instanceof ExpeditionUnit){
