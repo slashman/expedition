@@ -784,7 +784,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 					menuItems.remove(choice);
 				}
 				menuBox.resetSelection();
-				menuBox.setLegend(quantity+" " +choice.getItem().getDescription()+" transfered into "+to.getDescription());
+				menuBox.setLegend(itemTransferFunctionality.getTransferedLegend(quantity, choice, to));
   	  		} else if (commandParts[0].equals("CHANGE_PAGE")){
   	  			// Do nothing other than changing page and redrawing
   	  		}
@@ -1276,6 +1276,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	interface ItemTransferFunctionality {
 		String getTitle(ItemContainer from, ItemContainer to);
+		String getTransferedLegend(int quantity, Equipment choice, ItemContainer to);
 		boolean validateBreak(ItemContainer from, ItemContainer to);
 		/**
 		 * 
@@ -1316,6 +1317,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 		
 		@Override
+		public String getTransferedLegend(int quantity, Equipment choice, ItemContainer to) {
+			return quantity+" " +choice.getItem().getDescription()+" transfered into "+to.getDescription();
+		}
+		
+		@Override
 		public boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, Map<GoodType, List<Equipment>> fromMap, Equipment choice, int quantity) {
   			ExpeditionItem item = (ExpeditionItem) choice.getItem();
 			if (!(choice.getItem() instanceof ExpeditionUnit) && to.getTotalUnits() == 0){
@@ -1345,6 +1351,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		int minUnits;
 		TransferFromExpeditionFunctionality (int minUnits){
 			this.minUnits = minUnits;
+		}
+		
+		@Override
+		public String getTransferedLegend(int quantity, Equipment choice, ItemContainer to) {
+			return quantity+" " +choice.getItem().getDescription()+" transfered into "+to.getDescription();
 		}
 		
 		@Override
@@ -1405,6 +1416,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		SelectFromExpeditionFunctionality (List<Equipment> selection, String prompt, String verb){
 			this.selection = selection;
 			this.prompt = prompt;
+		}
+		
+		@Override
+		public String getTransferedLegend(int quantity, Equipment choice, ItemContainer to) {
+			return quantity+" " +choice.getItem().getDescription()+" selected";
 		}
 		
 		@Override
