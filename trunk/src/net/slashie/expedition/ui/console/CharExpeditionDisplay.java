@@ -167,7 +167,7 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.refresh();
 		String name = csi.input(10);
 		
-		return ExpeditionFactory.createPlayerExpedition(name, game);
+		return ExpeditionFactory.createPlayerExpedition(name, "Colombus", game);
 	}
 	
 	@Override

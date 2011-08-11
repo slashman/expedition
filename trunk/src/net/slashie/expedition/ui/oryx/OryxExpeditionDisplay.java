@@ -583,7 +583,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			}
 		}
 		si.remove(okButton);
-		return ExpeditionFactory.createPlayerExpedition(name, game);
+		return ExpeditionFactory.createPlayerExpedition(name, "Colombus", game);
 	}
 	
 }

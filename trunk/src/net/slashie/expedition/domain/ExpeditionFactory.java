@@ -35,17 +35,18 @@ public class ExpeditionFactory {
 		return ret;
 	}
 	
-	public static Expedition createPlayerExpedition(String name, ExpeditionGame game) {
-		name = name.trim();
+	public static Expedition createPlayerExpedition(String expeditionName, String expeditionaryName, ExpeditionGame game) {
+		expeditionName = expeditionName.trim();
+		expeditionaryName = expeditionaryName.trim();
 		Expedition ret = new Expedition(game);
 		ret.setGame(game);
 		ret.setAppearanceId("EXPEDITION");
-		ret.setName(name);
-		ret.setExpeditionary(name);
+		ret.setName(expeditionName);
+		ret.setExpeditionary(expeditionaryName);
 		ret.setAccountedGold(200);
 		ExpeditionUnit explorer = (ExpeditionUnit)ItemFactory.createItem("COLOMBUS");
-		explorer.setDescription(name);
-		explorer.setName(name);
+		explorer.setDescription(expeditionaryName);
+		explorer.setName(expeditionaryName);
 		explorer.updateCompositeVariables();
 		ret.setLeaderUnit(explorer);
 		ret.setMovementMode(MovementMode.FOOT);
