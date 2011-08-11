@@ -181,5 +181,16 @@ public enum Weather {
 		else
 			return null;
 	}
+
+	public boolean isStormy() {
+		switch (this) {
+		case HURRICANE:
+		case GALE_WIND:
+		case STORM:
+			return true;
+		default:
+			return false;
+		}
+	}
 	
 }
