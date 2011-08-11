@@ -1140,13 +1140,21 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		boolean storm = getLocation().hasStorm(destinationPoint) && getMovementMode() == MovementMode.SHIP; 
         if (storm){
 			getLevel().addMessage("You are caught on a Storm!");
-			wearOutShips(20, true);
-			increaseDeducedReckonWest(Util.rand(-5, 5));
-			if (Util.chance(30)){
-				//Random movement caused by the storm
-				destinationPoint.x += Util.rand(-1, 1);
-				destinationPoint.y += Util.rand(-1, 1);
+			if (isAnchored()){
+				getLevel().addMessage("We must weigh anchors or dock immediately!");
+				wearOutShips(40, true);
+			} else {
+				wearOutShips(20, true);
+				increaseDeducedReckonWest(Util.rand(-5, 5));
+				if (Util.chance(30)){
+					int xScale = GlobeMapModel.getLongitudeScale(getPosition().y);
+					int yScale = GlobeMapModel.getLatitudeHeight();
+					//Random movement caused by the storm
+					destinationPoint.x += Util.rand(-1, 1) * xScale;
+					destinationPoint.y += Util.rand(-1, 1) * yScale;
+				}
 			}
+			
 			if (Util.chance(5)){
 				ExpeditionUnit randomUnit = getRandomUnitFair();
 				int choice = UserInterface.getUI().switchChat("Man overboard!", "A "+randomUnit.getDescription()+" has fallen overboard in the storm! XXX What will you do?", "Let's try to save him!", "We must leave the man behind.");
@@ -1162,7 +1170,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				} else {
 					message("The sea takes the "+randomUnit.getDescription()+" away!");
 					reduceQuantityOf(randomUnit);
-					setCounter("decreaseMorale(100);", 100);
+					decreaseMorale(100);
 				}
 			}
 			seaAccident(10);
