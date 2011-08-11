@@ -142,9 +142,13 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			if (!exp.getFlag("MET_WITH_KINGS")){
 				//First meeting with kings
 				exp.setFlag("MET_WITH_KINGS", true);
-				m("We, the Catholic King and Queen of Spain, have generously decided to grant you this audience. In spite of our advisors words, we have approved your expedition to find the west path into the Indies.");
-				m("Should your journey be successful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
-				m("We have commissioned two caravels and a carrack for your trip. What other aid should the crown grant you?");
+				m("You stand again in front of King Ferdinand and Queen Isabella, the royal monarchs of the recently born Kingdom of Spain.");
+				m("Your last audience in their throne room ended in yet another disappointment, but when you were leaving Cordova a group of royal guards requested you to visit again the Alcazar.");
+				m("You approach the throne and wait for the monarchs' words.");
+				m(ferdinandSays()+"Welcome back, Christopher Colombus of Genoa.");
+				m(ferdinandSays()+"We, the Catholic King and Queen of Spain, have generously decided to grant you this audience. In spite of our advisors words, we have approved your expedition to find the west path into the Indies.");
+				m(ferdinandSays()+"Should your journey be successful, you will be given the rank of Admiral of the Seas, as well as viceroy and governor of any of the new-found lands.");
+				ml(isabellaSays()+"We have commissioned two caravels and a carrack for your voyage. What other aid should the crown grant you?");
 				int choice = -1;
 				while (choice == -1){
 					choice = (UserInterface.getUI()).switchChat("Audience with the King and Queen","What other aid should the crown grant you?",
@@ -155,10 +159,10 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				}
 				switch (choice){
 				case 0:
-					m("We will outfit the ships with sailors, captains and carpenters, we will also grant you 2.400 royal maravedíes and supplies for a five months trip.");
+					m(ferdinandSays()+"We will outfit the ships with sailors, captains and carpenters, we will also grant you 2.400 royal maravedíes and supplies for a five months voyage.");
 					break;
 				case 1:
-					m("We will outfit the ships with crew and will assign ten soldiers to your expedition, we will also grant you 1.000 royal maravedíes and supplies for a four months trip.");
+					m(ferdinandSays()+"We will outfit the ships with crew and will assign ten soldiers to your expedition, we will also grant you 1.000 royal maravedíes and supplies for a four months voyage.");
 					break;
 				}
 				stockExpedition(exp, choice);
@@ -173,23 +177,23 @@ public class SpainCastle extends StaticPattern implements Serializable {
 					}
 					switch (choice){
 					case 0:
-						m("Then, we trust 11.530 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						m(isabellaSays()+"Then, we trust 11.530 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
 						exp.setAccountedGold(11530);
 						break;
 					case 1:
-						m("Then, we trust 6.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						m(isabellaSays()+"Then, we trust 6.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
 						exp.setAccountedGold(6000);
 						break;
 					case 2:
-						m("Are you sure? You are a brave explorer. We trust 2.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						m(ferdinandSays()+"Are you sure? You are a brave explorer. We trust 2.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
 						exp.setAccountedGold(2000);
 						break;
 					}
 					exp.addItemOffshore(ItemFactory.createItem("SAILOR"), 15);
 				}
 				
-				m("We have also instructed Friar Domenico to answer your questions about this journey, you will find him next to the Alcazar entrance.");
-				m("May God be with you in your journey, we await your safe return. XXX XXX You are dismissed.");
+				m(isabellaSays()+"We have instructed Friar Domenico to answer your questions about this journey, you will find him next to the Alcazar entrance.");
+				ml(ferdinandSays()+"May God be with you in your journey, we await your safe return. XXX XXX You are dismissed.");
 				level.addMessage("You see the exit of the Alcazar to the south");
 			} else {
 				boolean earnedTitle = false;
@@ -202,17 +206,17 @@ public class SpainCastle extends StaticPattern implements Serializable {
 					}
 				}
 				if (earnedTitle) {
-					((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Because of your service to the crown, We, the Catholic Kings of the Kingdom of Spain, name you "+exp.getTitle().getFullDescription(exp.getExpeditionary())+"..");
-					((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("Take "+exp.getTitle().getPrize()+" maravedíes from the royal treasure, and continue defending our flag in the new world.");					
-					((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("May God be with you in your journey. You are dismissed.");
+					m(ferdinandSays()+"Because of your service to the crown, We, the Catholic Kings of Spain, name you "+exp.getTitle().getFullDescription(exp.getExpeditionary())+"..");
+					m(ferdinandSays()+"Take "+exp.getTitle().getPrize()+" maravedíes from the royal treasure, and continue defending our flag in the new world.");					
+					ml(ferdinandSays()+"May God be with you in your journey. You are dismissed.");
 					exp.setAccountedGold(exp.getAccountedGold()+exp.getTitle().getPrize());
 				} else {
 					if (exp.getFlag("DISCOVERED_NEW_WORLD")){
-						((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We await your safe return from the New World. XXX XXX  You are dismissed.");
+						ml(isabellaSays()+"We await your safe return from the West Indies. XXX You are dismissed.");
 					} else {
 						if (level.getPlayer().getPosition().y < previousPlayerY){
 							// Advancing toward the kings
-							((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("We await your safe return.  XXX XXX You are dismissed.");
+							ml(ferdinandSays()+"We await your safe return.  XXX You are dismissed.");
 						}
 					}
 				}
@@ -227,8 +231,20 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		}
 		
 
+		private String isabellaSays() {
+			return "Isabella, Queen of Castile and León says: XXX XXX";
+		}
+
+		private String ferdinandSays() {
+			return "Ferdinand II, King of Aragón says: XXX XXX" ;
+		}
+
 		private void m(String string) {
-			((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string);
+			((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string, true);		
+		}
+		
+		private void ml(String string) {
+			((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string, false);		
 		}
 
 		private void stockExpedition(Expedition ret, int choice) {

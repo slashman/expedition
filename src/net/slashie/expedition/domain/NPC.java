@@ -69,7 +69,7 @@ public class NPC extends AwareActor implements Cloneable{
 					}
 					m("Remember you need at least 200 wood to found an outstanding settlement. You can obtain wood by chopping or buying from the Supplies store. ");
 					m("Once you build a settlement, you can leave people inhabiting it and they will look out for their own survival, so you can use settlements as exploration bases.");
-					m("A settlement may host 40 people when created, but you can continue expanding it with more buildings if you want to push its growth forward.");
+					ml("A settlement may host 40 people when created, but you can continue expanding it with more buildings if you want to push its growth forward.");
 					break;
 				case 1:
 					m("My friend... how can I give advice on sailing the seas to a great navigator such as you! You have been on board since you were a child!");
@@ -84,7 +84,7 @@ public class NPC extends AwareActor implements Cloneable{
 						m("Remember to check out your \"Food Days\" calculations before departing. The crown has given you enough supplies for a long voyage with your sailing crew...");
 						m("But if you decide to bring more people, you will have to get your own supplies");
 					}
-					m("You can forage for fruits on the wilderness or fish on shallow waters, but it's better to keep your expedition stocked");
+					ml("You can forage for fruits on the wilderness or fish on shallow waters, but it's better to keep your expedition stocked");
 					break;
 				case 2:
 					m("Your expedition is made up of men of different skills, it is important to know the role of each one in order to have a successful journey.");
@@ -101,7 +101,7 @@ public class NPC extends AwareActor implements Cloneable{
 					m("They also construct buildings twice as fast, in case you are settling in a colony.");
 					m("Doctors can only wear basic gear, but they help your units to heal quickly.");
 					m("A wounded unit can't perform its functions and is subject to die in battle, so they can be a great help in your expedition.");
-					m("Finally, you can also bring colonists with you, they are people willing to strengthen the presence of the crown in foreign lands.");
+					ml("Finally, you can also bring colonists with you, they are people willing to strengthen the presence of the crown in foreign lands.");
 					break;
 				case 3:
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
@@ -114,32 +114,32 @@ public class NPC extends AwareActor implements Cloneable{
 					m("An assault is divided into three phases: \"Ranged\", \"Mounted\" and \"Melee\", and you may suffer retaliation from the defending party on any phase.");
 					m("Each phase may bring wounded or dead units. Wounded units cannot participate on the assault and are taken to the back row.");
 					m("Units with ranged equipment and mounted units can participate more than once on battle, during the Ranged and Mounted phases.");
-					m("Choosing when to fight and when to retreat may save your life!");
+					ml("Choosing when to fight and when to retreat may save your life!");
 					break;
 				case 4:
-					m("May God be with you!");
+					ml("May God be with you!");
 					break out;
 				}
 			}
 		} else if (unit.getBaseID().equals("GUARD")){
 			switch (Util.rand(0, 2)){
 			case 0:
-				m(says()+"I guard the castle and all within.");
+				ml(says()+"I guard the castle and all within.");
 				break;
 			case 1:
-				m(says()+"I couldn't be better!");
+				ml(says()+"I couldn't be better!");
 				break;
 			case 2:
-				m(says()+"The alcazar is fair and strong.");
+				ml(says()+"The alcazar is fair and strong.");
 				if ((UserInterface.getUI()).promptChat(says()+"Do you seek the King and Queen?")){
-					m(says()+"They are in the throne room.");
+					ml(says()+"They are in the throne room.");
 				} else {
-					m(says()+"Then what's your business here!");
+					ml(says()+"Then what's your business here!");
 				}
 			}
 		} else {
 			if (talkLines.length > 0){
-				m(says()+Util.randomElementOf(talkLines));
+				ml(says()+Util.randomElementOf(talkLines));
 			}
 		}
 
@@ -166,7 +166,11 @@ public class NPC extends AwareActor implements Cloneable{
 	}
 
 	private void m(String string) {
-		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string);		
+		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string, true);		
+	}
+	
+	private void ml(String string) {
+		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string, false);		
 	}
 	
 }
