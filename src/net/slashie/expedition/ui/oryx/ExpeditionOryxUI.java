@@ -169,6 +169,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void shutdown() {
 		try {
 			sfxQueue.put("KILL");
+			ExpeditionMusicManager.stopWeather();
 		} catch (InterruptedException e) {}
 		super.shutdown();
 	}
