@@ -2041,7 +2041,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		if (movementMode == MovementMode.SHIP){
 			return "Ships";
 		} else {
-			return "Exped";
+			return "Expedition";
 		}
 	}
 
