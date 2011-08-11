@@ -276,7 +276,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	  			currentPage = menuBox.getPages() - 1;
 	  			menuBox.setCurrentPage(currentPage);
 	  		}
-  	  		si.loadLayer(getUILayer());
+  	  		//si.loadLayer(getUILayer()); // ???
   	  		int boxX = startX + typeChoice * gapX - 21;
 			int boxY = 41 - 24;
   	  		menuBox.draw(boxX, boxY, IMG_BOX);
@@ -1451,13 +1451,16 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		try {
 			switch (weather){
 			case RAIN:
-				sfxQueue.put("RAIN 4 8 2 150 DARK");
+				sfxQueue.put("RAIN 4 8 2 150 1 DARK");
 				break;
 			case STORM:
-				sfxQueue.put("RAIN 6 10 4 300 DARK");
+				sfxQueue.put("RAIN 6 10 4 300 2 DARK");
+				break;
+			case GALE_WIND:
+				sfxQueue.put("RAIN 6 10 4 500 3 DARK");
 				break;
 			case HURRICANE:
-				sfxQueue.put("RAIN 6 10 4 500 DARK");
+				sfxQueue.put("RAIN 6 10 4 500 3 DARK");
 				break;
 			default:
 				sfxQueue.put("STOP");

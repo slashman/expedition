@@ -52,12 +52,13 @@ public class EffectsServer implements Runnable{
 		int maxSize = Integer.parseInt(cmd[2]);
 		int deadSize = Integer.parseInt(cmd[3]);
 		int maxRainlets = Integer.parseInt(cmd[4]);
-		String rainColorStr = cmd[5];
+		int rainSpeed = Integer.parseInt(cmd[5]);
+		String rainColorStr = cmd[6];
 		Color rainColor = null;
 		if (rainColorStr.equals("DARK"))
 			rainColor = new Color(150,150,200);
 		//rainColor = Color.GRAY;
-		Runnable currentEffect = new RainEffect(si, currentEffectQueue, minSize, maxSize, deadSize, maxRainlets, rainColor);
+		Runnable currentEffect = new RainEffect(si, currentEffectQueue, minSize, maxSize, deadSize, maxRainlets, rainSpeed, rainColor);
 		new Thread(currentEffect).start();
 	}
 	
