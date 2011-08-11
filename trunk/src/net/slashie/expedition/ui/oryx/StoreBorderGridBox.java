@@ -49,7 +49,34 @@ public class StoreBorderGridBox extends BorderedGridBox{
 	private int initialQuantity;
 	private Store store;
 	private boolean buyButtonEnabled = true;
-		
+	
+	private void increaseItemQuantity(){
+		StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
+		if (initialQuantity - selectedQuantity == 0)
+			changeSpeed = 1;
+		else
+			changeSpeed = (int) Math.ceil((selectedQuantity - initialQuantity )/ 5.0d); 
+		selectedQuantity += changeSpeed;
+		if (selectedQuantity > maximumQuantity)
+			selectedQuantity = maximumQuantity;
+	    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
+	}
+	
+	private void decreaseItemQuantity(){
+		StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
+		if (initialQuantity - selectedQuantity == 0)
+			changeSpeed = 1;
+		else
+			changeSpeed = (int) Math.ceil((initialQuantity - selectedQuantity)/ 5.0d); 
+		selectedQuantity -= changeSpeed;
+		if (selectedQuantity < 1)
+			selectedQuantity = 1;
+	    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
+	}
+	
+	private Timer increaseQuantityTimer;
+	private Timer decreaseQuantityTimer;
+	
 	public StoreBorderGridBox(BufferedImage border1, BufferedImage border2,
 			BufferedImage border3, BufferedImage border4,
 			SwingSystemInterface g, Color backgroundColor, Color borderIn,
@@ -83,18 +110,10 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void actionPerformed(ActionEvent xxx) {
-				StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
-				if (initialQuantity - selectedQuantity == 0)
-					changeSpeed = 1;
-				else
-					changeSpeed = (int) Math.ceil((selectedQuantity - initialQuantity )/ 5.0d); 
-				selectedQuantity += changeSpeed;
-				if (selectedQuantity > maximumQuantity)
-					selectedQuantity = maximumQuantity;
-			    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
+				increaseItemQuantity();
 			}
 		};
-		final Timer increaseQuantityTimer = new Timer(100, increaseQuantityAction);
+		increaseQuantityTimer = new Timer(100, increaseQuantityAction);
 
 		quantitySplitterUp.addMouseListener(new MouseAdapter(){
 			@Override
@@ -120,18 +139,10 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
-				if (initialQuantity - selectedQuantity == 0)
-					changeSpeed = 1;
-				else
-					changeSpeed = (int) Math.ceil((initialQuantity - selectedQuantity)/ 5.0d); 
-				selectedQuantity -= changeSpeed;
-				if (selectedQuantity < 1)
-					selectedQuantity = 1;
-			    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
+				decreaseItemQuantity();
 			}
 		};
-		final Timer decreaseQuantityTimer = new Timer(100, decreaseQuantityAction);
+		decreaseQuantityTimer = new Timer(100, decreaseQuantityAction);
 
 		quantitySplitterDown.addMouseListener(new MouseAdapter(){
 			@Override
@@ -279,7 +290,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 	}
 	
 
-	public void activateItemPseudoSelection(BlockingQueue<Integer> quantitySelectionQueue) {
+	public void activateItemPseudoSelection(final BlockingQueue<Integer> quantitySelectionQueue) {
 		buyButtonEnabled = true;
 		int itemsPerPage = gridX * gridY;
 		final int pageElements = itemsPerPage;
@@ -289,13 +300,18 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			public void keyPressed(KeyEvent e) {
 				try {
 					int code = SwingSystemInterface.charCode(e);
-					if (code != CharKey.SPACE &&
-						code != CharKey.ESC &&
-						code != CharKey.UARROW &&
-						code != CharKey.DARROW &&
-						code != CharKey.N8 &&
-						code != CharKey.N2 &&
-						
+					if (code == CharKey.UARROW || code == CharKey.N8){
+						initialQuantity = selectedQuantity;
+						increaseItemQuantity();
+						increaseQuantityTimer.start();
+					} else if (code == CharKey.DARROW || code == CharKey.N2){
+						initialQuantity = selectedQuantity;
+						decreaseItemQuantity();
+						decreaseQuantityTimer.start();
+					} else if (code == CharKey.SPACE){
+						// Buy
+						quantitySelectionQueue.put(selectedQuantity);
+					} else if (code != CharKey.ESC &&
 						(code < CharKey.A || code > CharKey.A + pageElements-1) &&
 						(code < CharKey.a || code > CharKey.a + pageElements-1)
 						){
@@ -307,6 +323,17 @@ public class StoreBorderGridBox extends BorderedGridBox{
 
 					}
 				} catch (InterruptedException e1) {}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				int code = SwingSystemInterface.charCode(e);
+				if (code == CharKey.UARROW || code == CharKey.N8){
+					increaseQuantityTimer.stop();
+				} else if (code == CharKey.DARROW || code == CharKey.N2){
+					decreaseItemQuantity();
+					decreaseQuantityTimer.stop();
+				}
 			}
 		}; 
 		
