@@ -10,8 +10,10 @@ import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.level.GlobeMapModel;
+import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.expedition.world.agents.ForageAgent;
 import net.slashie.expedition.world.agents.RandomEventAgent;
@@ -21,6 +23,7 @@ import net.slashie.serf.action.Actor;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.Appearance;
+import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
@@ -535,10 +538,17 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		Weather formerWeather = this.weather;
 		this.weather = weather;
 		if (formerWeather != weather){
+			((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(weather);
 			addMessage(weather.getChangeMessage(formerWeather));
 			if (weather.isWindy() && getWindDirection() == CardinalDirection.NULL){
 				//getDispatcher().callActor(currentWindAgent);
 				setWindDirection(getWindDirection().rotate(1));
+			}
+			if (weather.getMusicKey() != null){
+				ExpeditionMusicManager.playTune(weather.getMusicKey());
+			} else {
+				//ExpeditionMusicManager.stopWeather();
+				ExpeditionMusicManager.playTune(getMusicKey());
 			}
 		}
 		

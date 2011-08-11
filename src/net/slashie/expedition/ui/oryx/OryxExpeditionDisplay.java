@@ -26,6 +26,7 @@ import javax.swing.JTextArea;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.game.GameFiles.LicenseInfo;
 import net.slashie.expedition.ui.CommonUI;
@@ -125,7 +126,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		ExpeditionOryxUI oui = ((ExpeditionOryxUI)UserInterface.getUI()); 
 		oui.messageBox.setVisible(false);
 		oui.persistantMessageBox.setVisible(false);
-		STMusicManagerNew.thus.playKey("TITLE");
+		ExpeditionMusicManager.playTune("TITLE");
 		
 		si.setFont(0, FNT_TEXT);
 		si.setCursor(GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4));
@@ -365,39 +366,10 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	
 	public void showIntro(Expedition e){
 		si.drawImage(0, uiProperties.getProperty("IMG_THE_NEW_WORLD_INTRO"));
-		/*
-		BlockingQueue<String> titleSelectionHandler = new LinkedBlockingQueue<String>();
-		CallbackMouseListener<String> cbml = new CallbackMouseListener<String>(titleSelectionHandler){
-			@Override
-			public void mousePressed(MouseEvent e) {
-				try {
-					handler.put("OK");
-				} catch (InterruptedException e1) {}
-			}
-		};
-		si.addMouseListener(cbml);
-		CallbackKeyListener<String> cbkl = new CallbackKeyListener<String>(titleSelectionHandler){
-			@Override
-			public void keyPressed(KeyEvent e) {
-				try {
-					handler.put("OK");
-				} catch (InterruptedException e1) {}
-			}
-		};
-		si.addKeyListener(cbkl);
-		String take = null;
-		while (take == null){
-			try {
-				take = titleSelectionHandler.take();
-			} catch (InterruptedException e1) {}
-		};
-		si.removeMouseListener(cbml);
-		si.removeKeyListener(cbkl);*/
-		
+		si.commitLayer(0);
 		String message = CommonUI.getIntroText();
 		message = message.replaceAll("XXX", "\n");
 		((ExpeditionOryxUI)UserInterface.getUI()).showTextBox(message, 16, 216, 776, 376);
-		si.commitLayer(0);
 		
 	}
 
@@ -569,16 +541,14 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
-		CleanButton theNewWorldButton = new CleanButton(image, HAND_CURSOR);
-		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
-		si.add(theNewWorldButton);
-		
+		si.drawImage(0, 560, 15, image);
+
 		ExpeditionCleanButton okButton = new ExpeditionCleanButton(4, "Ok");
 		okButton.setLocation(350, 495);
 		
 		final BlockingQueue<Integer> inputQueue = si.getInputQueue();
 		
-		String defaultName = "West Indias";
+		String defaultName = "West Indies";
 		try {
 			/*for (int i = 0; i < 10; i++){
 				inputQueue.put(CharKey.BACKSPACE);
@@ -613,7 +583,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			}
 		}
 		si.remove(okButton);
-		si.remove(theNewWorldButton);
 		return ExpeditionFactory.createPlayerExpedition(name, game);
 	}
 	

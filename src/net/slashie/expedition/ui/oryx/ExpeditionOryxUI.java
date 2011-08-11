@@ -45,6 +45,7 @@ import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.domain.LandingParty.LandingSpec;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
 import net.slashie.expedition.level.ExpeditionLevelReader;
@@ -57,6 +58,7 @@ import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.TemperatureRules;
+import net.slashie.expedition.world.Weather;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
@@ -161,6 +163,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public String getQuitMessage() {
 		return "Quit?";
+	}
+	
+	@Override
+	public void shutdown() {
+		try {
+			sfxQueue.put("KILL");
+		} catch (InterruptedException e) {}
+		super.shutdown();
 	}
 
 	@Override
@@ -379,7 +389,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void onMusicOn() {
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
 		if (expeditionLevel.getMusicKey() != null)
-			STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
+			ExpeditionMusicManager.playTune(expeditionLevel.getMusicKey());
 	}
 
 	public boolean depart() {
@@ -508,15 +518,19 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	public void showBlockingMessage(String message) {
+		showBlockingMessage(message, false);
+	}
+
+	public void showBlockingMessage(String message, boolean keepMessage) {
 		if (getPlayer() != null)
 			((GFXUISelector)getPlayer().getSelector()).deactivate();
 		message = message.replaceAll("XXX", "\n");
-		showTextBox(message, 140, 300, 520, 250);
+		showTextBox(message, 140, 300, 520, 250, keepMessage);
 	}
 	
 	@Override
 	public void showSystemMessage(String x) {
-		showBlockingMessage(x);
+		showBlockingMessage(x, false);
 	}
 	
 	@Override
@@ -1433,11 +1447,31 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	
 	@Override
-	public void processSave(){
+	public void notifyWeatherChange(Weather weather) {
 		try {
-			sfxQueue.put("RAIN");
+			switch (weather){
+			case RAIN:
+				sfxQueue.put("RAIN 4 8 2 150 DARK");
+				break;
+			case STORM:
+				sfxQueue.put("RAIN 6 10 4 300 DARK");
+				break;
+			case HURRICANE:
+				sfxQueue.put("RAIN 6 10 4 500 DARK");
+				break;
+			default:
+				sfxQueue.put("STOP");
+			}
 		} catch (InterruptedException e) {
 		}
+	}	
+	
+	@Override
+	public void processSave(){
+		/*try {
+			sfxQueue.put("RAIN 4 8 2 200 DARK");
+		} catch (InterruptedException e) {
+		}*/
 		if (!player.getGame().canSave()){
 			level.addMessage("You cannot save your game here!");
 			return;

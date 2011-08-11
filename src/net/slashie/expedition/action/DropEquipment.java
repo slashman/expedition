@@ -14,6 +14,7 @@ import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.domain.LandingParty.LandingSpec;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -102,7 +103,7 @@ public class DropEquipment extends Action{
     				expedition.message("Land at last!");
     			}
     			expedition.resetDaysAtSea();
-    			STMusicManagerNew.thus.playKey("LAND");
+    			ExpeditionMusicManager.playTune("LAND");
     			try {
     				expedition.landOn(expedition.getLandCellAround());
     			} catch (ActionCancelException ace){

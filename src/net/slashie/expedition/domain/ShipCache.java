@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
@@ -77,7 +78,7 @@ public class ShipCache extends GoodsCache{
 					((Expedition)a).getLevel().destroyFeature(this);
 					a.setPosition(getPosition());
 					((Expedition)a).setAnchored(true);
-					STMusicManagerNew.thus.playKey("SEA");
+					ExpeditionMusicManager.playTune("SEA");
 				} else {
 					UserInterface.getUI().showMessage("The ships are too full!");
 				}

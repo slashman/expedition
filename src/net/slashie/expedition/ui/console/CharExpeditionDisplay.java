@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.libjcsi.CharKey;
@@ -99,7 +100,7 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		
 		
 		csi.refresh();
-    	STMusicManagerNew.thus.playKey("TITLE");
+    	ExpeditionMusicManager.playTune("TITLE");
     	CharKey x = new CharKey(CharKey.NONE);
 		while (x.code != CharKey.A && x.code != CharKey.a &&
 				x.code != CharKey.C && x.code != CharKey.c &&

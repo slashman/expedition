@@ -1,5 +1,6 @@
 package net.slashie.expedition.ui.oryx.sfx;
 
+import java.awt.Color;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -7,7 +8,7 @@ import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 
 public class EffectsServer implements Runnable{
 	protected BlockingQueue<String> commandsQueue = new LinkedBlockingQueue<String>();
-	protected BlockingQueue<String> sfxQueue = new LinkedBlockingQueue<String>();
+	protected BlockingQueue<String> currentEffectQueue;
 	protected SwingSystemInterface si;
 	public EffectsServer(SwingSystemInterface si, BlockingQueue<String> commandsQueue) {
 		this.si = si;
@@ -24,27 +25,41 @@ public class EffectsServer implements Runnable{
 			}
 			
 			String[] cmd = command.split(" ");
-			if (cmd[0].equals("KILL"))
+			if (cmd[0].equals("KILL")){
+				stopEffect();
 				break;
-			doCommand(cmd);
+			} else if (cmd[0].equals("STOP")){
+				stopEffect();
+			} else if (cmd[0].equals("RAIN")){
+				rain(cmd);
+			}
 		}
 	}
 	
-	private Runnable currentEffect = null;
-	
-	public void doCommand(String[] cmd){
-		if (cmd[0].equals("RAIN")){
-			// stopEffect();
-			currentEffect = new RainEffect(si, sfxQueue);
-			new Thread(currentEffect).start();
-		}
-	}
 	
 	private void stopEffect() {
-		if (currentEffect != null){
+		if (currentEffectQueue != null){
 			try {
-				sfxQueue.put("KILL");
+				currentEffectQueue.put("KILL");
 			} catch (InterruptedException e) {}
 		}
-	}	
+	}
+	
+	public void rain(String[] cmd){
+		stopEffect();
+		currentEffectQueue = new LinkedBlockingQueue<String>();
+		int minSize = Integer.parseInt(cmd[1]);
+		int maxSize = Integer.parseInt(cmd[2]);
+		int deadSize = Integer.parseInt(cmd[3]);
+		int maxRainlets = Integer.parseInt(cmd[4]);
+		String rainColorStr = cmd[5];
+		Color rainColor = null;
+		if (rainColorStr.equals("DARK"))
+			rainColor = new Color(150,150,200);
+		//rainColor = Color.GRAY;
+		Runnable currentEffect = new RainEffect(si, currentEffectQueue, minSize, maxSize, deadSize, maxRainlets, rainColor);
+		new Thread(currentEffect).start();
+	}
+	
+	
 }
