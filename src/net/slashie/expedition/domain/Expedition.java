@@ -1274,7 +1274,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	private void seaAccident(int chance) {
 		if (Util.chance(chance)){
 			ExpeditionUnit randomUnit = getRandomUnitFair();
-			message("Accident! A "+randomUnit.getDescription()+" is injured!");
+			UserInterface.getUI().showImportantMessage("Accident! A "+randomUnit.getDescription()+" is injured while performing his duty on board!");
 			reduceUnits(randomUnit, 1, false);
 			ExpeditionUnit woundedUnit = (ExpeditionUnit) randomUnit.clone();
 			woundedUnit.setWounded(true);
@@ -1496,7 +1496,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					food = "FISH";
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
-					level.addMessage("You catch "+quantity+" fish.");
+					UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
 					modifyPerceivedLuck(1);
 				} else {
 					return false;
@@ -1505,14 +1505,14 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				food = "FISH";
 				int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
 				quantity *= multiplier;
-				level.addMessage("You catch "+quantity+" fish.");
+				UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
 				modifyPerceivedLuck(1);
 			} else {
 				if (isForaging()){
 					food = "FRUIT";
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
-					level.addMessage("You forage "+quantity+" fruits.");
+					UserInterface.getUI().showImportantMessage("Your expedition forages "+quantity+" fruit!!!");
 					modifyPerceivedLuck(1);
 				} else {
 					return false;
