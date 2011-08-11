@@ -562,10 +562,15 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		ExpeditionCleanButton selectButton = new ExpeditionCleanButton(3, "Select");
 		List<Equipment> selection = new ArrayList<Equipment>();
 		ItemTransferFunctionality selectItemsFunctionality = new SelectFromExpeditionFunctionality(selection, prompt, verb);
-		ItemContainer tempItemContainer = new GoodsCache((ExpeditionGame)getPlayer().getGame()){
+		ItemContainer tempItemContainer = new GoodsCache(true){
 			@Override
 			public String getDescription() {
 				return "Offer";
+			}
+			
+			@Override
+			public boolean isPeopleContainer() {
+				return false;
 			}
 		};
 		
@@ -779,10 +784,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 					transferFromExpeditionHandler.clear();
 					continue;
 				}
-				
+				/*
 				if (choice.getQuantity() == 0){
 					menuItems.remove(choice);
-				}
+				}*/
 				menuBox.resetSelection();
 				menuBox.setLegend(itemTransferFunctionality.getTransferedLegend(quantity, choice, to));
   	  		} else if (commandParts[0].equals("CHANGE_PAGE")){

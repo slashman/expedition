@@ -2229,4 +2229,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	private void m(String string) {
 		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string);		
 	}
+	
+	@Override
+	public boolean isPeopleContainer() {
+		return true;
+	}
 }

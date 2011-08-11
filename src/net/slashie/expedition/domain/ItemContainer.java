@@ -22,4 +22,5 @@ public interface ItemContainer {
 	List<Equipment> getItems();
 	List<Equipment> getGoods(GoodType goodType);
 	int getItemCountBasic(String fullID);
+	boolean isPeopleContainer();
 }
