@@ -5,7 +5,7 @@ public enum GoodType {
 	LIVESTOCK ("livestock"),
 	PEOPLE ("people"),
 	SUPPLIES ("supplies"),
-	TRADE_GOODS ("trade"), 
+	TRADE_GOODS ("trade goods"), 
 	VEHICLE ("vehicles");
 	
 
