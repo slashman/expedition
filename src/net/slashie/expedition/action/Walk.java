@@ -61,13 +61,7 @@ public class Walk extends Action{
 	public boolean canPerform(Actor a) {
 		Expedition expedition = (Expedition) a;
 		
-		//if (expedition.getLevel() instanceof ExpeditionMicroLevel && ((ExpeditionMicroLevel)expedition.getLevel()).isDock()){
 		if (expedition.getLevel() instanceof ExpeditionMicroLevel ){
-			
-			/*if (expedition.getOffshoreCurrentlyCarrying() > 100){
-				invalidationMessage = "You are stranded! drop some items!";
-				return false;
-			}*/
 		} else {
 			if (expedition.getCurrentlyCarrying() > 100){
 				invalidationMessage = "You are stranded! drop some items!";
@@ -83,9 +77,11 @@ public class Walk extends Action{
 			var = Action.directionToVariation(targetDirection);
 		}
         
+        boolean sailingForward = false;
         if (expedition.getMovementMode() == MovementMode.SHIP){
 			//Don't walk, sail instead!
 			if (var.x() == 0 && !expedition.isAnchored()){
+				sailingForward = true;
 				var = expedition.getHeading().getVectors();
 			} else {
 				return true;
@@ -129,6 +125,12 @@ public class Walk extends Action{
 		        		invalidationMessage = "You can't go there";
 		        		return false;
 		        	}
+	        	}
+	        } else {
+	        	// Cell is land, check if the player bumps land with a forward command
+	        	if (sailingForward){
+	        		invalidationMessage = "We shouldn't sail straight ashore!";
+	        		return false;
 	        	}
 	        }
 	        
