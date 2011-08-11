@@ -1591,11 +1591,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			expeditionMorale --;
 		// Long time no see land
 		if (daysOnSea > 20){
-			if (Util.chance(20)) message("We need to touch land");
+			if (Util.chance(20)) message("Our men want to touch land");
 			expeditionMorale --;
 		}
 		if (daysOnSea > 40){
-			if (Util.chance(20)) message("We really need to touch land!");
+			if (Util.chance(20)) message("Our men are desperate to touch land!");
 			expeditionMorale --;
 		}
 		// On a storm
