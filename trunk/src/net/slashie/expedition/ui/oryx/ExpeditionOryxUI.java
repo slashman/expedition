@@ -561,7 +561,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public List<Equipment> selectItemsFromExpedition(String prompt, String verb) {
 		ExpeditionCleanButton selectButton = new ExpeditionCleanButton(3, "Select");
 		List<Equipment> selection = new ArrayList<Equipment>();
-		ItemTransferFunctionality selectItemsFunctionality = new SelectFromExpeditionFunctionality(selection, prompt, verb);
+		ItemTransferFunctionality selectItemsFunctionality = new SelectFromExpeditionFunctionality(selection,prompt, verb);
 		ItemContainer tempItemContainer = new GoodsCache(true){
 			@Override
 			public String getDescription() {
@@ -574,7 +574,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 		};
 		
-		transferItems(prompt, GoodType.TRADE_GOODS, getExpedition(), tempItemContainer, selectItemsFunctionality, true, true, selectButton);
+		transferItems("-", GoodType.TRADE_GOODS, getExpedition(), tempItemContainer, selectItemsFunctionality, true, true, selectButton);
 		return selection;
 	}
 
