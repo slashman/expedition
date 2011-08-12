@@ -1214,13 +1214,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        			if (superLevelId == null){
 		        				getLevel().addMessage("Nowhere to go.");
 		        			} else {
-		        				setMovementMode(MovementMode.SHIP);
-		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
-		        				destinationPoint = new Position(getPosition());
-		        				destinationPoint.x -= Math.round((double)GlobeMapModel.getLongitudeScale(getPosition().y)/2.0d);
-		        				setAnchored(true);
-		        		        super.landOn(destinationPoint);
-		        		        if (!getFlag("SAILING_EXPLAINED")){
+		        				if (!getFlag("SAILING_EXPLAINED")){
 		        		        	setFlag("SAILING_EXPLAINED", true);
 		    		        		if (UserInterface.getUI().promptChat("Do you want me to explain you the basics of sailing?")){
 		    		        			m("Your ships are currently anchored in front of the port. You can rotate them around to set your bearing, then you must weigh anchors to sail ahead.");
@@ -1235,6 +1229,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		    		        		}
 
 		        		        }
+		        				
+		        				setMovementMode(MovementMode.SHIP);
+		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
+		        				destinationPoint = new Position(getPosition());
+		        				destinationPoint.x -= Math.round((double)GlobeMapModel.getLongitudeScale(getPosition().y)/2.0d);
+		        				setAnchored(true);
+		        		        super.landOn(destinationPoint);
 				        		throw new ActionCancelException();
 
 		        			}
@@ -1243,7 +1244,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        		
 	        		}
 	        	} else if (cell.getStepCommand().equals("TRAVEL_CASTLE")){
-	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("A chariot takes you to the Alcazar of Córdova");
+	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("A charriot takes you to the Alcazar of Córdova");
 
 	        		
 	        	}
