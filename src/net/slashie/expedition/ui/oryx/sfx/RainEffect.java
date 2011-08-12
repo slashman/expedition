@@ -39,6 +39,7 @@ public class RainEffect implements Runnable{
 		int size;
 		int fall;
 		int speed;
+		boolean dead;
 		
 		Rainlet(Position position, int size, int speed){
 			this.position = position;
@@ -46,19 +47,19 @@ public class RainEffect implements Runnable{
 			this.speed = speed;
 		}
 		
-		boolean evolve(){
+		void evolve(){
 			fall++;
 			if (size < deadSize){
-				return true; // die
+				dead = true;
 			} else {
 				size --;
-				return false;
 			}
 		}
 	}
 	@Override
 	public void run() {
-		List<Rainlet> rainlets = new ArrayList<Rainlet>();
+		Rainlet[] rainlets = new Rainlet[maxRainlets];
+		int usedRainlets = 0;
 		while (true){
 			if (!commandsQueue.isEmpty()){
 				String command = null;
@@ -76,22 +77,23 @@ public class RainEffect implements Runnable{
 			}
 			
 			// Create new rainlets
-			if (rainlets.size() < maxRainlets){
-				int newRainlets = maxRainlets - rainlets.size();
-				for (int i = 0; i < newRainlets; i++){
-					rainlets.add(new Rainlet(new Position(Util.rand(0, 800), Util.rand(0, 600)), Util.rand(minSize, maxSize), Util.rand(rainSpeed, rainSpeed+2)));
+			
+			for (int i = 0; i < maxRainlets; i++){
+				if (rainlets[i] == null){
+					rainlets[i] = new Rainlet(new Position(Util.rand(0, 800), Util.rand(0, 600)), Util.rand(minSize, maxSize), Util.rand(rainSpeed, rainSpeed+2)); 
+				} else if (rainlets[i].dead) {
+					rainlets[i].position.x = Util.rand(0, 800);
+					rainlets[i].position.y = Util.rand(0, 600);
+					rainlets[i].size = Util.rand(minSize, maxSize);
+					rainlets[i].speed = Util.rand(rainSpeed, rainSpeed+2);
+					rainlets[i].fall = 0;
+					rainlets[i].dead = false;
+				} else {
+					rainlets[i].evolve();
 				}
 			}
 			
-			// Evolve rainlets				
-			for (int i = 0; i < rainlets.size(); i++){
-				Rainlet rainlet = rainlets.get(i);
-				boolean dead = rainlet.evolve();
-				if (dead){
-					rainlets.remove(i);
-					i--;
-				}
-			}
+			
 			synchronized (si) {
 				si.cleanLayer(ExpeditionOryxUI.SFX_LAYER);
 				Graphics2D g = si.getDrawingGraphics(ExpeditionOryxUI.SFX_LAYER);
