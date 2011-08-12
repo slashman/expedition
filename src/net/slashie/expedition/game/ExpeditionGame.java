@@ -8,6 +8,7 @@ import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.ui.ExpeditionDisplay;
+import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
@@ -98,9 +99,10 @@ public class ExpeditionGame extends SworeGame {
 	public void onGameResume() {
 		currentGame = this;
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
-		if (expeditionLevel.getMusicKey() != null)
-			//STMusicManagerNew.thus.playKey(expeditionLevel.getMusicKey());
-			ExpeditionMusicManager.playTune(expeditionLevel.getMusicKey());
+		expeditionLevel.enterLevel();
+		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
+		expeditionLevel.playMusic();
+		
 	}
 
 	@Override
@@ -143,8 +145,7 @@ public class ExpeditionGame extends SworeGame {
 	@Override
 	public void onLevelLoad(AbstractLevel level) {
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)level;
-		if (expeditionLevel.getMusicKey() != null)
-			ExpeditionMusicManager.playTune(expeditionLevel.getMusicKey());
+		expeditionLevel.playMusic();
 		if (level instanceof ExpeditionMicroLevel)
 			getExpedition().setMovementMode(MovementMode.FOOT);
 		if (level.getID().equals("SPAIN")){
@@ -160,9 +161,10 @@ public class ExpeditionGame extends SworeGame {
 			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar
 			level.getPlayer().setPosition(-4330, 732, 0); // Cabo dela vela
 			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atlántico
-			level.getPlayer().setPosition(-4362, 689, 0); // Near the Tairona
+			level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
 			*/ 
 			//level.getPlayer().setPosition(-430, 2235, 0); // Gotta put this to load the piece around the starting place, must find a better way..
+			//
 		}
 
 		
