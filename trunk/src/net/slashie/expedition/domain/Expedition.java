@@ -1231,7 +1231,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		    		        			m("You ships will always move forward when unanchored. Beware sailing your ships into land! You can anchor if you are near beach, in order to avoid crashing.");
 		    		        			m("As your expedition is not equiped with a marine chronometer, there's no way to know your exact longitudinal position. That's where the Dead' Reckon counter comes");
 		    		        			m("The Dead' Reckon is your aproximate calculus of longitudinal distance from a reference point, based on the distance travelled every day. You can reset the reference point anytime.");
-		    		        			m("God bless your voyage! Remember you can check the game manual for detailed instructions any time!");
+		    		        			ml("God bless your voyage! Remember you can check the game manual for detailed instructions any time!");
 		    		        		}
 
 		        		        }
@@ -2239,7 +2239,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 	
 	private void m(String string) {
-		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string);		
+		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string, true);		
+	}
+	
+	private void ml(String string) {
+		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(string, false);		
 	}
 	
 	@Override
