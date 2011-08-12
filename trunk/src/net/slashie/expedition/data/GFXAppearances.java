@@ -109,7 +109,7 @@ public class GFXAppearances {
 				//Overworld Terrain
 				createAppearance("GRASS", 3 ,3),
 				createAppearance("PLAINS", 4 ,3),
-				createAppearance("WATER", 1 ,1),
+				createAppearance("WATER", 2 ,1),
 				createAppearance("WATER2", 3 ,1),
 				createAppearance("WATER_SHADOW", 4 ,20),
 				createAppearance("MOUNTAIN", 5 ,17),
@@ -131,7 +131,7 @@ public class GFXAppearances {
 				createAppearance("SPAIN_WALL", 7 ,3),
 				createAppearance("DEPARTURE", 5 ,4),
 				createAppearance("CITY_GRASS", 4 ,3),
-				createAppearance("CITY_SEA", 1 ,2),
+				createAppearance("CITY_SEA", 2,1),
 				
 				createAppearance("SPAIN_GRASS", 4 ,3),
 				createAppearance("SPAIN_GRASS_BLOCKED", 4 ,3),
