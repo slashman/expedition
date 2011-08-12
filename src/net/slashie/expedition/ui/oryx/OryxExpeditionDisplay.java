@@ -549,17 +549,6 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		final BlockingQueue<Integer> inputQueue = si.getInputQueue();
 		
 		String defaultName = "West Indies";
-		try {
-			/*for (int i = 0; i < 10; i++){
-				inputQueue.put(CharKey.BACKSPACE);
-			}*/
-			for (char c: defaultName.toCharArray()){
-				Integer code = SwingSystemInterface.charCode(c);
-				if (code != null){
-					inputQueue.put(code);
-				}
-			}
-		} catch (InterruptedException e1) {}
 		
 		okButton.addActionListener(new ActionListener(){
 			@Override
@@ -576,7 +565,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		String name = "";
 		while (name.trim().equals("")){
-			name = si.input(2, 222, 463, Color.WHITE, 20);
+			name = si.input(2, 222, 463, Color.WHITE, 20 , defaultName);
 			if (name.trim().equals("")){
 				UserInterface.getUI().showSystemMessage("Please enter a name for the Expedition.");
 				si.commitLayer(0);
