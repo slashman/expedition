@@ -1217,7 +1217,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        				setMovementMode(MovementMode.SHIP);
 		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
 		        				destinationPoint = new Position(getPosition());
-		        				destinationPoint.x -= GlobeMapModel.getLongitudeScale(getPosition().y);
+		        				destinationPoint.x -= Math.round((double)GlobeMapModel.getLongitudeScale(getPosition().y)/2.0d);
 		        				setAnchored(true);
 		        		        super.landOn(destinationPoint);
 		        		        if (!getFlag("SAILING_EXPLAINED")){
