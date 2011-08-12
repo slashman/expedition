@@ -22,4 +22,6 @@ public interface ExpeditionLevel{
 	public void elapseTime(int lastActionTimeCost);
 	public boolean hasStorm(Position destinationPoint);
 	public Pair<String, String> getLocationLabels();
+	public void playMusic();
+	public void enterLevel();
 }

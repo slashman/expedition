@@ -246,8 +246,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	@Override
 	public void onMusicOn() {
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
-		if (expeditionLevel.getMusicKey() != null)
-			ExpeditionMusicManager.playTune(expeditionLevel.getMusicKey());
+		expeditionLevel.playMusic();
 	}
 
 	private Expedition getExpedition(){

@@ -165,7 +165,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public void shutdown() {
 		try {
-			sfxQueue.put("KILL");
+			sfxQueue.put("STOP");
 			ExpeditionMusicManager.stopWeather();
 		} catch (InterruptedException e) {}
 		super.shutdown();
@@ -386,8 +386,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public void onMusicOn() {
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
-		if (expeditionLevel.getMusicKey() != null)
-			ExpeditionMusicManager.playTune(expeditionLevel.getMusicKey());
+		expeditionLevel.playMusic();
 	}
 
 	public boolean depart() {
