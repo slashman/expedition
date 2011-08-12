@@ -1,5 +1,6 @@
 package net.slashie.expedition.world;
 
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.level.BufferedExpeditionLevel;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
@@ -67,6 +68,7 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	public Weather getWeather() {
 		return Weather.CLEAR;
 	}
+	
 	public boolean isZoomIn() {
 		return isZoomIn;
 	}
@@ -95,4 +97,13 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 		this.temperature = temperature;
 	}
 	
+	@Override
+	public void playMusic() {
+		if (getMusicKey() != null)
+			ExpeditionMusicManager.playTune(getMusicKey());
+	}
+	
+	@Override
+	public void enterLevel() {
+	}
 }

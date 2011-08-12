@@ -548,16 +548,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				// Remove all storms
 				storms.clear();
 			}
-			if (weather.getMusicKey() != null){
-				ExpeditionMusicManager.playTune(weather.getMusicKey());
-			} else {
-				if (System.currentTimeMillis() > lastPlayedLevelTune + LEVEL_MUSIC_TUNE_PLAYBACK_GAP) {
-					ExpeditionMusicManager.playTune(getMusicKey());
-					lastPlayedLevelTune = System.currentTimeMillis();
-				} else {
-					ExpeditionMusicManager.stopWeather();
-				}
-			}
+			playMusic();
 		}
 		
 	}
@@ -611,5 +602,24 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				return false;
 				
 		}
+	}
+	
+	@Override
+	public void playMusic() {
+		if (weather.getMusicKey() != null){
+			ExpeditionMusicManager.playTune(weather.getMusicKey());
+		} else {
+			if (System.currentTimeMillis() > lastPlayedLevelTune + LEVEL_MUSIC_TUNE_PLAYBACK_GAP) {
+				ExpeditionMusicManager.playTune(getMusicKey());
+				lastPlayedLevelTune = System.currentTimeMillis();
+			} else {
+				ExpeditionMusicManager.stopWeather();
+			}
+		}
+	}
+	
+	@Override
+	public void enterLevel() {
+		lastPlayedLevelTune = -1;	
 	}
 }
