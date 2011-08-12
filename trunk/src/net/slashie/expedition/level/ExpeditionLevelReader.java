@@ -198,8 +198,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			}
 		} else if (cmds[1].equals("NPC")){
 			NPC npc = NPCFactory.createNPC(cmds[2]);
-			npc.setPosition(where.x+xoff,where.y+yoff,where.z);
 			addActor(npc);
+			npc.setPosition(where.x+xoff,where.y+yoff,where.z);
 		} else if (cmds[1].equals("EXIT_GLOBE_COORDINATES")){
 			Position pos = new Position(GlobeMapModel.transformXIntoLong(where.x+xoff),GlobeMapModel.transformYIntoLat(where.y+yoff),where.z);
 			addExit(pos, cmds[2]);

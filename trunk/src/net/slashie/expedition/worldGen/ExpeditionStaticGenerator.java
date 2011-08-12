@@ -17,8 +17,8 @@ public class ExpeditionStaticGenerator extends StaticGenerator{
 			l.addItem(Position.add(where, new Position(x,y)), item);
 		} else if (cmds[1].equals("NPC")){
 			NPC npc = NPCFactory.createNPC(cmds[2]);
-			npc.setPosition(where.x+x,where.y+y,where.z);
 			l.addActor(npc);
+			npc.setPosition(where.x+x,where.y+y,where.z);
 		}
 	}
 }
