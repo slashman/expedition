@@ -1,43 +1,18 @@
 package net.slashie.expedition.ai;
 
 import net.slashie.expedition.domain.Expedition;
-import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.domain.NativeTown;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.action.AwareActor;
 import net.slashie.serf.action.PassAction;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class NativeActionSelector implements ActionSelector {
-	private static final Action PASS_ACTION = new PassAction(200);
+	private static final long serialVersionUID = 1L;
 	
-	private class NativeTownAwareActor extends AwareActor {
-		private NativeTown town;
-		@Override
-		public int getSightRange() {
-			return town.getSightRange();
-		}
-
-		@Override
-		public String getClassifierID() {
-			return null;
-		}
-
-		@Override
-		public String getDescription() {
-			return null;
-		}
-
-		public void setTown(NativeTown town) {
-			this.town = town;
-		}
-		
-	};
-
-	private NativeTownAwareActor awareActorDelegate = new NativeTownAwareActor();
+	private static final Action PASS_ACTION = new PassAction(200);
 	public ActionSelector derive() {
 		return null;
 	}
@@ -55,14 +30,9 @@ public class NativeActionSelector implements ActionSelector {
 			return PASS_ACTION;
 		}
 		
-		awareActorDelegate.setTown(town);
-		awareActorDelegate.setLevel(town.getLevel());
-		awareActorDelegate.setPosition(town.getPosition());
-		awareActorDelegate.setWasSeen(town.wasSeen());
 		if (town.isUnfriendly()){
-			if (awareActorDelegate.isActorInLOS(town.getLevel().getPlayer())){
-				
-				int potentialPower = town.getPotentialPower(); 
+			if (town.wasSeen() && Position.distance(town.getPosition(), town.getLevel().getPlayer().getPosition()) <= town.getSightRange()){
+ 				int potentialPower = town.getPotentialPower(); 
 				if (potentialPower > 0){
 					int maxPotentialPower = 3;
 					if (town.getCulture().isCivilization())

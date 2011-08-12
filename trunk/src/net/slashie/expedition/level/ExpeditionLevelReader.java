@@ -77,6 +77,13 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		if (m != null){
 			m.setWasSeen(true);
 		}
+		List<AbstractFeature> f = getFeaturesAt(tempSeen);
+		if (f != null && f.size() > 0){
+			for (AbstractFeature feature: f){
+				feature.setWasSeen(true);
+			}
+		}
+		
 	}
 	
 	protected void markLit(int x, int y, int z) {
