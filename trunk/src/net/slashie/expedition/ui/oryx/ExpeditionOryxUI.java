@@ -940,7 +940,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				vehicleUnitItems.add(new VehicleGFXMenuItem(expeditionVehicle));
 			}
 			vehiclesMenuBox.setMenuItems(vehicleUnitItems);
-			vehiclesMenuBox.draw();
+			vehiclesMenuBox.draw(false);
 		} else {
 			expeditionUnitsVector.clear();
 			expeditionUnitsVector.addAll(statsExpedition.getGoods(GoodType.PEOPLE));
@@ -967,11 +967,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			//expeditionUnitItems.add(0, mainUnitMenuItem);
 			unitsMenuBox.setMenuItems(expeditionUnitItems);
 			Collections.sort(expeditionUnitItems, ITEMS_COMPARATOR);
-			unitsMenuBox.draw();
+			unitsMenuBox.draw(false);
 		}
 		
 		si.drawImage(getUILayer(), 774, 2, BTN_MOVE);
 	}
+	
 	private List<GFXMenuItem> expeditionUnitItems = new ArrayList<GFXMenuItem>();
 	private List<GFXMenuItem> vehicleUnitItems = new ArrayList<GFXMenuItem>();
 	private Map<String,Equipment> resumedEquipments = new HashMap<String, Equipment>();
