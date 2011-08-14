@@ -128,7 +128,7 @@ public class Walk extends Action{
 	        	}
 	        } else {
 	        	// Cell is land, check if the player bumps land with a forward command
-	        	if (sailingForward){
+	        	if (!cell.isRiver() && sailingForward){
 	        		invalidationMessage = "We shouldn't sail straight ashore!";
 	        		return false;
 	        	}
