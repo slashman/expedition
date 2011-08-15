@@ -99,8 +99,12 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	
 	@Override
 	public void playMusic() {
-		if (getMusicKey() != null)
+		if (getWeather().getMusicKey() != null){
+			ExpeditionMusicManager.playTune(getWeather().getMusicKey());
+		} else {
+			ExpeditionMusicManager.stopWeather();
 			ExpeditionMusicManager.playTune(getMusicKey());
+		}
 	}
 	
 	@Override

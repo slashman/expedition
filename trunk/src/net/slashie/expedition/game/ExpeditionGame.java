@@ -18,7 +18,6 @@ import net.slashie.serf.game.Player;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.level.LevelMetaData;
-import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.CommandListener;
 import net.slashie.serf.ui.UserInterface;
 
@@ -166,6 +165,7 @@ public class ExpeditionGame extends SworeGame {
 			//level.getPlayer().setPosition(-430, 2235, 0); // Gotta put this to load the piece around the starting place, must find a better way..
 			//
 		}
+		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
 
 		
 	}
