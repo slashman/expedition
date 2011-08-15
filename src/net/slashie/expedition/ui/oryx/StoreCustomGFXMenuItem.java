@@ -133,10 +133,16 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 			ExpeditionUnit unit = (ExpeditionUnit)eitem;
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "ATK: "+unit.getAttack().getString(), Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, "DEF: "+unit.getDefense().getString(), Color.WHITE);
-			if (unit.isMonthlyWage()){
+			switch (unit.getContractType()){
+			case JOIN_AND_SPLIT:
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+", for the spoils", Color.WHITE);
+				break;
+			case LIFETIME:
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+", lifetime", Color.WHITE);
+				break;
+			case MONTHLY:
 				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+" monthly", Color.WHITE);
-			} else {
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+", join and split", Color.WHITE);
+				break;
 			}
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		} else {

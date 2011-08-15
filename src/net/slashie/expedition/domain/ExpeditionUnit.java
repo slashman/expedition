@@ -13,6 +13,13 @@ import net.slashie.util.Pair;
 import net.slashie.utils.roll.Roll;
 
 public class ExpeditionUnit extends Vehicle{
+	private static final long serialVersionUID = 1L;
+
+	public enum ContractType {
+		LIFETIME,
+		MONTHLY,
+		JOIN_AND_SPLIT
+	}
 	
 	@Override
 	public Appearance getAppearance() {
@@ -335,10 +342,9 @@ public class ExpeditionUnit extends Vehicle{
 	public boolean isMounted() {
 		return getMount() != null;
 	}
-
 	
-	public boolean isMonthlyWage() {
-		return true;
+	public ContractType getContractType(){
+		return ContractType.LIFETIME;
 	}
 
 	public List<Appearance> getAvailableWeaponAppearances() {
