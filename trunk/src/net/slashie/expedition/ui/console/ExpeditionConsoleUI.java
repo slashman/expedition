@@ -586,9 +586,6 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		Equipment.eqMode = false;
 	}
 	
-	
-	
-
 	@Override
 	public int switchChat(String title, String prompt, String... options) {
 		MenuBox selectionBox = new MenuBox(csi);
@@ -614,10 +611,9 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			csi.refresh();
 			SimpleItem itemChoice = ((SimpleItem)selectionBox.getSelection());
 			if (itemChoice == null)
-				break;
+				continue;
 			return itemChoice.getValue();
 		}
-		return -1;	
 	}
 	
 	public String inputBox(String prompt){
