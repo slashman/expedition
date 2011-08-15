@@ -63,8 +63,13 @@ public class DropEquipment extends Action{
         			LandingParty landingParty = ((ExpeditionUserInterface)UserInterface.getUI()).selectLandingParty();
         			
         			List<Equipment> transferredEquipment = selectUnitsForLanding(landingParty, ship);
-        			// Show the units to be transferred
-        			if ( ((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(transferredEquipment, "Landing Group", "These units will disembark, is this ok?")){
+        			if (transferredEquipment.size() == 0){
+        				UserInterface.getUI().showImportantMessage("Your expedition doesn't have units to make that landing group.");
+    					expedition.removeAllGoods();
+            			expedition.setMovementMode(MovementMode.FOOT);
+            			expedition.setCurrentVehicles(new ArrayList<Vehicle>());
+            			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the units and goods to transfer", GoodType.PEOPLE, ship);
+        			} else if ( ((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(transferredEquipment, "Landing Group", "These units will disembark, is this ok?")){
         				// Initialize the transfer
         				expedition.removeAllGoods();
             			expedition.setMovementMode(MovementMode.FOOT);
