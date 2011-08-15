@@ -1,4 +1,4 @@
 echo off
 cls
-java -jar expedition.jar gfx
+java -Xmx512m -jar expedition.jar gfx
 pause
