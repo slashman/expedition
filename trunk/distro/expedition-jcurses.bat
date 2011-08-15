@@ -1,4 +1,4 @@
 echo off
 cls
-java -jar expedition.jar jc
+java -Xmx512m -jar expedition.jar jc
 pause
