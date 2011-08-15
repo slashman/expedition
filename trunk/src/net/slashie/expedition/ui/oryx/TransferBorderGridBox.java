@@ -119,9 +119,9 @@ public class TransferBorderGridBox extends BorderedGridBox{
 					} else if (code == CharKey.PAGEDOWN) {
 						avPag();
 						handler.put("CHANGE_PAGE");
-					} else if (code >= CharKey.A && code <= CharKey.A + pageElements-1) {
+					} else if (code >= CharKey.A && code <= CharKey.A + pageElements-1 && code <= CharKey.A + items.size() - 1) {
 						handler.put("SELECT_UNIT:"+(code-CharKey.A));
-					} else if (code >= CharKey.a && code <= CharKey.a + pageElements-1) {
+					} else if (code >= CharKey.a && code <= CharKey.a + pageElements-1 && code <= CharKey.a + items.size() - 1) {
 						handler.put("SELECT_UNIT:"+(code-CharKey.a));
 					}
 				} catch (InterruptedException e1) {}
