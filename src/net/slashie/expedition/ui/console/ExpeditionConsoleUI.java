@@ -405,7 +405,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 		chatBox.setTitle("[Space] to continue");
 		chatBox.draw();
 		csi.refresh();
-		csi.waitKey(CharKey.SPACE);
+		csi.waitKeys(CharKey.SPACE, CharKey.ENTER);
 	}
 	
 	public boolean promptChat(String message){
@@ -671,9 +671,9 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
   	  		csi.refresh();
   	  		
 	  		CharKey x = new CharKey(CharKey.NONE);
-			while (x.code != CharKey.SPACE && !x.isArrow())
+			while (x.code != CharKey.ENTER && x.code != CharKey.SPACE && !x.isArrow())
 				x = csi.inkey();
-			if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+			if (x.code == CharKey.ENTER || x.code == CharKey.SPACE || x.code == CharKey.ESC){
 				break;
 			}
 			if (x.isLeftArrow()){
@@ -896,7 +896,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			}
 		}
 		csi.refresh();
-		csi.waitKey(CharKey.SPACE);
+		csi.waitKeys(CharKey.SPACE, CharKey.ENTER);
 		csi.restore();
 	}
 	
@@ -993,7 +993,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			cacheBox.setPrompt("You "+verb+" "+quantity+" "+choice.getItem().getDescription()+" [Press Space]");
 			cacheBox.draw();
 			csi.refresh();
-			csi.waitKey(CharKey.SPACE);
+			csi.waitKeys(CharKey.SPACE, CharKey.ENTER);
 	 		//menuBox.draw();
 		}
 		Equipment.eqMode = false;
@@ -1059,7 +1059,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			BuildingMenuItem buildingChoice = ((BuildingMenuItem)cacheBox.getSelection(x));
 
 			if (buildingChoice == null){
-				if (x.code != CharKey.SPACE){
+				if (x.code != CharKey.SPACE && x.code != CharKey.ENTER){
 					continue;
 				}
 				break;

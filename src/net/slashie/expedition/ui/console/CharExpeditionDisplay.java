@@ -33,9 +33,9 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.cls();
 		if (saveFiles == null || saveFiles.length == 0){
 			csi.print(3,6, "No expeditions available");
-			csi.print(4,8, "[Space to Cancel]");
+			csi.print(4,8, "[Esc to Cancel]");
 			csi.refresh();
-			csi.waitKey(CharKey.SPACE);
+			csi.waitKey(CharKey.ESC);
 			return -1;
 		}
 			
@@ -43,14 +43,14 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		for (int i = 0; i < saveFiles.length; i++){
 			csi.print(5,7+i, (char)(CharKey.a+i+1)+ " - "+ saveFiles[i].getName());
 		}
-		csi.print(3,9+saveFiles.length, "[Space to Cancel]");
+		csi.print(3,9+saveFiles.length, "[Esc to Cancel]");
 		csi.refresh();
 		CharKey x = csi.inkey();
-		while ((x.code < CharKey.a || x.code > CharKey.a+saveFiles.length) && x.code != CharKey.SPACE){
+		while ((x.code < CharKey.a || x.code > CharKey.a+saveFiles.length) && x.code != CharKey.ESC){
 			x = csi.inkey();
 		}
 		csi.cls();
-		if (x.code == CharKey.SPACE)
+		if (x.code == CharKey.ESC)
 			return -1;
 		else
 			return x.code - CharKey.a;
@@ -153,7 +153,7 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.print(6,23, "  Press Space to continue", ConsoleSystemInterface.CYAN);
 		csi.refresh();
 
-		csi.waitKey(CharKey.SPACE);
+		csi.waitKeys(CharKey.SPACE, CharKey.ENTER);
 		   
 		csi.restore();
 		csi.refresh();

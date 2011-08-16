@@ -312,7 +312,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 						initialQuantity = selectedQuantity;
 						decreaseItemQuantity();
 						decreaseQuantityTimer.start();
-					} else if (code == CharKey.SPACE){
+					} else if (code == CharKey.SPACE || code == CharKey.ENTER){
 						// Buy
 						quantitySelectionQueue.put(selectedQuantity);
 					} else if (code != CharKey.ESC &&
