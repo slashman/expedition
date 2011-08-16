@@ -56,7 +56,7 @@ public class EffectsServer implements Runnable{
 		String rainColorStr = cmd[6];
 		Color rainColor = null;
 		if (rainColorStr.equals("DARK"))
-			rainColor = new Color(150,150,200);
+			rainColor = new Color(130,130,180);
 		//rainColor = Color.GRAY;
 		Runnable currentEffect = new RainEffect(si, currentEffectQueue, minSize, maxSize, deadSize, maxRainlets, rainSpeed, rainColor);
 		Thread effectThread = new Thread(currentEffect);
