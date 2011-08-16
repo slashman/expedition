@@ -5,6 +5,8 @@ useMouse = true
 TILE_SIZE = 24
 GADGETSIZE = 24
 
+FRAMES_PER_SECOND = 20
+
 mouseQuadrant = 360,216,72,72
 
 PC_POS = 16,10
