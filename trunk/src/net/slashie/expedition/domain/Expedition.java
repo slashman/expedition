@@ -122,7 +122,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 	}
 	
-	public static final int DEATH_BY_STARVATION = 1, DEATH_BY_DROWNING = 2, DEATH_BY_SLAYING = 3;
+	public enum DeathCause {
+		DEATH_BY_STARVATION,
+		DEATH_BY_DROWNING, 
+		DEATH_BY_SLAYING
+	}
+	
+//	public static final int  = 1,  = 2,  = 3;
 
 	private static final String[] MORALE_DESCRIPTIONS = new String[] {
 		"Rebellious",
@@ -371,7 +377,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 	private List<Town> towns = new ArrayList<Town>();
 
-	private int deathCause;
+	private DeathCause deathCause;
 
 	private boolean justAttacked = false;
 	
@@ -572,9 +578,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		if (getTotalUnits() <= 0){
 			UserInterface.getUI().refresh();
 			if (justAttacked )
-				deathCause = DEATH_BY_SLAYING;
+				deathCause = DeathCause.DEATH_BY_SLAYING;
 			else
-				deathCause = DEATH_BY_STARVATION;
+				deathCause = DeathCause.DEATH_BY_STARVATION;
 			UserInterface.getUI().onPlayerDeath();
 			informPlayerEvent (DEATH);
 		}
@@ -1047,13 +1053,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				setMovementMode(MovementMode.FOOT);
 			} else {
 				UserInterface.getUI().refresh();
-				deathCause = DEATH_BY_DROWNING;
+				deathCause = DeathCause.DEATH_BY_DROWNING;
 				informPlayerEvent (DEATH);
 			}
 		}
 	}
 
-	public int getDeathCause() {
+	public DeathCause getDeathCause() {
 		return deathCause;
 	}
 
@@ -1156,21 +1162,30 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 			
 			if (Util.chance(5)){
-				ExpeditionUnit randomUnit = getRandomUnitFair();
-				int choice = UserInterface.getUI().switchChat("Man overboard!", "A "+randomUnit.getDescription()+" has fallen overboard in the storm! XXX What will you do?", "Let's try to save him!", "We must leave the man behind.");
-				if (choice == 0){
-					if (Util.chance(50)){
-						message("You pull the "+randomUnit.getDescription()+" from the seas!");
-						boostMorale(100);
-					} else {
-						reduceQuantityOf(randomUnit);
-						message("The sea takes the "+randomUnit.getDescription()+" away!");
-					}
-					wearOutShips(50, false);
+				if (getTotalUnits() == 1){
+					// The last one aboard falls into the sea, no one can try to save him
+					ExpeditionUnit randomUnit = getRandomUnitFair();
+					UserInterface.getUI().showImportantMessage("The last "+randomUnit.getDescription()+" of your expedition falls overboard... the sea takes him away...");
+					deathCause = DeathCause.DEATH_BY_DROWNING;
+					informPlayerEvent (DEATH);
+					return;
 				} else {
-					message("The sea takes the "+randomUnit.getDescription()+" away!");
-					reduceQuantityOf(randomUnit);
-					decreaseMorale(100);
+					ExpeditionUnit randomUnit = getRandomUnitFair();
+					int choice = UserInterface.getUI().switchChat("Man overboard!", "A "+randomUnit.getDescription()+" has fallen overboard in the storm! XXX What will you do?", "Let's try to save him!", "We must leave the man behind.");
+					if (choice == 0){
+						if (Util.chance(50)){
+							message("You pull the "+randomUnit.getDescription()+" from the seas!");
+							boostMorale(100);
+						} else {
+							reduceQuantityOf(randomUnit);
+							message("The sea takes the "+randomUnit.getDescription()+" away!");
+						}
+						wearOutShips(50, false);
+					} else {
+						message("The sea takes the "+randomUnit.getDescription()+" away!");
+						reduceQuantityOf(randomUnit);
+						decreaseMorale(100);
+					}
 				}
 			}
 			seaAccident(10);
@@ -1284,10 +1299,18 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 
 	private ExpeditionUnit getRandomUnitFair() {
-		// TODO Implement this in a fair way
+		int totalUnits = getTotalUnits();
+		int randomUnit = Util.rand(1, totalUnits);
+		int acum = 0;
 		List<Equipment> units = getGoods(GoodType.PEOPLE);
-		Equipment randomEquipment = (Equipment) Util.randomElementOf(units);
-		return (ExpeditionUnit) randomEquipment.getItem();
+		for (Equipment unit: units){
+			if (unit.getQuantity()+acum >= randomUnit)
+				return (ExpeditionUnit) unit.getItem();
+			else
+				acum += unit.getQuantity();
+		}
+		// Shouldn't happen
+		return null;
 	}
 
 	public void resetDaysAtSea() {
@@ -1497,8 +1520,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					food = "FISH";
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
-					UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
-					modifyPerceivedLuck(1);
+					if (quantity > 0){
+						UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
+						modifyPerceivedLuck(1);
+					}
 				} else {
 					return false;
 				}
@@ -1506,15 +1531,19 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				food = "FISH";
 				int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
 				quantity *= multiplier;
-				UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
-				modifyPerceivedLuck(1);
+				if (quantity > 0){
+					UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
+					modifyPerceivedLuck(1);
+				}
 			} else {
 				if (isForaging()){
 					food = "FRUIT";
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
-					UserInterface.getUI().showImportantMessage("Your expedition forages "+quantity+" fruit!!!");
-					modifyPerceivedLuck(1);
+					if (quantity > 0){
+						UserInterface.getUI().showImportantMessage("Your expedition forages "+quantity+" fruit!!!");
+						modifyPerceivedLuck(1);
+					}
 				} else {
 					return false;
 				}
