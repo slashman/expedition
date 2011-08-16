@@ -411,7 +411,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.commitLayer(2);
 		si.commitLayer(0);
 
-		si.waitKey(CharKey.SPACE);
+		si.waitKeys(CharKey.SPACE, CharKey.ENTER);
 		   
 		si.loadLayer(0);
 		si.loadLayer(2);
@@ -427,9 +427,9 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		if (saveFiles == null || saveFiles.length == 0){
 			
 			si.print(0, 3,6, "No expeditions available",Color.WHITE);
-			si.print(0, 4,8, "[Space to Cancel]",Color.WHITE);
+			si.print(0, 4,8, "[Esc to Cancel]",Color.WHITE);
 			si.commitLayer(0);
-			si.waitKey(CharKey.SPACE);
+			si.waitKey(CharKey.ESC);
 			return -1;
 		}
 			
@@ -458,7 +458,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		addornedTextArea.setBounds(consoleX, consoleY, consoleW, consoleH);
 		addornedTextArea.setText(text);
 		addornedTextArea.setVisible(true);
-		si.waitKey(CharKey.SPACE);
+		si.waitKeys(CharKey.SPACE, CharKey.ENTER);
 		addornedTextArea.setVisible(false);
 	}
 	
@@ -493,7 +493,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		addornedTextArea.setText(text);
 		addornedTextArea.setFont(f);
 		addornedTextArea.setVisible(true);
-		si.waitKey(CharKey.SPACE);
+		si.waitKeys(CharKey.SPACE, CharKey.ENTER);
 		addornedTextArea.setVisible(false);
 	}
 

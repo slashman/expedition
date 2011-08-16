@@ -219,7 +219,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			public void keyPressed(KeyEvent e) {
 				try {
 					CharKey x = new CharKey(SwingSystemInterface.charCode(e));
-					if (x.code == CharKey.SPACE || x.code == CharKey.ESC){
+					if (x.code == CharKey.ENTER || x.code == CharKey.SPACE || x.code == CharKey.ESC){
 						handler.put("BREAK");
 					} else if (x.isLeftArrow()){
 						handler.put("<");
@@ -645,7 +645,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			public void keyPressed(KeyEvent e) {
 				try {
 					CharKey x = new CharKey(SwingSystemInterface.charCode(e));
-					if (x.code == CharKey.SPACE){
+					if (x.code == CharKey.SPACE || x.code == CharKey.ENTER){
 						handler.put("CONFIRM_TRANSFER");
 					}else if (x.code == CharKey.ESC){
 						handler.put("BREAK");
