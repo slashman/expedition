@@ -73,11 +73,11 @@ public class ExpeditionGame extends SworeGame {
 	@Override
 	public String getDeathMessage() {
 		switch (getCurrentGame().getExpedition().getDeathCause()){
-		case Expedition.DEATH_BY_STARVATION:
+		case DEATH_BY_STARVATION:
 			return "Your expedition has perished by hunger..";
-		case Expedition.DEATH_BY_DROWNING:
+		case DEATH_BY_DROWNING:
 			return "Your expedition has drown in the seas..";
-		case Expedition.DEATH_BY_SLAYING:
+		case DEATH_BY_SLAYING:
 			return "Your expedition has been slayed..";
 		}
 		return "Your expedition has perished..";
