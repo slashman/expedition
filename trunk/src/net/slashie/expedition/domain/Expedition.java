@@ -1502,7 +1502,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				} else {
 					return false;
 				}
-			} else if (cell.isSea()) {
+			} else if (!level.getWeather().isStormy() && cell.isSea()) {
 				food = "FISH";
 				int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
 				quantity *= multiplier;
