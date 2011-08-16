@@ -201,7 +201,10 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			addActor(npc);
 			npc.setPosition(where.x+xoff,where.y+yoff,where.z);
 		} else if (cmds[1].equals("EXIT_GLOBE_COORDINATES")){
-			Position pos = new Position(GlobeMapModel.transformXIntoLong(where.x+xoff),GlobeMapModel.transformYIntoLat(where.y+yoff),where.z);
+			int x = GlobeMapModel.transformXIntoLong(where.x+xoff);
+			int y = GlobeMapModel.transformYIntoLat(where.y+yoff);
+			x = GlobeMapModel.normalizeLong(y, x);
+			Position pos = new Position(x,y,where.z);
 			addExit(pos, cmds[2]);
 		}
 	}
@@ -247,7 +250,9 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	@Override
 	public String getExitOn(Position pos) {
 		int magnificationLevel = GlobeMapModel.getLongitudeScale(pos.y());
-		int start = pos.x() - (int)Math.round(magnificationLevel/2.0d);
+		//int start = pos.x() - (int)Math.round(magnificationLevel/2.0d); // Removed to reduce rounding issues
+		int x = GlobeMapModel.normalizeLong(pos.y, pos.x);
+		int start = x - magnificationLevel;
 		recyclablePosition.y = pos.y();
 		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
 			recyclablePosition.x = xrow;
@@ -257,6 +262,15 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		}
 		return null;
 	}
+	/*
+	x = GlobeMapModel.normalizeLong(y, x);
+	int gridY = GlobeMapModel.transformLatIntoY(y);
+	int gridX = GlobeMapModel.transformLongIntoX(x);
+	// The map may be incomplete
+	if (gridY < 0 || gridY > super.getHeight())
+		return null;
+	return super.getMapCell(gridX, gridY, z);*/
+	
 	
 	@Override
 	public List<AbstractFeature> getFeaturesAt(Position pos){
