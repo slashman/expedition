@@ -197,9 +197,9 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			// Get some info
 			Image unitImage = ((GFXAppearance)eitem.getAppearance()).getImage();
 			String itemDescription = eitem.getDescription();
-			int inventory = highlight.getQuantity();
-			int stock = offShoreExpedition.getOffshoreCarryable(eitem);
-			int current = offShoreExpedition.getItemCountBasic(eitem.getFullID());
+			int packsOnStore = highlight.getQuantity();
+			int carryable = offShoreExpedition.getOffshoreCarryable(eitem);
+			int onExpedition = offShoreExpedition.getItemCountBasic(eitem.getFullID());
 			StoreItemInfo itemInfo = store.getBuyInfo((ExpeditionItem)highlight.getItem(), offShoreExpedition);
 
 			// Draw a cute border
@@ -217,16 +217,21 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 32, "On ships", OryxExpeditionDisplay.COLOR_BOLD);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 47, "Max", OryxExpeditionDisplay.COLOR_BOLD);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 62, "In store", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 32, current+"", Color.WHITE);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, stock+"", Color.WHITE);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, inventory+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 32, onExpedition+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, carryable+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, packsOnStore*itemInfo.getPack()+"", Color.WHITE);
 
 			if (eitem != lastChoice){		
+				// Translate to packs
+				int carryablePacks = (int)Math.floor((double)carryable / itemInfo.getPack());
+				
 				// Just Selected
-				maximumQuantity = stock < inventory ? stock : inventory;
-				int maxBuy = (int)Math.floor((double)offShoreExpedition.getAccountedGold() / (double)itemInfo.getPrice());
-				if (maximumQuantity > maxBuy)
-					maximumQuantity = maxBuy;
+				maximumQuantity = carryablePacks < packsOnStore ? carryablePacks : packsOnStore; 
+				
+				int maxBuyPacks = (int)Math.floor((double)offShoreExpedition.getAccountedGold() / (double)itemInfo.getPrice());
+				if (maximumQuantity > maxBuyPacks)
+					maximumQuantity = maxBuyPacks;
+								
 				selectedQuantity = 1;
 				if (selectedQuantity > maximumQuantity)
 					selectedQuantity = maximumQuantity;
