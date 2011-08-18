@@ -6,6 +6,7 @@ import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.sound.STMusicManagerNew;
@@ -63,7 +64,17 @@ public class ShipCache extends GoodsCache{
 	@Override
 	public void onStep(Actor a) {
 		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
-			switch (UserInterface.getUI().switchChat("Ships","What do you want to do?", "Transfer To Expedition", "Transfer To Ship", "Board Ship")){
+			// Ugly hack, since the ConsoleUI isn't prepared to perform dual-direction transfer
+			boolean isGFXUI = UserInterface.getUI() instanceof ExpeditionOryxUI;
+			int choice = -1;
+			if (isGFXUI){
+				choice = UserInterface.getUI().switchChat("Ships","What do you want to do?", "Transfer equipment", "Board ships");
+				choice++;
+			} else {
+				choice = UserInterface.getUI().switchChat("Ships","What do you want to do?", "Transfer to expedition", "Transfer to ships", "Board ships");
+			}
+			
+			switch (choice){
 			case 0:
 				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the goods to transfer", null, this);
     			break;
