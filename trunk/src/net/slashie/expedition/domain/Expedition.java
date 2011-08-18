@@ -441,7 +441,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 	public int getCurrentlyCarrying(){
 		if (getCarryCapacity() == 0)
-			return 101;
+			return 0;
 		return (int)Math.round(((double)getCurrentWeight()/(double)getCarryCapacity())*100.0d);
 	}
 
@@ -2081,7 +2081,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 	public void validateMounted() {
 		if (movementMode.isLandMovement()){
-			if (getUnmountedUnits().size() == 0){
+			if (getUnmountedUnits().size() == 0 && getTotalUnits() > 0){
 				setMovementMode(MovementMode.HORSE);
 			} else {
 				setMovementMode(MovementMode.FOOT);
@@ -2282,6 +2282,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	@Override
 	public boolean isPeopleContainer() {
+		return true;
+	}
+	
+	@Override
+	public boolean requiresUnitsToContainItems() {
 		return true;
 	}
 }

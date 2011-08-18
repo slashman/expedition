@@ -18,6 +18,8 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 
 public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitContainer, ItemContainer{
+	private static final long serialVersionUID = 1L;
+	
 	private FoodConsumerDelegate foodConsumerDelegate; 
 	
 	public GoodsCache(boolean abstractCache) {
@@ -416,5 +418,10 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	@Override
 	public boolean isPeopleContainer() {
 		return true;
+	}
+	
+	@Override
+	public boolean requiresUnitsToContainItems() {
+		return false;
 	}
 }

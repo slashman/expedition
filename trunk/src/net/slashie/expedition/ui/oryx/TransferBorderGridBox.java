@@ -11,19 +11,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import net.slashie.expedition.domain.ExpeditionItem;
-import net.slashie.expedition.domain.Food;
+import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.ItemContainer;
 import net.slashie.expedition.domain.ShipCache;
-import net.slashie.expedition.world.FoodConsumer;
+import net.slashie.expedition.ui.oryx.ExpeditionOryxUI.ItemTransferFunctionality;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.UserInterface;
@@ -31,7 +31,6 @@ import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.swing.BorderedGridBox;
-import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
@@ -39,25 +38,32 @@ import net.slashie.utils.swing.GFXMenuItem;
 
 public class TransferBorderGridBox extends BorderedGridBox{
 	private static final long serialVersionUID = 1L;
-	private Equipment highlight;
-	private ItemContainer from;
-	private ItemContainer to;
-	private CleanButton transferButton;
+	private ExpeditionItem highlight;
+	private ItemContainer source;
+	private ItemContainer destination;
 	private CallbackKeyListener<String> cbkl;
 	private CallbackMouseListener<String> cbml;
 	private Image goodTypeBox;
 	
 	// Splitter attributes
-	private CleanButton quantitySplitterUp;
-	private CleanButton quantitySplitterDown;
-	private JLabel quantityLabel;
-	private int selectedQuantity;
-	private int maximumQuantity;
+	private CleanButton quantitySplitterToSource;
+	private CleanButton quantitySplitterToDestination;
+	
+	private int sourceCurrentQuantity;
+	private int sourceMaximumQuantity;
+	
+	private int destinationCurrentQuantity;
+	private int destinationMaximumQuantity;
+	
 	private String transferUnit;
 	private int changeSpeed;
 	private int initialQuantity;
 	private KeyListener splitterArrowsListener;
 	private boolean kbLaunchedTimer = false;
+	private ItemTransferFunctionality itemTransferFunctionality;
+	
+	private Map<GoodType, List<Equipment>> expeditionGoodsMap;
+	
 	
 	public TransferBorderGridBox(
 			// Standard parameters, sent to super()
@@ -67,42 +73,18 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			Color borderOut, int borderWidth, int outsideBound, int inBound,
 			int insideBound, int itemHeight, int itemWidth, int gridX,
 			int gridY, BufferedImage box, 
-			CleanButton closeButton, CleanButton transferButton,
-			
-			ItemContainer from, ItemContainer to, 
-			
-			BlockingQueue<String> transferSelectionHandler) {
+			CleanButton closeButton, 
+			ItemContainer source, ItemContainer destination, 
+			BlockingQueue<String> transferSelectionHandler,
+			ItemTransferFunctionality itemTransferFunctionality) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
 				itemWidth, gridX, gridY, box, closeButton);
-		
+		this.itemTransferFunctionality = itemTransferFunctionality;
 		initializeSplitters();
 		this.goodTypeBox = box;
-		this.from = from;
-		this.to = to;
-		this.transferButton = transferButton;
-		
-		quantityLabel = new JLabel();
-		quantityLabel.setFont(si.getFont(ExpeditionOryxUI.UI_WIDGETS_LAYER));
-		quantityLabel.setVisible(false);
-		quantityLabel.setBounds(540+90,231,200,27);
-		quantityLabel.setForeground(Color.WHITE);
-		si.add(quantityLabel);
-		
-		transferButton.setVisible(false);
-		transferButton.setLocation(515+90,270);
-		si.add(transferButton);
-		transferButton.addActionListener(new CallbackActionListener<String>(transferSelectionHandler){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (hoverDisabled)
-					return;
-				try {
-					handler.put("CONFIRM_TRANSFER");
-				} catch (InterruptedException e1) {}
-				si.recoverFocus();
-			}
-		});
+		this.source = source;
+		this.destination = destination;
 		
 		final int pageElements = gridX * gridY;
 		
@@ -150,80 +132,283 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		si.addKeyListener(cbkl);
 	}
 
+	private void transferToSource() {
+		if (initialQuantity - sourceCurrentQuantity == 0)
+			changeSpeed = 1;
+		else
+			changeSpeed = (int) Math.ceil((sourceCurrentQuantity - initialQuantity )/ 5.0d);
+		
+		int transferQuantity = changeSpeed;
+		
+		// Try to do the transfer
+		updateMaximumQuantities(highlight);
+		
+		if (transferQuantity == 0 || highlight == null){
+			return;
+		}
+			
+		if (transferQuantity + sourceCurrentQuantity > sourceMaximumQuantity){
+			if (sourceCurrentQuantity >= sourceMaximumQuantity){
+				return;
+			} else {
+				transferQuantity = 1;
+				initialQuantity = sourceCurrentQuantity;
+			}
+		}
+		
+		if (!itemTransferFunctionality.validateAndPerformTransfer(destination, source, expeditionGoodsMap, highlight, transferQuantity)){
+			return;
+		}
+		/*menuBox.resetSelection();*/
+		// setLegend(itemTransferFunctionality.getTransferedLegend(transferQuantity, highlight, source));
+		
+		// Transfer was sucessful... yay...
+		
+		sourceCurrentQuantity += changeSpeed;
+		destinationCurrentQuantity -= changeSpeed;
+		
+		// Perform the transfer
+		if (sourceCurrentQuantity > sourceMaximumQuantity)
+			sourceCurrentQuantity = sourceMaximumQuantity;
+		if (destinationCurrentQuantity < 0)
+			destinationCurrentQuantity = 0;
+		afterQuantityChange();
+	}
+	
+	private void transferToDestination(){
+		if (initialQuantity - destinationCurrentQuantity == 0)
+			changeSpeed = 1;
+		else
+			changeSpeed = (int) Math.ceil((destinationCurrentQuantity - initialQuantity)/ 5.0d);
+		
+		int transferQuantity = changeSpeed;
+
+		
+		// Try to do the transfer
+		updateMaximumQuantities((ExpeditionItem) highlight);
+		
+		if (transferQuantity == 0 || highlight == null){
+			return;
+		}
+		
+		if (transferQuantity + destinationCurrentQuantity > destinationMaximumQuantity){
+			if (destinationCurrentQuantity >= destinationMaximumQuantity){
+				return;
+			} else {
+				transferQuantity = 1;
+				initialQuantity = destinationCurrentQuantity;
+			}
+		}
+		
+		if (!itemTransferFunctionality.validateAndPerformTransfer(source, destination, expeditionGoodsMap, highlight, transferQuantity)){
+			return;
+		}
+		/*menuBox.resetSelection();*/
+		//setLegend(itemTransferFunctionality.getTransferedLegend(transferQuantity, highlight, destination));
+		
+		// Transfer was sucessful... yay...
+		
+		destinationCurrentQuantity += changeSpeed;
+		sourceCurrentQuantity -= changeSpeed;
+		if (destinationCurrentQuantity > destinationMaximumQuantity)
+			destinationCurrentQuantity = destinationMaximumQuantity;
+		if (sourceCurrentQuantity < 0)
+			sourceCurrentQuantity = 0;
+
+		afterQuantityChange();
+		
+	}
+	
+	private void afterQuantityChange(){
+		super.draw(false);
+		updateContainerInfo();
+		si.commitLayer(getDrawingLayer());
+	}
+	
+	private void updateContainerInfo(){
+		
+		// Draw a cute border
+		int x = 490; //55
+		int y = 75;
+		
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_COLOR);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 270 - 2, 390 - 2);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 270 - 2, 390 - 2);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 270 - 4, 390 - 4);
+		
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+94, y + 76, "Carrying", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+100, y + 90, "People", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+83, y + 104, "Food Days", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+75, y + 118, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
+		
+		if (highlight != null){
+			int textWidth = (int) (si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, highlight.getFullDescription()) / 2.0d);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+(145-textWidth)-10, y + 174, highlight.getFullDescription(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+93, y + 188, "Current", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+114, y + 202, "Max", OryxExpeditionDisplay.COLOR_BOLD);
+		}
+			
+		drawContainerInfo(x+10, y, source, false);
+		drawContainerInfo(x+260, y, destination, true);	
+		// Draw current unit
+		if (highlight != null){
+			// Get some info
+			Image unitImage = ((GFXAppearance)highlight.getAppearance()).getImage();
+
+			// Draw the unit info
+			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 117, y + 132, unitImage);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+10, y + 188, sourceCurrentQuantity+"", Color.WHITE, false);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+10, y + 202, sourceMaximumQuantity+"", Color.WHITE, false);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+260, y + 188, destinationCurrentQuantity+"", Color.WHITE, true);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+260, y + 202, destinationMaximumQuantity+"", Color.WHITE, true);
+			
+			if (highlight != lastChoice){
+				// Just Selected
+				updateMaximumQuantities(highlight);
+				
+				sourceCurrentQuantity = source.getItemCount(highlight.getFullID());
+				destinationCurrentQuantity = destination.getItemCount(highlight.getFullID());
+
+				// Pop components up
+			    quantitySplitterToSource.setVisible(true);
+			    quantitySplitterToDestination.setVisible(true);
+				lastChoice = highlight;
+			}
+		} else {
+			quantitySplitterToSource.setVisible(false);
+			quantitySplitterToDestination.setVisible(false);
+			lastChoice = null;
+		}
+		
+		// Draw Box
+		int boxY = 41 - 24;
+		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, boxX, boxY, goodTypeBox);
+	}
+	
+	private void updateMaximumQuantities(ExpeditionItem eitem) {
+		sourceCurrentQuantity = source.getItemCount(eitem.getFullID());
+		destinationCurrentQuantity = destination.getItemCount(eitem.getFullID());
+		int allQuantity = sourceCurrentQuantity + destinationCurrentQuantity;
+		
+		sourceMaximumQuantity = source.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
+		
+		if (sourceMaximumQuantity == -1){
+			// Infinite capacity, can carry all available
+			sourceMaximumQuantity = allQuantity;
+		} else {
+			sourceMaximumQuantity += sourceCurrentQuantity;
+			// Finite capacity, can carry up to this
+			if (sourceMaximumQuantity > allQuantity)
+				sourceMaximumQuantity = allQuantity;
+		}
+		
+		destinationMaximumQuantity = destination.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
+		
+
+		if (destinationMaximumQuantity == -1){
+			// Infinite capacity, can carry all available
+			destinationMaximumQuantity = allQuantity;
+		} else {
+			destinationMaximumQuantity += destinationCurrentQuantity;
+			// Finite capacity, can carry up to this
+			if (destinationMaximumQuantity > allQuantity)
+				destinationMaximumQuantity = allQuantity;
+		}
+		/* Disabled for the bidirectional transfer
+			if (eitem instanceof Food){
+				if (to instanceof FoodConsumer){
+					FoodConsumer toFoodConsumer = (FoodConsumer) to;
+					int dailyFoodConsumption = toFoodConsumer.getDailyFoodConsumption();
+					if (dailyFoodConsumption == 0){
+						// Destination has no units, transfer by quantity
+						transferUnit = "";
+						daysFoodTransfer = false;
+					} else {
+	  	  				// Player picks supply days, not item quantity, scale things
+	  					int unitMaximumQuantity = maximumQuantity;
+	  					maximumQuantity = (int) Math.floor((double)unitMaximumQuantity / (double)dailyFoodConsumption);
+	  					if (maximumQuantity == 0){
+	  						maximumQuantity = unitMaximumQuantity;
+	  						transferUnit = "";
+	  						daysFoodTransfer = false;
+	  					} else {
+	  						transferUnit = " days";
+	  						daysFoodTransfer = true;
+	  					}
+					}
+				} else {
+					maximumQuantity = -1;
+				}
+			} else {
+				transferUnit = "";
+				daysFoodTransfer  = false;
+			}*/
+		transferUnit = "";
+		daysFoodTransfer  = false;
+		
+	}
+
 	private void initializeSplitters() {
-		quantitySplitterUp = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
-		quantitySplitterUp.setVisible(false);
-		quantitySplitterUp.setLocation(512+90,223);
-		final Action increaseQuantityAction = new AbstractAction() {
+		quantitySplitterToSource = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_LEFT, ExpeditionOryxUI.BTN_SPLIT_LEFT_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterToSource.setVisible(false);
+		quantitySplitterToSource.setLocation(556,206);
+		final Action transferToSourceAction = new AbstractAction() {
+			
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (initialQuantity - selectedQuantity == 0)
-					changeSpeed = 1;
-				else
-					changeSpeed = (int) Math.ceil((selectedQuantity - initialQuantity )/ 5.0d); 
-				selectedQuantity += changeSpeed;
-				if (selectedQuantity > maximumQuantity)
-					selectedQuantity = maximumQuantity;
-			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity+transferUnit);
+				transferToSource();
 			}
+			
 		};
-		final Timer increaseQuantityTimer = new Timer(100, increaseQuantityAction);
+		final Timer transferToSourceTimer = new Timer(100, transferToSourceAction);
 
-		quantitySplitterUp.addMouseListener(new MouseAdapter(){
+		quantitySplitterToSource.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e){
 				if (highlight == null)
 					return;
-				initialQuantity = selectedQuantity;
-				increaseQuantityAction.actionPerformed(null);
-			    increaseQuantityTimer.start();
+				initialQuantity = sourceCurrentQuantity;
+				transferToSource();
+				transferToSourceTimer.start();
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				increaseQuantityTimer.stop();
+				transferToSourceTimer.stop();
 			}
 		});
+		quantitySplitterToDestination = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_RIGHT, ExpeditionOryxUI.BTN_SPLIT_RIGHT_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterToDestination.setVisible(false);
+		quantitySplitterToDestination.setLocation(661,206);
 		
-		
-		quantitySplitterDown = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
-		quantitySplitterDown.setVisible(false);
-		quantitySplitterDown.setLocation(512+90,248);
-		
-		final Action decreaseQuantityAction = new AbstractAction() {
+		final Action transferToDestinationAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (initialQuantity - selectedQuantity == 0)
-					changeSpeed = 1;
-				else
-					changeSpeed = (int) Math.ceil((initialQuantity - selectedQuantity)/ 5.0d); 
-				selectedQuantity -= changeSpeed;
-				if (selectedQuantity < 0)
-					selectedQuantity = 0;
-			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity+transferUnit);
+				transferToDestination();
 			}
 		};
-		final Timer decreaseQuantityTimer = new Timer(100, decreaseQuantityAction);
+		final Timer transferToDestinationTimer = new Timer(100, transferToDestinationAction);
 
-		quantitySplitterDown.addMouseListener(new MouseAdapter(){
+		quantitySplitterToDestination.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e){
 				if (highlight == null)
 					return;
-				initialQuantity = selectedQuantity;
-				decreaseQuantityAction.actionPerformed(null);
-			    decreaseQuantityTimer.start();
+				initialQuantity = destinationCurrentQuantity;
+				transferToDestination();
+				transferToDestinationTimer.start();
 			}
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				decreaseQuantityTimer.stop();
+				transferToDestinationTimer.stop();
 			}
 		});
-		si.add(quantitySplitterUp);
-		si.add(quantitySplitterDown);
+		si.add(quantitySplitterToSource);
+		si.add(quantitySplitterToDestination);
 		splitterArrowsListener = new KeyAdapter(){
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -233,16 +418,16 @@ public class TransferBorderGridBox extends BorderedGridBox{
 					return;
 				int code = SwingSystemInterface.charCode(e);
 				if (code == CharKey.UARROW || code == CharKey.N8){
-					initialQuantity = selectedQuantity;
-					increaseQuantityAction.actionPerformed(null);
-					increaseQuantityTimer.start();
+					initialQuantity = sourceCurrentQuantity;
+					transferToSource();
+					transferToSourceTimer.start();
 					kbLaunchedTimer = true;
 				} else if (code == CharKey.DARROW || code == CharKey.N2){
 					if (highlight == null)
 						return;
-					initialQuantity = selectedQuantity;
-					decreaseQuantityAction.actionPerformed(null);
-				    decreaseQuantityTimer.start();
+					initialQuantity = destinationCurrentQuantity;
+					transferToDestination();
+					transferToDestinationTimer.start();
 				    kbLaunchedTimer = true;
 				}
 			}
@@ -253,10 +438,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 					return;
 				int code = SwingSystemInterface.charCode(e);
 				if (code == CharKey.UARROW || code == CharKey.N8){
-					increaseQuantityTimer.stop();
+					transferToSourceTimer.stop();
 					kbLaunchedTimer = false;
 				} else if (code == CharKey.DARROW || code == CharKey.N2){
-					decreaseQuantityTimer.stop();
+					transferToDestinationTimer.stop();
 					kbLaunchedTimer = false;
 
 				}
@@ -269,141 +454,43 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private int boxX;
 	private boolean daysFoodTransfer = false;
 	
-	public void draw(Equipment highlight, int boxX) {
+	public void draw(ExpeditionItem highlight, int boxX) {
 		this.highlight = highlight;
 		super.draw(false);
-		
-		// Draw a cute border
-		int x = 540; //55
-		int y = 75;
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_COLOR);
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 225 - 2, 390 - 2);
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 225 - 2, 390 - 2);
-		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 225 - 4, 390 - 4);
-		
-		drawContainerInfo(x, 85, from);
-		drawContainerInfo(x, 323, to);
-		
-		// Draw current unit
-		if (highlight != null){
-			ExpeditionItem eitem = (ExpeditionItem) highlight.getItem();
-			// Get some info
-			Image unitImage = ((GFXAppearance)eitem.getAppearance()).getImage();
-			String itemDescription = eitem.getDescription();
-
-			y = 210;
-
-			// Draw the unit info
-			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, unitImage);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, "How many ?", OryxExpeditionDisplay.COLOR_BOLD);
-
-			if (eitem != lastChoice){
-				// Just Selected
-				maximumQuantity = to.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
-				if (maximumQuantity == -1){
-					// Infinite capacity, can carry all available
-					maximumQuantity = highlight.getQuantity();
-				} else {
-					// Finite capacity, can carry up to this
-					if (maximumQuantity > highlight.getQuantity())
-						maximumQuantity = highlight.getQuantity();
-				}
-  	  			if (eitem instanceof Food){
-  	  				if (to instanceof FoodConsumer){
-  	  					FoodConsumer toFoodConsumer = (FoodConsumer) to;
-  	  					int dailyFoodConsumption = toFoodConsumer.getDailyFoodConsumption();
-  	  					if (dailyFoodConsumption == 0){
-  	  						// Destination has no units, transfer by quantity
-  	  						transferUnit = "";
-	  						daysFoodTransfer = false;
-  	  					} else {
-	  	  	  				// Player picks supply days, not item quantity, scale things
-	  	  					int unitMaximumQuantity = maximumQuantity;
-	  	  					maximumQuantity = (int) Math.floor((double)unitMaximumQuantity / (double)dailyFoodConsumption);
-	  	  					if (maximumQuantity == 0){
-	  	  						maximumQuantity = unitMaximumQuantity;
-	  	  						transferUnit = "";
-	  	  						daysFoodTransfer = false;
-	  	  					} else {
-	  	  						transferUnit = " days";
-	  	  						daysFoodTransfer = true;
-	  	  					}
-  	  					}
-  	  				} else {
-  	  					maximumQuantity = -1;
-  	  				}
-  	  			} else {
-  	  				transferUnit = "";
-  	  				daysFoodTransfer  = false;
-  	  			}
-
-				selectedQuantity = 0;
-			    quantityLabel.setText(selectedQuantity+"/"+maximumQuantity+transferUnit);
-
-
-				// Pop components up
-			    quantitySplitterUp.setVisible(true);
-			    quantitySplitterDown.setVisible(true);
-				transferButton.setVisible(true);
-				quantityLabel.setVisible(true);
-				lastChoice = eitem;
-			}
-		} else {
-		    quantitySplitterUp.setVisible(false);
-		    quantitySplitterDown.setVisible(false);
-		    transferButton.setVisible(false);
-			quantityLabel.setVisible(false);
-			lastChoice = null;
-		}
-		
-		// Draw Box
-		int boxY = 41 - 24;
-		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, boxX, boxY, goodTypeBox);
-		
-		
+		updateContainerInfo();
 		si.commitLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
 	}
 	
-	private void drawContainerInfo(int x, int y, ItemContainer container) {
+	private void drawContainerInfo(int x, int y, ItemContainer container, boolean alignRight) {
 		if (!container.isPeopleContainer())
 			return;
 
+
 		GFXAppearance containerAppearance = (GFXAppearance)container.getAppearance();
 		if (containerAppearance != null){
-			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 17, containerAppearance.getImage());
-		}
-		int foodDays = container.getFoodDays();
-		if (foodDays != -1){
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 92, "Food Days", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 92, container.getFoodDays()+"", Color.WHITE);
-		}
-		int waterDays = container.getWaterDays();
-		if (waterDays != -1){
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 106, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 106, container.getWaterDays()+"", Color.WHITE);
+			if (alignRight)
+				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x - 40, y+10, containerAppearance.getImage());
+			else
+				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 20, y+10, containerAppearance.getImage());
 		}
 		
-		if (container instanceof ShipCache){
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, "Sea Expedition", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 32, "Ships", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 47, "Cargo", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 62, "Max Cargo", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 77, "Crew", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 32, container.getTotalShips()+"", Color.WHITE);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, container.getCurrentlyCarrying()+"", Color.WHITE);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, container.getCarryCapacity()+"", Color.WHITE);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 77, container.getTotalUnits()+"", Color.WHITE);
-		} else {
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 17, container.getDescription(), OryxExpeditionDisplay.COLOR_BOLD);
-			if (container.getCarryCapacity() != -1){
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 62, "Capacity", OryxExpeditionDisplay.COLOR_BOLD);
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, container.getCarryCapacity()+"", Color.WHITE);
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 47, "Carrying", OryxExpeditionDisplay.COLOR_BOLD);
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, container.getCurrentlyCarrying()+"%", Color.WHITE);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y+52, container.getDescription(), OryxExpeditionDisplay.COLOR_BOLD, alignRight);		
+		
+		if (container.getCarryCapacity() != -1){
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 76, container.getCurrentlyCarrying()+"%", Color.WHITE, alignRight);
+		}
+		
+		if (container.isPeopleContainer()){
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 90, container.getTotalUnits()+"", Color.WHITE, alignRight);
+
+			int foodDays = container.getFoodDays();
+			if (foodDays != -1){
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 104, container.getFoodDays()+"", Color.WHITE, alignRight);
 			}
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+12, y + 77, "People", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 77, container.getTotalUnits()+"", Color.WHITE);
+			int waterDays = container.getWaterDays();
+			if (waterDays != -1){
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 118, container.getWaterDays()+"", Color.WHITE, alignRight);
+			}
 		}
 	}
 
@@ -419,10 +506,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	@Override
 	public void kill() {
 		super.kill();
-		si.remove(quantitySplitterUp);
-		si.remove(quantitySplitterDown);
-		si.remove(transferButton);
-		si.remove(quantityLabel);
+		si.remove(quantitySplitterToSource);
+		si.remove(quantitySplitterToDestination);
 		si.removeKeyListener(cbkl);
 		si.removeKeyListener(splitterArrowsListener);
 		si.removeMouseListener(cbml);
@@ -431,20 +516,13 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	public void selectUnit(int index) {
 		if (index != -1){
 			index += getCurrentPage() *  getItemsPerPage();
-			highlight = ((CacheCustomGFXMenuItem)items.get(index)).getEquipment();
+			highlight = ((CacheCustomGFXMenuItem)items.get(index)).getItem();
+			updateMaximumQuantities(highlight);
 		}
+		
 		//draw(highlight);
 	}
 
-	public Equipment getSelectedUnit() {
-		return highlight;
-	}
-
-	public int getQuantity() {
-		return selectedQuantity;
-	}
-
-	
 	public void resetSelection() {
 		highlight = null;
 	}
@@ -455,8 +533,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		if (highlight != null){
 			for (GFXMenuItem item: items){
 				CacheCustomGFXMenuItem cacheItem = (CacheCustomGFXMenuItem) item; 
-				if (cacheItem.getEquipment().getItem().getFullID().equals(highlight.getItem().getFullID())){
-					highlight = cacheItem.getEquipment();
+				if (cacheItem.getItem().getFullID().equals(highlight.getFullID())){
+					highlight = cacheItem.getItem();
 					return;
 				}
 			}
@@ -481,5 +559,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	@Override
 	public int getDrawingLayer() {
 		return ExpeditionOryxUI.UI_WIDGETS_LAYER;
+	}
+
+	public void setExpeditionGoodsMap(Map<GoodType, List<Equipment>> expeditionGoodsMap) {
+		this.expeditionGoodsMap = expeditionGoodsMap;
+		
 	}
 }

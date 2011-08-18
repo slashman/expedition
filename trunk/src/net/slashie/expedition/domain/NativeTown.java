@@ -418,4 +418,9 @@ public class NativeTown extends Town{
 		}
 		checkFriendlyChange();
 	}
+	
+	@Override
+	public boolean requiresUnitsToContainItems() {
+		return false;
+	}
 }

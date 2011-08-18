@@ -229,4 +229,8 @@ public class Town extends GoodsCache{
 		}
 	}
 
+	@Override
+	public boolean requiresUnitsToContainItems() {
+		return false;
+	}
 }
