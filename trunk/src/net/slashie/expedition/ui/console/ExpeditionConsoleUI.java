@@ -47,6 +47,7 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.sound.STMusicManagerNew;
+import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
@@ -928,7 +929,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	}
 	
 	@Override
-	public List<Equipment> selectItemsFromExpedition(String prompt, String verb) {
+	public List<Equipment> selectItemsFromExpedition(String prompt, String verb, Appearance containerAppearance) {
 		List<Equipment> expeditionEquipment = getExpedition().getInventory();
     	csi.saveBuffer();
    		Equipment.eqMode = true;

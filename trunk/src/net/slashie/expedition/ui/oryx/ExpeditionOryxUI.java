@@ -60,6 +60,7 @@ import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
+import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.CommandListener;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
@@ -553,21 +554,20 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Create the button to confirm transfer and add it to the UI
 		//ItemTransferFunctionality transferFromExpeditionFunctionality = new TransferFromExpeditionFunctionality(minUnits);
 		ItemTransferFunctionality transferFromExpeditionFunctionality = new DualTransferFunctionality(minUnits, 1);
-		transferItems("Select the goods to transfer", null, getExpedition(), toCache, transferFromExpeditionFunctionality, true, false);
+		transferItems("Select the goods to transfer", null, getExpedition(), toCache, transferFromExpeditionFunctionality, true);
 	}
 	
 	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache fromCache) {
 		//ItemTransferFunctionality transferFromCacheFunctionality = new TransferFromCacheFunctionality();
 		ItemTransferFunctionality dualTransferFunctionality = new DualTransferFunctionality(1,-1);
-		transferItems(prompt, preselectedGoodType, fromCache, getExpedition(), dualTransferFunctionality, false, false);
+		transferItems(prompt, preselectedGoodType, fromCache, getExpedition(), dualTransferFunctionality, false);
 		if (fromCache.destroyOnEmpty() && fromCache.getItems().size() == 0)
 			level.destroyFeature(fromCache);
 	}
 	
-	public List<Equipment> selectItemsFromExpedition(String prompt, String verb) {
-		List<Equipment> selection = new ArrayList<Equipment>();
-		ItemTransferFunctionality selectItemsFunctionality = new SelectFromExpeditionFunctionality(selection,prompt, verb);
-		ItemContainer tempItemContainer = new GoodsCache(true){
+	public List<Equipment> selectItemsFromExpedition(String prompt, String verb, final Appearance containerAppearance) {
+		ItemTransferFunctionality selectItemsFunctionality = new SelectFromExpeditionFunctionality(prompt, verb);
+		ItemContainer tempOfferContainer = new GoodsCache(true){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -584,10 +584,43 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			public boolean requiresUnitsToContainItems() {
 				return false;
 			}
+			
+			@Override
+			public Appearance getAppearance() {
+				return containerAppearance;
+			}
 		};
 		
-		transferItems("-", GoodType.TRADE_GOODS, getExpedition(), tempItemContainer, selectItemsFunctionality, true, true);
-		return selection;
+		ItemContainer tempInventoryContainer = new GoodsCache(true){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getDescription() {
+				return "Inventory";
+			}
+			
+			@Override
+			public boolean isPeopleContainer() {
+				return true;
+			}
+			
+			@Override
+			public boolean requiresUnitsToContainItems() {
+				return false;
+			}
+			
+			@Override
+			public Appearance getAppearance() {
+				return getExpedition().getAppearance();
+			}
+		};
+		
+		for (Equipment equipment: getExpedition().getInventory()){
+			tempInventoryContainer.addItem((ExpeditionItem) equipment.getItem(), equipment.getQuantity());
+		}
+		
+		transferItems("-", GoodType.TRADE_GOODS, tempInventoryContainer, tempOfferContainer, selectItemsFunctionality, true);
+		return tempOfferContainer.getItems();
 	}
 
 	/**
@@ -598,10 +631,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	 * @param to
 	 * @param itemTransferFunctionality
 	 * @param fromExpedition
-	 * @param cloneEquipment Prevents alterations over the original equipments by cloning them. Used for selectItems
 	 */
 	public void transferItems(String prompt, GoodType preselectedGoodType, ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality, 
-			boolean fromExpedition, boolean cloneEquipment) {
+			boolean fromExpedition) {
 		// Change UI Mode
    		Equipment.eqMode = true;
    		((GFXUISelector)getPlayer().getSelector()).deactivate();
@@ -694,36 +726,29 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   			}
   		}
   		
-  		Map<GoodType, List<Equipment>> expeditionGoodsMap = null;
 		Map<GoodType, List<ExpeditionItem>> expeditionItemMap = null;
+		expeditionItemMap = new HashMap<GoodType, List<ExpeditionItem>>();
 		
-  		
-			expeditionItemMap = new HashMap<GoodType, List<ExpeditionItem>>();
-  			for (GoodType goodType: goodTypes){
-  				//expeditionGoodsMap.put(goodType, getExpedition().getGoods(goodType, true));
-  				expeditionItemMap.put(goodType, new ArrayList<ExpeditionItem>());
-  				List<Equipment> fromGoods = from.getGoods(goodType);
-  				for (Equipment fromGood: fromGoods){
-  					expeditionItemMap.get(goodType).add((ExpeditionItem)fromGood.getItem());
-  					if (cloneEquipment){
-  						expeditionGoodsMap.get(goodType).add(new Equipment(fromGood.getItem(), fromGood.getQuantity()));
-  					}
-  				}
-  				
-  				List<Equipment> toGoods = to.getGoods(goodType);
-  				for (Equipment toGood: toGoods){
-  					if (!expeditionItemMap.get(goodType).contains((ExpeditionItem)toGood.getItem())){
-  						expeditionItemMap.get(goodType).add((ExpeditionItem)toGood.getItem());
-  						if (cloneEquipment){
-  	  						expeditionGoodsMap.get(goodType).add(new Equipment(toGood.getItem(), toGood.getQuantity()));
-  	  					}
-  					}
-  					
-  				}
-  			}
-  			menuBox.setExpeditionGoodsMap(expeditionGoodsMap);
+		for (GoodType goodType: goodTypes){
+			//expeditionGoodsMap.put(goodType, getExpedition().getGoods(goodType, true));
+			expeditionItemMap.put(goodType, new ArrayList<ExpeditionItem>());
+			List<Equipment> fromGoods = from.getGoods(goodType);
+			for (Equipment fromGood: fromGoods){
+				expeditionItemMap.get(goodType).add((ExpeditionItem)fromGood.getItem());
+			}
+			
+			List<Equipment> toGoods = to.getGoods(goodType);
+			for (Equipment toGood: toGoods){
+				if (expeditionItemMap.get(goodType) == null){
+					expeditionItemMap.put(goodType, new ArrayList<ExpeditionItem>());
+				}
+				if (!expeditionItemMap.get(goodType).contains((ExpeditionItem)toGood.getItem())){
+					expeditionItemMap.get(goodType).add((ExpeditionItem)toGood.getItem());
+				}
+				
+			}
+		}
   			
-  		//}
   		
   		while (true){
   			menuBox.setHoverDisabled(false);
@@ -731,11 +756,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   			int currentPage = menuBox.getCurrentPage();
   			List<ExpeditionItem> inventory = null;
   			if (typeChoice < goodTypes.length){
-  				//if (cloneEquipment){
-  					inventory = expeditionItemMap.get(goodTypes[typeChoice]);
-  				/*} else {
-  					inventory = from.getGoods(goodTypes[typeChoice]);
-  				}*/
+				inventory = expeditionItemMap.get(goodTypes[typeChoice]);
   	  		}
   	  		
   	  		Vector<CacheCustomGFXMenuItem> menuItems = new Vector<CacheCustomGFXMenuItem>();
@@ -1329,7 +1350,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		 * @param quantity
 		 * @return
 		 */
-		boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, Map<GoodType, List<Equipment>> fromMap, ExpeditionItem choice, int quantity);
+		boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, ExpeditionItem choice, int quantity);
 	}
 	
 	
@@ -1407,7 +1428,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 		
 		@Override
-		public boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, Map<GoodType, List<Equipment>> fromMap, ExpeditionItem choice, int quantity) {
+		public boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, ExpeditionItem choice, int quantity) {
 			if (!to.canCarry(choice, quantity)){
 				showBlockingMessage("Not enough room in the "+to.getDescription());
 				return false;
@@ -1447,11 +1468,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	
 	class SelectFromExpeditionFunctionality implements ItemTransferFunctionality {
-		private List<Equipment> selection;
 		private String prompt;
-		private Map<String, Equipment> selectionMap = new HashMap<String, Equipment>();
-		SelectFromExpeditionFunctionality (List<Equipment> selection, String prompt, String verb){
-			this.selection = selection;
+		
+		SelectFromExpeditionFunctionality (String prompt, String verb){
 			this.prompt = prompt;
 		}
 		
@@ -1471,10 +1490,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 		
 		@Override
-		public boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, Map<GoodType, List<Equipment>> fromMap, ExpeditionItem choice, int quantity) {
+		public boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, ExpeditionItem choice, int quantity) {
 			// Validate at least one man in the expedition
 			if (((ExpeditionItem)choice).getGoodType() == GoodType.PEOPLE){
-				List<Equipment> allMen = fromMap.get(GoodType.PEOPLE);
+				List<Equipment> allMen = from.getGoods(GoodType.PEOPLE);
 				int men = 0;
 				for (Equipment man: allMen){
 					men += man.getQuantity();
@@ -1486,16 +1505,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 			
 			to.addItem((ExpeditionItem)choice, quantity);
-			//choice.reduceQuantity(quantity);
-			
-			if (selectionMap.get(choice.getFullID()) == null){
-				Equipment e = new Equipment(choice, quantity);
-				selectionMap.put(choice.getFullID(), e);
-				selection.add(e);
-			} else {
-				Equipment e = selectionMap.get(choice.getFullID());
-				e.setQuantity(e.getQuantity()+quantity);
-			}
+			from.reduceQuantityOf(choice, quantity);
 			return true;
 		}
 	}
