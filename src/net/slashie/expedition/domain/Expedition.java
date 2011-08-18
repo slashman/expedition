@@ -1540,6 +1540,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 						UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
 						modifyPerceivedLuck(1);
 					}
+				} else {
+					return false;
 				}
 			} else {
 				if (isForaging()){
