@@ -15,10 +15,12 @@ import net.slashie.serf.game.Equipment;
 public interface ExpeditionUserInterface {
 	public void launchStore(Store store);
 	public boolean depart();
-	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache ship);
 	
-	public void transferFromExpedition(GoodsCache ship);
+	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache from);
+	public void transferFromExpedition(GoodsCache toCache);
 	public void transferFromExpedition(GoodsCache ship, int minUnits);
+	
+	
 
 	public void showBlockingMessage(String message);
 	public void showBlockingMessage(String message, boolean keepMessage);

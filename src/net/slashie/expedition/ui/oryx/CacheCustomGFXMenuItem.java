@@ -9,7 +9,6 @@ import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.ItemContainer;
 import net.slashie.expedition.domain.Weapon;
 import net.slashie.libjcsi.CharKey;
-import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.swing.CustomGFXMenuItem;
@@ -17,23 +16,23 @@ import net.slashie.utils.swing.CustomGFXMenuItem;
 public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 	private static final long serialVersionUID = 1L;
 	
-	private Equipment item;
+	private ExpeditionItem item;
 
 	private ItemContainer from;
 	private ItemContainer to;
 
-	public CacheCustomGFXMenuItem(Equipment item, ItemContainer from, ItemContainer to) {
+	public CacheCustomGFXMenuItem(ExpeditionItem item, ItemContainer from, ItemContainer to) {
 		this.item = item;
 		this.to = to;
 		this.from = from;
 	}
 	
-	public Equipment getEquipment(){
+	public ExpeditionItem getItem(){
 		return item;
 	}
 	
 	public String getGroupClassifier() {
-		return ((ExpeditionItem)item.getItem()).getGroupClassifier();
+		return item.getGroupClassifier();
 	}
 	
 	public Image getMenuImage() {
@@ -56,12 +55,11 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
-		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
-		String itemDescription = item.getItem().getDescription();
+		Image unitImage = ((GFXAppearance)item.getAppearance()).getImage();
+		String itemDescription = item.getDescription();
 		
 		// Draw a cute border
-		if (eitem instanceof ExpeditionUnit){
+		if (item instanceof ExpeditionUnit){
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_HIGHLIGHT_COLOR);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 350 - 2, 60 - 2);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
@@ -80,8 +78,8 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		
 		// Unit status
-		if (eitem instanceof ExpeditionUnit){
-			ExpeditionUnit unit = (ExpeditionUnit)eitem;
+		if (item instanceof ExpeditionUnit){
+			ExpeditionUnit unit = (ExpeditionUnit)item;
 			Weapon weapon = unit.getWeapon();
 			String weaponDescription = weapon != null ? weapon.getFullDescription() : "Unarmed";
 			Armor armor = unit.getArmor();
@@ -94,8 +92,8 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 28, "DEF: " + unit.getDefense().getString(), Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 42, "Weight: "+unit.getWeight(), Color.WHITE);
 		} else {
-			int inventory = item.getQuantity();
-			String current = to.getItemCountBasic(item.getItem().getFullID())+"";
+			int inventory = from.getItemCount(item.getFullID());
+			int current = to.getItemCount(item.getFullID());
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getDescription()+": "+inventory, Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getDescription()+": "+current, Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
@@ -105,10 +103,10 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawMenuItem(SwingSystemInterface si, int x, int y, int index, boolean highlight) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
-		String itemDescription = item.getItem().getDescription();
-		int inventory = item.getQuantity();
-		String current = to.getItemCountBasic(item.getItem().getFullID())+"";
+		Image unitImage = ((GFXAppearance)item.getAppearance()).getImage();
+		String itemDescription = item.getDescription();
+		int inventory = from.getItemCount(item.getFullID());
+		String current = to.getItemCount(item.getFullID())+"";
 
 		// Draw a cute border
 		if (highlight){

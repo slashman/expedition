@@ -27,4 +27,9 @@ public class SeaPseudoCache extends GoodsCache{
 	public int getFoodDays() {
 		return -1;
 	}
+	
+	@Override
+	public boolean requiresUnitsToContainItems() {
+		return false;
+	}
 }

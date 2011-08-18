@@ -107,4 +107,9 @@ public class ShipCache extends GoodsCache{
 	public boolean destroyOnEmpty() {
 		return false;
 	}
+	
+	@Override
+	public boolean requiresUnitsToContainItems() {
+		return false;
+	}
 }

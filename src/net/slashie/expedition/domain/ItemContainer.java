@@ -21,6 +21,9 @@ public interface ItemContainer {
 	void reduceQuantityOf(AbstractItem item, int quantity);
 	List<Equipment> getItems();
 	List<Equipment> getGoods(GoodType goodType);
-	int getItemCountBasic(String fullID);
+	int getItemCountBasic(String basicID);
+	int getItemCount(String fullID);
 	boolean isPeopleContainer();
+	boolean requiresUnitsToContainItems();
+	int getCurrentFood();
 }
