@@ -2,8 +2,6 @@ package net.slashie.expedition.ui.oryx.sfx;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -13,7 +11,7 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class RainEffect implements Runnable{
-	private static final int RAIN_SIZE = 3;
+	private static final int RAIN_SIZE = 2;
 	protected SwingSystemInterface si;
 	protected BlockingQueue<String> commandsQueue = new LinkedBlockingQueue<String>();
 	
