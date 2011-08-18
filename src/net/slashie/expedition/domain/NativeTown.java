@@ -322,12 +322,13 @@ public class NativeTown extends Town{
 						break;
 					}
 					if (nativeTown.canTradeGoodType(goodType)){
-						List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer");
+						List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer", getAppearance());
 						if (offer == null){
 							//Cancelled
 							break;
 						}
-						if (UserInterface.getUI().promptChat("Are you sure?")){
+						//if (UserInterface.getUI().promptChat("Are you sure?")){
+						if ( ((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(offer, "Offer", "Will you make this offer?")){
 							List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
 							if (townOffer == null || townOffer.size() == 0){
 								showBlockingMessage("We can offer you nothing for that.");

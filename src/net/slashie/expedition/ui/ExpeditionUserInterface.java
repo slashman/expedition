@@ -11,6 +11,7 @@ import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.world.Weather;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.ui.Appearance;
 
 public interface ExpeditionUserInterface {
 	public void launchStore(Store store);
@@ -51,7 +52,7 @@ public interface ExpeditionUserInterface {
 			String battleTitle, 
 			List<Equipment> attackingUnits,
 			List<Equipment> defendingUnits);
-	public List<Equipment> selectItemsFromExpedition(String prompt, String verb);
+	public List<Equipment> selectItemsFromExpedition(String prompt, String verb, Appearance destinationAppearance);
 	public boolean promptUnitList(List<Equipment> unitList, String title, String prompt);
 	public List<Building> createBuildingPlan();
 	public void showCityInfo(Town town);

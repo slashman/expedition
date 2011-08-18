@@ -55,14 +55,13 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private int destinationCurrentQuantity;
 	private int destinationMaximumQuantity;
 	
-	private String transferUnit;
 	private int changeSpeed;
 	private int initialQuantity;
 	private KeyListener splitterArrowsListener;
 	private boolean kbLaunchedTimer = false;
 	private ItemTransferFunctionality itemTransferFunctionality;
 	
-	private Map<GoodType, List<Equipment>> expeditionGoodsMap;
+	//private Map<GoodType, List<Equipment>> expeditionGoodsMap;
 	
 	
 	public TransferBorderGridBox(
@@ -156,7 +155,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			}
 		}
 		
-		if (!itemTransferFunctionality.validateAndPerformTransfer(destination, source, expeditionGoodsMap, highlight, transferQuantity)){
+		if (!itemTransferFunctionality.validateAndPerformTransfer(destination, source, highlight, transferQuantity)){
 			return;
 		}
 		/*menuBox.resetSelection();*/
@@ -200,7 +199,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			}
 		}
 		
-		if (!itemTransferFunctionality.validateAndPerformTransfer(source, destination, expeditionGoodsMap, highlight, transferQuantity)){
+		if (!itemTransferFunctionality.validateAndPerformTransfer(source, destination, highlight, transferQuantity)){
 			return;
 		}
 		/*menuBox.resetSelection();*/
@@ -289,6 +288,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private void updateMaximumQuantities(ExpeditionItem eitem) {
 		sourceCurrentQuantity = source.getItemCount(eitem.getFullID());
 		destinationCurrentQuantity = destination.getItemCount(eitem.getFullID());
+		
+		
 		int allQuantity = sourceCurrentQuantity + destinationCurrentQuantity;
 		
 		sourceMaximumQuantity = source.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
@@ -315,38 +316,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			if (destinationMaximumQuantity > allQuantity)
 				destinationMaximumQuantity = allQuantity;
 		}
-		/* Disabled for the bidirectional transfer
-			if (eitem instanceof Food){
-				if (to instanceof FoodConsumer){
-					FoodConsumer toFoodConsumer = (FoodConsumer) to;
-					int dailyFoodConsumption = toFoodConsumer.getDailyFoodConsumption();
-					if (dailyFoodConsumption == 0){
-						// Destination has no units, transfer by quantity
-						transferUnit = "";
-						daysFoodTransfer = false;
-					} else {
-	  	  				// Player picks supply days, not item quantity, scale things
-	  					int unitMaximumQuantity = maximumQuantity;
-	  					maximumQuantity = (int) Math.floor((double)unitMaximumQuantity / (double)dailyFoodConsumption);
-	  					if (maximumQuantity == 0){
-	  						maximumQuantity = unitMaximumQuantity;
-	  						transferUnit = "";
-	  						daysFoodTransfer = false;
-	  					} else {
-	  						transferUnit = " days";
-	  						daysFoodTransfer = true;
-	  					}
-					}
-				} else {
-					maximumQuantity = -1;
-				}
-			} else {
-				transferUnit = "";
-				daysFoodTransfer  = false;
-			}*/
-		transferUnit = "";
-		daysFoodTransfer  = false;
-		
 	}
 
 	private void initializeSplitters() {
@@ -452,7 +421,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 
 	private ExpeditionItem lastChoice;
 	private int boxX;
-	private boolean daysFoodTransfer = false;
 	
 	public void draw(ExpeditionItem highlight, int boxX) {
 		this.highlight = highlight;
@@ -462,10 +430,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	}
 	
 	private void drawContainerInfo(int x, int y, ItemContainer container, boolean alignRight) {
-		if (!container.isPeopleContainer())
-			return;
-
-
 		GFXAppearance containerAppearance = (GFXAppearance)container.getAppearance();
 		if (containerAppearance != null){
 			if (alignRight)
@@ -551,18 +515,9 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	protected Cursor getHandCursor() {
 		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).HAND_CURSOR;
 	}
-
-	public boolean isDaysFoodTransfer() {
-		return daysFoodTransfer;
-	}
 	
 	@Override
 	public int getDrawingLayer() {
 		return ExpeditionOryxUI.UI_WIDGETS_LAYER;
-	}
-
-	public void setExpeditionGoodsMap(Map<GoodType, List<Equipment>> expeditionGoodsMap) {
-		this.expeditionGoodsMap = expeditionGoodsMap;
-		
 	}
 }
