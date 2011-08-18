@@ -457,7 +457,7 @@ public class ExpeditionDAO {
 					new String[]{""}, 100, 5000),
 			new ExpeditionUnit("EAGLE_WARRIOR", "Eagle Warrior","Eagle Warriors", "Elite Warrior", UNIT_WEIGHT, 200,
 					new Roll("2D1"),
-					new Roll("1D1"),
+					new Roll("1D2"),
 					3,
 					95,20,
 					2,
