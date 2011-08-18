@@ -318,6 +318,7 @@ public class CommonUI {
 		allButCrewParty.setHorses(LandingSpec.ALL);
 		allButCrewParty.setSoldiers(LandingSpec.ALL);
 		allButCrewParty.setDoctors(LandingSpec.ALL);
+		allButCrewParty.setCarpenters(LandingSpec.ALL);
 		allButCrewParty.setName("All but ships crew");
 		allButCrewParty.setMounted(false);
 		STANDARD_LANDING_PARTIES.add(allButCrewParty);
@@ -327,6 +328,7 @@ public class CommonUI {
 		allParty.setHorses(LandingSpec.ALL);
 		allParty.setSoldiers(LandingSpec.ALL);
 		allParty.setDoctors(LandingSpec.ALL);
+		allParty.setCarpenters(LandingSpec.ALL);
 		allParty.setCrew(LandingSpec.ALL);
 		allParty.setName("Everybody");
 		allParty.setMounted(false);
