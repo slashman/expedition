@@ -1531,13 +1531,15 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				} else {
 					return false;
 				}
-			} else if (!level.getWeather().isStormy() && cell.isSea()) {
-				food = "FISH";
-				int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
-				quantity *= multiplier;
-				if (quantity > 0){
-					UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
-					modifyPerceivedLuck(1);
+			} else if (cell.isSea()) {
+				if (!level.getWeather().isStormy()){
+					food = "FISH";
+					int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
+					quantity *= multiplier;
+					if (quantity > 0){
+						UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
+						modifyPerceivedLuck(1);
+					}
 				}
 			} else {
 				if (isForaging()){
