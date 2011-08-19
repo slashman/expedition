@@ -482,6 +482,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			index += getCurrentPage() *  getItemsPerPage();
 			highlight = ((CacheCustomGFXMenuItem)items.get(index)).getItem();
 			updateMaximumQuantities(highlight);
+			wasJustOnHovered = false;
 		}
 		
 		//draw(highlight);
