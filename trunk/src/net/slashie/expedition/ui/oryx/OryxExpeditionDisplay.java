@@ -441,7 +441,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			items.add(saveFileItem);
 		}
 		
-		BorderedMenuBox menuBox = ((ExpeditionOryxUI)UserInterface.getUI()).createBorderedMenuBox(20,6,9,12,20);
+		BorderedMenuBox menuBox = ((ExpeditionOryxUI)UserInterface.getUI()).createBorderedMenuBox();
 		menuBox.setLegend("Pick an Expedition");
 		menuBox.setMenuItems(items);
 		menuBox.setItemsPerPage(10);

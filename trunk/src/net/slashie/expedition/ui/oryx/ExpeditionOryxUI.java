@@ -72,12 +72,14 @@ import net.slashie.util.Pair;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.Position;
 import net.slashie.utils.PropertyFilters;
+import net.slashie.utils.Util;
 import net.slashie.utils.swing.BorderedGridBox;
 import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CleanButton;
 import net.slashie.utils.swing.GFXMenuItem;
+import net.slashie.utils.swing.GridBox;
 import net.slashie.utils.swing.MenuBox;
 
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
@@ -141,7 +143,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 	}
 	
-	public BorderedMenuBox createBorderedMenuBox(int borderWidth, int outsideBound, int inBound, int insideBound, int itemHeight){
+	public BorderedMenuBox createBorderedMenuBox(){
+		// Standard measures
+		int borderWidth = 20;
+		int outsideBound = 6;
+		int inBound =9;
+		int insideBound = 12;
+		int itemHeight = 20;
 		final ExpeditionOryxUI this_ = this;
 		BorderedMenuBox ret = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderWidth, outsideBound, inBound, insideBound, itemHeight, null){
 			@Override
@@ -152,6 +160,33 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			@Override
 			protected Cursor getDefaultCursor() {
 				return this_.getDefaultCursor();
+			}
+		};
+		ret.setCursor(si.getCursor());
+		return ret;
+	}
+	
+	public BorderedGridBox createBorderedGridBox(int itemHeight, int itemWidth, int gridX, int gridY) {
+		final ExpeditionOryxUI this_ = this;
+		int borderWidth = 20;
+		int outsideBound = 6;
+		int inBound =9;
+		int insideBound = 12;
+		BorderedGridBox ret = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderWidth, outsideBound, inBound, insideBound, 
+				itemHeight, itemWidth, gridX, gridY, null, null) { 
+			@Override
+			protected Cursor getHandCursor() {
+				return this_.getHandCursor();
+			}
+			
+			@Override
+			protected Cursor getDefaultCursor() {
+				return this_.getDefaultCursor();
+			}
+			
+			@Override
+			public int getDrawingLayer() {
+				return UI_WIDGETS_LAYER;
 			}
 		};
 		ret.setCursor(si.getCursor());
@@ -522,10 +557,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	public void showBlockingMessage(String message, boolean keepMessage) {
+		showBlockingMessage(message, 140, 300, 520, 250, keepMessage);
+	}
+	
+	public void showBlockingMessage(String message, int x, int y, int w, int h, boolean keepMessage) {
 		if (getPlayer() != null)
 			((GFXUISelector)getPlayer().getSelector()).deactivate();
 		message = message.replaceAll("XXX", "\n");
-		showTextBox(message, 140, 300, 520, 250, keepMessage);
+		showTextBox(message, x, y, w, h, keepMessage);
 	}
 	
 	@Override
@@ -1152,6 +1191,43 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		clearTextBox();
 		((GFXUISelector)getPlayer().getSelector()).deactivate();
 				
+		// Show the armies
+		List<GFXMenuItem> attackingMenuItems = new ArrayList<GFXMenuItem>();
+		for (Equipment equipment: attackingUnits){
+			attackingMenuItems.add(new IconUnitCustomGFXMenuItem(equipment, false));
+		}
+		
+		List<GFXMenuItem> defendingMenuItems = new ArrayList<GFXMenuItem>();
+
+		for (Equipment equipment: defendingUnits){
+			defendingMenuItems.add(new IconUnitCustomGFXMenuItem(equipment, true));
+		}
+		si.saveLayer(getUILayer());
+		BorderedGridBox defendantsGridBox = createBorderedGridBox(28, 28, 5, 5);
+		defendantsGridBox.setMenuItems(defendingMenuItems);
+		defendantsGridBox.setBounds(408,94,245,234);
+		defendantsGridBox.setTitle("Defenders");
+		defendantsGridBox.setUsedBuffer(1);
+		defendantsGridBox.draw(false);
+		
+		BorderedGridBox combatantsGridBox = createBorderedGridBox(28, 28, 5, 5);
+		combatantsGridBox.setMenuItems(attackingMenuItems);
+		combatantsGridBox.setBounds(143,94,245,234);
+		combatantsGridBox.setTitle("Attackers");
+		combatantsGridBox.draw(false);
+		
+		si.commitLayer(getUILayer());
+		
+		//si.waitKeyOrClick(CharKey.SPACE);
+		showBlockingMessage(battleTitle, 140, 350, 520, 200, false);
+
+		si.loadLayer(getUILayer());
+		
+		combatantsGridBox.kill();
+		defendantsGridBox.kill();
+		
+		// Show battlescape
+		
 		int xBase = 192;
 		int yBase = 48;
 		si.drawImage(getUILayer(), 168, yBase - 24, BATTLE_BACKGROUND);
@@ -1160,6 +1236,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		for (Equipment equipment: attackingUnits){
 			GFXAppearance appearance = (GFXAppearance) equipment.getItem().getAppearance();
 			for (int i = 0; i < equipment.getQuantity(); i++){
+				gridX = Util.rand(0,15);
+				gridY = Util.rand(0,12);
 				si.drawImage(getUILayer(), xBase + gridX * 24, yBase + gridY*24, appearance.getImage());
 				gridY ++;
 				if (gridY > 12){
@@ -1171,10 +1249,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		gridX = 15;
 		gridY = 0;
+
 		for (Equipment equipment: defendingUnits){
 			GFXAppearance appearance = (GFXAppearance) equipment.getItem().getAppearance();
 			Image img = ImageUtils.vFlip((BufferedImage)appearance.getImage());
 			for (int i = 0; i < equipment.getQuantity(); i++){
+				gridX = Util.rand(0,15);
+				gridY = Util.rand(0,12);
 				si.drawImage(getUILayer(), xBase + gridX * 24, yBase + gridY*24, img);
 				gridY ++;
 				if (gridY > 12){
@@ -1183,9 +1264,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				}
 			}
 		}
-		si.commitLayer(getUILayer());
 		
-		//si.waitKeyOrClick(CharKey.SPACE);
+		si.commitLayer(getUILayer());
+
+
 	}
 	
 	@Override
@@ -1196,9 +1278,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			AssaultOutcome[] mountedAttackOutcome,
 			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
 		List<String> messages = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits, battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome, attackerScore, defenderScore);
+		messages.remove(0); // Ignore the first message, since it's replaced with the formation grid
+		int i = 0;
 		for (String message: messages){
 			message = message.replaceAll("XXX", "\n");
-			showTextBox(message, 16, 380, 776, 200);
+			showTextBox(message, 16, 380, 776, 200, i < messages.size()-1);
+			i++;
 		}
 	}
 	

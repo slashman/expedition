@@ -126,7 +126,7 @@ public class CommonUI {
 		message = "";
 
 		if (defenderRangedAttackOutcome.hasEvents()){
-			message += "    >> Ranged Retaliation << XXX ";
+			message += "    >> Ranged Defense << XXX ";
 			nothingHappened = false;
 		}
 		
@@ -204,7 +204,7 @@ public class CommonUI {
 		message = "";
 		
 		if (nothingHappened) {
-			message += "No losses for both sides XXX ";
+			message += "No losses on any side XXX ";
 		}
 		if (attackerScore > defenderScore){
 			message += "The attacking party wins the battle XXX ";
