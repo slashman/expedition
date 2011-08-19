@@ -155,6 +155,7 @@ public class ExpeditionGame extends SworeGame {
 					getExpedition().cashValuables();
 				}
 			}
+			getExpedition().touchLand();
 		}
 		if (level.getID().equals("WORLD")){
 			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar
@@ -164,6 +165,7 @@ public class ExpeditionGame extends SworeGame {
 			*/ 
 			//level.getPlayer().setPosition(-430, 2235, 0); // Gotta put this to load the piece around the starting place, must find a better way..
 			//
+			 // level.getPlayer().setPosition(-329, 3000, 0); // North
 		}
 		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
 

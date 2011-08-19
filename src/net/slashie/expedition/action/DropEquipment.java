@@ -104,10 +104,7 @@ public class DropEquipment extends Action{
     			if (expedition.getUnmountedUnits().size() == 0){
     				expedition.setMovementMode(MovementMode.HORSE);
 				}
-    			if (expedition.getDaysOnSea() > 20){
-    				expedition.message("Land at last!");
-    			}
-    			expedition.resetDaysAtSea();
+    			expedition.touchLand();
     			ExpeditionMusicManager.playTune("LAND");
     			try {
     				expedition.landOn(expedition.getLandCellAround());
