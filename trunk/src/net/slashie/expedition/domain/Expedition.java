@@ -131,8 +131,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 //	public static final int  = 1,  = 2,  = 3;
 
 	private static final String[] MORALE_DESCRIPTIONS = new String[] {
-		"Rebellious",
-		"Cracking appart",
+		"Depressed",
+		"Cracking Apart",
 		"Hopeless",
 		"Downcast",
 		"Restless",
@@ -2292,5 +2292,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	@Override
 	public boolean requiresUnitsToContainItems() {
 		return true;
+	}
+
+	
+	public void touchLand() {
+		if (getDaysOnSea() > 20){
+			message("Land at last!");
+		}
+		resetDaysAtSea();
 	}
 }

@@ -84,7 +84,9 @@ public class NPC extends AwareActor implements Cloneable{
 						m("Remember to check out your \"Food Days\" calculations before departing. The crown has given you enough supplies for a long voyage with your sailing crew...");
 						m("But if you decide to bring more people, you will have to get your own supplies");
 					}
-					ml("You can forage for fruits on the wilderness or fish on shallow waters, but it's better to keep your expedition stocked");
+					m("You can forage for fruits on the wilderness or fish on shallow waters, but it's better to keep your expedition stocked");
+					m("Also remember, the morale of your expedition greatly influences their performance on all activities, it varies depending on the hapennings on the voyage.");
+					ml("You can tell it in the faces of your men, they change from Victorious to Calm to Depressed. Food supply, battle performance and voyage difficulties are the main factors to consider to keep your crew happy.");
 					break;
 				case 2:
 					m("Your expedition is made up of men of different skills, it is important to know the role of each one in order to have a successful journey.");
