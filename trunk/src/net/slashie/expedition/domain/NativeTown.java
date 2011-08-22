@@ -238,7 +238,7 @@ public class NativeTown extends Town{
 
 	public List<Equipment> calculateOffer(
 			GoodType goodType,
-			int offerValue) {
+			double offerValue) {
 		List<Equipment> townOffer = new ArrayList<Equipment>();
 		List<Equipment> townGoods = getGoods(goodType);
 		for (Equipment townGood: townGoods){
@@ -247,7 +247,7 @@ public class NativeTown extends Town{
 				double goodValue = evalItem(good);
 				if (goodValue == 0)
 					continue;
-				int maxQuantity = (int)Math.floor((double)offerValue/(double)goodValue);
+				int maxQuantity = (int)Math.floor(offerValue/goodValue);
 				if (maxQuantity == 0)
 					continue;
 				int quantity = townGood.getQuantity();
@@ -264,7 +264,7 @@ public class NativeTown extends Town{
 	public List<Equipment> calculateOffer(
 			GoodType goodType,
 			List<Equipment> offer) {
-		int value = 0;
+		double value = 0;
 		for (Equipment eqOffer: offer){
 			ExpeditionItem good = (ExpeditionItem) eqOffer.getItem();
 			value += evalItem(good) * eqOffer.getQuantity();
@@ -272,8 +272,8 @@ public class NativeTown extends Town{
 		return calculateOffer(goodType, value);
 	}
 
-	private int evalItem(ExpeditionItem good) {
-		return (int)Math.round(good.getAmericaValue()*getGoodTypeModifier(good.getGoodType()));
+	private double evalItem(ExpeditionItem good) {
+		return good.getAmericaValue()*getGoodTypeModifier(good.getGoodType());
 	}
 
 	private double getGoodTypeModifier(GoodType goodType) {
