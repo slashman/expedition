@@ -1358,6 +1358,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			} catch (InterruptedException e) {}
   		}
   		
+  		
   		cancel = commandStr.equals("CANCEL");
 
   		menuBox.kill();
