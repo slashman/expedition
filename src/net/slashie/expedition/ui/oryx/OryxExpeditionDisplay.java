@@ -409,11 +409,11 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.print(0, 3,19, "  T: Turn music on / off", Color.WHITE);
 		si.print(0, 3,20, "  Q: Quit", Color.WHITE);
 		si.print(0, 3,21, "  ", Color.WHITE);
-		si.print(0, 3,22, "  Press Space to continue", Color.CYAN);
+		si.print(0, 3,22, "  Press Space or Click to continue", Color.CYAN);
 		si.commitLayer(2);
 		si.commitLayer(0);
 
-		si.waitKeys(CharKey.SPACE, CharKey.ENTER);
+		si.waitKeysOrClick(CharKey.SPACE, CharKey.ENTER);
 		   
 		si.loadLayer(0);
 		si.loadLayer(2);
