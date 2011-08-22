@@ -146,7 +146,7 @@ public class DropEquipment extends Action{
 	}
 	
 	private void addItemsForLanding(GoodsCache from, List<Equipment> to, LandingSpec spec, String... baseIds) {
-		int quantity = 0;
+		//int quantity = 0;
 		switch (spec){
 		case NONE:
 			return;
@@ -160,55 +160,47 @@ public class DropEquipment extends Action{
 			return;
 		case HALF:
 			for (String baseId: baseIds){
-				if (baseId.equals("HORSE")){
-					// Check if there are already mounted units on the expedition
-					for (Equipment equipment: to){
-						if (equipment.getItem() instanceof ExpeditionUnit && ((ExpeditionUnit)equipment.getItem()).isMounted()){
-							quantity -= equipment.getQuantity();
+				List<Equipment> equipments = from.getItemsWithBaseID(baseId);
+				for (Equipment equipment: equipments){
+					int quantity = equipment.getQuantity();
+					if (baseId.equals("HORSE")){
+						// Check if there are already mounted units on the expedition
+						for (Equipment mountedEquipment: to){
+							if (mountedEquipment.getItem() instanceof ExpeditionUnit && ((ExpeditionUnit)mountedEquipment.getItem()).isMounted()){
+								quantity -= mountedEquipment.getQuantity();
+							}
 						}
-					}
-				} 
-				quantity += from.getItemCountBasic(baseId);
-			}
-			quantity = (int)Math.ceil((double)quantity/2.0d);
-			break;
-		case ONE:
-			next: for (String baseId: baseIds){
-				if (baseId.equals("HORSE")){
-					// Check if there are already mounted units on the expedition
-					for (Equipment equipment: to){
-						if (equipment.getItem() instanceof ExpeditionUnit && ((ExpeditionUnit)equipment.getItem()).isMounted()){
-							// No need to add more horses
-							continue next;
-						}
-					}
-				}
-				if (from.getItemCountBasic(baseId) > 0){
-					quantity = 1;
-					break;
-				}
-			}
-			break;
-		}
-		if (quantity <= 0)
-			return;
-		int remaining = quantity;
-		for (String baseId: baseIds){
-			List<Equipment> equipments = from.getItemsWithBaseID(baseId);
-			for (Equipment equipment: equipments){
-				if (equipment.getQuantity() >= remaining){
+					} 
+					quantity = (int)Math.ceil((double)quantity/2.0d);
+					
 					Equipment clone = equipment.clone();
-					clone.setQuantity(remaining);
-					remaining = 0;
+					clone.setQuantity(quantity);
 					to.add(clone);
-				} else {
-					remaining -= equipment.getQuantity();
-					to.add(equipment.clone());
 				}
-				if (remaining <= 0)
-					return;
 			}
 			
+			return;
+		case ONE:
+			next: for (String baseId: baseIds){
+				List<Equipment> equipments = from.getItemsWithBaseID(baseId);
+				for (Equipment equipment: equipments){
+					if (baseId.equals("HORSE")){
+						// Check if there are already mounted units on the expedition
+						for (Equipment mountedEquipment: to){
+							if (mountedEquipment.getItem() instanceof ExpeditionUnit && ((ExpeditionUnit)mountedEquipment.getItem()).isMounted()){
+								// No need to add more horses
+								continue next;
+							}
+						}
+					}
+					if (from.getItemCountBasic(baseId) > 0){
+						Equipment clone = equipment.clone();
+						clone.setQuantity(1);
+						to.add(clone);
+					}
+				}
+			}
+			return;
 		}
 	}
 
