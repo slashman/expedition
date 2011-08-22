@@ -297,57 +297,51 @@ public class NativeTown extends Town{
 			break;
 		case 1:
 			if (nativeTown.wantsToTradeWith(expedition)){
-				int actionChoice = UserInterface.getUI().switchChat("Trading with "+nativeTown.getDescription(),"What do you want to do?", 
-					"Ask the "+nativeTown.getCulture().getName()+" what they want", "Trade goods");
-				switch (actionChoice){
-				case 0:
-					List<GoodType> mostValued = getCulture().getMostValuedGoodTypes();
-					if (mostValued.size() == 0){
-						
-					} else {
-						String interestedString = "We are mostly interested in ";
-						List<String> strings = new ArrayList<String>();
-						for (GoodType goodType: mostValued){
-							strings.add(goodType.getDescription());
-						}
-						interestedString += EnglishGrammar.stringList(strings);
-						showBlockingMessage(interestedString);
+				List<GoodType> mostValued = getCulture().getMostValuedGoodTypes();
+				String interestedString = "";
+				if (mostValued.size() == 0){
+					// No particular interest
+					interestedString = "The "+nativeTown.getCulture().getName()+" are open to trading any goods";
+				} else {
+					interestedString = "The "+nativeTown.getCulture().getName()+" are interested in ";
+					List<String> strings = new ArrayList<String>();
+					for (GoodType goodType: mostValued){
+						strings.add(goodType.getDescription());
 					}
+					interestedString += EnglishGrammar.stringList(strings);
+				}
+				
+				int goodTypeChoice = UserInterface.getUI().switchChat(interestedString, "What goods are you looking for?", GoodType.getChoicesList());
+				GoodType goodType = GoodType.fromChoice(goodTypeChoice);
+				if (goodType == null){
+					//Cancelled
 					break;
-				case 1:
-					int goodTypeChoice = UserInterface.getUI().switchChat("Trading with "+nativeTown.getDescription(),"What goods are you looking for?", GoodType.getChoicesList());
-					GoodType goodType = GoodType.fromChoice(goodTypeChoice);
-					if (goodType == null){
+				}
+				if (nativeTown.canTradeGoodType(goodType)){
+					List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer", getAppearance());
+					if (offer == null){
 						//Cancelled
 						break;
 					}
-					if (nativeTown.canTradeGoodType(goodType)){
-						List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer", getAppearance());
-						if (offer == null){
-							//Cancelled
-							break;
-						}
-						//if (UserInterface.getUI().promptChat("Are you sure?")){
-						if ( ((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(offer, "Offer", "Will you make this offer?")){
-							List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
-							if (townOffer == null || townOffer.size() == 0){
-								showBlockingMessage("We can offer you nothing for that.");
+					//if (UserInterface.getUI().promptChat("Are you sure?")){
+					if ( ((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(offer, "Offer", "Will you make this offer?")){
+						List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
+						if (townOffer == null || townOffer.size() == 0){
+							showBlockingMessage("We can offer you nothing for that.");
+						} else {
+							if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it?")){
+								expedition.reduceAllItems(offer);
+								expedition.addAllItems(townOffer);
+								nativeTown.reduceAllItems(townOffer);
+								nativeTown.addAllItems(offer);
+								showBlockingMessage("Thank you, friend..");
 							} else {
-								if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it?")){
-									expedition.reduceAllItems(offer);
-									expedition.addAllItems(townOffer);
-									nativeTown.reduceAllItems(townOffer);
-									nativeTown.addAllItems(offer);
-									showBlockingMessage("Thank you, friend..");
-								} else {
-									showBlockingMessage("Some other time then..");
-								}
+								showBlockingMessage("Some other time then..");
 							}
 						}
-					} else {
-						showBlockingMessage("We have no "+goodType.getDescription()+" to trade.");
 					}
-					break;
+				} else {
+					showBlockingMessage("We have no "+goodType.getDescription()+" to trade.");
 				}
 			} else {
 				showBlockingMessage("The "+nativeTown.getDescription()+" refuses to trade with you.");
