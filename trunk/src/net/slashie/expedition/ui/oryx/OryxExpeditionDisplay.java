@@ -395,19 +395,21 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.print(0, 3, 6, " ", Color.WHITE);
 		si.print(0, 3, 7, "== Commands ==", Color.CYAN);
 		
-		si.print(0, 3, 8, "  a: Arm / Disarm expedition", Color.WHITE);
-		si.print(0, 3, 9, "  b: Build a Settlement", Color.WHITE);
-		si.print(0, 3,10, "  d: Drop equipment", Color.WHITE);
-		si.print(0, 3,11, "  i: Show inventory", Color.WHITE);
-		si.print(0, 3,12, "  l: Look around", Color.WHITE);
-		si.print(0, 3,13, "  m: Ride/Unmount your mounts", Color.WHITE);
-		si.print(0, 3,14, "  r: Repair damaged ships", Color.WHITE);
-		si.print(0, 3,15, "  R: Reset dead' reckon counter", Color.WHITE);
-		si.print(0, 3,16, "  w: Chop wood from forests", Color.WHITE);
-		si.print(0, 3,17, "  S: Save Game", Color.WHITE);
-		si.print(0, 3,18, "  Q: Quit", Color.WHITE);
-		si.print(0, 3,19, "  ", Color.WHITE);
-		si.print(0, 3,20, "  Press Space to continue", Color.CYAN);
+		si.print(0, 3, 8, "  A: Drop anchors / Weigh anchors", Color.WHITE);
+		si.print(0, 3, 9, "  a: Arm / Disarm expedition", Color.WHITE);
+		si.print(0, 3,10, "  b: Build a Settlement", Color.WHITE);
+		si.print(0, 3,11, "  d: Transfer equipment / Make Landfall", Color.WHITE);
+		si.print(0, 3,12, "  i: Show inventory", Color.WHITE);
+		si.print(0, 3,13, "  l: Look around", Color.WHITE);
+		si.print(0, 3,14, "  m: Ride/Unmount your mounts", Color.WHITE);
+		si.print(0, 3,15, "  r: Repair damaged ships", Color.WHITE);
+		si.print(0, 3,16, "  R: Reset dead' reckon counter", Color.WHITE);
+		si.print(0, 3,17, "  w: Chop wood from forests", Color.WHITE);
+		si.print(0, 3,18, "  S: Save Game", Color.WHITE);
+		si.print(0, 3,19, "  T: Turn music on / off", Color.WHITE);
+		si.print(0, 3,20, "  Q: Quit", Color.WHITE);
+		si.print(0, 3,21, "  ", Color.WHITE);
+		si.print(0, 3,22, "  Press Space to continue", Color.CYAN);
 		si.commitLayer(2);
 		si.commitLayer(0);
 
