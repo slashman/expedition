@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.Bump;
+import net.slashie.expedition.domain.Armor.ArmorType;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -81,6 +82,24 @@ public class ExpeditionFactory {
 								ret.addItem(ItemFactory.createItem(itemId.getFullID()), quantityToAdd);
 								town.reduceQuantityOf(itemId, quantityToAdd);
 								wantedWeapons -= quantityToAdd;
+							}
+						}
+						int wantedArmor = wantedClassPopulation;
+
+						// Armors
+						for (ArmorType preferredType: unit.getArmorTypes()){
+							List<Armor> itemIds = ItemFactory.getItemsByArmorType(preferredType);
+							for (Armor itemId: itemIds){
+								int count = town.getItemCount(itemId.getFullID());
+								if (count == 0)
+									continue;
+								int quantityToAdd = count;
+								if (quantityToAdd > wantedArmor){
+									quantityToAdd = wantedArmor;
+								}
+								ret.addItem(ItemFactory.createItem(itemId.getFullID()), quantityToAdd);
+								town.reduceQuantityOf(itemId, quantityToAdd);
+								wantedArmor -= quantityToAdd;
 							}
 						}
 						
