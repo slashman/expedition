@@ -193,6 +193,7 @@ public class GFXAppearances {
 				sumAppearances("QUETZAL_ARCHER_MOUNTED", 8 ,19, 1, 25),
 				sumAppearances("EAGLE_WARRIOR_MOUNTED", 9 ,19, 1, 25),
 				sumAppearances("JAGUAR_WARRIOR_MOUNTED", 10 ,19, 1, 25),
+				sumAppearances("DOCTOR_MOUNTED", 11 ,19, 1, 25),
 				
 				createAppearance("NATIVE_WARRIOR", 1 ,11),
 				createAppearance("NATIVE_ARCHER", 3 ,11),
