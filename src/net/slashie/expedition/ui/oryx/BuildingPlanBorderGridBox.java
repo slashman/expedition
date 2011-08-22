@@ -2,7 +2,6 @@ package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -13,8 +12,6 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import net.slashie.libjcsi.CharKey;
@@ -25,6 +22,8 @@ import net.slashie.utils.swing.BorderedGridBox;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CleanButton;
+import net.slashie.utils.swing.CustomGFXMenuItem;
+import net.slashie.utils.swing.GFXMenuItem;
 
 public class BuildingPlanBorderGridBox extends BorderedGridBox{
 		private static final long serialVersionUID = 1L;
@@ -51,14 +50,7 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 					borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
 					itemWidth, gridX, gridY, null, closeButton);
 			initializeSplitters();
-			
-			/*quantityLabel = new JLabel();
-			quantityLabel.setFont(si.getFont());
-			quantityLabel.setVisible(false);
-			quantityLabel.setBounds(540,231,200,27);
-			quantityLabel.setForeground(Color.WHITE);
-			si.add(quantityLabel);*/
-			
+					
 			okButton = new ExpeditionCleanButton(4, "Build");
 			okButton.setVisible(true);
 			okButton.setLocation(615,370);
@@ -76,6 +68,8 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 				}
 			});
 			
+			final int pageElements = gridX * gridY;
+			
 			cbkl = new CallbackKeyListener<String>(selectionHandler){
 				@Override
 				public void keyPressed(KeyEvent e) {
@@ -83,11 +77,34 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 						return;
 					
 					int code = SwingSystemInterface.charCode(e);
-					if (code == CharKey.UARROW || code == CharKey.N8){
-						rePag();
+					
+					if (code == CharKey.SPACE || code == CharKey.ESC || code == CharKey.ENTER){
+						try {
+							handler.put("OK");
+						} catch (InterruptedException e1) {}
+						si.recoverFocus();
+					} else if (code == CharKey.UARROW || code == CharKey.N8){
+						selectedBuilding.add();
+						draw(true);
 					} else if (code == CharKey.DARROW || code == CharKey.N2){
+						selectedBuilding.remove();
+						draw(true);
+					} else if (code == CharKey.LARROW || code == CharKey.N4){
+						rePag();
+					} else if (code == CharKey.RARROW || code == CharKey.N6){
 						avPag();
+					} else if (code >= CharKey.A && code <= CharKey.A + pageElements-1 && code <= CharKey.A + items.size() - 1) {
+						selectedBuilding = (BuildingCustomGFXMenuItem) shownItems.get(code-CharKey.A);
+						int selectedIndex = code-CharKey.A;
+						selectedItem = getSelectedItemByKeyboard(selectedIndex);
+						draw(true);
+					} else if (code >= CharKey.a && code <= CharKey.a + pageElements-1 && code <= CharKey.a + items.size() - 1) {
+						selectedBuilding = (BuildingCustomGFXMenuItem) shownItems.get(code-CharKey.a);
+						int selectedIndex = code-CharKey.a;
+						selectedItem = getSelectedItemByKeyboard(selectedIndex);
+						draw(true);
 					}
+					
 				}
 			};
 			
@@ -109,6 +126,11 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 						quantitySplitterDown.setLocation(xpos + ExpeditionOryxUI.STANDARD_ITEM_WIDTH + 3, ypos + 44);
 						quantitySplitterUp.setVisible(true);
 						quantitySplitterDown.setVisible(true);
+						GFXMenuItem item = (GFXMenuItem) shownItems.get(selectedItem.selectedIndex);
+						((CustomGFXMenuItem) item).drawTooltip(si, xpos, ypos, selectedItem.selectedIndex);
+						si.commitLayer(getDrawingLayer());
+						si.setCursor(getHandCursor());
+						
 					} else {
 						// No grid selected
 						quantitySplitterUp.setVisible(false);
