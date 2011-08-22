@@ -181,6 +181,20 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return cache;
 	}
 	
+	public GoodsCache getCache(Position where){
+		List<AbstractFeature> features = getFeaturesAt(where);
+		if (features == null || features.size() == 0){
+			return null;
+		} else {
+			for (AbstractFeature feature: features){
+				if (feature instanceof GoodsCache){
+					return (GoodsCache) feature;
+				} 
+			}
+		}
+		return null;
+	}
+	
 	public void addAllEquipment(Expedition expedition, Position where) {
 		if (((OverworldExpeditionCell) getMapCell(where)).isLand()){
 			GoodsCache cache = getOrCreateCache(where);
