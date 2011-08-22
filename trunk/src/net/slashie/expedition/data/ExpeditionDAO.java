@@ -420,7 +420,7 @@ public class ExpeditionDAO {
 					50,5,
 					1,
 					new String[]{"STEEL_SPEAR","WOODEN_MACE"},
-					new String[]{""}, 10, 10),
+					new String[]{""}, 400, 450),
 							
 			//Native Units
 			new ExpeditionUnit("NATIVE_WARRIOR", "Warrior","Warriors", "Defender of his tribe", UNIT_WEIGHT, 200, 
