@@ -1203,7 +1203,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			defendingMenuItems.add(new IconUnitCustomGFXMenuItem(equipment, true));
 		}
 		si.saveLayer(getUILayer());
-		BorderedGridBox defendantsGridBox = createBorderedGridBox(28, 28, 5, 5);
+		BorderedGridBox defendantsGridBox = createBorderedGridBox(28, 38, 5, 5);
 		defendantsGridBox.setMenuItems(defendingMenuItems);
 		defendantsGridBox.setBounds(408,94,245,234);
 		defendantsGridBox.setTitle("Defenders");
