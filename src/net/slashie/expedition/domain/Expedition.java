@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import net.slashie.expedition.action.Hibernate;
+import net.slashie.expedition.domain.Armor.ArmorType;
 import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
@@ -2234,18 +2235,21 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 		});
 		for (Equipment unit: units){
-			String[] preferredArmors = ((ExpeditionUnit)unit.getItem()).getArmorTypes();
-			for (String armorType: preferredArmors){
-				int available = getItemCount(armorType);
-				int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
-				reduceGood(armorType, unitsToArm);
-				//Split equipment in armored and unarmored
-				if (unitsToArm > 0){
-					reduceQuantityOf(unit.getItem(), unitsToArm);
-					//ExpeditionUnit newUnit = (ExpeditionUnit)ItemFactory.createItem(unit.getItem().getFullID());
-					ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
-					newUnit.setArmor((Armor)ItemFactory.createItem(armorType));
-					addItem(newUnit, unitsToArm);
+			ArmorType[] preferredArmors = ((ExpeditionUnit)unit.getItem()).getArmorTypes();
+			for (ArmorType armorType: preferredArmors){
+				List<Armor> armors = ItemFactory.getItemsByArmorType(armorType);
+				for (Armor armorId: armors){
+					int available = getItemCount(armorId.getFullID());
+					int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
+					reduceGood(armorId.getFullID(), unitsToArm);
+					//Split equipment in armored and unarmored
+					if (unitsToArm > 0){
+						reduceQuantityOf(unit.getItem(), unitsToArm);
+						//ExpeditionUnit newUnit = (ExpeditionUnit)ItemFactory.createItem(unit.getItem().getFullID());
+						ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
+						newUnit.setArmor((Armor)ItemFactory.createItem(armorId.getFullID()));
+						addItem(newUnit, unitsToArm);
+					}
 				}
 			}
 		}
