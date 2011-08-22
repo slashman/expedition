@@ -142,6 +142,11 @@ public class DropEquipment extends Action{
 		if (landingParty.getCarpenters() != LandingSpec.NONE){
 			addItemsForLanding(ship, ret, landingParty.getCarpenters(), "CARPENTER");
 		}
+		
+		if (landingParty.getColonists() != LandingSpec.NONE){
+			addItemsForLanding(ship, ret, landingParty.getColonists(), "COLONIST");
+		}
+
 		return ret;
 	}
 	
