@@ -370,6 +370,21 @@ public class ExpeditionUnit extends Vehicle{
 	}
 
 
+	public String getWeaponDescription() {
+		if (getWeapon() == null){
+			return "Unarmed";
+		}else {
+			return getWeapon().getDescription();
+		}
+	}
+	
+	public String getArmorDescription(){
+		if (getArmor() == null){
+			return "In Clothes";
+		} else {
+			return getArmor().getDescription();
+		}
+	}
 }
 
 	

@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import net.slashie.expedition.domain.ExpeditionItem;
+import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.ItemContainer;
 import net.slashie.expedition.domain.ShipCache;
@@ -242,10 +243,20 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+75, y + 118, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
 		
 		if (highlight != null){
-			int textWidth = (int) (si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, highlight.getFullDescription()) / 2.0d);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+(145-textWidth)-10, y + 174, highlight.getFullDescription(), Color.WHITE);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+93, y + 188, "Current", OryxExpeditionDisplay.COLOR_BOLD);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+114, y + 202, "Max", OryxExpeditionDisplay.COLOR_BOLD);
+			int textWidth = (int) (si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, highlight.getDescription()) / 2.0d);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+(145-textWidth)-10, y + 174, highlight.getDescription(), Color.WHITE);
+			
+			if (highlight instanceof ExpeditionUnit){
+				textWidth = (int) (si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, ((ExpeditionUnit)highlight).getWeaponDescription()) / 2.0d);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+(145-textWidth)-10, y + 188, ((ExpeditionUnit)highlight).getWeaponDescription(), Color.WHITE);
+				textWidth = (int) (si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, ((ExpeditionUnit)highlight).getArmorDescription()) / 2.0d);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+(145-textWidth)-10, y + 202, ((ExpeditionUnit)highlight).getArmorDescription(), Color.WHITE);
+				textWidth = (int) (si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, ((ExpeditionUnit)highlight).getStatusModifiersString()) / 2.0d);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+(145-textWidth)-10, y + 216, ((ExpeditionUnit)highlight).getStatusModifiersString(), Color.WHITE);
+			}
+			
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+93, y + 230, "Current", OryxExpeditionDisplay.COLOR_BOLD);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+114, y + 244, "Max", OryxExpeditionDisplay.COLOR_BOLD);
 		}
 			
 		drawContainerInfo(x+10, y, source, false);
@@ -257,10 +268,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 
 			// Draw the unit info
 			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 117, y + 132, unitImage);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+10, y + 188, sourceCurrentQuantity+"", Color.WHITE, false);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+10, y + 202, sourceMaximumQuantity+"", Color.WHITE, false);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+260, y + 188, destinationCurrentQuantity+"", Color.WHITE, true);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+260, y + 202, destinationMaximumQuantity+"", Color.WHITE, true);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+10, y + 230, sourceCurrentQuantity+"", Color.WHITE, false);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+10, y + 244, sourceMaximumQuantity+"", Color.WHITE, false);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+260, y + 230, destinationCurrentQuantity+"", Color.WHITE, true);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+260, y + 244, destinationMaximumQuantity+"", Color.WHITE, true);
 			
 			if (highlight != lastChoice){
 				// Just Selected
