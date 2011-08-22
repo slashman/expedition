@@ -1,10 +1,16 @@
 package net.slashie.expedition.domain;
 
+import java.util.List;
+
+import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.serf.action.Action;
 import net.slashie.serf.ai.SimpleAI;
+import net.slashie.serf.game.Equipment;
+import net.slashie.util.Pair;
 import net.slashie.util.Util;
 
 public class ExpeditionFactory {
@@ -34,6 +40,80 @@ public class ExpeditionFactory {
 		ret.calculateInitialPower();
 		return ret;
 	}
+	
+	public static Expedition deployTroops(NativeTown town, int expeditionPower){
+		ExpeditionGame game = ExpeditionGame.getCurrentGame();
+		NonPrincipalExpedition ret = new NonPrincipalExpedition(game, "nativeExpedition"+game.getLastExpeditionId());
+		ret.setGame(game);
+		ret.setAppearanceId("HOSTILE_EXPEDITION");
+		ret.setName(town.getCulture().getName()+" group");
+		ret.setExpeditionary("-");
+		
+		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
+		ai.setBumpEnemy(true);
+		ret.setSelector(ai);
+		int targetPopulation = expeditionPower*30 + Util.rand(-expeditionPower*20, expeditionPower * 20);
+		int specializedPopulation = 0;
+		for(Pair<Double, String> classD: town.getCulture().getClassDistribution()){
+			int wantedClassPopulation = (int) (classD.getA().doubleValue() * targetPopulation);
+			if (wantedClassPopulation > 0){
+				int availableClassPopulation = town.getItemCount(classD.getB()); 
+				if (availableClassPopulation < wantedClassPopulation){
+					wantedClassPopulation = availableClassPopulation;
+				}
+				if (wantedClassPopulation > 0){
+					ExpeditionUnit unit = (ExpeditionUnit)ItemFactory.createItem(classD.getB());
+					ret.addItem(unit, wantedClassPopulation);
+					town.reduceQuantityOf(classD.getB(), wantedClassPopulation);
+					if (unit.getWeaponTypes().length>0){
+						ret.addItem(ItemFactory.createItem(unit.getWeaponTypes()[0]), wantedClassPopulation);
+					}
+				}
+			}
+			specializedPopulation += wantedClassPopulation;
+			
+		}
+		int commoners = targetPopulation - specializedPopulation - 1;
+		if (commoners > 0){
+			ret.addItem(ItemFactory.createItem("NATIVE_COMMONER"), commoners);
+			town.reduceQuantityOf("NATIVE_COMMONER", commoners);
+		}
+		
+		// Add some treasure
+		List<Equipment> items = town.getItems();
+		int treasure = Util.rand(0, (int)Math.round(ret.getTotalUnits() / 2.0d));
+		for (int i = 0; i < items.size(); i++){
+			Equipment item = (Equipment) items.get(i);
+			if (item.getItem() instanceof ExpeditionUnit)
+				continue;
+			int quantity = Util.rand(0, expeditionPower*3);
+			int max = town.getItemCount(item.getItem().getFullID()) - 1;
+			if (quantity > max)
+				quantity = max;
+			if (quantity > treasure){
+				quantity = treasure;
+				treasure = 0;
+			} else {
+				treasure -= quantity;
+			}
+			
+			ret.addItem(ItemFactory.createItem(item.getItem().getFullID()), quantity);
+			town.reduceQuantityOf(ItemFactory.createItem(item.getItem().getFullID()), quantity);
+			if (treasure <= 0)
+				break;
+		}
+		
+		
+		Action armExpedition = new ArmExpedition();
+		armExpedition.setPerformer(ret);
+		armExpedition.execute();
+		
+		ret.calculateInitialPower();
+		
+		return ret;
+		
+	}
+
 	
 	public static Expedition createPlayerExpedition(String expeditionName, String expeditionaryName, ExpeditionGame game) {
 		expeditionName = expeditionName.trim();

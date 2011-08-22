@@ -156,58 +156,16 @@ public class NativeTown extends Town{
 		return 8;
 	}
 
-	public Expedition deployTroops(int expeditionPower) {
-		ExpeditionGame game = ExpeditionGame.getCurrentGame();
-		NonPrincipalExpedition ret = new NonPrincipalExpedition(game, "nativeExpedition"+game.getLastExpeditionId());
-		ret.setGame(game);
-		ret.setAppearanceId("HOSTILE_EXPEDITION");
-		ret.setName(getCulture().getName()+" group");
-		ret.setExpeditionary("-");
-		
-		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
-		ai.setBumpEnemy(true);
-		ret.setSelector(ai);
-		int targetPopulation = expeditionPower*30 + Util.rand(-expeditionPower*20, expeditionPower * 20);
-		int specializedPopulation = 0;
-		for(Pair<Double, String> classD: culture.getClassDistribution()){
-			int wantedClassPopulation = (int) (classD.getA().doubleValue() * targetPopulation);
-			if (wantedClassPopulation > 0){
-				int availableClassPopulation = getItemCount(classD.getB()); 
-				if (availableClassPopulation < wantedClassPopulation){
-					wantedClassPopulation = availableClassPopulation;
-				}
-				if (wantedClassPopulation > 0){
-					ExpeditionUnit unit = (ExpeditionUnit)ItemFactory.createItem(classD.getB());
-					ret.addItem(unit, wantedClassPopulation);
-					reduceQuantityOf(classD.getB(), wantedClassPopulation);
-					if (unit.getWeaponTypes().length>0){
-						ret.addItem(ItemFactory.createItem(unit.getWeaponTypes()[0]), wantedClassPopulation);
-					}
-				}
-			}
-			specializedPopulation += wantedClassPopulation;
-			
-		}
-		int commoners = targetPopulation - specializedPopulation - 1;
-		if (commoners > 0){
-			ret.addItem(ItemFactory.createItem("NATIVE_COMMONER"), commoners);
-			reduceQuantityOf("NATIVE_COMMONER", commoners);
-		}
-		 
-		
-		Action armExpedition = new ArmExpedition();
-		armExpedition.setPerformer(ret);
-		armExpedition.execute();
-		
-		ret.calculateInitialPower();
-		
-		turnsBeforeNextExpedition = expeditionPower * 10;
-		return ret;
-	}
-
 	public Culture getCulture() {
 		return culture;
 	}
+	
+	public Expedition deployTroops(int expeditionPower){
+		Expedition ret = ExpeditionFactory.deployTroops(this, expeditionPower);
+		turnsBeforeNextExpedition = expeditionPower * 10;
+		return ret;
+	}
+	
 	
 	@Override
 	public void onSeenByPlayer() {

@@ -1395,9 +1395,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		
 	}
 	
-	
-
-	
 	public List<Equipment> getTools(boolean clone) {
 		List<Equipment> ret = new ArrayList<Equipment>();  
 		List<Equipment> inventory = getInventory();
