@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import net.slashie.expedition.action.Hibernate;
+import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
@@ -2205,18 +2206,23 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 		});
 		for (Equipment unit: units){
-			String[] preferredWeapons = ((ExpeditionUnit)unit.getItem()).getWeaponTypes();
-			for (String weaponType: preferredWeapons){
-				int available = getItemCount(weaponType);
-				int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
-				reduceGood(weaponType, unitsToArm);
-				//Split equipment in armed and disarmed
-				if (unitsToArm > 0){
-					reduceQuantityOf(unit.getItem(), unitsToArm);
-					//ExpeditionUnit newUnit = (ExpeditionUnit)ItemFactory.createItem(unit.getItem().getFullID());
-					ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
-					newUnit.setArm((Weapon)ItemFactory.createItem(weaponType));
-					addItem(newUnit, unitsToArm);
+			WeaponType[] preferredWeapons = ((ExpeditionUnit)unit.getItem()).getWeaponTypes();
+			for (WeaponType preferredType: preferredWeapons){
+				List<Weapon> Weapon = ItemFactory.getItemsByWeaponType(preferredType);
+				for (Weapon weaponId: Weapon){
+					int available = getItemCount(weaponId.getFullID());
+					if (available == 0)
+						continue;
+					int unitsToArm = available > unit.getQuantity() ? unit.getQuantity() : available;
+					reduceGood(weaponId.getFullID(), unitsToArm);
+					//Split equipment in armed and disarmed
+					if (unitsToArm > 0){
+						reduceQuantityOf(unit.getItem(), unitsToArm);
+						//ExpeditionUnit newUnit = (ExpeditionUnit)ItemFactory.createItem(unit.getItem().getFullID());
+						ExpeditionUnit newUnit = (ExpeditionUnit)((ExpeditionUnit)unit.getItem()).clone();
+						newUnit.setArm((Weapon)ItemFactory.createItem(weaponId.getFullID()));
+						addItem(newUnit, unitsToArm);
+					}
 				}
 			}
 		}

@@ -5,6 +5,7 @@ import java.util.List;
 import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.domain.Expedition.MovementMode;
+import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.action.Action;
@@ -66,7 +67,23 @@ public class ExpeditionFactory {
 					ret.addItem(unit, wantedClassPopulation);
 					town.reduceQuantityOf(classD.getB(), wantedClassPopulation);
 					if (unit.getWeaponTypes().length>0){
-						ret.addItem(ItemFactory.createItem(unit.getWeaponTypes()[0]), wantedClassPopulation);
+						int wantedWeapons = wantedClassPopulation;
+						for (WeaponType preferredType: unit.getWeaponTypes()){
+							List<Weapon> itemIds = ItemFactory.getItemsByWeaponType(preferredType);
+							for (Weapon itemId: itemIds){
+								int count = town.getItemCount(itemId.getFullID());
+								if (count == 0)
+									continue;
+								int quantityToAdd = count;
+								if (quantityToAdd > wantedWeapons){
+									quantityToAdd = wantedWeapons;
+								}
+								ret.addItem(ItemFactory.createItem(itemId.getFullID()), quantityToAdd);
+								town.reduceQuantityOf(itemId, quantityToAdd);
+								wantedWeapons -= quantityToAdd;
+							}
+						}
+						
 					}
 				}
 			}
@@ -84,7 +101,8 @@ public class ExpeditionFactory {
 		int treasure = Util.rand(0, (int)Math.round(ret.getTotalUnits() / 2.0d));
 		for (int i = 0; i < items.size(); i++){
 			Equipment item = (Equipment) items.get(i);
-			if (item.getItem() instanceof ExpeditionUnit)
+			GoodType goodType = ((ExpeditionItem)item.getItem()).getGoodType(); 
+			if (goodType == GoodType.ARMORY || goodType == GoodType.PEOPLE)
 				continue;
 			int quantity = Util.rand(0, expeditionPower*3);
 			int max = town.getItemCount(item.getItem().getFullID()) - 1;

@@ -3,6 +3,7 @@ package net.slashie.expedition.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
 import net.slashie.serf.game.Equipment;
@@ -44,7 +45,7 @@ public class ExpeditionUnit extends Vehicle{
 	private Roll compositeDefense;
 	private boolean isRangedAttack;
 	
-	private String[] weaponTypes;
+	private WeaponType[] weaponTypes;
 	private String[] armorTypes;
 	private String special;
 	private Weapon weapon;
@@ -61,7 +62,7 @@ public class ExpeditionUnit extends Vehicle{
 		return weapon;
 	}
 
-	public String[] getWeaponTypes() {
+	public WeaponType[] getWeaponTypes() {
 		return weaponTypes;
 	}
 
@@ -136,7 +137,7 @@ public class ExpeditionUnit extends Vehicle{
 			int baseHitChance,
 			int evadeChance,
 			int dailyFoodConsumption,
-			String[] weaponTypes, String[] armorTypes, int europeValue, int americaValue) {
+			WeaponType[] weaponTypes, String[] armorTypes, int europeValue, int americaValue) {
 		super(classifierId, description, pluralDescription, longDescription, weight, false,
 				false, 1, carryCapacity, 1, true, GoodType.PEOPLE, europeValue, americaValue);
 		this.name = description;
@@ -348,12 +349,12 @@ public class ExpeditionUnit extends Vehicle{
 	}
 
 	public List<Appearance> getAvailableWeaponAppearances() {
-		String[] weaponTypes = getWeaponTypes();
+		WeaponType[] weaponTypes = getWeaponTypes();
 		List<Appearance> ret = new ArrayList<Appearance>();
-		for (String weaponType: weaponTypes){
+		for (WeaponType weaponType: weaponTypes){
 			if (weaponType.equals(""))
 				continue;
-			ret.add(ItemFactory.getItemAppearanceById(weaponType));
+			ret.add(AppearanceFactory.getAppearanceFactory().getAppearance(weaponType.getAppearanceId()));
 		}
 		return ret;
 	}
