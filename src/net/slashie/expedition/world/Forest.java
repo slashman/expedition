@@ -54,7 +54,7 @@ public class Forest extends AbstractFeature{
 
 	public int substractWood(Expedition expedition) {
 		int expeditionUnits = expedition.getTotalUnits();
-		int woodcutCapacity = (int) Math.round(( (Util.rand(100, 120)/100.0d) * expeditionUnits ) / 5.0d);
+		int woodcutCapacity = (int) Math.ceil(( (Util.rand(100, 120)/100.0d) * expeditionUnits ) / 5.0d);
 		int wood = 0;
 		if (woodcutCapacity > availableWood)
 			wood = availableWood;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
+import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.Forest;
@@ -56,7 +57,16 @@ public class ChopWoods extends Action{
 			int wood = ((Forest)f).substractWood(expedition);
 			ExpeditionItem woodSample = ItemFactory.createItem("WOOD");
 			int currentWood = expedition.getItemCount("WOOD");
-			level.addMessage("You chop "+wood+" wood. ("+currentWood+" in expedition)");
+			GoodsCache cache = level.getCache(f.getPosition());
+			int currentLandWood = 0;
+			if (cache != null)
+				currentLandWood = cache.getItemCount("WOOD");
+			if (currentLandWood > 0){
+				level.addMessage("You chop "+wood+" wood. ("+currentWood+" in expedition, "+currentLandWood+" on land)");
+			} else {
+				level.addMessage("You chop "+wood+" wood. ("+currentWood+" in expedition)");
+			}
+			
 			if (expedition.canCarry(woodSample, wood)){
 				
 				expedition.addItem(woodSample, wood);
