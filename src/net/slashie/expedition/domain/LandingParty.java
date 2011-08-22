@@ -11,6 +11,8 @@ public class LandingParty {
 	private LandingSpec doctors = LandingSpec.NONE;
 	private LandingSpec carpenters = LandingSpec.NONE;
 	private LandingSpec horses = LandingSpec.NONE;
+	private LandingSpec colonists = LandingSpec.NONE;
+	
 	private boolean isMounted;
 	
 	public boolean isMounted() {
@@ -60,6 +62,12 @@ public class LandingParty {
 	}
 	public void setCarpenters(LandingSpec carpenters) {
 		this.carpenters = carpenters;
+	}
+	public LandingSpec getColonists() {
+		return colonists;
+	}
+	public void setColonists(LandingSpec colonists) {
+		this.colonists = colonists;
 	}
 	
 }
