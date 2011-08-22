@@ -369,7 +369,7 @@ public class NativeTown extends Town{
 				if (nativeTown.canTradeGoodType(goodType)){
 					List<Equipment> townOffer = nativeTown.calculateOffer(goodType, getScaredLevel()*200);
 					if (townOffer == null || townOffer.size() == 0){
-						showBlockingMessage("We have no "+goodType.getDescription());
+						showBlockingMessage("We are unwilling to give you "+goodType.getDescription());
 					} else {
 						if (((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(townOffer, "Native Offer","This is our offer, do you accept it? [Y/N]")){
 							expedition.addAllItems(townOffer);
@@ -381,7 +381,7 @@ public class NativeTown extends Town{
 						}
 					}
 				} else {
-					showBlockingMessage("We have no "+goodType.getDescription());
+					showBlockingMessage("We don't have any "+goodType.getDescription()+"!");
 				}
 				
 			}
