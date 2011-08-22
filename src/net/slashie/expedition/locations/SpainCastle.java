@@ -232,11 +232,11 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		
 
 		private String isabellaSays() {
-			return "Isabella, Queen of Castile and León says: XXX XXX";
+			return "Isabella, Queen of Castile and León says: XXX XXX ";
 		}
 
 		private String ferdinandSays() {
-			return "Ferdinand II, King of Aragón says: XXX XXX" ;
+			return "Ferdinand II, King of Aragón says: XXX XXX " ;
 		}
 
 		private void m(String string) {
