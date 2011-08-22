@@ -315,6 +315,9 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				sourceMaximumQuantity = allQuantity;
 		}
 		
+		if (sourceMaximumQuantity < 0)
+			sourceMaximumQuantity = 0;
+		
 		destinationMaximumQuantity = destination.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
 		
 
@@ -327,6 +330,9 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			if (destinationMaximumQuantity > allQuantity)
 				destinationMaximumQuantity = allQuantity;
 		}
+		
+		if (destinationMaximumQuantity < 0)
+			destinationMaximumQuantity = 0;
 	}
 
 	private void initializeSplitters() {
