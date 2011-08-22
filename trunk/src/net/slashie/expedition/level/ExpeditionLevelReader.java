@@ -1,5 +1,6 @@
 package net.slashie.expedition.level;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -176,6 +177,46 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 					ret[px][(2 * yspan) - py] = getMapCell(iilong, iilat, z);
 					watcher.seeMapCell(ret[px][py]);
 					visible++;
+				}
+				py++;
+			}
+			px++;
+		}
+		return ret;
+	}
+	
+	public List<AbstractFeature> getFeaturesAround(AwareActor watcher, 
+			int longMinutes,
+			int latMinutes, 
+			int z, int xspan, int yspan) {
+		int longitudeScale = GlobeMapModel.getLongitudeScale(latMinutes);
+		int latitudeScale= GlobeMapModel.getLatitudeHeight();
+		
+		int xstart = longMinutes - xspan * longitudeScale;
+		int xend = longMinutes + xspan * longitudeScale;
+		
+		int ystart = latMinutes - yspan * latitudeScale;
+		int yend = latMinutes + yspan * latitudeScale;
+
+		List<AbstractFeature>  ret = new ArrayList<AbstractFeature>();
+		int px = 0;
+		Position pos = new Position(0,0);
+		for (int ilong = xstart; ilong <=xend; ilong+=longitudeScale){
+			int py = 0;
+			for (int ilat =  ystart ; ilat <= yend; ilat+=latitudeScale){
+				int iilong = ilong;
+				int iilat = ilat;
+				
+				/* TODO: Pole Mirror */
+				/*if (ilat < 0){
+					iilat = ilat * -1;
+					iilong = (ilong + 180*60) % (360*60); 
+				}*/
+				pos.x = iilong;
+				pos.y = iilat;
+				List<AbstractFeature> featuresAt = getFeaturesAt(pos); 
+				if (featuresAt != null){
+					ret.addAll(featuresAt);
 				}
 				py++;
 			}

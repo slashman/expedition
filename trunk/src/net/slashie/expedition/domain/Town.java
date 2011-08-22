@@ -71,6 +71,9 @@ public class Town extends GoodsCache{
 		if (a != ExpeditionGame.getCurrentGame().getExpedition()){
 			return;
 		}
+		if (!ExpeditionGame.getCurrentGame().getExpedition().getMovementMode().isLandMovement()){
+			return;
+		}
 		((ExpeditionUserInterface)UserInterface.getUI()).showCityInfo(this);
 		townAction(UserInterface.getUI().switchChat(getLongDescription(),"What do you want to do", getTownActions()), (Expedition)a);
 		((ExpeditionUserInterface)UserInterface.getUI()).afterTownAction();
@@ -233,4 +236,6 @@ public class Town extends GoodsCache{
 	public boolean requiresUnitsToContainItems() {
 		return false;
 	}
+	
+	
 }

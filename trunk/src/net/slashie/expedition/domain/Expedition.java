@@ -2301,4 +2301,20 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		resetDaysAtSea();
 	}
+
+	
+	/**
+	 * Looks of a town around the expedition
+	 * @return
+	 */
+	public Town getDockingTown() {
+		if (!(getLevel() instanceof ExpeditionLevelReader))
+			return null;
+		List<AbstractFeature> features = ((ExpeditionLevelReader)getLevel()).getFeaturesAround(this, getPosition().x, getPosition().y, getPosition().z, 1, 1);
+		for (AbstractFeature feature: features){
+			if (feature instanceof Town && ! (feature instanceof NativeTown))
+				return (Town) feature;
+		}
+		return null;
+	}
 }

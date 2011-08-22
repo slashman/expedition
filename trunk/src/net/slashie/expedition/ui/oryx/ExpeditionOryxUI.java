@@ -589,10 +589,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		transferFromExpedition(toCache, -1);
 	}
 	
-	public void transferFromExpedition(GoodsCache toCache, int minUnits) {
+	public void transferFromExpedition(GoodsCache toCache, int destinationMinUnits) {
 		// Create the button to confirm transfer and add it to the UI
 		//ItemTransferFunctionality transferFromExpeditionFunctionality = new TransferFromExpeditionFunctionality(minUnits);
-		ItemTransferFunctionality transferFromExpeditionFunctionality = new DualTransferFunctionality(minUnits, 1);
+		ItemTransferFunctionality transferFromExpeditionFunctionality = new DualTransferFunctionality(destinationMinUnits, 1);
 		transferItems("Select the goods to transfer", null, getExpedition(), toCache, transferFromExpeditionFunctionality, true);
 	}
 	

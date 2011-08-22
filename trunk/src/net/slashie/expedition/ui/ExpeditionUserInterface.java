@@ -19,7 +19,7 @@ public interface ExpeditionUserInterface {
 	
 	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache from);
 	public void transferFromExpedition(GoodsCache toCache);
-	public void transferFromExpedition(GoodsCache ship, int minUnits);
+	public void transferFromExpedition(GoodsCache ship, int destinationMinUnits);
 	
 	
 

@@ -10,6 +10,7 @@ import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.LandingParty;
 import net.slashie.expedition.domain.SeaPseudoCache;
 import net.slashie.expedition.domain.ShipCache;
+import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.domain.LandingParty.LandingSpec;
@@ -39,12 +40,16 @@ public class DropEquipment extends Action{
 	public void execute(){
 		Expedition expedition = (Expedition)performer;
 		if (((OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition())).isLand()){
+			// Droping things from expedition into land caché
 			GoodsCache cache = ((ExpeditionMacroLevel)performer.getLevel()).getOrCreateCache(performer.getPosition());
 			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(cache);
 			if (cache.destroyOnEmpty() && cache.getItems().size() == 0)
 				performer.getLevel().destroyFeature(cache);
 		} else {
-			if (expedition.canDisembark()){
+			Town town = expedition.getDockingTown();
+			if (town != null){
+    			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(town);
+			} else if (expedition.canDisembark()){
 				int choice = UserInterface.getUI().switchChat("Landfall","What do you want to do?",
 		        		"Land using a predefined group",
 		        		"Arm people and land using a predefined group",

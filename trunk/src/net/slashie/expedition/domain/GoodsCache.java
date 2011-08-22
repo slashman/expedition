@@ -31,12 +31,10 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		setAppearanceId("GOODS_CACHE");
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		game.addFoodConsumer(this);
-		setSolid(true);
 	}
 	
 	public GoodsCache() {
 		super();
-		setSolid(true);
 	}
 
 	public int getItemCount(String string) {
@@ -162,9 +160,19 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 				removeAllItems();
 				if (destroyOnEmpty())
 					getLevel().destroyFeature(this);
-				setSolid(false);
+				forceNotSolid = true;
 			}
 		}
+	}
+	
+	private boolean forceNotSolid = false;
+	
+	@Override
+	public boolean isSolid() {
+		if (forceNotSolid)
+			return false;
+		else 
+			return ExpeditionGame.getCurrentGame().getExpedition().getMovementMode().isLandMovement();
 	}
 
 	public boolean canCarry(ExpeditionItem item, int quantity) {
