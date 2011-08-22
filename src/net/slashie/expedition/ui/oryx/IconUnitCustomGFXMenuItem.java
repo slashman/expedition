@@ -53,7 +53,16 @@ public class IconUnitCustomGFXMenuItem implements CustomGFXMenuItem{
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		ExpeditionUnit eitem = (ExpeditionUnit)item.getItem();
 		String itemDescription = eitem.getFullDescription();
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+ 26, y + 15, itemDescription, Color.WHITE);
+
+		int textWidth = (int) si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, itemDescription);
+
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_HIGHLIGHT_COLOR);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+26, y, textWidth + 10 + 2, 20 - 2);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+26+1, y+1, textWidth + 10 + 2 - 2, 20 - 2);
+		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+26+2, y+2, textWidth + 10 + 2 - 4, 20 - 4);
+		
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+ 25 + 5, y + 15, itemDescription, Color.WHITE);
 		
 	}
 	
