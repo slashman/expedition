@@ -1,13 +1,9 @@
 package net.slashie.expedition.ui.oryx;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -15,18 +11,19 @@ import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractAction;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.action.Message;
 import net.slashie.serf.ui.UserAction;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
@@ -353,6 +350,38 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			try {
 				selectionHandler.put("MOUSE_MOVE:"+mouseDirection);
 			} catch (InterruptedException e1) {}
+		}
+	}
+	
+	private Position _advanceInDirection = new Position(0,0);
+	protected Action advanceInDirection(int direction) {
+		Position variation = Action.directionToVariation(direction);
+		_advanceInDirection.x = variation.x * GlobeMapModel.getLongitudeScale(player.getPosition().y);
+		_advanceInDirection.y = variation.y * GlobeMapModel.getLatitudeHeight() * -1;
+		Actor vMonster = player.getLevel().getActorAt(Position.add(player.getPosition(), _advanceInDirection));
+		if (vMonster != null && vMonster.isHostile() && attack.canPerform(player)){
+			attack.setDirection(direction);
+			return attack;
+		} else {
+			advance.setDirection(direction);
+			switch (direction){
+			case Action.UPLEFT:
+			case Action.LEFT:
+			case Action.DOWNLEFT:
+				ui().setFlipFacing(true);
+				break;
+			case Action.UPRIGHT:
+			case Action.RIGHT:
+			case Action.DOWNRIGHT:
+				ui().setFlipFacing(false);
+				break;
+			}
+			if (advance.canPerform(player)){
+				return advance;
+			} else {
+				ui().addMessage(new Message(advance.getInvalidationMessage(), player.getPosition()));
+				return null;
+			}
 		}
 	}
 	

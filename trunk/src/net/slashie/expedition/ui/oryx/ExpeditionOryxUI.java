@@ -56,6 +56,7 @@ import net.slashie.expedition.world.Weather;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.action.Message;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
@@ -1439,11 +1440,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, ExpeditionItem choice, int quantity);
 	}
 	
-	
-	
-	
-	
-	
 	class DualTransferFunctionality implements ItemTransferFunctionality {
 		int destinationMinExpeditionUnits;
 		int sourceMinExpeditionUnits;
@@ -1663,4 +1659,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public int getMapLayer() {
 		return MAP_LAYER;
 	}
+	
+	
 }

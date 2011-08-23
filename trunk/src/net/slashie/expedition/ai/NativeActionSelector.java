@@ -2,6 +2,7 @@ package net.slashie.expedition.ai;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.NativeTown;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.action.Actor;
@@ -41,6 +42,8 @@ public class NativeActionSelector implements ActionSelector {
 						potentialPower = maxPotentialPower;
 					Expedition expedition = town.deployTroops(potentialPower);
 					expedition.setPosition(town.getPosition());
+					expedition.getPosition().x = GlobeMapModel.normalizeLong(expedition.getPosition().y, expedition.getPosition().x);
+					expedition.getPosition().y = GlobeMapModel.normalizeLat(expedition.getPosition().y);
 					town.getLevel().addActor(expedition);
 					town.getLevel().addMessage("The "+town.getDescription()+" sends out an expedition!");
 				}

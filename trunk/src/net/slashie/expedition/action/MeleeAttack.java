@@ -1,26 +1,19 @@
 package net.slashie.expedition.action;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.slashie.expedition.domain.BattleManager;
 import net.slashie.expedition.domain.Expedition;
-import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.NativeTown;
 import net.slashie.expedition.domain.NonPrincipalExpedition;
 import net.slashie.expedition.domain.Expedition.MovementMode;
-import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
-import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.game.Equipment;
 import net.slashie.serf.text.EnglishGrammar;
-import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
-import net.slashie.utils.Util;
 
 public class MeleeAttack extends Action {
+	private Position _execute = new Position(0,0);
 	@Override
 	public void execute() {
 		Expedition expedition = (Expedition) performer;
@@ -28,7 +21,11 @@ public class MeleeAttack extends Action {
 			return;
 		}
         Position var = directionToVariation(targetDirection);
-        Position destinationPoint = Position.add(performer.getPosition(), var);
+        
+        _execute.x = var.x * GlobeMapModel.getLongitudeScale(performer.getPosition().y);
+        _execute.y = var.y * GlobeMapModel.getLatitudeHeight()*-1;
+		
+        Position destinationPoint = Position.add(performer.getPosition(), _execute);
         
     	Actor actor = expedition.getLevel().getActorAt(destinationPoint);
     	

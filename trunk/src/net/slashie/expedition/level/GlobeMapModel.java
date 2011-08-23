@@ -56,7 +56,12 @@ public class GlobeMapModel {
 		int scale = getLongitudeScale(latitudeMinutes);
 		return (int)Math.floor((double)longitudeMinutes/(double)scale) * scale;
 	}
-
+	
+	public static int normalizeLat(int latitudeMinutes) {
+		int scale = getLatitudeHeight();
+		return (int)Math.floor((double)latitudeMinutes/(double)scale) * scale;
+	}
+	
 	public static int getLatitudeHeight() {
 		return 3;
 	}
