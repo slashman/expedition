@@ -155,8 +155,8 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 	}
 
 	
-	
-
-	
-
+	@Override
+	public boolean equals(Object obj) {
+		return obj != null && ((ExpeditionItem)obj).getFullID().equals(getFullID());
+	}
 }
