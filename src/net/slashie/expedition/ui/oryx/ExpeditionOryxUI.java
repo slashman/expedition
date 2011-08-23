@@ -732,10 +732,21 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 						handler.put("CONFIRM_TRANSFER");
 					}else if (x.code == CharKey.ESC){
 						handler.put("BREAK");
-					} else if (x.isLeftArrow()){
+					} /*else if (x.isLeftArrow()){
 						handler.put("GOOD_TYPE:<");
 					} else if (x.isRightArrow()){
 						handler.put("GOOD_TYPE:>");
+					}*/
+					else if (x.code == CharKey.N1){
+						handler.put("GOOD_TYPE:0");
+					} else if (x.code == CharKey.N2){
+						handler.put("GOOD_TYPE:1");
+					} else if (x.code == CharKey.N3){
+						handler.put("GOOD_TYPE:2");
+					} else if (x.code == CharKey.N4){
+						handler.put("GOOD_TYPE:3");
+					} else if (x.code == CharKey.N5){
+						handler.put("GOOD_TYPE:4");
 					}
 				} catch (InterruptedException e1) {}
 			}
