@@ -48,25 +48,23 @@ public class WorldGenerator {
 				numberOfSettlements = Util.rand(3, 6);
 				int fussible = 0;
 				for (int i = 0; i < numberOfSettlements; i++){
-					Position settlementPosition = new Position(
-							Util.rand(cultureCenter.getA().x-range, cultureCenter.getA().x+range),
-							Util.rand(cultureCenter.getA().y-range, cultureCenter.getA().y+range));
+					Position settlementPosition = new Position(Util.rand(cultureCenter.getA().x-range, cultureCenter.getA().x+range), Util.rand(cultureCenter.getA().y-range, cultureCenter.getA().y+range));
+					settlementPosition.x = GlobeMapModel.normalizeLong(settlementPosition.y, settlementPosition.x);
+					OverworldExpeditionCell cell = (OverworldExpeditionCell) level.getMapCell(settlementPosition);
+					
 					//Check if this is land
-					if (level.getMapCell(settlementPosition )== null ||
-							((OverworldExpeditionCell)level.getMapCell(settlementPosition )).isRiver() ||
-							!((OverworldExpeditionCell)level.getMapCell(settlementPosition)).isLand() || 
-							level.getFeaturesAt(settlementPosition) != null){
-						fussible++;
-						if (fussible < 1000){
-							i--;
-							continue;
-						}
-					} else {
+					if ( cell != null && !cell.isRiver() && cell.isLand() && level.getFeaturesAt(settlementPosition) == null){
 						//Place a settlement
 						NativeTown t = new NativeTown(ExpeditionGame.getCurrentGame(), cultureCenter.getB(), cultureCenter.getB().getASize());
 						t.setPosition(new Position(settlementPosition));
 						t.setUnfriendly(Util.chance(30*cultureCenter.getB().getAggresiveness()));
 						level.addFeature(t);
+					} else {
+						fussible++;
+						if (fussible < 1000){
+							i--;
+							continue;
+						}
 					}
 				}
 			}
