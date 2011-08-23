@@ -297,9 +297,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	}
 	
 	private void updateMaximumQuantities(ExpeditionItem eitem) {
+		if (source == null || destination == null)
+			return;
 		sourceCurrentQuantity = source.getItemCount(eitem.getFullID());
 		destinationCurrentQuantity = destination.getItemCount(eitem.getFullID());
-		
 		
 		int allQuantity = sourceCurrentQuantity + destinationCurrentQuantity;
 		
@@ -403,12 +404,12 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				if (kbLaunchedTimer)
 					return;
 				int code = SwingSystemInterface.charCode(e);
-				if (code == CharKey.UARROW || code == CharKey.N8){
+				if (code == CharKey.LARROW){
 					initialQuantity = sourceCurrentQuantity;
 					transferToSource();
 					transferToSourceTimer.start();
 					kbLaunchedTimer = true;
-				} else if (code == CharKey.DARROW || code == CharKey.N2){
+				} else if (code == CharKey.RARROW){
 					if (highlight == null)
 						return;
 					initialQuantity = destinationCurrentQuantity;
@@ -423,10 +424,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				if (highlight == null)
 					return;
 				int code = SwingSystemInterface.charCode(e);
-				if (code == CharKey.UARROW || code == CharKey.N8){
+				if (code == CharKey.LARROW){
 					transferToSourceTimer.stop();
 					kbLaunchedTimer = false;
-				} else if (code == CharKey.DARROW || code == CharKey.N2){
+				} else if (code == CharKey.RARROW){
 					transferToDestinationTimer.stop();
 					kbLaunchedTimer = false;
 
