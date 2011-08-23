@@ -50,6 +50,7 @@ public class WorldGenerator {
 				for (int i = 0; i < numberOfSettlements; i++){
 					Position settlementPosition = new Position(Util.rand(cultureCenter.getA().x-range, cultureCenter.getA().x+range), Util.rand(cultureCenter.getA().y-range, cultureCenter.getA().y+range));
 					settlementPosition.x = GlobeMapModel.normalizeLong(settlementPosition.y, settlementPosition.x);
+					settlementPosition.y = GlobeMapModel.normalizeLat(settlementPosition.y);
 					OverworldExpeditionCell cell = (OverworldExpeditionCell) level.getMapCell(settlementPosition);
 					
 					//Check if this is land

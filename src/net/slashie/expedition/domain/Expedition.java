@@ -1251,6 +1251,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
 		        				destinationPoint = new Position(getPosition());
 		        				destinationPoint.x = GlobeMapModel.normalizeLong(destinationPoint.y, destinationPoint.x);
+		        				destinationPoint.y = GlobeMapModel.normalizeLat(destinationPoint.y);
 
 		        				//destinationPoint.x -= Math.floor((double)GlobeMapModel.getLongitudeScale(getPosition().y)/2.0d);
 		        				

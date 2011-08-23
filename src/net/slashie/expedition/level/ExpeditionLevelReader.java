@@ -44,6 +44,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	@Override
 	public AbstractCell getMapCell(int x, int y, int z) {
 		x = GlobeMapModel.normalizeLong(y, x);
+		y = GlobeMapModel.normalizeLat(y);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		// The map may be incomplete
@@ -245,6 +246,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			int x = GlobeMapModel.transformXIntoLong(where.x+xoff);
 			int y = GlobeMapModel.transformYIntoLat(where.y+yoff);
 			x = GlobeMapModel.normalizeLong(y, x);
+			y = GlobeMapModel.normalizeLat(y);
 			Position pos = new Position(x,y,where.z);
 			addExit(pos, cmds[2]);
 		}
@@ -293,8 +295,9 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		int magnificationLevel = GlobeMapModel.getLongitudeScale(pos.y());
 		//int start = pos.x() - (int)Math.round(magnificationLevel/2.0d); // Removed to reduce rounding issues
 		int x = GlobeMapModel.normalizeLong(pos.y, pos.x);
+		int y = GlobeMapModel.normalizeLat(pos.y);
 		int start = x - magnificationLevel;
-		recyclablePosition.y = pos.y();
+		recyclablePosition.y = y;
 		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
 			recyclablePosition.x = xrow;
 			String exit = super.getExitOn(recyclablePosition);
