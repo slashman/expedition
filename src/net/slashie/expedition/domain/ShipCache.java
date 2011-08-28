@@ -83,19 +83,23 @@ public class ShipCache extends GoodsCache{
 				break;
 			case 2:
 				if (canCarryWeight(((Expedition)a).getWeightToBoardShip())){
-					((Expedition)a).setMovementMode(MovementMode.SHIP);
-					((Expedition)a).setCurrentVehicles(vehicles);
-					((Expedition)a).addAllItems(getItems());
-					((Expedition)a).getLevel().destroyFeature(this);
-					a.setPosition(getPosition());
-					((Expedition)a).setAnchored(true);
-					ExpeditionMusicManager.playTune("SEA");
+					boardShips((Expedition)a);
 				} else {
 					UserInterface.getUI().showMessage("The ships are too full!");
 				}
 				break;
     		}
 		}
+	}
+	
+	public void boardShips(Expedition expedition){
+		expedition.setMovementMode(MovementMode.SHIP);
+		expedition.setCurrentVehicles(vehicles);
+		expedition.addAllItems(getItems());
+		expedition.getLevel().destroyFeature(this);
+		expedition.setPosition(getPosition());
+		expedition.setAnchored(true);
+		ExpeditionMusicManager.playTune("SEA");
 	}
 	
 	@Override
@@ -122,5 +126,10 @@ public class ShipCache extends GoodsCache{
 	@Override
 	public boolean requiresUnitsToContainItems() {
 		return false;
+	}
+	
+	@Override
+	public String getTypeDescription() {
+		return "Ships";
 	}
 }
