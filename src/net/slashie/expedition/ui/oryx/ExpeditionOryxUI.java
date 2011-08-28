@@ -1222,7 +1222,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		defendantsGridBox.setUsedBuffer(1);
 		defendantsGridBox.draw(false);
 		
-		BorderedGridBox combatantsGridBox = createBorderedGridBox(28, 28, 5, 5);
+		BorderedGridBox combatantsGridBox = createBorderedGridBox(28, 38, 5, 5);
 		combatantsGridBox.setMenuItems(attackingMenuItems);
 		combatantsGridBox.setBounds(143,94,245,234);
 		combatantsGridBox.setTitle("Attackers");
