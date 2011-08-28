@@ -1,6 +1,8 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import net.slashie.expedition.game.ExpeditionGame;
@@ -238,13 +240,14 @@ public class BattleManager {
 	
 	// Trim attacking and defending teams to 60, 20 ranged (if possible), 20 mounted (if possible) and the remaining.
 
-	private static List<Equipment> selectSquad(
-			List<Equipment> fullGroup) {
+	private static List<Equipment> selectSquad(List<Equipment> fullGroup) {
 		int remaining = 60;
 		int remainingRanged = 20;
 		int remainingMounted = 20;
 		List<String> usedUnitsFullIDs = new ArrayList<String>();
 		List<Equipment> squad = new ArrayList<Equipment>();
+		
+		fullGroup = orderByCombatValue(fullGroup);
 		
 		// Ranged
 		for (Equipment eq: fullGroup){
@@ -352,5 +355,16 @@ public class BattleManager {
 
 		}
 		return squad;
+	}
+
+	private static List<Equipment> orderByCombatValue(List<Equipment> fullGroup) {
+		List<Equipment> ret = new ArrayList<Equipment>(fullGroup);
+		Collections.sort(ret, new Comparator<Equipment>(){
+			@Override
+			public int compare(Equipment o1, Equipment o2) {
+				return ((ExpeditionUnit)o2.getItem()).getPower() - ((ExpeditionUnit)o1.getItem()).getPower();
+			}
+		});
+		return ret;
 	}
 }
