@@ -2325,4 +2325,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		return null;
 	}
+	
+	@Override
+	public String getTypeDescription() {
+		return "Expedition";
+	}
 }

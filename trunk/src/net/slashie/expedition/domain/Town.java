@@ -236,6 +236,14 @@ public class Town extends GoodsCache{
 	public boolean requiresUnitsToContainItems() {
 		return false;
 	}
-	
+
+	@Override
+	public String getTypeDescription() {
+		if (isCity())
+			return "City";
+		if (isTown())
+			return "Town";
+		return "Village";
+	}
 	
 }

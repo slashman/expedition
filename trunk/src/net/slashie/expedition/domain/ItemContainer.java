@@ -26,4 +26,8 @@ public interface ItemContainer {
 	boolean isPeopleContainer();
 	boolean requiresUnitsToContainItems();
 	int getCurrentFood();
+	/**
+	 * General description for this type of container (Example: "Town" instead of "La Española"
+	 */
+	String getTypeDescription();
 }

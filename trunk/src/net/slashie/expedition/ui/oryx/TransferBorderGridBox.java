@@ -456,7 +456,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 20, y+10, containerAppearance.getImage());
 		}
 		
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y+52, container.getDescription(), OryxExpeditionDisplay.COLOR_BOLD, alignRight);		
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y+52, container.getTypeDescription(), OryxExpeditionDisplay.COLOR_BOLD, alignRight);		
 		
 		if (container.getCarryCapacity() != -1){
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 76, container.getCurrentlyCarrying()+"%", Color.WHITE, alignRight);
