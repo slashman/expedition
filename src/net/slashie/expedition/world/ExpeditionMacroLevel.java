@@ -154,6 +154,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	/**
 	 * Gets a cache at a locations or returns a new instance 
 	 * @param where
+	 * @param appearance 
 	 * @return
 	 */
 	public GoodsCache getOrCreateCache(Position where){
@@ -174,7 +175,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			}
 		}
 		if (newCache){
-			cache = new GoodsCache((ExpeditionGame)(getExpedition().getGame()));
+			cache = new GoodsCache((ExpeditionGame)(getExpedition().getGame()), getMapCell(where).getAppearance().getID(), "GOODS_CACHE");
 			cache.setPosition(new Position(where));
 			addFeature(cache);
 		}

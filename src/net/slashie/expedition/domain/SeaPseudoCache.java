@@ -32,4 +32,9 @@ public class SeaPseudoCache extends GoodsCache{
 	public boolean requiresUnitsToContainItems() {
 		return false;
 	}
+	
+	@Override
+	public String getTypeDescription() {
+		return "Sea";
+	}
 }

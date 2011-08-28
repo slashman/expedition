@@ -9,16 +9,16 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
-import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserInterface;
 
 public class ShipCache extends GoodsCache{
+	private static final long serialVersionUID = 1L;
+	
 	private List<Vehicle> vehicles;
 	
 	public ShipCache(ExpeditionGame game, List<Vehicle> vehicles) {
-		super(game);
+		super(game, "SHIP");
 		this.vehicles = vehicles;
-		setAppearanceId("SHIP");
 	}
 
 	public int getCarryable(ExpeditionItem item){

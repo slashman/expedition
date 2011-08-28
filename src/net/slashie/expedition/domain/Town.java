@@ -16,7 +16,9 @@ import net.slashie.serf.action.Actor;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class Town extends GoodsCache{
+	
 	private static final String[] TOWN_ACTIONS = new String[] { 
 		"Transfer equipment into settlement",
 		"Transfer equipment to expedition",
@@ -38,8 +40,7 @@ public class Town extends GoodsCache{
 	}
 	
 	public Town(ExpeditionGame game) {
-		super(game);
-		setAppearanceId("TOWN");
+		super(game, "TOWN");
 		founderExpedition = game.getExpedition();
 		foundedIn = game.getGameTime().getTime();
 	}
