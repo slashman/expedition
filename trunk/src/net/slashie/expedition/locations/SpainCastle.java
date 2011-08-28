@@ -253,6 +253,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
+			choice = 99;
 			switch (choice){
 			case 0:
 				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);
@@ -291,7 +292,28 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			case 2:
 				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 1);
 				break;
-			
+			case 99:
+				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);
+				ret.addItemOffshore(ItemFactory.createItem("ROGUE"), 30);
+				ret.addItemOffshore(ItemFactory.createItem("CAPTAIN"), 3);
+				ret.addItemOffshore(ItemFactory.createItem("CARPENTER"), 30);
+				ret.addItemOffshore(ItemFactory.createItem("DOCTOR"), 30);
+
+				
+				ret.addItemOffshore(ItemFactory.createItem("STEEL_SPEAR"), 82);
+				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 3);
+				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 3);
+				ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
+				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
+				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 40000);
+				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 100);
+				
+				ret.addItemOffshore(ItemFactory.createItem("SOLDIER"), 30);
+				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 5);
+				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 5);
+				ret.addItemOffshore(ItemFactory.createItem("MARINE"), 20);
+				ret.addItemOffshore(ItemFactory.createItem("STUDDED_VEST"), 5);
+				ret.addItemOffshore(ItemFactory.createItem("HARQUEBUS"), 5);
 			}
 			/*ret.addItemOffshore(ItemFactory.createItem("SAILOR"), Util.rand(85,95));
 			ret.addItemOffshore(ItemFactory.createItem("ROGUE"), Util.rand(15,25));

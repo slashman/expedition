@@ -14,23 +14,41 @@ import net.slashie.serf.action.Actor;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.level.AbstractFeature;
+import net.slashie.serf.ui.Appearance;
+import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 
 public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitContainer, ItemContainer{
 	private static final long serialVersionUID = 1L;
 	
-	private FoodConsumerDelegate foodConsumerDelegate; 
+	private FoodConsumerDelegate foodConsumerDelegate;
+
+	private String nonEmptyAppearanceId; 
 	
 	public GoodsCache(boolean abstractCache) {
 		setAppearanceId("GOODS_CACHE");
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 	}
 	
-	public GoodsCache(ExpeditionGame game) {
-		setAppearanceId("GOODS_CACHE");
+	public GoodsCache(ExpeditionGame game, String appearanceId) {
+		this(game, appearanceId, null);
+	}
+	
+	public GoodsCache(ExpeditionGame game, String appearanceId, String nonEmptyAppearanceId) {
+		setAppearanceId(appearanceId);
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		game.addFoodConsumer(this);
+		this.nonEmptyAppearanceId = nonEmptyAppearanceId;
+	}
+	
+	@Override
+	public Appearance getAppearance() {
+		if (nonEmptyAppearanceId != null && getItems().size() > 0)
+			return AppearanceFactory.getAppearanceFactory().getAppearance(nonEmptyAppearanceId);
+		else {
+			return super.getAppearance();
+		}
 	}
 	
 	public GoodsCache() {

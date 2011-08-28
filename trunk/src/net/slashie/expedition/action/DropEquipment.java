@@ -39,7 +39,8 @@ public class DropEquipment extends Action{
 	@Override
 	public void execute(){
 		Expedition expedition = (Expedition)performer;
-		if (((OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition())).isLand()){
+		OverworldExpeditionCell standingCell = ((OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition()));
+		if (standingCell.isLand()){
 			// Droping things from expedition into land caché
 			GoodsCache cache = ((ExpeditionMacroLevel)performer.getLevel()).getOrCreateCache(performer.getPosition());
 			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(cache);
