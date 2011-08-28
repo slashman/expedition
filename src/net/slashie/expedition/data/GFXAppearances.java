@@ -209,9 +209,9 @@ public class GFXAppearances {
 				createAppearance("BOOKSHELF", 2, 20),
 				createAppearance("BOOKSHELF_R", 3, 20),
 				
-				createAppearance("GOODS_STORE", 1 ,6),
-				createAppearance("WEAPONS_STORE", 2 ,6),
-				createAppearance("PORT", 3 ,6),
+				createAppearance("GOODS_STORE", 3 ,6),
+				createAppearance("WEAPONS_STORE", 7 ,6),
+				createAppearance("PORT", 2 ,6),
 				createAppearance("MERCHANT", 4 ,6),
 				createAppearance("GUILD", 5 ,6),
 				
