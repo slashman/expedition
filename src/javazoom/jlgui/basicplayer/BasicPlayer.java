@@ -454,17 +454,23 @@ public class BasicPlayer implements BasicController, Runnable
                 log.debug("Controls : " + c[p].toString());
             }
             /*-- Is Gain Control supported ? --*/
-            if (m_line.isControlSupported(FloatControl.Type.MASTER_GAIN))
-            {
-                m_gainControl = (FloatControl) m_line.getControl(FloatControl.Type.MASTER_GAIN);
-                log.info("Master Gain Control : [" + m_gainControl.getMinimum() + "," + m_gainControl.getMaximum() + "] " + m_gainControl.getPrecision());
+            try {
+              if (m_line.isControlSupported(FloatControl.Type.MASTER_GAIN))
+              {
+                  m_gainControl = (FloatControl) m_line.getControl(FloatControl.Type.MASTER_GAIN);
+                  log.info("Master Gain Control : [" + m_gainControl.getMinimum() + "," + m_gainControl.getMaximum() + "] " + m_gainControl.getPrecision());
+              }
             }
+            catch (Exception e) { }
             /*-- Is Pan control supported ? --*/
-            if (m_line.isControlSupported(FloatControl.Type.PAN))
-            {
-                m_panControl = (FloatControl) m_line.getControl(FloatControl.Type.PAN);
-                log.info("Pan Control : [" + m_panControl.getMinimum() + "," + m_panControl.getMaximum() + "] " + m_panControl.getPrecision());
+            try {
+              if (m_line.isControlSupported(FloatControl.Type.PAN))
+              {
+                  m_panControl = (FloatControl) m_line.getControl(FloatControl.Type.PAN);
+                  log.info("Pan Control : [" + m_panControl.getMinimum() + "," + m_panControl.getMaximum() + "] " + m_panControl.getPrecision());
+              }
             }
+            catch (Exception e) { }
         }
     }
 
@@ -795,7 +801,10 @@ public class BasicPlayer implements BasicController, Runnable
         if (m_gainControl == null)
         {
             // Try to get Gain control again (to support J2SE 1.5)
-            if ( (m_line != null) && (m_line.isControlSupported(FloatControl.Type.MASTER_GAIN))) m_gainControl = (FloatControl) m_line.getControl(FloatControl.Type.MASTER_GAIN);
+            try {
+              if ( (m_line != null) && (m_line.isControlSupported(FloatControl.Type.MASTER_GAIN))) m_gainControl = (FloatControl) m_line.getControl(FloatControl.Type.MASTER_GAIN);
+            }
+            catch (Exception e) { }
         }
         return m_gainControl != null;
     }
@@ -853,7 +862,10 @@ public class BasicPlayer implements BasicController, Runnable
         if (m_panControl == null)
         {
             // Try to get Pan control again (to support J2SE 1.5)
-            if ((m_line != null)&& (m_line.isControlSupported(FloatControl.Type.PAN))) m_panControl = (FloatControl) m_line.getControl(FloatControl.Type.PAN);
+            try {
+              if ((m_line != null)&& (m_line.isControlSupported(FloatControl.Type.PAN))) m_panControl = (FloatControl) m_line.getControl(FloatControl.Type.PAN);
+            }
+            catch (Exception e) { }
         }
         return m_panControl != null;
     }
