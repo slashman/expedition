@@ -599,7 +599,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache fromCache) {
 		//ItemTransferFunctionality transferFromCacheFunctionality = new TransferFromCacheFunctionality();
-		ItemTransferFunctionality dualTransferFunctionality = new DualTransferFunctionality(1,-1);
+		ItemTransferFunctionality dualTransferFunctionality = new DualTransferFunctionality(-1,-1);
 		transferItems(prompt, preselectedGoodType, fromCache, getExpedition(), dualTransferFunctionality, false);
 		if (fromCache.destroyOnEmpty() && fromCache.getItems().size() == 0)
 			level.destroyFeature(fromCache);

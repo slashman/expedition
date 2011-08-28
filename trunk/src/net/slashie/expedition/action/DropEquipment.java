@@ -53,14 +53,15 @@ public class DropEquipment extends Action{
 				int choice = UserInterface.getUI().switchChat("Landfall","What do you want to do?",
 		        		"Land using a predefined group",
 		        		"Arm people and land using a predefined group",
-		        		"Select the members of the expedition"
+		        		"Select the members of the expedition",
+		        		"Continue sailing"
 		        		); 
 				
 				if (choice == 1){
 					expedition.arm();
 				}
 				
-				GoodsCache ship = new ShipCache((ExpeditionGame)expedition.getGame(), expedition.getCurrentVehicles());
+				ShipCache ship = new ShipCache((ExpeditionGame)expedition.getGame(), expedition.getCurrentVehicles());
 				ship.addAllGoods(expedition);
     			
         		switch (choice){
@@ -102,6 +103,9 @@ public class DropEquipment extends Action{
         			
         			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the units and goods to transfer", GoodType.PEOPLE, ship);
         			break;
+        		case 3:
+        			// Continue sailing
+        			return;
         		}
 
         		ship.setPosition(new Position(expedition.getPosition()));
@@ -109,12 +113,20 @@ public class DropEquipment extends Action{
     			if (expedition.getUnmountedUnits().size() == 0){
     				expedition.setMovementMode(MovementMode.HORSE);
 				}
-    			expedition.touchLand();
-    			ExpeditionMusicManager.playTune("LAND");
-    			try {
-    				expedition.landOn(expedition.getLandCellAround());
-    			} catch (ActionCancelException ace){
-    				ace.printStackTrace();
+    			
+    			// Check if this was a null disembarkment (No units)
+    			if (expedition.getTotalUnits() == 0) {
+    				// "Board Ships" again
+    				ship.boardShips(expedition);
+    				expedition.getLevel().addMessage("Disembarkment aborted");
+    			} else {
+	    			expedition.touchLand();
+	    			ExpeditionMusicManager.playTune("LAND");
+	    			try {
+	    				expedition.landOn(expedition.getLandCellAround());
+	    			} catch (ActionCancelException ace){
+	    				ace.printStackTrace();
+	    			}
     			}
 			} else {
 				//Drop things into the big sea
