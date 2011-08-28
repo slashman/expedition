@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.slashie.serf.action.Message;
 import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
@@ -14,15 +13,15 @@ public enum Weather {
 //                                                      <- Normal weather, sum = 100        | Special Weathers ->
 //                                 CLEAR,   CLOUDY,   RAIN,   STORM,   WINDY,   GALE_WIND,    FOG,   HURRICANE,   SNOW,   DUST_STORM
 	   CLEAR(       "Clear",       50,      30,       0,      0,       20,      0,            0,     0,           0,      0 )   ,
-	   CLOUDY(      "Cloudy",      35,      40,       20,     5,       0,       0,            25,    0,           40,     0 )   ,
-	   RAIN(        "Rain",        5,       30,       55,     10,      0,       0,            80,    0,           80,     0 )   ,
-	   STORM(       "Heavy Rain!", 0,       15,       30,     40,      10,      5,            0,     0,           0,      0 )   ,
-	   WINDY(       "Windy",       15,      10,       0,      35,      35,      5,            0,     0,           0,      70)   ,
-	   GALE_WIND(   "Gale Winds!", 0,       0,        0,      45,      10,      45,           0,     10,          0,      90)   ,
-	   FOG(         "Fog",         0,       50,       30,     20,      0,       0,            50,    0,           50,     0 )   ,
-	   HURRICANE(   "HURRICANE!",  0,       0,        30,     40,      0,       30,           0,     50,          0,      100),
-	   SNOW(        "Snow",        10,      50,       40,     0,       0,       0,            0,     0,           60,     0 )   ,
-	   DUST_STORM(  "Dust Storm",  0,       0,        0,      0,       50,      50,           0,     0,           0,      50 )
+	   CLOUDY(      "Cloudy",      40,      40,       20,     0,       0,       0,            25,    0,           40,     0 )   ,
+	   RAIN(        "Rain",        5,       30,       55,     10,      0,       0,            0,     0,           80,     0 )   ,
+	   STORM(       "Heavy Rain!", 0,       0,        40,     50,      0,       10,           0,     0,           0,      0 )   ,
+	   WINDY(       "Windy",       50,      0,        0,      0,       50,      0,            0,     0,           0,      70)   ,
+	   GALE_WIND(   "Gale Winds!", 0,       0,        0,      55,      0,       45,           0,     10,          0,      0)    ,
+	   FOG(         "Fog",         5,       55,       40,     0,       0,       0,            50,    0,           50,     0 )   ,
+	   HURRICANE(   "HURRICANE!",  0,       0,        0,      50,      0,       50,           0,     50,          0,      0 )  ,
+	   SNOW(        "Snow",        0,       50,       40,     0,       0,       0,            0,     0,           60,     0 )   ,
+	   DUST_STORM(  "Dust Storm",  30,      0,        0,      0,       70,      0,            0,     0,           0,      50 )
 	   ;
 	
 	private int[] transitionsList;
