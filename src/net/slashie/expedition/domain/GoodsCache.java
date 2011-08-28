@@ -432,4 +432,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	public boolean requiresUnitsToContainItems() {
 		return false;
 	}
+	
+	@Override
+	public String getTypeDescription() {
+		return "Ground";
+	}
 }

@@ -94,8 +94,8 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 		} else {
 			int inventory = from.getItemCount(item.getFullID());
 			int current = to.getItemCount(item.getFullID());
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getDescription()+": "+inventory, Color.WHITE);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getDescription()+": "+current, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getTypeDescription()+": "+inventory, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getTypeDescription()+": "+current, Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 		}
 	}
@@ -123,8 +123,8 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 		
 		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 12, unitImage);
 		
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getDescription()+": "+inventory, Color.WHITE);
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getDescription()+": "+current, Color.WHITE);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getTypeDescription()+": "+inventory, Color.WHITE);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getTypeDescription()+": "+current, Color.WHITE);
 		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 	}
 	
