@@ -12,6 +12,8 @@ import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.utils.Util;
 
 public class Farm extends Building {
+	private static final long serialVersionUID = 1L;
+
 	private final static Map<SpecialCapability, Object> NO_CAPABILITIES = new HashMap<SpecialCapability, Object>();
 	
 	private Calendar nextCrop;
@@ -42,7 +44,7 @@ public class Farm extends Building {
 	@Override
 	public String getDescription() {
 		if (nextCrop != null){
-			return super.getDescription() + " (Crop: "+ExpeditionOryxUI.months[nextCrop.get(Calendar.MONTH)]+" "+nextCrop.get(Calendar.YEAR)+")";
+			return super.getDescription() + " (Crop: around "+ExpeditionOryxUI.months[nextCrop.get(Calendar.MONTH)]+" "+nextCrop.get(Calendar.YEAR)+")";
 		} else {
 			return super.getDescription();
 		}
