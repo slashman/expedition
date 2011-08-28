@@ -201,12 +201,20 @@ public class Town extends GoodsCache{
 	public void forageFood() {
 		// Get max foraged food storage
 		int maxForagedStorage = getMaxForagedStorage(); 
+		
+		// Get currently stored food
+		int currentFood = getItemCount("FRUIT");
+		
 		// Get food foraging capacity
 		int foragingCapacity = getTotalUnits();
+		
+		maxForagedStorage -= currentFood;
+		
 		// Store food
 		if (foragingCapacity > maxForagedStorage){
 			foragingCapacity = maxForagedStorage;
 		}
+		
 		if (foragingCapacity > 0){
 			String food = "FRUIT";
 			ExpeditionItem foodSample = ItemFactory.createItem(food);
