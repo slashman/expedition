@@ -354,7 +354,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 					int fontSize = getFont().getSize();
 					final int lineHeight = (int)Math.round(fontSize*1.5);
 					final int legendLines = legends.length > 0 ? legends.length: 1;
-					SelectedItem selectedItem = getSelectedItemByClick(e.getPoint(), legendLines, lineHeight);
+					selectedItem = getSelectedItemByClick(e.getPoint(), legendLines, lineHeight);
 					if (selectedItem != null){
 						if (handler.isEmpty())
 							handler.put(-1);
