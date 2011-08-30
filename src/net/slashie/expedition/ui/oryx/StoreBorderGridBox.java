@@ -34,6 +34,13 @@ import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
 
+/**
+ * This was replaced by an item transfer functionality applied to
+ * the TransferBorderGridBox
+ * @author Slash
+ *
+ */
+@Deprecated() 
 public class StoreBorderGridBox extends BorderedGridBox{
 	private static final long serialVersionUID = 1L;
 	
@@ -88,7 +95,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			final Store store, final Expedition offShoreExpedition, CleanButton buyButton, final BlockingQueue<Integer> buyButtonSelectionHandler_, CleanButton closeButton, Image upIcon, Image downIcon) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
-				itemWidth, gridX, gridY, box, closeButton, upIcon, downIcon, ExpeditionOryxUI.HAND_CURSOR);
+				itemWidth, gridX, gridY, box, closeButton, upIcon, downIcon, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, ExpeditionOryxUI.HAND_CURSOR);
 		this.offShoreExpedition = offShoreExpedition;
 		this.buyButton = buyButton;
 		this.store = store;

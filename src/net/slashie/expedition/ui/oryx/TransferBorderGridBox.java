@@ -33,6 +33,7 @@ import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.swing.BorderedGridBox;
+import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
@@ -77,7 +78,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			ItemTransferFunctionality itemTransferFunctionality) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
-				itemWidth, gridX, gridY, box, closeButton, ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.HAND_CURSOR);
+				itemWidth, gridX, gridY, box, closeButton, ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, ExpeditionOryxUI.HAND_CURSOR);
 		this.itemTransferFunctionality = itemTransferFunctionality;
 		initializeSplitters();
 		this.goodTypeBox = box;
@@ -93,10 +94,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 					return;
 				try {
 					int code = SwingSystemInterface.charCode(e);
-					if (code == CharKey.PAGEUP){
+					if (code == CharKey.UARROW){
 						rePag();
 						handler.put("CHANGE_PAGE");
-					} else if (code == CharKey.PAGEDOWN) {
+					} else if (code == CharKey.DARROW) {
 						avPag();
 						handler.put("CHANGE_PAGE");
 					} else if (code >= CharKey.A && code <= CharKey.A + pageElements-1 && code <= CharKey.A + items.size() - 1) {
@@ -125,6 +126,26 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				} catch (InterruptedException e1) {}
 			}
 		};
+		
+		avPagButton.addActionListener(new CallbackActionListener<String>(transferSelectionHandler){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				avPag();
+				try {
+					handler.put("CHANGE_PAGE");
+				} catch (InterruptedException e1) {}
+			}
+		});
+		
+		rePagButton.addActionListener(new CallbackActionListener<String>(transferSelectionHandler){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				rePag();
+				try {
+					handler.put("CHANGE_PAGE");
+				} catch (InterruptedException e1) {}
+			}
+		});
 		
 		si.addMouseListener(cbml);
 		si.addKeyListener(cbkl);

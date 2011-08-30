@@ -22,7 +22,7 @@ public class InventoryBorderGridBox extends BorderedGridBox{
 			int gridY, BufferedImage box) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
-				itemWidth, gridX, gridY, box, null, ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.HAND_CURSOR);
+				itemWidth, gridX, gridY, box, null, ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER, ExpeditionOryxUI.HAND_CURSOR);
 	}
 
 	public void draw(int boxX, int boxY, Image box) {
