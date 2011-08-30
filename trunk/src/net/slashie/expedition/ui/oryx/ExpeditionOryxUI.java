@@ -177,7 +177,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		int inBound =9;
 		int insideBound = 12;
 		BorderedGridBox ret = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderWidth, outsideBound, inBound, insideBound, 
-				itemHeight, itemWidth, gridX, gridY, null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, HAND_CURSOR) { 
+				itemHeight, itemWidth, gridX, gridY, null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER,HAND_CURSOR) { 
 			@Override
 			protected Cursor getHandCursor() {
 				return this_.getHandCursor();
@@ -649,7 +649,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Create the gridbox component. Send the transferFromExpeditionHandler to allow item selection with both mouse and keyb
    		TransferBorderGridBox menuBox = new TransferBorderGridBox(
    				BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
-   				STANDARD_ITEM_HEIGHT,STANDARD_ITEM_WIDTH,2,6, IMG_BOX, null, 
+   				STANDARD_ITEM_HEIGHT,STANDARD_ITEM_WIDTH,/*2*/ 1,6, IMG_BOX, null, 
    				from, to, transferFromExpeditionHandler, itemTransferFunctionality);
    		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
@@ -718,9 +718,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  		menuBox.setMenuItems(menuItems);
   	  		if (menuBox.isValidPage(currentPage)){
   	  			menuBox.setCurrentPage(currentPage);
+				menuBox.updatePageButtonStatus();
   	  		} else {
   	  			currentPage = menuBox.getPages() - 1;
   	  			menuBox.setCurrentPage(currentPage);
+  	  			menuBox.updatePageButtonStatus();
   	  		}
   	  		
   	  		int boxX = startX + typeChoice * gapX - 21;
@@ -743,17 +745,23 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	  	  			typeChoice--;
 					if (typeChoice == -1)
 						typeChoice = 0;
-					if (currentType != typeChoice) menuBox.resetSelection();
+					if (currentType != typeChoice) {
+						menuBox.resetSelection();
+					}
 					continue;
   	  			} else if (commandParts[1].equals(">")){
 	  	  			typeChoice++;
 					if (typeChoice == goodTypes.length)
 						typeChoice = goodTypes.length-1;
-					if (currentType != typeChoice) menuBox.resetSelection();
+					if (currentType != typeChoice) {
+						menuBox.resetSelection();
+					}
 					continue;
   	  			} else {
   	  				typeChoice = Integer.parseInt(commandParts[1]);
-  	  			if (currentType != typeChoice) menuBox.resetSelection();
+	  	  			if (currentType != typeChoice) {
+	  	  				menuBox.resetSelection();
+	  	  			}
   	  				continue;
   	  			}
   	  		} else if (commandParts[0].equals("BREAK")){
@@ -1180,8 +1188,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Equipment.eqMode = true;
 		clearTextBox();
 		final ExpeditionOryxUI this_ = this;
-   		BorderedGridBox cacheBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH,2,4,null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, HAND_CURSOR) {
-   			
+   		BorderedGridBox cacheBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH,2,4,null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER,HAND_CURSOR) {
    			protected Cursor getDefaultCursor() {
    				return this_.getDefaultCursor();
    			}
