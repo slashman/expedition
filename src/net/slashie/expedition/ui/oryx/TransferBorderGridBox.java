@@ -24,6 +24,7 @@ import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.ItemContainer;
 import net.slashie.expedition.domain.ShipCache;
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI.ItemTransferFunctionality;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.Equipment;
@@ -62,9 +63,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private boolean kbLaunchedTimer = false;
 	private ItemTransferFunctionality itemTransferFunctionality;
 	
-	//private Map<GoodType, List<Equipment>> expeditionGoodsMap;
-	
-	
 	public TransferBorderGridBox(
 			// Standard parameters, sent to super()
 			BufferedImage border1, BufferedImage border2,
@@ -79,7 +77,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			ItemTransferFunctionality itemTransferFunctionality) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
-				itemWidth, gridX, gridY, box, closeButton);
+				itemWidth, gridX, gridY, box, closeButton, ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.HAND_CURSOR);
 		this.itemTransferFunctionality = itemTransferFunctionality;
 		initializeSplitters();
 		this.goodTypeBox = box;
@@ -291,11 +289,21 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			lastChoice = null;
 		}
 		
+		drawExpeditionCurrencies(x+10, y + 274);
+		
 		// Draw Box
 		int boxY = 41 - 24;
 		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, boxX, boxY, goodTypeBox);
 	}
 	
+	private void drawExpeditionCurrencies(int x, int y) {
+		int textWidth = (int) ((260 - si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, "Expedition Valuables") ) / 2.0d);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + textWidth, y, "Expedition Valuables", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 28, "Spanish Maravedíes:", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 255, y + 42, ExpeditionGame.getCurrentGame().getExpedition().getAccountedGold()+"", Color.WHITE, true);
+		
+	}
+
 	private void updateMaximumQuantities(ExpeditionItem eitem) {
 		if (source == null || destination == null)
 			return;

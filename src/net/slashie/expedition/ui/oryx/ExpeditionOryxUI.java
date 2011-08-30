@@ -31,6 +31,7 @@ import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ItemContainer;
+import net.slashie.expedition.domain.ItemOffshoreExpeditionContainer;
 import net.slashie.expedition.domain.LandingParty;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Store;
@@ -47,6 +48,7 @@ import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.ui.oryx.ExpeditionOryxUI.ItemTransferFunctionality.MenuItemType;
 import net.slashie.expedition.ui.oryx.sfx.EffectsServer;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
@@ -79,6 +81,7 @@ import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackKeyListener;
 import net.slashie.utils.swing.CleanButton;
+import net.slashie.utils.swing.CustomGFXMenuItem;
 import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.GridBox;
 import net.slashie.utils.swing.MenuBox;
@@ -128,8 +131,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image[] MORALE_IMAGES;
 	
 	private BufferedImage IMG_BOX;
-	public Cursor HAND_CURSOR;
-	public Cursor POINTER_CURSOR;
+	public static Cursor HAND_CURSOR;
+	public static Cursor POINTER_CURSOR;
 	private SimplifiedUnitGFXMenuItem mainUnitMenuItem;
 	private AbstractItem HORSES_ITEM;
 	
@@ -174,7 +177,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		int inBound =9;
 		int insideBound = 12;
 		BorderedGridBox ret = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderWidth, outsideBound, inBound, insideBound, 
-				itemHeight, itemWidth, gridX, gridY, null, null) { 
+				itemHeight, itemWidth, gridX, gridY, null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, HAND_CURSOR) { 
 			@Override
 			protected Cursor getHandCursor() {
 				return this_.getHandCursor();
@@ -438,121 +441,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			return false;
 	}
 
-	public void launchStore(Store store) {
-    	List<Equipment> merchandise = store.getInventory();
-    	if (merchandise == null || merchandise.size() == 0){
-    		return;
-    	}
-   		Equipment.eqMode = true;
-   		((GFXUISelector)getPlayer().getSelector()).deactivate();
-   		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(730,31);
-		
-		ExpeditionCleanButton buyButton = new ExpeditionCleanButton(2, "BUY");
-		BlockingQueue<Integer> buyButtonSelectionHandler = new LinkedBlockingQueue<Integer>();
-
-   		StoreBorderGridBox menuBox = new StoreBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT,STANDARD_ITEM_WIDTH,2,5,null,
-   				store, getExpedition(), buyButton, buyButtonSelectionHandler, closeButton);
-   		menuBox.setCursor(si.getCursor());
-  		menuBox.setBounds(16, 16, 768,480);
-  		
-  		List<StoreCustomGFXMenuItem> invMenuItems = new Vector<StoreCustomGFXMenuItem> ();
-  		for (Equipment item: merchandise){
-  			invMenuItems.add(new StoreCustomGFXMenuItem(item, store, getExpedition()));
-  		}
-  		//Collections.sort(invMenuItems, inventoryCustomItemsComparator);
-  		
-  		menuBox.setMenuItems(invMenuItems);
-  		menuBox.draw(null);
-  		menuBox.setTitleColor(TITLE_COLOR);
-  		menuBox.setForeColor(TEXT_COLOR);
-  		menuBox.setTitle(store.getOwnerName());
-  		//menuBox.setBorder(true);
-  		String prompt = "Welcome to the "+store.getOwnerName();
-  		StoreCustomGFXMenuItem itemChoice = null;
-  		boolean keepItemChoice = false;
-		while (true) {
-			menuBox.setLegend(prompt);
-			menuBox.setBuyButtonEnabled(true);
-
-			if (!keepItemChoice)
-				itemChoice = ((StoreCustomGFXMenuItem)menuBox.getSelection());
-			
-			if (itemChoice == null)
-				break;
-			
-			// Pick quantity
-			Equipment choice = itemChoice.getEquipment();
-			ExpeditionItem item = (ExpeditionItem) choice.getItem();
-			StoreItemInfo storeItemInfo = store.getBuyInfo(item, getExpedition());
-			
-			if(!keepItemChoice){
-				if (storeItemInfo.getPack() > 1)
-					menuBox.setLegend("How many "+storeItemInfo.getPackDescription()+" of "+item.getPluralDescription()+"?");
-				else
-					menuBox.setLegend("How many "+item.getPluralDescription()+"?");
-			}
-			keepItemChoice = false;
-			
-			menuBox.draw(choice);
-			menuBox.activateItemPseudoSelection(buyButtonSelectionHandler);
-			int buyQuantity = 0;
-			while (buyQuantity == 0){
-				try {
-					buyQuantity = buyButtonSelectionHandler.take();
-				} catch (InterruptedException e) {}
-			}
-			menuBox.quantityObtained();
-			
-			if (buyQuantity == -1){
-				//prompt = "Ok... Do you need anything else?";
-				continue;
-			}
-			if (buyQuantity > choice.getQuantity()){
-				prompt = "I don't have that many...";
-				continue;
-			}
-			
-			int quantity = buyQuantity * storeItemInfo.getPack();
-			
-			if (!getExpedition().canCarryOffshore(item, quantity)){
-				prompt = "Your ships are full!";
-				continue;
-			}
-			
-			int gold = storeItemInfo.getPrice() * buyQuantity;	
-			String question = "";
-			if (item instanceof ExpeditionUnit){
-				if (quantity > 1)
-					question = "Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes?";
-				else
-					question = "Hire a "+item.getDescription()+" for "+gold+" maravedíes?";
-			} else {
-				if (quantity > 1)
-					question = "Buy "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes?";
-				else
-					question = "Buy a "+item.getDescription()+" for "+gold+" maravedíes?";
-			}
-			
-	 		if (promptChat(question))
-	 			if (getExpedition().getAccountedGold() >= gold) {
-	 				getExpedition().reduceAccountedGold(gold);
-	 				getExpedition().addItemOffshore((ExpeditionItem) choice.getItem(), quantity);
-	 				choice.reduceQuantity(buyQuantity);
-	 				prompt = "Thank you! Do you need anything else?";
-			 	} else {
-			 		prompt = "You can't afford it! Do you need anything else?";
-			 	}
-			else {
-				prompt = "Ok, do you need anything else?";
-			}
-	 		keepItemChoice = true;
-		}
-		menuBox.kill();
-		Equipment.eqMode = false;
-
+	public void launchStore(final Store store) {
+		ItemTransferFunctionality buyItemsFunctionality = new BuyItemsFunctionality(store);
+		ItemOffshoreExpeditionContainer offShoreExpeditionContainer = new ItemOffshoreExpeditionContainer(getExpedition(), store);
+		transferItems("Welcome to the "+store.getOwnerName(), store.getMainGoodType(), store, offShoreExpeditionContainer, buyItemsFunctionality);
 	}
-
+	
 	public void showBlockingMessage(String message) {
 		showBlockingMessage(message, false);
 	}
@@ -594,13 +488,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Create the button to confirm transfer and add it to the UI
 		//ItemTransferFunctionality transferFromExpeditionFunctionality = new TransferFromExpeditionFunctionality(minUnits);
 		ItemTransferFunctionality transferFromExpeditionFunctionality = new DualTransferFunctionality(destinationMinUnits, 1);
-		transferItems("Select the goods to transfer", null, getExpedition(), toCache, transferFromExpeditionFunctionality, true);
+		transferItems("Select the goods to transfer", null, getExpedition(), toCache, transferFromExpeditionFunctionality);
 	}
 	
 	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache fromCache) {
 		//ItemTransferFunctionality transferFromCacheFunctionality = new TransferFromCacheFunctionality();
 		ItemTransferFunctionality dualTransferFunctionality = new DualTransferFunctionality(-1,-1);
-		transferItems(prompt, preselectedGoodType, fromCache, getExpedition(), dualTransferFunctionality, false);
+		transferItems(prompt, preselectedGoodType, fromCache, getExpedition(), dualTransferFunctionality);
 		if (fromCache.destroyOnEmpty() && fromCache.getItems().size() == 0)
 			level.destroyFeature(fromCache);
 	}
@@ -659,7 +553,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			tempInventoryContainer.addItem((ExpeditionItem) equipment.getItem(), equipment.getQuantity());
 		}
 		
-		transferItems("-", GoodType.TRADE_GOODS, tempInventoryContainer, tempOfferContainer, selectItemsFunctionality, true);
+		transferItems("-", GoodType.TRADE_GOODS, tempInventoryContainer, tempOfferContainer, selectItemsFunctionality);
 		return tempOfferContainer.getItems();
 	}
 
@@ -672,8 +566,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	 * @param itemTransferFunctionality
 	 * @param fromExpedition
 	 */
-	public void transferItems(String prompt, GoodType preselectedGoodType, ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality, 
-			boolean fromExpedition) {
+	public void transferItems(String prompt, GoodType preselectedGoodType, ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality) {
 		// Change UI Mode
    		Equipment.eqMode = true;
    		((GFXUISelector)getPlayer().getSelector()).deactivate();
@@ -800,7 +693,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 		}
   			
-  		
   		while (true){
   			menuBox.setHoverDisabled(false);
   			// Select data to draw and draw it
@@ -810,9 +702,17 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				inventory = expeditionItemMap.get(goodTypes[typeChoice]);
   	  		}
   	  		
-  	  		Vector<CacheCustomGFXMenuItem> menuItems = new Vector<CacheCustomGFXMenuItem>();
+  	  		Vector<CustomGFXMenuItem> menuItems = new Vector<CustomGFXMenuItem>();
   	  		for (ExpeditionItem item: inventory){
-  	  			menuItems.add(new CacheCustomGFXMenuItem(item, from, to));
+  	  			switch (itemTransferFunctionality.getMenuItemType()){
+  	  			case CACHE:
+  	  				menuItems.add(new CacheCustomGFXMenuItem(item, from, to));
+  	  				break;
+  	  			case STORE:
+  	  				menuItems.add(new StoreCustomGFXMenuItem(item, ((BuyItemsFunctionality)itemTransferFunctionality).store, getExpedition()));
+	  				break;
+  	  			}
+  	  			
   	  		}
   	  		Collections.sort(menuItems, ITEMS_COMPARATOR);
   	  		menuBox.setMenuItems(menuItems);
@@ -865,33 +765,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   	  		} else if (commandParts[0].equals("SELECT_UNIT")){
   	  			selectedIndex = Integer.parseInt(commandParts[1]);
   	  			menuBox.selectUnit(selectedIndex);
-  	  		} else if (commandParts[0].equals("CONFIRM_TRANSFER")){
-  	  			/*Equipment choice = menuBox.getSelectedUnit();
-  	  			int quantity = menuBox.getQuantity();
-  	  			if (quantity == 0 || choice == null){
-  	  				continue;
-  	  			}
-  	  			
-  	  			if (choice.getItem() instanceof Food){
-  	  				if (menuBox.isDaysFoodTransfer()){
-  	  					FoodConsumer toFoodConsumer = (FoodConsumer) to;
-  	  					// Player picked supply days, not item quantity, scaleback
-  	  	  				quantity = quantity * toFoodConsumer.getDailyFoodConsumption();
-  	  				}
-  	  			}
-  	  			
-				if (quantity > choice.getQuantity()){
-					showBlockingMessage("Not enough "+choice.getItem().getDescription());
-					transferFromExpeditionHandler.clear();
-					continue;
-				}
-				
-				if (!itemTransferFunctionality.validateAndPerformTransfer(from, to, expeditionGoodsMap, choice, quantity)){
-					transferFromExpeditionHandler.clear();
-					continue;
-				}
-				menuBox.resetSelection();
-				menuBox.setLegend(itemTransferFunctionality.getTransferedLegend(quantity, choice, to));*/
   	  		} else if (commandParts[0].equals("CHANGE_PAGE")){
   	  			// Do nothing other than changing page and redrawing
   	  		}
@@ -1307,7 +1180,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Equipment.eqMode = true;
 		clearTextBox();
 		final ExpeditionOryxUI this_ = this;
-   		BorderedGridBox cacheBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH,2,4,null, null) {
+   		BorderedGridBox cacheBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH,2,4,null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, HAND_CURSOR) {
+   			
    			protected Cursor getDefaultCursor() {
    				return this_.getDefaultCursor();
    			}
@@ -1436,6 +1310,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	
 	interface ItemTransferFunctionality {
+		public enum MenuItemType {
+			CACHE,
+			STORE
+		}
+		
+		MenuItemType getMenuItemType();
 		String getTitle(ItemContainer from, ItemContainer to);
 		String getTransferedLegend(int quantity, ExpeditionItem choice, ItemContainer to);
 		boolean validateBreak(ItemContainer from, ItemContainer to);
@@ -1449,6 +1329,87 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		 * @return
 		 */
 		boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, ExpeditionItem choice, int quantity);
+	}
+	
+	class BuyItemsFunctionality implements ItemTransferFunctionality {
+		private Store store;
+		
+		public BuyItemsFunctionality(Store store) {
+			this.store = store;
+		}
+
+		@Override
+		public String getTitle(ItemContainer from, ItemContainer to) {
+			return store.getOwnerName();
+		}
+
+		@Override
+		public String getTransferedLegend(int quantity, ExpeditionItem choice, ItemContainer to) {
+			if (to instanceof Expedition)
+				return "You buy "+quantity+" "+choice.getDescription();
+			else
+				return "You sell "+quantity+" "+choice.getDescription();
+			
+		}
+
+		@Override
+		public boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, ExpeditionItem choice, int quantity) {
+			if (to instanceof ItemOffshoreExpeditionContainer) {
+				//Buying
+				StoreItemInfo storeItemInfo = store.getBuyInfo(choice, getExpedition());
+				
+				if (quantity > from.getItemCount(choice.getFullID())){
+					showBlockingMessage("I don't have that many...");
+					return false;
+				}
+				
+				if (!to.canCarry(choice, quantity)){
+					showBlockingMessage("Your ships are full!");
+					return false;
+				}
+				
+				if (quantity <= 0){
+					return false;
+				}
+				
+				int gold = storeItemInfo.getPrice() * quantity;	
+				
+	 			if (getExpedition().getAccountedGold() >= gold) {
+	 				getExpedition().reduceAccountedGold(gold);
+	 				to.addItem(choice, quantity);
+	 				from.reduceQuantityOf(choice, quantity);
+	 				// prompt = "Thank you! Do you need anything else?";
+			 	} else {
+			 		//prompt = "You can't afford it! Do you need anything else?";
+			 		return false;
+			 	}
+	 			return true;
+			} else {
+				// Selling
+				if (store.canBuy(choice, quantity)){
+					int sellPrice = store.getSellPrice(choice);
+					// Remove from expedition and add gold
+	 				to.addItem(choice, quantity);
+					from.reduceQuantityOf(choice, quantity);
+					getExpedition().addAccountedGold(sellPrice * quantity);
+					return true;
+				} else {
+					showBlockingMessage("I am not interested on "+choice.getDescription());
+					return false;
+				}
+			}
+		}
+
+		@Override
+		public boolean validateBreak(ItemContainer from, ItemContainer to) {
+			// Can stop buying anytime
+			return true;
+		}
+		
+		@Override
+		public MenuItemType getMenuItemType() {
+			return MenuItemType.STORE;
+		}
 	}
 	
 	class DualTransferFunctionality implements ItemTransferFunctionality {
@@ -1556,9 +1517,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			//--
 			return true;
 		}
+		
+		@Override
+		public MenuItemType getMenuItemType() {
+			return MenuItemType.CACHE;
+		}
 	}
-	
-	
 	
 	class SelectFromExpeditionFunctionality implements ItemTransferFunctionality {
 		private String prompt;
@@ -1600,6 +1564,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			to.addItem((ExpeditionItem)choice, quantity);
 			from.reduceQuantityOf(choice, quantity);
 			return true;
+		}
+		
+		@Override
+		public MenuItemType getMenuItemType() {
+			return MenuItemType.CACHE;
 		}
 	}
 	

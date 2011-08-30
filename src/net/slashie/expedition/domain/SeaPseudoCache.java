@@ -4,7 +4,7 @@ import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 
-public class SeaPseudoCache extends GoodsCache{
+public class SeaPseudoCache extends GoodsCache {
 	public SeaPseudoCache(ExpeditionGame game) {
 		super();
 	}

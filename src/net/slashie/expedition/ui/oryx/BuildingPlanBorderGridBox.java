@@ -48,7 +48,7 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 				) {
 			super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 					borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
-					itemWidth, gridX, gridY, null, closeButton);
+					itemWidth, gridX, gridY, null, closeButton, ExpeditionOryxUI.BTN_SPLIT_UP, ExpeditionOryxUI.BTN_SPLIT_DOWN, ExpeditionOryxUI.HAND_CURSOR);
 			initializeSplitters();
 					
 			okButton = new ExpeditionCleanButton(4, "Build");

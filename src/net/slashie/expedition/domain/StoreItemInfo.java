@@ -9,20 +9,12 @@ public class StoreItemInfo implements Cloneable, Serializable{
 	
 	private String fullId;
 	private int price;
-	private int pack;
-	private String packDescription;
 	
-	public String getPackDescription() {
-		return packDescription;
-	}
 	public String getFullId() {
 		return fullId;
 	}
 	public int getPrice() {
 		return price;
-	}
-	public int getPack() {
-		return pack;
 	}
 	
 	public void setFullId(String fullId) {
@@ -31,27 +23,11 @@ public class StoreItemInfo implements Cloneable, Serializable{
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	public void setPack(int pack) {
-		this.pack = pack;
-	}
-	public void setPackDescription(String packDescription) {
-		this.packDescription = packDescription;
-	}
 	
 	public StoreItemInfo(String fullId) {
 		super();
 		this.fullId = fullId;
 		this.price = ItemFactory.getEuropeanPackPrize(fullId);
-		this.pack = 1;
-		this.packDescription = "units";
-	}
-	
-	public StoreItemInfo(String fullId, int pack, String packDescription) {
-		super();
-		this.fullId = fullId;
-		this.price = ItemFactory.getEuropeanPackPrize(fullId);
-		this.pack = pack;
-		this.packDescription = packDescription;
 	}
 
 	public StoreItemInfo clone(){

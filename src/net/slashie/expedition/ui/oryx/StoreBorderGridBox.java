@@ -59,7 +59,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 		selectedQuantity += changeSpeed;
 		if (selectedQuantity > maximumQuantity)
 			selectedQuantity = maximumQuantity;
-	    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
+	    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
 	}
 	
 	private void decreaseItemQuantity(){
@@ -73,7 +73,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			selectedQuantity = 1;
 		if (selectedQuantity > maximumQuantity)
 			selectedQuantity = maximumQuantity;
-	    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
+	    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
 	}
 	
 	private Timer increaseQuantityTimer;
@@ -85,10 +85,10 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			Color borderOut, int borderWidth, int outsideBound, int inBound,
 			int insideBound, int itemHeight, int itemWidth, int gridX,
 			int gridY, BufferedImage box,
-			final Store store, final Expedition offShoreExpedition, CleanButton buyButton, final BlockingQueue<Integer> buyButtonSelectionHandler_, CleanButton closeButton) {
+			final Store store, final Expedition offShoreExpedition, CleanButton buyButton, final BlockingQueue<Integer> buyButtonSelectionHandler_, CleanButton closeButton, Image upIcon, Image downIcon) {
 		super(border1, border2, border3, border4, g, backgroundColor, borderIn,
 				borderOut, borderWidth, outsideBound, inBound, insideBound, itemHeight,
-				itemWidth, gridX, gridY, box, closeButton);
+				itemWidth, gridX, gridY, box, closeButton, upIcon, downIcon, ExpeditionOryxUI.HAND_CURSOR);
 		this.offShoreExpedition = offShoreExpedition;
 		this.buyButton = buyButton;
 		this.store = store;
@@ -219,11 +219,11 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+41, y + 62, "In store", OryxExpeditionDisplay.COLOR_BOLD);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 32, onExpedition+"", Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 47, carryable+"", Color.WHITE);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, packsOnStore*itemInfo.getPack()+"", Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+146, y + 62, packsOnStore+"", Color.WHITE);
 
 			if (eitem != lastChoice){		
 				// Translate to packs
-				int carryablePacks = (int)Math.floor((double)carryable / itemInfo.getPack());
+				int carryablePacks = carryable;
 				
 				// Just Selected
 				maximumQuantity = carryablePacks < packsOnStore ? carryablePacks : packsOnStore; 
@@ -235,7 +235,7 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				selectedQuantity = 1;
 				if (selectedQuantity > maximumQuantity)
 					selectedQuantity = maximumQuantity;
-			    quantityLabel.setText(selectedQuantity+" "+itemInfo.getPackDescription()+", $"+(itemInfo.getPrice() * selectedQuantity));
+			    quantityLabel.setText(selectedQuantity+", $"+(itemInfo.getPrice() * selectedQuantity));
 			    
 			    if (eitem instanceof ExpeditionUnit){
 			    	buyButton.setText("Hire");
@@ -309,17 +309,25 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			public void keyPressed(KeyEvent e) {
 				try {
 					int code = SwingSystemInterface.charCode(e);
-					if (code == CharKey.UARROW || code == CharKey.N8){
+					if (code == CharKey.RARROW){
 						initialQuantity = selectedQuantity;
 						increaseItemQuantity();
 						increaseQuantityTimer.start();
-					} else if (code == CharKey.DARROW || code == CharKey.N2){
+					} else if (code == CharKey.LARROW){
 						initialQuantity = selectedQuantity;
 						decreaseItemQuantity();
 						decreaseQuantityTimer.start();
 					} else if (code == CharKey.SPACE || code == CharKey.ENTER){
 						// Buy
 						quantitySelectionQueue.put(selectedQuantity);
+					} else if (code == CharKey.UARROW) {
+						rePag();
+						updatePageButtonStatus();
+						draw(true);
+					} else if (code == CharKey.DARROW){
+						avPag();
+						updatePageButtonStatus();
+						draw(true);
 					} else if (code != CharKey.ESC &&
 						(code < CharKey.A || code > CharKey.A + pageElements-1) &&
 						(code < CharKey.a || code > CharKey.a + pageElements-1)
@@ -337,9 +345,9 @@ public class StoreBorderGridBox extends BorderedGridBox{
 			@Override
 			public void keyReleased(KeyEvent e) {
 				int code = SwingSystemInterface.charCode(e);
-				if (code == CharKey.UARROW || code == CharKey.N8){
+				if (code == CharKey.RARROW){
 					increaseQuantityTimer.stop();
-				} else if (code == CharKey.DARROW || code == CharKey.N2){
+				} else if (code == CharKey.LARROW){
 					decreaseItemQuantity();
 					decreaseQuantityTimer.stop();
 				}
@@ -364,6 +372,28 @@ public class StoreBorderGridBox extends BorderedGridBox{
 				} catch (InterruptedException e1) {}
 			}
 		};
+		
+		ActionListener avPagActionListener = new CallbackActionListener<Integer>(quantitySelectionQueue) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					handler.put(CharKey.PAGEDOWN);
+				} catch (InterruptedException e1) {}
+			}
+		};
+		
+		ActionListener rePagActionListener = new CallbackActionListener<Integer>(quantitySelectionQueue) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					handler.put(CharKey.PAGEUP);
+				} catch (InterruptedException e1) {}
+			}
+		};
+		
+		avPagButton.addActionListener(avPagActionListener);
+		rePagButton.addActionListener(rePagActionListener);
+		
 		
 		cbal = new CallbackActionListener<Integer>(quantitySelectionQueue){
 			@Override
