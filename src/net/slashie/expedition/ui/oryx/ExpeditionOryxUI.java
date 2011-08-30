@@ -5,7 +5,10 @@ import java.awt.Cursor;
 import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -1190,6 +1193,39 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		clearTextBox();
 		final ExpeditionOryxUI this_ = this;
    		BorderedGridBox cacheBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH,2,4,null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER,HAND_CURSOR) {
+   			KeyListener changePageKeyListener;
+   			@Override
+   			protected void customInit() {
+   				super.customInit();
+   				avPagButton.addActionListener(new ActionListener(){
+   					@Override
+   					public void actionPerformed(ActionEvent e) {
+   						avPag();
+   						draw(true);
+   					}
+   				});
+   				rePagButton.addActionListener(new ActionListener(){
+   					@Override
+   					public void actionPerformed(ActionEvent e) {
+   						rePag();
+   						draw(true);
+   					}
+   				});
+   				changePageKeyListener = new KeyAdapter(){
+   					@Override
+   					public void keyPressed(KeyEvent e) {
+   						if (e.getKeyCode() == KeyEvent.VK_UP){
+   							rePag();
+   	   						draw(true);
+   						} else if (e.getKeyCode() == KeyEvent.VK_DOWN){
+   							avPag();
+   	   						draw(true);
+   						}
+   					}
+   				};
+   				si.addKeyListener(changePageKeyListener);
+   			}
+   			
    			protected Cursor getDefaultCursor() {
    				return this_.getDefaultCursor();
    			}
@@ -1201,6 +1237,12 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    			@Override
    			public int getDrawingLayer() {
    				return getUILayer();
+   			}
+   			
+   			@Override
+   			public void kill() {
+   				super.kill();
+   				si.removeKeyListener(changePageKeyListener);
    			}
    		};
    		cacheBox.setCursor(si.getCursor());
