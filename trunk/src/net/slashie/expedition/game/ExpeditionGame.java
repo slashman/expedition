@@ -166,6 +166,7 @@ public class ExpeditionGame extends SworeGame {
 			//level.getPlayer().setPosition(-430, 2235, 0); // Gotta put this to load the piece around the starting place, must find a better way..
 			//
 			 // level.getPlayer().setPosition(-329, 3000, 0); // North
+			level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
 		}
 		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
 
@@ -173,7 +174,7 @@ public class ExpeditionGame extends SworeGame {
 	}
 	
 	public static String getVersion(){
-		return "v0.3.1 alpha2";
+		return "v0.3.1 RC1";
 	}
 	
 	public Expedition getExpedition(){
