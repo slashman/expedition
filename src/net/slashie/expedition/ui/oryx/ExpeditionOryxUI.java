@@ -213,6 +213,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	@Override
 	public void shutdown() {
+		unitsMenuBox.deactivate();
 		try {
 			sfxQueue.put("STOP");
 			ExpeditionMusicManager.stopWeather();
@@ -1020,6 +1021,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			public int getDrawingLayer() {
 				return getUILayer();
 			}
+			
+			@Override
+			protected Cursor getHandCursor() {
+				return HAND_CURSOR;
+			}
 		};
 		unitsMenuBox.setLocation(641,308-92);
 		
@@ -1693,5 +1699,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		return MAP_LAYER;
 	}
 	
+	@Override
+	public void reactivate() {
+		unitsMenuBox.reactivate();
+	}
 	
 }

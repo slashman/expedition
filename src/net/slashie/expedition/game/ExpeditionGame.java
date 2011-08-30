@@ -100,6 +100,7 @@ public class ExpeditionGame extends SworeGame {
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
 		expeditionLevel.enterLevel();
 		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
+		((ExpeditionUserInterface)UserInterface.getUI()).reactivate();
 		expeditionLevel.playMusic();
 		
 	}
@@ -110,6 +111,8 @@ public class ExpeditionGame extends SworeGame {
 		ExpeditionDisplay.thus.showIntro(getExpedition());
 		loadMetadata();
 		loadLevel("SPAIN_CASTLE");
+		((ExpeditionUserInterface)UserInterface.getUI()).reactivate();
+
 		setGameTime(3,8,1492);
 	}
 	

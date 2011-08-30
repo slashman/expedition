@@ -59,4 +59,5 @@ public interface ExpeditionUserInterface {
 	public void afterTownAction();
 	public LandingParty selectLandingParty();
 	public void notifyWeatherChange(Weather weather);
+	public void reactivate();
 }
