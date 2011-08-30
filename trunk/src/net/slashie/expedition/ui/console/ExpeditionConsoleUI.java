@@ -1130,6 +1130,11 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	
 	@Override
 	public void notifyWeatherChange(Weather weather) {
-		// TODO
+
+	}
+	
+	@Override
+	public void reactivate() {
+
 	}
 }
