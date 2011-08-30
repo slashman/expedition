@@ -806,8 +806,15 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		setMovementMode(currentMovementMode);
 		return retValue;
 	}
-
-
+	
+	public int getOffshoreCarryCapacity() {
+		MovementMode currentMovementMode = getMovementMode();
+		setMovementMode(MovementMode.SHIP);
+		int retValue = getCarryCapacity();
+		setMovementMode(currentMovementMode);
+		return retValue;
+	}
+	
 	public void addItemOffshore(ExpeditionItem what, int quantity){
 		MovementMode currentMovementMode = getMovementMode();
 		setMovementMode(MovementMode.SHIP);
@@ -819,6 +826,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			addItem(what, quantity);
 		}
 		
+		setMovementMode(currentMovementMode);
+	}
+	
+	public void reduceItemOffshore(ExpeditionItem item, int quantity){
+		MovementMode currentMovementMode = getMovementMode();
+		setMovementMode(MovementMode.SHIP);
+		reduceQuantityOf(item, quantity);
 		setMovementMode(currentMovementMode);
 	}
 	
@@ -940,7 +954,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		
 	}
 
-	private void addAccountedGold(int valuables) {
+	public void addAccountedGold(int valuables) {
 		accountedGold += valuables;
 	}
 	

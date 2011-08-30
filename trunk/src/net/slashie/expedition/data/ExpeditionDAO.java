@@ -38,16 +38,16 @@ import net.slashie.utils.roll.Roll;
 public class ExpeditionDAO {
 	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
 		
-		Store goodsStore = new Store();
+		Store goodsStore = new Store(GoodType.SUPPLIES);
 		goodsStore.setOwnerName("Supplies Store");
-		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", Store.FOOD_PACK, "barrels"));
+		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT"));
 		// goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", Store.LIQUID_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", Store.FOOD_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(500, new StoreItemInfo("RUM", Store.LIQUID_PACK, "barrels")); TODO: Implement
-		goodsStore.addItem(10000, new StoreItemInfo("WOOD", Store.WOOD_PACK, "packs"));
+		goodsStore.addItem(10000, new StoreItemInfo("WOOD"));
 		
 		//Weapons Store
-		Store weaponsStore = new Store();
+		Store weaponsStore = new Store(GoodType.ARMORY);
 		weaponsStore.setOwnerName("Armory");
 		weaponsStore.addItem(5000, new StoreItemInfo("STEEL_SPEAR"));
 		weaponsStore.addItem(1000, new StoreItemInfo("STEEL_SWORD"));
@@ -57,8 +57,16 @@ public class ExpeditionDAO {
 		weaponsStore.addItem(2000, new StoreItemInfo("STUDDED_VEST"));
 		weaponsStore.addItem(1000, new StoreItemInfo("BREASTPLATE"));
 		
+		weaponsStore.addItem(200, new StoreItemInfo("CARRACK"));
+		weaponsStore.addItem(200, new StoreItemInfo("CARAVEL"));
+		weaponsStore.addItem(200, new StoreItemInfo("CAPTAIN"));
+		weaponsStore.addItem(200, new StoreItemInfo("SAILOR"));
+		weaponsStore.addItem(200, new StoreItemInfo("COLONIST"));
+		weaponsStore.addItem(200, new StoreItemInfo("ROGUE"));
+		
+		
 		//Port
-		Store port = new Store();
+		Store port = new Store(GoodType.VEHICLE);
 		port.setOwnerName("Harbor");
 		port.addItem(30, new StoreItemInfo("CARRACK"));
 		port.addItem(20, new StoreItemInfo("CARAVEL"));
@@ -68,7 +76,7 @@ public class ExpeditionDAO {
 		port.addItem(35000, new StoreItemInfo("ROGUE"));
 	
 		//Pub
-		Store merchant = new Store();
+		Store merchant = new Store(GoodType.TRADE_GOODS);
 		merchant.setOwnerName("Trade Company");
 		merchant.addItem(10000, new StoreItemInfo("COTTON"));
 		merchant.addItem(10000, new StoreItemInfo("SUGAR"));
@@ -77,8 +85,11 @@ public class ExpeditionDAO {
 		merchant.addItem(200, new StoreItemInfo("HORSE"));
 		merchant.addItem(200, new StoreItemInfo("PIGS"));
 		
+
+		
+		
 		//Guild
-		Store guild = new Store();
+		Store guild = new Store(GoodType.PEOPLE);
 		guild.setOwnerName("Guild");
 		guild.addItem(7000, new StoreItemInfo("MARINE"));
 		guild.addItem(5000, new StoreItemInfo("SOLDIER"));
@@ -483,23 +494,23 @@ public class ExpeditionDAO {
 					new ArmorType[]{ArmorType.LIGHT}, 200, 300),
 			
 			//Goods
-			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 40,50, Store.FOOD_PACK),
-			new Food("BREAD", "Bread", "Bread", "Food Ration", 3, 1, 100, 200, Store.FOOD_PACK),
-			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 3, 1, 400,50, Store.FOOD_PACK),
-			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 3, 1, 400,50, Store.FOOD_PACK),
+			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 1,1),
+			new Food("BREAD", "Bread", "Bread", "Food Ration", 3, 1, 1, 2),
+			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 3, 1, 2,1),
+			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 3, 1, 2,1),
 			
-			new Food("BEANS", "Beans", "Beans", "Food Ration", 3, 1, 800,100, Store.FOOD_PACK),
-			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 400,50, Store.FOOD_PACK),
-			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 20,40, Store.FOOD_PACK),
-			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 3, 1, 800,200, Store.FOOD_PACK),
-			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 3, 1, 800,200, Store.FOOD_PACK),
-			new Food("FISH", "Fish", "Fish", "Food Ration", 3, 1, 100, 200, Store.FOOD_PACK),
-			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 100, 100, Store.FOOD_PACK),
+			new Food("BEANS", "Beans", "Beans", "Food Ration", 3, 1, 4,1),
+			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 2,1),
+			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 1,2),
+			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 3, 1, 4,1),
+			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 3, 1, 4,1),
+			new Food("FISH", "Fish", "Fish", "Food Ration", 3, 1, 1, 2),
+			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 1, 1),
 			
 			new ExpeditionItem("FRESHWATER", "Freshwater", "Freshwater", "Liquid of Life", "FRESHWATER", 2, GoodType.SUPPLIES, 20,5),
 			new ExpeditionItem("RUM", "Rum", "Rum", "Liquid of Life", "RUM", 2, GoodType.SUPPLIES, 400,500),
 			
-			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "Wood piece", "WOOD", 10, GoodType.SUPPLIES, 100,5),
+			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "Wood piece", "WOOD", 10, GoodType.SUPPLIES, 3,1),
 			
 			// Trade Goods, Old world
 			new ExpeditionItem("COTTON", "Cotton", "Cotton", "Trade Good", "COTTON", 200, GoodType.TRADE_GOODS, 200 , 400),

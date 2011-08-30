@@ -3,39 +3,36 @@ package net.slashie.expedition.ui.oryx;
 import java.awt.Color;
 import java.awt.Image;
 
-import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
-import net.slashie.expedition.domain.Weapon;
 import net.slashie.libjcsi.CharKey;
-import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
-import net.slashie.utils.swing.CustomGFXMenuItem;
 
-public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
+public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 	private static final long serialVersionUID = 1L;
 	
-	private Equipment item;
+	private ExpeditionItem item;
 	private Store store;
 	private Expedition expedition;
 
-	public StoreCustomGFXMenuItem(Equipment item, Store store, Expedition expedition) {
+	public StoreCustomGFXMenuItem(ExpeditionItem item, Store store, Expedition expedition) {
+		super(item, store, expedition);
 		this.item = item;
 		this.store = store;
 		this.expedition = expedition;
 	}
 	
-	public Equipment getEquipment(){
+	public ExpeditionItem getEquipment(){
 		return item;
 	}
 	
 	public String getGroupClassifier() {
-		return ((ExpeditionItem)item.getItem()).getGroupClassifier();
+		return item.getGroupClassifier();
 	}
 	
 	
@@ -59,13 +56,12 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
-		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
-		String itemDescription = item.getItem().getDescription();
-		StoreItemInfo itemInfo = store.getBasicInfo((ExpeditionItem)item.getItem(), expedition);
+		Image unitImage = ((GFXAppearance)item.getAppearance()).getImage();
+		String itemDescription = item.getDescription();
+		StoreItemInfo itemInfo = store.getBasicInfo(item, expedition);
 	
 		// Draw a cute border
-		if (eitem instanceof ExpeditionUnit){
+		if (item instanceof ExpeditionUnit){
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_HIGHLIGHT_COLOR);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, 350 - 2, 60 - 2);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_BORDER_COLOR);
@@ -83,8 +79,8 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		
 		// Unit status
-		if (eitem instanceof ExpeditionUnit){
-			ExpeditionUnit unit = (ExpeditionUnit)eitem;
+		if (item instanceof ExpeditionUnit){
+			ExpeditionUnit unit = (ExpeditionUnit)item;
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, unit.getLongDescription(), Color.WHITE);
 			int i = 0;
 			for (Appearance weaponAppearance: unit.getAvailableWeaponAppearances()){
@@ -95,11 +91,13 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48+i*28, y+17, ((GFXAppearance)armorAppearance).getImage());
 			}
 		} else {
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "Weight "+eitem.getWeight(), Color.WHITE);
-			if (itemInfo.getPack() != 1){
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, itemInfo.getPackDescription()+"x"+itemInfo.getPack(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "Weight "+item.getWeight(), Color.WHITE);
+			if (itemInfo != null){
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Sell: $"+itemInfo.getPrice(), Color.WHITE);
+			} else {
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
 			}
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 		}
 		
 	}
@@ -107,10 +105,9 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawMenuItem(SwingSystemInterface si, int x, int y, int index, boolean highlight) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
-		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
-		String itemDescription = item.getItem().getDescription();
-		StoreItemInfo itemInfo = store.getBasicInfo((ExpeditionItem)item.getItem(), expedition);
+		Image unitImage = ((GFXAppearance)item.getAppearance()).getImage();
+		String itemDescription = item.getDescription();
+		StoreItemInfo itemInfo = store.getBasicInfo(item, expedition);
 		
 		// Draw a cute border
 		if (highlight){
@@ -118,7 +115,12 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, 60 - 2);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+2, y+2, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 4, 60 - 4);
 		} else {
-			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_COLOR);
+			if (itemInfo == null){
+				si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(Color.DARK_GRAY);
+			} else {
+				si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_COLOR);
+			}
+			
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+1, y+1, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 2, 60 - 2);
 			si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+2, y+2, ExpeditionOryxUI.STANDARD_ITEM_WIDTH - 4, 60 - 4);
 		}
@@ -129,28 +131,33 @@ public class StoreCustomGFXMenuItem implements CustomGFXMenuItem{
 		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 12, unitImage);
 		
 		// Unit status
-		if (eitem instanceof ExpeditionUnit){
-			ExpeditionUnit unit = (ExpeditionUnit)eitem;
+		if (item instanceof ExpeditionUnit){
+			ExpeditionUnit unit = (ExpeditionUnit)item;
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "ATK: "+unit.getAttack().getString(), Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, "DEF: "+unit.getDefense().getString(), Color.WHITE);
-			switch (unit.getContractType()){
-			case JOIN_AND_SPLIT:
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+", for the spoils", Color.WHITE);
-				break;
-			case LIFETIME:
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+", lifetime", Color.WHITE);
-				break;
-			case MONTHLY:
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+" monthly", Color.WHITE);
-				break;
+			if (itemInfo != null){
+				switch (unit.getContractType()){
+				case JOIN_AND_SPLIT:
+					si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+", for the spoils", Color.WHITE);
+					break;
+				case LIFETIME:
+					si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+", lifetime", Color.WHITE);
+					break;
+				case MONTHLY:
+					si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice()+" monthly", Color.WHITE);
+					break;
+				}
+			} else {
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
 			}
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		} else {
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "Weight "+eitem.getWeight(), Color.WHITE);
-			if (itemInfo.getPack() != 1){
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, itemInfo.getPackDescription()+"x"+itemInfo.getPack(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "Weight "+item.getWeight(), Color.WHITE);
+			if (itemInfo != null){
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Sell: $"+itemInfo.getPrice(), Color.WHITE);
+			} else {
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
 			}
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice(), Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 		}
 	}

@@ -317,10 +317,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			Equipment choice = itemChoice.getEquipment();
 			ExpeditionItem item = (ExpeditionItem) choice.getItem();
 			StoreItemInfo storeItemInfo = store.getBuyInfo(item, getExpedition());
-			if (storeItemInfo.getPack() > 1)
-				menuBox.setPrompt("How many "+storeItemInfo.getPackDescription()+" of "+item.getPluralDescription()+"?");
-			else
-				menuBox.setPrompt("How many "+item.getPluralDescription()+"?");
+			menuBox.setPrompt("How many "+item.getPluralDescription()+"?");
 			menuBox.draw();
 			csi.refresh();
 			int buyQuantity = readQuantity(27, 9, "                       ", 5);
@@ -333,7 +330,7 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 				continue;
 			}
 			
-			int quantity = buyQuantity * storeItemInfo.getPack();
+			int quantity = buyQuantity;
 			
 			if (!getExpedition().canCarryOffshore(item, quantity)){
 				prompt = "Your ships are full! Do you need anything else?";

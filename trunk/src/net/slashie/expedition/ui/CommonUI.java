@@ -66,31 +66,18 @@ public class CommonUI {
 		if (item.getItem() instanceof ExpeditionUnit){
 			if (stock < 0)
 				stock = 0;
-			if (itemInfo.getPack() > 1){
-				if (stock < inventory)
-					return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
-				else
-					return itemInfo.getPack()+" "+ itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
-			} else {
-				if (stock < inventory)
-					return itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
-				else
-					return itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
-			}
+			if (stock < inventory)
+				return itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
+			else
+				return itemDescription + ", "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
 		} else {
 			if (stock < 0)
 				stock = 0;
-			if (itemInfo.getPack() > 1){
-				if (stock < inventory)
-					return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
-				else
-					return itemInfo.getPack()+" "+ itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
-			} else {
-				if (stock < inventory)
-					return itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
-				else
-					return itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
-			}
+			if (stock < inventory)
+				return itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Max "+stock+", Available "+inventory+"]";
+			else
+				return itemDescription + " for "+itemInfo.getPrice()+"$ [Current "+current+", Available "+inventory+"]";
+
 		}
 	}
 

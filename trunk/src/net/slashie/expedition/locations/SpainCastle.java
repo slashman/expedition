@@ -253,7 +253,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
 			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
-			choice = 99;
+			//choice = 99;
 			switch (choice){
 			case 0:
 				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);

@@ -6,21 +6,25 @@ import java.util.Hashtable;
 import java.util.List;
 
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
 
-public class Store implements Serializable, Cloneable{
+public class Store implements ItemContainer, Serializable, Cloneable{
 	private static final long serialVersionUID = 1L;
-	
-	public final static int FOOD_PACK = 200;
-	public final static int LIQUID_PACK = 500;
-	public final static int WOOD_PACK = 50;
 	
 	private Hashtable<String, StoreItemInfo> prices = new Hashtable<String, StoreItemInfo>();
 	private List<Equipment> inventory = new ArrayList<Equipment>();
 	private String text;
 	private String ownerName;
 	private Appearance ownerAppearance;
+
+	private GoodType mainGoodType;
+	
+	public Store(GoodType mainGoodType) {
+		super();
+		this.mainGoodType = mainGoodType;
+	}
 	
 	public List<Equipment> getInventory() {
 		return inventory;
@@ -50,36 +54,14 @@ public class Store implements Serializable, Cloneable{
 	}
 		
 	public StoreItemInfo getBuyInfo(ExpeditionItem item, Expedition expedition){
-		if (item instanceof Food){
-			StoreItemInfo ret = prices.get(item.getFullID()).clone();
-			double unitPrice = (double)ret.getPrice() / (double)ret.getPack();
-			ret.setPack(expedition.getDailyFoodConsumption());
-			ret.setPackDescription("days");
-			ret.setPrice((int)Math.round(unitPrice*ret.getPack()));
-			return ret;
-		} else {
-			return prices.get(item.getFullID());
-		}
+		return prices.get(item.getFullID());
 	}
 	
 	public void addItem(int quantity, StoreItemInfo info){
 		ExpeditionItem item = ItemFactory.createItem(info.getFullId());
-		Equipment existingEquipment = null;
-		for (Equipment equipment: inventory){
-			if (equipment.getItem().getFullID().equals(item.getFullID())){
-				existingEquipment = equipment;
-				break;
-			}
-		}
-		if (existingEquipment == null){
-			inventory.add(new Equipment(item, quantity)) ;
-		} else {
-			existingEquipment.increaseQuantity(quantity);
-		}
+		addItem(item, quantity);
 		prices.put(item.getFullID(), info);
 	}
-	
-	
 	
 	@Override
 	public Store clone() {
@@ -98,5 +80,162 @@ public class Store implements Serializable, Cloneable{
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	
+	public GoodType getMainGoodType() {
+		return mainGoodType;
+	}
+
+	// ItemContainer implementation
+	
+	@Override
+	public void addItem(ExpeditionItem item, int quantity) {
+		Equipment existingEquipment = null;
+		for (Equipment equipment: inventory){
+			if (equipment.getItem().getFullID().equals(item.getFullID())){
+				existingEquipment = equipment;
+				break;
+			}
+		}
+		if (existingEquipment == null){
+			inventory.add(new Equipment(item, quantity)) ;
+		} else {
+			existingEquipment.increaseQuantity(quantity);
+		}
+	}
+
+	@Override
+	public boolean canCarry(ExpeditionItem item, int quantity) {
+		return true;
+	}
+
+	@Override
+	public Appearance getAppearance() {
+		return getOwnerAppearance();
+	}
+
+	@Override
+	public int getCarryCapacity() {
+		return -1;
+	}
+
+	@Override
+	public int getCarryable(ExpeditionItem eitem) {
+		return -1;
+	}
+
+	@Override
+	public int getCurrentFood() {
+		return 0;
+	}
+
+	@Override
+	public int getCurrentlyCarrying() {
+		return 0;
+	}
+
+	@Override
+	public String getDescription() {
+		return getOwnerName();
+	}
+
+	@Override
+	public int getFoodDays() {
+		return 0;
+	}
+
+	@Override
+	public List<Equipment> getGoods(GoodType goodType) {
+		List<Equipment> ret = new ArrayList<Equipment>();
+		for (Equipment e: getInventory()){
+			ExpeditionItem g = (ExpeditionItem) e.getItem();
+			if (g.getGoodType() == goodType)
+				ret.add(new Equipment(e.getItem(), e.getQuantity()));
+		}
+		return ret;
+	}
+
+	@Override
+	public int getItemCount(String fullID) {
+		int goodCount = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem().getFullID().equals(fullID)){
+				goodCount += equipment.getQuantity();
+			}
+		}
+		return goodCount;
+	}
+
+	@Override
+	public int getItemCountBasic(String basicID) {
+		int goodCount = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
+			if (((ExpeditionItem)equipment.getItem()).getBaseID().equals(basicID)){
+				goodCount += equipment.getQuantity();
+			}
+		}
+		return goodCount;
+	}
+
+	@Override
+	public List<Equipment> getItems() {
+		return inventory;
+	}
+
+	@Override
+	public int getTotalShips() {
+		return 0;
+	}
+
+	@Override
+	public int getTotalUnits() {
+		return 0;
+	}
+
+	@Override
+	public String getTypeDescription() {
+		return "Store";
+	}
+
+	@Override
+	public int getWaterDays() {
+		return 0;
+	}
+
+	@Override
+	public boolean isPeopleContainer() {
+		return false;
+	}
+
+	@Override
+	public void reduceQuantityOf(AbstractItem item, int quantity) {
+		for (int i = 0; i < inventory.size(); i++){
+			Equipment equipment = (Equipment) inventory.get(i);
+			if (equipment.getItem().equals(item)){
+				equipment.reduceQuantity(quantity);
+				if (equipment.isEmpty()){
+					inventory.remove(equipment);
+				}
+				return;
+			}
+		}
+	}
+
+	@Override
+	public boolean requiresUnitsToContainItems() {
+		return false;
+	}
+
+	
+	//TODO: Trading arc, implement market system
+	public boolean canBuy(ExpeditionItem item, int quantity) {
+		return prices.get(item.getFullID()) != null;
+	}
+
+	public int getSellPrice(ExpeditionItem item) {
+		return prices.get(item.getFullID()).getPrice(); // Return the same as buy price, for now
 	}
 }
