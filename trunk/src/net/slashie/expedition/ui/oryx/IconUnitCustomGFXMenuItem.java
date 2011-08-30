@@ -17,10 +17,12 @@ public class IconUnitCustomGFXMenuItem implements CustomGFXMenuItem{
 	
 	private Equipment item;
 	private boolean flip;
+	private boolean down;
 
-	public IconUnitCustomGFXMenuItem(Equipment item, boolean flip) {
+	public IconUnitCustomGFXMenuItem(Equipment item, boolean flip, boolean down) {
 		this.item = item;
 		this.flip = flip;
+		this.down = down;
 	}
 	
 	public Equipment getEquipment(){
@@ -30,7 +32,6 @@ public class IconUnitCustomGFXMenuItem implements CustomGFXMenuItem{
 	public String getGroupClassifier() {
 		return ((ExpeditionItem)item.getItem()).getGroupClassifier();
 	}
-	
 	
 	public Image getMenuImage() {
 		return null;
@@ -53,8 +54,14 @@ public class IconUnitCustomGFXMenuItem implements CustomGFXMenuItem{
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		ExpeditionUnit eitem = (ExpeditionUnit)item.getItem();
 		String itemDescription = eitem.getFullDescription();
-
+		
 		int textWidth = (int) si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, itemDescription);
+		
+		// Check if the tooltip will go outa the screen
+		if (x + 30 + textWidth > 800){
+			int diff = x + 30 + textWidth - 800;
+			x -= diff;
+		}
 
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).setColor(ExpeditionOryxUI.ITEM_BOX_HIGHLIGHT_COLOR);
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).fillRect(x+26, y, textWidth + 10 + 2, 20 - 2);
@@ -62,7 +69,11 @@ public class IconUnitCustomGFXMenuItem implements CustomGFXMenuItem{
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+26+1, y+1, textWidth + 10 + 2 - 2, 20 - 2);
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+26+2, y+2, textWidth + 10 + 2 - 4, 20 - 4);
 		
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+ 25 + 5, y + 15, itemDescription, Color.WHITE);
+		if (down){
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+ 25 + 5, y + 15, itemDescription, Color.WHITE);
+		} else {
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+ 25 + 5, y + 15, itemDescription, Color.WHITE);
+		}
 		
 	}
 	
@@ -76,7 +87,11 @@ public class IconUnitCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y, unitImage);
 
 		}
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+ 13, y + 28, "x"+item.getQuantity(), Color.WHITE);
+		if (down){
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 24 + 12, "x"+item.getQuantity(), Color.WHITE);
+		} else {
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+ 13, y + 28, "x"+item.getQuantity(), Color.WHITE);
+		}
 	}
 	
 	
