@@ -285,7 +285,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		saveMapLayer();
 		
-		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH, 3, 6, null);
+		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH, 3, 6, null, inventorySelectionQueue);
 		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Examine Expedition Inventory");
@@ -319,6 +319,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	  			currentPage = menuBox.getPages() - 1;
 	  			menuBox.setCurrentPage(currentPage);
 	  		}
+  	  		menuBox.updatePageButtonStatus();
   	  		//si.loadLayer(getUILayer()); // ???
   	  		int boxX = startX + typeChoice * gapX - 21;
 			int boxY = 41 - 24;
