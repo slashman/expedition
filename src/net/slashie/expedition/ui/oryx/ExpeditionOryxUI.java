@@ -54,6 +54,7 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI.ItemTransferFunctionality.MenuItemType;
 import net.slashie.expedition.ui.oryx.sfx.EffectsServer;
 import net.slashie.expedition.world.ExpeditionLevel;
+import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.TemperatureRules;
@@ -829,11 +830,17 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String minuteStr = gameTime.get(Calendar.MINUTE) < 10 ? "0"+gameTime.get(Calendar.MINUTE) : gameTime.get(Calendar.MINUTE)+"";
 		String amPmStr = gameTime.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
 		
+		// Define showing
+		boolean showWind = statsExpedition.getMovementMode().equals(MovementMode.SHIP);
+		boolean showCurrent = false;
+		boolean showHeading = statsExpedition.getMovementMode().equals(MovementMode.SHIP);
+		boolean isOnMacroLevel = statsExpedition.getLevel() instanceof ExpeditionMacroLevel;
+		
 		// Compose labels
 		String ui_date = gameTime.get(Calendar.YEAR)+", "+ months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE);
 		String ui_time = hourStr +":"+ minuteStr+" "+ amPmStr;
 		String ui_gold = getExpedition().getAccountedGold()+" Gold";
-		String ui_food = statsExpedition.getOffshoreFoodDays()+" food days";
+		String ui_food = isOnMacroLevel ? statsExpedition.getOffshoreFoodDays()+" food days" : "";
 		String ui_foodModifier = TemperatureRules.getTemperatureFoodModifierString(getExpedition().getLocation().getTemperature()) + (statsExpedition.isForaging() ? " (foraging)" : "");
 		String ui_carrying;
 		if (getExpedition().getLevel() instanceof ExpeditionMicroLevel)
@@ -859,9 +866,17 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		} else {
 			ui_bearing = statsExpedition.getMovementMode().getDescription();
 		}
-		String ui_movementSpeed = getExpedition().getMovementSpeed().getDescription();
+		String ui_movementSpeed = "";
+		if (isOnMacroLevel){
+			if (statsExpedition.isAnchored()){
+				ui_movementSpeed = "";
+			} else {
+				ui_movementSpeed = getExpedition().getMovementSpeed().getDescription();
+			}
+		}
+		
 		String ui_shipStatus; 
-		if (totalShips > 0){
+		if (getExpedition().getMovementMode() == MovementMode.SHIP && totalShips > 0){
 			if (totalShips == 1){
 				ui_shipStatus = "A ship ("+statsExpedition.getShipHealth()+"%)";
 			} else {
@@ -891,9 +906,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.print(getUILayer(), 2, 5, ui_food + ui_foodModifier);
 		si.print(getUILayer(), 2, 6, ui_seaDays);
 		// si.print(2, 7, ui_water); TODO: Implement
-		si.drawImage(getUILayer(), 22, 171, MORALE_IMAGES[statsExpedition.getMorale()]);
-		si.print(getUILayer(), 5, 8, ui_morale);
-		si.print(getUILayer(), 2, 9, ui_carrying);
+		if (isOnMacroLevel){
+			si.drawImage(getUILayer(), 22, 171, MORALE_IMAGES[statsExpedition.getMorale()]);
+			si.print(getUILayer(), 5, 8, ui_morale);
+			si.print(getUILayer(), 2, 9, ui_carrying);
+		}
 		si.print(getUILayer(), 2,10, ui_gold);
 		
 		
@@ -904,68 +921,71 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.print(getUILayer(), line2, 2, ui_weatherDescription);
 		si.print(getUILayer(), line2, 3, ui_temperatureDescription);
 		si.print(getUILayer(), line2, 4, ui_terrainDescription);
-			
-		si.print(getUILayer(), line2, 5, "WIND", TITLE_COLOR);
-			si.print(getUILayer(), line2+9, 5, ui_windDirection);
-		// si.print(line2+2, 6, ui_windStrength); TODO: Implement
-		//si.print(line2, 7, "CURRENT", TITLE_COLOR); TODO: Implement
-			//si.print(line2+9, 7, ui_currentDirection); TODO: Implement
-		//si.print(line2+2, 8, ui_currentStrength); TODO: Implement
 		
-		si.print(getUILayer(), line2, 9, "HEADING", TITLE_COLOR);
-			si.print(getUILayer(), line2+9, 9, ui_headingDirection);
-		si.print(getUILayer(), line2+2, 10, ui_bearing);
-		si.print(getUILayer(), line2, 11, ui_movementSpeed);
-		
-		si.print(getUILayer(), line2, 12, ui_shipStatus);
-		
-		
-		if (getExpedition().getMovementMode() == MovementMode.SHIP){
-			vehicleUnitItems.clear();
-			for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
-				vehicleUnitItems.add(new VehicleGFXMenuItem(expeditionVehicle));
-			}
-			vehiclesMenuBox.setMenuItems(vehicleUnitItems);
-			vehiclesMenuBox.draw(false);
-		} else {
-			expeditionUnitsVector.clear();
-			expeditionUnitsVector.addAll(statsExpedition.getGoods(GoodType.PEOPLE));
-			int horses = statsExpedition.getItemCountBasic("HORSE");
-			if (horses > 0){
-				Equipment forgedEquipment = new Equipment(HORSES_ITEM, horses);
-				expeditionUnitsVector.add(forgedEquipment);
-			}
-			
-			expeditionUnitItems.clear();
-			
-			resumedEquipments.clear();
-			for (Equipment expeditionUnit: expeditionUnitsVector){
-				String basicId = ((ExpeditionItem)expeditionUnit.getItem()).getBaseID();
-				Equipment resumedEquipment = resumedEquipments.get(basicId) ;
-				if (resumedEquipment == null){
-					resumedEquipment = new Equipment(expeditionUnit.getItem(), expeditionUnit.getQuantity());
-					resumedEquipments.put(basicId, resumedEquipment);
-					expeditionUnitItems.add(new SimplifiedUnitGFXMenuItem(resumedEquipment));
-				} else {
-					resumedEquipment.setQuantity(resumedEquipment.getQuantity()+expeditionUnit.getQuantity());
-				}
-			}
-			//expeditionUnitItems.add(0, mainUnitMenuItem);
-			unitsMenuBox.setMenuItems(expeditionUnitItems);
-			Collections.sort(expeditionUnitItems, ITEMS_COMPARATOR);
-			unitsMenuBox.draw(false);
+		if (showWind){
+			si.print(getUILayer(), line2, 5, "WIND", TITLE_COLOR);
+				si.print(getUILayer(), line2+9, 5, ui_windDirection);
+			// si.print(line2+2, 6, ui_windStrength); TODO: Implement
 		}
+		
+		if (showCurrent){
+			//si.print(line2, 5, "CURRENT", TITLE_COLOR); TODO: Implement
+				//si.print(line2+9, 5, ui_currentDirection); TODO: Implement
+			//si.print(line2+2, 6, ui_currentStrength); TODO: Implement
+		}
+		
+		if (showHeading){
+			si.print(getUILayer(), line2, 7, "HEADING", TITLE_COLOR);
+				si.print(getUILayer(), line2+9, 7, ui_headingDirection);
+			si.print(getUILayer(), line2+2, 8, ui_bearing);
+		}
+		
+		si.print(getUILayer(), line2, 9, ui_movementSpeed);
+		
+		si.print(getUILayer(), line2, 10, ui_shipStatus);
+		
+		
+		expeditionUnitItems.clear();
+		
+		for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
+			expeditionUnitItems.add(new IconVehicleCustomGFXMenuItem(expeditionVehicle, false));
+		}
+		
+		expeditionUnitsVector.clear();
+		expeditionUnitsVector.addAll(statsExpedition.getGoods(GoodType.PEOPLE));
+		int horses = statsExpedition.getItemCountBasic("HORSE");
+		if (horses > 0){
+			Equipment forgedEquipment = new Equipment(HORSES_ITEM, horses);
+			expeditionUnitsVector.add(forgedEquipment);
+		}
+		resumedEquipments.clear();
+		
+		for (Equipment expeditionUnit: expeditionUnitsVector){
+			String basicId = ((ExpeditionItem)expeditionUnit.getItem()).getBaseID();
+			Equipment resumedEquipment = resumedEquipments.get(basicId) ;
+			if (resumedEquipment == null){
+				resumedEquipment = new Equipment(expeditionUnit.getItem(), expeditionUnit.getQuantity());
+				resumedEquipments.put(basicId, resumedEquipment);
+				expeditionUnitItems.add(new IconUnitCustomGFXMenuItem(resumedEquipment, false, true));
+			} else {
+				resumedEquipment.setQuantity(resumedEquipment.getQuantity()+expeditionUnit.getQuantity());
+			}
+		}
+		//expeditionUnitItems.add(0, mainUnitMenuItem);
+		unitsMenuBox.setMenuItems(expeditionUnitItems);
+		unitsMenuBox.setUsedBuffer(1);
+		Collections.sort(expeditionUnitItems, ITEMS_COMPARATOR);
+		unitsMenuBox.draw(false);
+		
 		
 		si.drawImage(getUILayer(), 774, 2, BTN_MOVE);
 	}
 	
 	private List<GFXMenuItem> expeditionUnitItems = new ArrayList<GFXMenuItem>();
-	private List<GFXMenuItem> vehicleUnitItems = new ArrayList<GFXMenuItem>();
 	private Map<String,Equipment> resumedEquipments = new HashMap<String, Equipment>();
 	
 	private Vector<Equipment> expeditionUnitsVector = new Vector<Equipment>();
-	private MenuBox unitsMenuBox;
-	private MenuBox vehiclesMenuBox;
+	private GridBox unitsMenuBox;
 	private Properties UIProperties;
 	
 	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
@@ -995,31 +1015,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		HAND_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		POINTER_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4);
 
-		//unitsMenuBox = new BorderedMenuBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, null);
-		unitsMenuBox = new MenuBox(si, null){
+		unitsMenuBox = new GridBox(si, 42, 42, 5, 7){;
 			@Override
 			public int getDrawingLayer() {
 				return getUILayer();
 			}
 		};
-		unitsMenuBox.setGap(36);
-		unitsMenuBox.setPosition(61,14);
-		unitsMenuBox.setWidth(17);
-		unitsMenuBox.setItemsPerPage(6);
-  		unitsMenuBox.setShowOptions(false);
-  		
-  		vehiclesMenuBox = new MenuBox(si, null){
-  			@Override
-  			public int getDrawingLayer() {
-  				return getUILayer();
-  			}
-  		};
-  		vehiclesMenuBox.setGap(36);
-  		vehiclesMenuBox.setPosition(61,14);
-  		vehiclesMenuBox.setWidth(17);
-  		vehiclesMenuBox.setItemsPerPage(6);
-  		vehiclesMenuBox.setShowOptions(false);
-  		
+		unitsMenuBox.setLocation(641,308-92);
+		
 		//unitsMenuBox.setTitle("Expedition");
   		try {
 			BATTLE_BACKGROUND = ImageUtils.createImage(UIProperties.getProperty("BATTLE_BACKGROUND"));
@@ -1091,13 +1094,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Show the armies
 		List<GFXMenuItem> attackingMenuItems = new ArrayList<GFXMenuItem>();
 		for (Equipment equipment: attackingUnits){
-			attackingMenuItems.add(new IconUnitCustomGFXMenuItem(equipment, false));
+			attackingMenuItems.add(new IconUnitCustomGFXMenuItem(equipment, false, false));
 		}
 		
 		List<GFXMenuItem> defendingMenuItems = new ArrayList<GFXMenuItem>();
 
 		for (Equipment equipment: defendingUnits){
-			defendingMenuItems.add(new IconUnitCustomGFXMenuItem(equipment, true));
+			defendingMenuItems.add(new IconUnitCustomGFXMenuItem(equipment, true, false));
 		}
 		si.saveLayer(getUILayer());
 		BorderedGridBox defendantsGridBox = createBorderedGridBox(28, 38, 5, 5);
