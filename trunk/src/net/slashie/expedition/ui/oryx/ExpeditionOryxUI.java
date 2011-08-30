@@ -649,7 +649,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Create the gridbox component. Send the transferFromExpeditionHandler to allow item selection with both mouse and keyb
    		TransferBorderGridBox menuBox = new TransferBorderGridBox(
    				BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
-   				STANDARD_ITEM_HEIGHT,STANDARD_ITEM_WIDTH,/*2*/ 1,6, IMG_BOX, null, 
+   				STANDARD_ITEM_HEIGHT,STANDARD_ITEM_WIDTH, 2, 6, IMG_BOX, null, 
    				from, to, transferFromExpeditionHandler, itemTransferFunctionality);
    		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
