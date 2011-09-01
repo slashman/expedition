@@ -97,20 +97,21 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		} catch (IOException e) {
 			ExpeditionGame.crash("Error loading buttons", e);
 		}
-		armButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.a));
-		buildButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.b));
-		dropButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.d));
-		inventoryButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.i));
-		lookButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.l));
-		mountButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.m));
-		repairButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.r));
-		resetButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.R));
-		chopButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.w));
-		anchorButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.A));
-		musicButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.M));
-		sfxButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.F));
-		saveButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.S));
-		quitButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.Q));
+		
+		armButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("ARM_EXPEDITION_KEY")));
+		buildButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("BUILD_SETTLEMENT_KEY")));
+		dropButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("DROP_EQUIPMENT_KEY")));
+		inventoryButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("SHOW_INVENTORY_KEY")));
+		lookButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("LOOK_KEY")));
+		mountButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("MOUNT_KEY")));
+		repairButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("REPAIR_SHIPS_KEY")));
+		resetButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("RESET_RECKON_KEY")));
+		chopButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("CHOP_WOODS_KEY")));
+		anchorButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("ANCHOR_KEY")));
+		musicButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("SWITCH_MUSIC_KEY")));
+		sfxButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("SWITCH_SFX_KEY")));
+		saveButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("PROMPT_SAVE_KEY")));
+		quitButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("QUIT_KEY")));
 		
 		armButton.setPopupText("Arm Expedition");
 		buildButton.setPopupText("Build Settlement");
