@@ -170,26 +170,25 @@ public class SpainCastle extends StaticPattern implements Serializable {
 					choice = -1;
 					while (choice == -1){
 						choice = (UserInterface.getUI()).switchChat("Audience with the King and Queen","How much would you need?",
-								"By my accounts, I need 11.530 Maravedíes.",
-								"6.000 Maravedíes will be more than enough",
-								"2.000 Maravedíes, and your blessing."
+								"By my accounts, I need 24.990 Maravedíes.",
+								"12.000 Maravedíes will be more than enough",
+								"6.000 Maravedíes, and your blessing."
 								);
 					}
 					switch (choice){
 					case 0:
-						m(isabellaSays()+"Then, we trust 11.530 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
-						exp.setAccountedGold(11530);
+						m(isabellaSays()+"Then, we trust 24.990 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						exp.setAccountedGold(24990);
 						break;
 					case 1:
-						m(isabellaSays()+"Then, we trust 6.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
-						exp.setAccountedGold(6000);
+						m(isabellaSays()+"Then, we trust 12.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						exp.setAccountedGold(12000);
 						break;
 					case 2:
-						m(ferdinandSays()+"Are you sure? You are a brave explorer. We trust 2.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
-						exp.setAccountedGold(2000);
+						m(ferdinandSays()+"Are you sure? You are a brave explorer. We trust 6.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						exp.setAccountedGold(6000);
 						break;
 					}
-					exp.addItemOffshore(ItemFactory.createItem("SAILOR"), 15);
 				}
 				
 				m(isabellaSays()+"We have instructed Friar Domenico to answer your questions about this journey, you will find him next to the Alcazar entrance.");
@@ -224,10 +223,10 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			
 			/*
 			level.getPlayer().setPosition(new Position(level.getExitFor("SPAIN")));
-			level.getPlayer().getPosition().y --;
+			level.getPlayer().getPosition().y --;*/
 			((Player)level.getPlayer()).darken();
 			((Player)level.getPlayer()).see();
-			UserInterface.getUI().refresh();*/
+			UserInterface.getUI().refresh();
 		}
 		
 
@@ -289,38 +288,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				
 				ret.setAccountedGold(1000);
 				break;
-			case 2:
-				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 1);
-				break;
-			case 99:
-				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);
-				ret.addItemOffshore(ItemFactory.createItem("ROGUE"), 30);
-				ret.addItemOffshore(ItemFactory.createItem("CAPTAIN"), 3);
-				ret.addItemOffshore(ItemFactory.createItem("CARPENTER"), 30);
-				ret.addItemOffshore(ItemFactory.createItem("DOCTOR"), 30);
-
-				
-				ret.addItemOffshore(ItemFactory.createItem("STEEL_SPEAR"), 82);
-				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 3);
-				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 3);
-				//ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
-				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
-				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 40000);
-				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 100);
-				
-				ret.addItemOffshore(ItemFactory.createItem("SOLDIER"), 30);
-				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 5);
-				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 5);
-				ret.addItemOffshore(ItemFactory.createItem("MARINE"), 20);
-				ret.addItemOffshore(ItemFactory.createItem("STUDDED_VEST"), 5);
-				ret.addItemOffshore(ItemFactory.createItem("HARQUEBUS"), 5);
 			}
-			/*ret.addItemOffshore(ItemFactory.createItem("SAILOR"), Util.rand(85,95));
-			ret.addItemOffshore(ItemFactory.createItem("ROGUE"), Util.rand(15,25));
-			ret.addItemOffshore(ItemFactory.createItem("CAPTAIN"), 3);
-			ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 3);
-			ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), Util.rand(19000, 21000));
-			ret.addItemOffshore(ItemFactory.createItem("WOOD"), Util.rand(250, 350));*/
 		}
 	}
 }

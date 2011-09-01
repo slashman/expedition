@@ -494,17 +494,17 @@ public class ExpeditionDAO {
 					new ArmorType[]{ArmorType.LIGHT}, 200, 300),
 			
 			//Goods
-			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 1,1),
-			new Food("BREAD", "Bread", "Bread", "Food Ration", 3, 1, 1, 2),
-			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 3, 1, 2,1),
-			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 3, 1, 2,1),
+			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 1, 1),
+			new Food("BREAD", "Bread", "Bread", "Food Ration", 1, 1, 1, 2),
+			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 2, 1, 2,1),
+			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 2, 1, 2,1),
 			
-			new Food("BEANS", "Beans", "Beans", "Food Ration", 3, 1, 4,1),
+			new Food("BEANS", "Beans", "Beans", "Food Ration", 2, 1, 4,1),
 			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 2,1),
 			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 1,2),
-			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 3, 1, 4,1),
-			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 3, 1, 4,1),
-			new Food("FISH", "Fish", "Fish", "Food Ration", 3, 1, 1, 2),
+			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 5, 1, 4,1),
+			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 2, 1, 4,1),
+			new Food("FISH", "Fish", "Fish", "Food Ration", 1, 1, 1, 2),
 			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 1, 1),
 			
 			new ExpeditionItem("FRESHWATER", "Freshwater", "Freshwater", "Liquid of Life", "FRESHWATER", 2, GoodType.SUPPLIES, 20,5),
