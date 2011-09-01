@@ -49,6 +49,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	private CleanButton quitButton;
 	private CleanButton anchorButton;
 	private CleanButton musicButton;
+	private CleanButton sfxButton;
 	private Image unmountImage;
 	private Image disarmImage;
 	private Image mountImage;
@@ -88,9 +89,11 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			resetButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")), HAND_CURSOR);
 			chopButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")), HAND_CURSOR);
 			anchorButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ANCHOR_BOUNDS")), HAND_CURSOR);
-			musicButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MUSIC_BOUNDS")), HAND_CURSOR);
-			saveButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), HAND_CURSOR);
-			quitButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), HAND_CURSOR);
+			
+			musicButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MUSIC_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MUSIC_BOUNDS")), HAND_CURSOR);
+			sfxButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SFX_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SFX_BOUNDS")), HAND_CURSOR);
+			saveButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), HAND_CURSOR);
+			quitButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), HAND_CURSOR);
 		} catch (IOException e) {
 			ExpeditionGame.crash("Error loading buttons", e);
 		}
@@ -104,7 +107,8 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.R));
 		chopButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.w));
 		anchorButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.A));
-		musicButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.T));
+		musicButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.M));
+		sfxButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.F));
 		saveButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.S));
 		quitButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+CharKey.Q));
 		
@@ -118,7 +122,9 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.setPopupText("Reset Dead' Reckon");
 		chopButton.setPopupText("Chop Woods");
 		anchorButton.setPopupText("Anchor Ships");
+		
 		musicButton.setPopupText("Switch Music");
+		sfxButton.setPopupText("Switch SFX");
 		saveButton.setPopupText("Save and Quit");
 		quitButton.setPopupText("Quit");
 		
@@ -132,9 +138,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.setVisible(false);
 		chopButton.setVisible(false);
 		anchorButton.setVisible(false);
-		musicButton.setVisible(false);
-		saveButton.setVisible(false);
-		quitButton.setVisible(false);
 		
 		buttonsPanel = new JPanel();
 		buttonsPanel.setOpaque(false);
@@ -158,10 +161,20 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		buttonsPanel.add(resetButton);
 		buttonsPanel.add(anchorButton);
 		
-		buttonsPanel.add(musicButton);
-		buttonsPanel.add(saveButton);
-		buttonsPanel.add(quitButton);
+		// Add these in the border
+		musicButton.setVisible(false);
+		sfxButton.setVisible(false);
+		saveButton.setVisible(false);
+		quitButton.setVisible(false);
+		musicButton.setLocation(774, 32 + 24 * 0);
+		sfxButton.setLocation(774, 32 + 24 * 1);
+		saveButton.setLocation(774, 32 + 24 * 2);
+		quitButton.setLocation(774, 32 + 24 * 3);
 		
+		si.add(musicButton);
+		si.add(sfxButton);
+		si.add(saveButton);
+		si.add(quitButton);
 		
 		si.add(buttonsPanel);
 	}
@@ -198,9 +211,12 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		//repairButton.setVisible(true);
 		//resetButton.setVisible(true);
 		//chopButton.setVisible(true);
+		
 		musicButton.setVisible(true);
+		sfxButton.setVisible(true);
 		saveButton.setVisible(true);
 		quitButton.setVisible(true);
+		
 		updateButtonStatus();
 	}
 	
@@ -219,8 +235,13 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.setVisible(false);
 		anchorButton.setVisible(false);
 		chopButton.setVisible(false);
+		
+		musicButton.setVisible(false);
+		sfxButton.setVisible(false);
 		saveButton.setVisible(false);
 		quitButton.setVisible(false);
+		
+		
 	}
 
 	private CallbackActionListener<String> getStringCallBackActionListener (BlockingQueue<String> queue, final String option) {

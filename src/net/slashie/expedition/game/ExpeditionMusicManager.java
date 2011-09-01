@@ -4,6 +4,8 @@ import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.Weather;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.sound.STMusicManagerNew;
+import net.slashie.serf.ui.UserInterface;
+import net.slashie.serf.ui.UserInterface.SoundCycle;
 
 public class ExpeditionMusicManager {
 	private static STMusicManagerNew weatherMusicManager;
@@ -51,5 +53,11 @@ public class ExpeditionMusicManager {
 	public static void setEnabled(boolean enabled) {
 		STMusicManagerNew.thus.setEnabled(enabled);
 		weatherMusicManager.setEnabled(enabled);
+	}
+	
+	public static void setSoundCycle(SoundCycle cycle){
+		UserInterface.getUI().setSoundCycle(cycle);
+		STMusicManagerNew.thus.setVolume(cycle.getGain());
+		weatherMusicManager.setVolume(cycle.getGain());
 	}
 }
