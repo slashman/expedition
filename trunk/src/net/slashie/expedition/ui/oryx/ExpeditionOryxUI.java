@@ -1668,7 +1668,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		if (promptChat("Save your game in journal \""+getPlayer().getName()+"\"?")){
 			messageBox.setText("Saving... ");
 			si.commitLayer(getUILayer());
-			informPlayerCommand(CommandListener.SAVE);
+			informPlayerCommand(CommandListener.Command.SAVE);
 			enterScreen();
 		}
 	}

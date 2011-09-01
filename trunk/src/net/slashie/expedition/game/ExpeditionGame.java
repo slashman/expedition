@@ -192,10 +192,10 @@ public class ExpeditionGame extends SworeGame {
 		return lastExpeditionId;
 	}
 
-	public void commandSelected (int commandCode){
+	public void commandSelected (Command commandCode){
 		super.commandSelected(commandCode);
 		switch (commandCode){
-		case CommandListener.HELP:
+		case HELP:
 			ExpeditionDisplay.thus.showHelp();
 			break;
 		}

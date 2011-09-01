@@ -146,9 +146,10 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		csi.print(6,16, "  r: Repair damaged ships", ConsoleSystemInterface.WHITE);
 		csi.print(6,17, "  R: Reset dead' reckon counter", ConsoleSystemInterface.WHITE);
 		csi.print(6,18, "  w: Chop wood from forests", ConsoleSystemInterface.WHITE);
-		csi.print(6,19, "  S: Save Game", ConsoleSystemInterface.WHITE);
-		csi.print(6,20, "  T: Turn music on / off", ConsoleSystemInterface.WHITE);
-		csi.print(6,21, "  Q: Quit", ConsoleSystemInterface.WHITE);
+		csi.print(6,19, "  F: Change SFX volume", ConsoleSystemInterface.WHITE);
+		csi.print(6,20, "  M: Change Music volume", ConsoleSystemInterface.WHITE);
+		csi.print(6,21, "  S: Save Game", ConsoleSystemInterface.WHITE);
+		csi.print(6,22, "  Q: Quit", ConsoleSystemInterface.WHITE);
 		
 		csi.print(6,23, "  Press Space to continue", ConsoleSystemInterface.CYAN);
 		csi.refresh();
