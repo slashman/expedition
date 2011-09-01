@@ -262,7 +262,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SPEAR"), 82);
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 3);
 				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 3);
-				ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
+				//ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
 				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
 				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 15000);
 				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 100);
@@ -275,7 +275,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SPEAR"), 82);
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 3);
 				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 3);
-				ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
+				//ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
 				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
 				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 15000);
 				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 100);
@@ -303,7 +303,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SPEAR"), 82);
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 3);
 				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 3);
-				ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
+				//ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
 				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
 				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 40000);
 				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 100);
