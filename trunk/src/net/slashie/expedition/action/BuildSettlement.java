@@ -19,6 +19,7 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.OutParameter;
 import net.slashie.utils.Position;
 
+@SuppressWarnings("serial")
 public class BuildSettlement extends Action{
 	private static final List<Building> DEFAULT_FIRST_TOWN_BUILDINGS = new ArrayList<Building>();
 	static {
@@ -104,7 +105,10 @@ public class BuildSettlement extends Action{
 	public boolean canPerform(Actor a) {
 		if (!(a.getLevel() instanceof ExpeditionMacroLevel))
 			return false;
-		if (!((OverworldExpeditionCell) a.getLevel().getMapCell(a.getPosition())).isLand())
+		OverworldExpeditionCell standingCell = (OverworldExpeditionCell) a.getLevel().getMapCell(a.getPosition()); 
+		if (!standingCell.isLand())
+			return false;
+		if (standingCell.isRiver())
 			return false;
 		if (((Expedition)performer).getLocation().getLocation().getB() >= -30){
 			return false;
@@ -116,8 +120,12 @@ public class BuildSettlement extends Action{
 	public String getInvalidationMessage() {
 		if (!(performer.getLevel() instanceof ExpeditionMacroLevel))
 			return "You can't build a town here!";
-		if (!((OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition())).isLand())
+		OverworldExpeditionCell standingCell = (OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition()); 
+		if (!standingCell.isLand())
 			return "You can't build a town here!";
+		if (standingCell.isRiver())
+			return "You can't build a town here!";
+			
 		if (((Expedition)performer).getLocation().getLocation().getB() >= -30){
 			return "This land is claimed already!";
 		}
