@@ -130,7 +130,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		public void unleash(AbstractLevel level, SworeGame game) {
 			Actor p = level.getPlayer();
 			int distance = net.slashie.utils.Position.distance(p.getPosition(), CREST_POSITION);
-			if (distance <= 8){
+			if (distance <= 5){
 				interactWithKings(level);
 			}
 			previousPlayerY = level.getPlayer().getPosition().y;
