@@ -197,6 +197,9 @@ public class WorldGenerator {
 		int lat = parseLatitude(latStr);
 		int longi = parseLongitude(longStr);
 		
+		lat = GlobeMapModel.normalizeLat(lat);
+		longi = GlobeMapModel.normalizeLong(lat, longi);
+		
 		// Create the settlement feature
 		Settlement s = new Settlement(settlementName, "TOWN");
 		s.setPosition(longi, lat, 0);

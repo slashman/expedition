@@ -89,7 +89,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		charMap.put("#", "CASTLE_WALL");
 		charMap.put("+", "SPAIN_BANNER");
 		charMap.put("W", "CASTLE_WINDOW");
-		charMap.put("S", "CASTLE_FLOOR EXIT SPAIN");
+		charMap.put("S", "CASTLE_FLOOR EXIT PALOS");
 		charMap.put("T", "THRONE");
 		charMap.put("F", "RED_CARPET NPC KING_FERDINAND");
 		charMap.put("I", "RED_CARPET NPC QUEEN_ISABELLE");
