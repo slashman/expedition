@@ -2,6 +2,7 @@ package net.slashie.expedition.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1111,9 +1112,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			for (Vehicle vehicle: vehiclesToRemove){
 				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLevel().getMapCell(getPosition());
 				if (cell.isRiver()){
-					UserInterface.getUI().showImportantMessage("A "+vehicle.getDescription()+" breaks into the shallow water.");
+					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"A "+vehicle.getDescription()+" breaks into the shallow water.");
 				} else {
-					UserInterface.getUI().showImportantMessage("You have lost a "+vehicle.getDescription()+" to the sea!");
+					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"You have lost a "+vehicle.getDescription()+" to the sea!");
 				}
 				vehicles.remove(vehicle);
 			}
@@ -1187,7 +1188,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				if (getTotalUnits() == 1){
 					// The last one aboard falls into the sea, no one can try to save him
 					ExpeditionUnit randomUnit = getRandomUnitFair();
-					UserInterface.getUI().showImportantMessage("The last "+randomUnit.getDescription()+" of your expedition falls overboard... the sea takes him away...");
+					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"The last "+randomUnit.getDescription()+" of your expedition falls overboard... the sea takes him away...");
 					deathCause = DeathCause.DEATH_BY_DROWNING;
 					informPlayerEvent (DEATH);
 					return;
@@ -1312,7 +1313,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	private void seaAccident(int chance) {
 		if (Util.chance(chance)){
 			ExpeditionUnit randomUnit = getRandomUnitFair();
-			UserInterface.getUI().showImportantMessage("Accident! A "+randomUnit.getDescription()+" is injured while performing his duty on board!");
+			UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"Accident! A "+randomUnit.getDescription()+" is injured while performing his duty on board!");
 			reduceUnits(randomUnit, 1, false);
 			ExpeditionUnit woundedUnit = (ExpeditionUnit) randomUnit.clone();
 			woundedUnit.setWounded(true);
@@ -1540,7 +1541,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
 					if (quantity > 0){
-						UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
+						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"Your expedition catches "+quantity+" fish!!");
 						modifyPerceivedLuck(1);
 					}
 				} else {
@@ -1552,7 +1553,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
 					quantity *= multiplier;
 					if (quantity > 0){
-						UserInterface.getUI().showImportantMessage("Your expedition catches "+quantity+" fish!!");
+						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"Your expedition catches "+quantity+" fish!!");
 						modifyPerceivedLuck(1);
 					}
 				} else {
@@ -1564,7 +1565,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
 					if (quantity > 0){
-						UserInterface.getUI().showImportantMessage("Your expedition forages "+quantity+" fruit!!!");
+						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"Your expedition forages "+quantity+" fruit!!!");
 						modifyPerceivedLuck(1);
 					}
 				} else {
@@ -1578,6 +1579,16 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		} else {
 			return false;
 		}		
+	}
+
+	private String getEventDatePreffix() {
+		Calendar gameTime = ((ExpeditionGame)getGame()).getGameTime();
+		String hourStr = gameTime.get(Calendar.HOUR) == 0 ? "12" : gameTime.get(Calendar.HOUR)+"";
+		String minuteStr = gameTime.get(Calendar.MINUTE) < 10 ? "0"+gameTime.get(Calendar.MINUTE) : gameTime.get(Calendar.MINUTE)+"";
+		String amPmStr = gameTime.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
+		
+		return gameTime.get(Calendar.YEAR)+", "+ ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+" XXX "; 
+		
 	}
 
 	public boolean isForaging() {
