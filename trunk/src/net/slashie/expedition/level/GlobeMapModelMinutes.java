@@ -71,4 +71,14 @@ public class GlobeMapModelMinutes extends GlobeModel{
 				longMinutes >= 180 * 60 ||
 				latMinutes >= 90*60);
 	}
+	
+	@Override
+	public int getLongitudeDegrees(int longitude) {
+		return (int)Math.round(longitude / 60.0d);
+	}
+	
+	@Override
+	public int getLatitudeDegrees(int latitude) {
+		return (int)Math.round(latitude / 60.0d);
+	}
 }

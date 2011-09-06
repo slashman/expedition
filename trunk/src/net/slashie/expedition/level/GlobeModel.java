@@ -56,5 +56,9 @@ public abstract class GlobeModel {
 	}
 
 	public abstract boolean isValidCoordinate(int longitude, int latitutde);
+
+	public abstract int getLongitudeDegrees(int longitude);
+
+	public abstract int getLatitudeDegrees(int latitude);
 	
 }
