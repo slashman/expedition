@@ -118,8 +118,8 @@ public class ExpeditionGame extends SworeGame {
 	
 	private void loadMetadata() {
 		LevelMetaData md = null;
-		md = new LevelMetaData("SPAIN");
-		addMetaData("SPAIN", md);
+		md = new LevelMetaData("PALOS");
+		addMetaData("PALOS", md);
 		md = new LevelMetaData("SPAIN_CASTLE");
 		addMetaData("SPAIN_CASTLE", md);
 		md = new LevelMetaData("WORLD");
@@ -165,10 +165,9 @@ public class ExpeditionGame extends SworeGame {
 			level.getPlayer().setPosition(-4330, 732, 0); // Cabo dela vela
 			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atlántico
 			level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
+			level.getPlayer().setPosition(-329, 3000, 0); // North
 			*/ 
-			//level.getPlayer().setPosition(-430, 2235, 0); // Gotta put this to load the piece around the starting place, must find a better way..
-			//
-			 // level.getPlayer().setPosition(-329, 3000, 0); // North
+			//level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
 		}
 		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
 

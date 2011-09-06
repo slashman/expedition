@@ -1097,22 +1097,6 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	}
 
 	@Override
-	public int getXScale() {
-		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
-			return GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
-		else
-			return 1;
-	}
-	
-	@Override
-	public int getYScale() {
-		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
-			return -GlobeMapModel.getLatitudeHeight();
-		else
-			return 1;
-	}
-	
-	@Override
 	public LandingParty selectLandingParty() {
 		List<LandingParty> landingParties = CommonUI.getLandingParties();
 		String[] landingPartiesDescription = new String[landingParties.size()];

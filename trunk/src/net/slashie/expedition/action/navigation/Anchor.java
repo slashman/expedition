@@ -47,7 +47,7 @@ public class Anchor extends Action{
 			return true;
 		}
 		
-		AbstractCell[][] around = e.getVisibleCellsAround(2, 2);
+		AbstractCell[][] around = e.getEnvironmentAround(2, 2).getCellsAround();
 		for (int x = 0; x < around.length; x++){
 			for (int y = 0; y < around[0].length; y++){
 				if (around[x][y] != null && ((OverworldExpeditionCell)around[x][y]).isLand()){

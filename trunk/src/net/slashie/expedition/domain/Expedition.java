@@ -2193,7 +2193,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		List<Position> ret = new ArrayList<Position>();
 		int longitudeScale = GlobeMapModel.getLongitudeScale(getLatitude());
 		int latitudeScale= GlobeMapModel.getLatitudeHeight();
-		AbstractCell[][] around = getVisibleCellsAround(1, 1);
+		AbstractCell[][] around = getEnvironmentAround(1, 1).getCellsAround();
 		for (int x = 0; x < around[0].length; x++){
 			for (int y = 0; y < around.length; y++){
 				if (((OverworldExpeditionCell)around[x][y]).isLand()){
