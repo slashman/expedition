@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 
 public class EffectsServer implements Runnable{
@@ -58,7 +59,7 @@ public class EffectsServer implements Runnable{
 		if (rainColorStr.equals("DARK"))
 			rainColor = new Color(130,130,180);
 		//rainColor = Color.GRAY;
-		Runnable currentEffect = new RainEffect(si, currentEffectQueue, minSize, maxSize, deadSize, maxRainlets, rainSpeed, rainColor);
+		Runnable currentEffect = new RainEffect(si, currentEffectQueue, minSize, maxSize, deadSize, maxRainlets, rainSpeed, rainColor, ExpeditionGame.getCurrentGame().getExpedition().getLocation());
 		Thread effectThread = new Thread(currentEffect);
 		effectThread.setPriority(Thread.MIN_PRIORITY);
 		effectThread.start();
