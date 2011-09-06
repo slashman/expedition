@@ -575,8 +575,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void transferItems(String prompt, GoodType preselectedGoodType, ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality) {
 		// Change UI Mode
    		Equipment.eqMode = true;
-   		((GFXUISelector)getPlayer().getSelector()).deactivate();
-   		clearTextBox();
+   		startWindowMode();
+   		
 		
 		int startX = 480;
 		int gapX = 40;
@@ -793,9 +793,20 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		si.removeKeyListener(cbkl);
 		menuBox.kill();
 		Equipment.eqMode = false;
+		stopWindowMode();
 		si.loadLayer(getUILayer());
 	}
 	
+	private void stopWindowMode() {
+		unitsMenuBox.setHoverDisabled(false);
+	}
+
+	private void startWindowMode() {
+		((GFXUISelector)getPlayer().getSelector()).deactivate();
+   		clearTextBox();
+   		unitsMenuBox.setHoverDisabled(true);
+	}
+
 	public void beforeDrawLevel() {
 		if (getExpedition().getMovementMode() == MovementMode.SHIP)
 			setFlipEnabled(false);
