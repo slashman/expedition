@@ -36,23 +36,6 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		return helper.getSuperLevelId();
 	}
 	
-	/**
-	 * Bold move, this acts as a proxy where x and y are translated into lat and long
-	 * @param x Expedition references entities with longitude instead of x
-	 * @param y Expedition references entities with latitude instead of y
-	 */
-	@Override
-	public AbstractCell getMapCell(int x, int y, int z) {
-		x = GlobeMapModel.normalizeLong(y, x);
-		y = GlobeMapModel.normalizeLat(y);
-		int gridY = GlobeMapModel.transformLatIntoY(y);
-		int gridX = GlobeMapModel.transformLongIntoX(x);
-		// The map may be incomplete
-		if (gridY < 0 || gridY > super.getHeight())
-			return null;
-		return super.getMapCell(gridX, gridY, z);
-	}
-	
 	protected void darken(int x, int y, int z) {
 		int gridX = GlobeMapModel.transformLongIntoX(x);
 		int gridY = GlobeMapModel.transformLatIntoY(y);
@@ -85,7 +68,6 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 				feature.setWasSeen(true);
 			}
 		}
-		
 	}
 	
 	protected void markLit(int x, int y, int z) {
@@ -242,13 +224,6 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			NPC npc = NPCFactory.createNPC(cmds[2]);
 			addActor(npc);
 			npc.setPosition(where.x+xoff,where.y+yoff,where.z);
-		} else if (cmds[1].equals("EXIT_GLOBE_COORDINATES")){
-			int x = GlobeMapModel.transformXIntoLong(where.x+xoff);
-			int y = GlobeMapModel.transformYIntoLat(where.y+yoff);
-			x = GlobeMapModel.normalizeLong(y, x);
-			y = GlobeMapModel.normalizeLat(y);
-			Position pos = new Position(x,y,where.z);
-			addExit(pos, cmds[2]);
 		}
 	}
 	
@@ -270,7 +245,6 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		return helper;
 	}
 	
-	
 	/**
 	 * Returns the actor *around* x.
 	 * An actor may ocuppy more than one cells wide, based on the magnification level
@@ -279,7 +253,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	private Position recyclablePosition = new Position(0,0);
 	public Actor getActorAt(Position x){
 		int magnificationLevel = GlobeMapModel.getLongitudeScale(x.y());
-		int start = x.x() - (int)Math.round(magnificationLevel/2.0d);
+		//int start = x.x() - (int)Math.round(magnificationLevel/2.0d);
+		int start = GlobeMapModel.normalizeLong(x.y(), x.x());
 		recyclablePosition.y = x.y();
 		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
 			recyclablePosition.x = xrow;
@@ -290,44 +265,72 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		return null;
 	}
 	
+	/**
+	 * Bold move, this acts as a proxy where x and y are translated into lat and long
+	 * @param x Expedition references entities with longitude instead of x
+	 * @param y Expedition references entities with latitude instead of y
+	 */
+	@Override
+	public AbstractCell getMapCell(int x, int y, int z) {
+		x = GlobeMapModel.normalizeLong(y, x);
+		y = GlobeMapModel.normalizeLat(y);
+		int gridY = GlobeMapModel.transformLatIntoY(y);
+		int gridX = GlobeMapModel.transformLongIntoX(x);
+		// The map may be incomplete
+		if (gridY < 0 || gridY > super.getHeight())
+			return null;
+		return super.getMapCell(gridX, gridY, z);
+	}
+	
+	
+	/**
+	 * Normalize lat and long, rounding them to the nearest reference points
+	 */
 	@Override
 	public String getExitOn(Position pos) {
-		int magnificationLevel = GlobeMapModel.getLongitudeScale(pos.y());
-		//int start = pos.x() - (int)Math.round(magnificationLevel/2.0d); // Removed to reduce rounding issues
 		int x = GlobeMapModel.normalizeLong(pos.y, pos.x);
 		int y = GlobeMapModel.normalizeLat(pos.y);
-		int start = x - magnificationLevel;
 		recyclablePosition.y = y;
-		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
-			recyclablePosition.x = xrow;
-			String exit = super.getExitOn(recyclablePosition);
-			if (exit != null)
-				return exit;
-		}
-		return null;
+		recyclablePosition.x = x;
+		return super.getExitOn(recyclablePosition);
+
+		/*int x = GlobeMapModel.normalizeLong(pos.y, pos.x);
+		int y = GlobeMapModel.normalizeLat(pos.y);
+		recyclablePosition.y = GlobeMapModel.transformLatIntoY(y);
+		recyclablePosition.x = GlobeMapModel.transformLongIntoX(x);
+		return super.getExitOn(recyclablePosition);*/
 	}
-	/*
-	x = GlobeMapModel.normalizeLong(y, x);
-	int gridY = GlobeMapModel.transformLatIntoY(y);
-	int gridX = GlobeMapModel.transformLongIntoX(x);
-	// The map may be incomplete
-	if (gridY < 0 || gridY > super.getHeight())
-		return null;
-	return super.getMapCell(gridX, gridY, z);*/
 	
-	
+	public Position getExitFor(String levelID){
+		Position exitPosition = super.getExitFor(levelID);
+		Position normalized = new Position(exitPosition);
+		
+		normalized.x = GlobeMapModel.normalizeLong(normalized.y, normalized.x);
+		normalized.y = GlobeMapModel.normalizeLat(normalized.y);
+		return normalized;
+	}
+
+	/**
+	 * Normalize lat and long, rounding them to the nearest reference points
+	 */
 	@Override
 	public List<AbstractFeature> getFeaturesAt(Position pos){
-		int magnificationLevel = GlobeMapModel.getLongitudeScale(pos.y());
-		int start = pos.x() - (int)Math.round(magnificationLevel/2.0d);
-		recyclablePosition.y = pos.y();
-		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
-			recyclablePosition.x = xrow;
-			List<AbstractFeature> ret = super.getFeaturesAt(recyclablePosition);
-			if (ret != null)
-				return ret;
-		}
-		return null;
+		int x = GlobeMapModel.normalizeLong(pos.y, pos.x);
+		int y = GlobeMapModel.normalizeLat(pos.y);
+		recyclablePosition.y = y;
+		recyclablePosition.x = x;
+		return super.getFeaturesAt(recyclablePosition);
+	}
+	
+	/**
+	 * Normalize lat and long, rounding them to the nearest reference points
+	 */
+	@Override
+	public void addFeature(AbstractFeature feature){
+		int x = GlobeMapModel.normalizeLong(feature.getPosition().y, feature.getPosition().x);
+		int y = GlobeMapModel.normalizeLat(feature.getPosition().y);
+		feature.setPosition(x, y, 0);
+		super.addFeature(feature, false);
 	}
 
 }
