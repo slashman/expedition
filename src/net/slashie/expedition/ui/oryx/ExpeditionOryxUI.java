@@ -895,7 +895,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Draw
 		si.setColor(getUILayer(), Color.WHITE);
 		
-		//si.print(20, 1, ui_debug);
+		si.print(getUILayer(),20, 1, ui_debug);
 		
 		// Left Column
 		si.print(getUILayer(), 2, 1, ui_date);
@@ -1333,23 +1333,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public void afterTownAction() {
 		clearTextBox();
-	}
-	
-	@Override
-	public int getXScale() {
-		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
-			return GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
-		else
-			return 1;
-	}
-	
-	@Override
-	public int getYScale() {
-		if (getExpedition().getLevel() instanceof ExpeditionLevelReader)
-			//return -GlobeMapModel.getLongitudeScale(getExpedition().getLatitude());
-			return -GlobeMapModel.getLatitudeHeight();
-		else
-			return 1;
 	}
 	
 	@Override
