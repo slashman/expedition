@@ -1262,12 +1262,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        				setMovementMode(MovementMode.SHIP);
 		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
 		        				destinationPoint = new Position(getPosition());
-		        				destinationPoint.x = GlobeMapModel.normalizeLong(destinationPoint.y, destinationPoint.x);
-		        				destinationPoint.y = GlobeMapModel.normalizeLat(destinationPoint.y);
-
-		        				//destinationPoint.x -= Math.floor((double)GlobeMapModel.getLongitudeScale(getPosition().y)/2.0d);
-		        				
-		        				//destinationPoint.x -= GlobeMapModel.getLongitudeScale(getPosition().y);
+		        				destinationPoint.x -= GlobeMapModel.getLongitudeScale(getPosition().y);
 		        				setAnchored(true);
 		        		        super.landOn(destinationPoint);
 				        		throw new ActionCancelException();
@@ -1279,10 +1274,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	        		}
 	        	} else if (cell.getStepCommand().equals("TRAVEL_CASTLE")){
 	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("A charriot takes you to the Alcazar of Córdova");
-
-	        		
 	        	}
-	        	
 	        }
         } else {
 	        OverworldExpeditionCell cell = (OverworldExpeditionCell)absCell;
