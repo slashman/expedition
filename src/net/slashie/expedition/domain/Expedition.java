@@ -154,8 +154,16 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	 * Quantity in degree minutes
 	 * @param q
 	 */
-	public void increaseDeducedReckonWest(int q){
-		deducedReckonWest += GlobeMapModel.getSingleton().transformLongIntoNauticalMiles(getPosition().y, q);
+	public void increaseDeducedReckonWestByLongitude(int longitude){
+		deducedReckonWest += GlobeMapModel.getSingleton().transformLongIntoNauticalMiles(getPosition().y, longitude);
+	}
+	
+	/**
+	 * Quantity in miles
+	 * @param q
+	 */
+	public void increaseDeducedReckonWestByMiles(int miles){
+		deducedReckonWest += miles;
 	}
 	
 	private FoodConsumerDelegate foodConsumerDelegate;
@@ -1165,7 +1173,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				wearOutShips(40, true);
 			} else {
 				wearOutShips(20, true);
-				increaseDeducedReckonWest(Util.rand(-5, 5));
+				increaseDeducedReckonWestByMiles(Util.rand(-5, 5));
 				if (Util.chance(30)){
 					int xScale = GlobeMapModel.getSingleton().getLongitudeScale(getPosition().y);
 					int yScale = GlobeMapModel.getSingleton().getLatitudeHeight();
@@ -1295,7 +1303,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	        }
 	        if (Util.chance(95)) {
 	        	//Simulate the lack of precision
-	        	increaseDeducedReckonWest(getPosition().x()-destinationPoint.x());
+	        	increaseDeducedReckonWestByLongitude(getPosition().x()-destinationPoint.x());
 	        }
         }
         super.landOn(destinationPoint);
