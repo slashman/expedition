@@ -496,7 +496,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		if (ret == null && cell != null && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
 			// Get cell to the wind shadow
 			Position var = new Position(getWindDirection().getVectors());
-			var = GlobeMapModel.scaleVar(var, getExpedition().getLatitude());
+			var = GlobeMapModel.getSingleton().scaleVar(var, getExpedition().getLatitude());
 			if (tempP.equals(Position.add(getExpedition().getPosition(), var))){
 				if (ret == null)
 					ret = new ArrayList<AbstractFeature>();

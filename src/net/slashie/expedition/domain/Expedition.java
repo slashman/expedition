@@ -155,7 +155,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	 * @param q
 	 */
 	public void increaseDeducedReckonWest(int q){
-		deducedReckonWest += GlobeMapModel.transformLongIntoNauticalMiles(getPosition().y, q);
+		deducedReckonWest += GlobeMapModel.getSingleton().transformLongIntoNauticalMiles(getPosition().y, q);
 	}
 	
 	private FoodConsumerDelegate foodConsumerDelegate;
@@ -678,7 +678,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		
 		int BASE_SIGHT = 9;
 		//int scale = GlobeMapModel.getLongitudeScale(getPosition().y());
-		int scale = 1; // Map shouldn't required this to be scaled
+		int scale = 1; // Map shouldn't require this to be scaled
 		int base = BASE_SIGHT * scale;
 		int mod = (bonus - malus) * scale;
 		
@@ -1167,8 +1167,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				wearOutShips(20, true);
 				increaseDeducedReckonWest(Util.rand(-5, 5));
 				if (Util.chance(30)){
-					int xScale = GlobeMapModel.getLongitudeScale(getPosition().y);
-					int yScale = GlobeMapModel.getLatitudeHeight();
+					int xScale = GlobeMapModel.getSingleton().getLongitudeScale(getPosition().y);
+					int yScale = GlobeMapModel.getSingleton().getLatitudeHeight();
 					//Random movement caused by the storm
 					destinationPoint.x += Util.rand(-1, 1) * xScale;
 					destinationPoint.y += Util.rand(-1, 1) * yScale;
@@ -1262,7 +1262,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        				setMovementMode(MovementMode.SHIP);
 		        				informPlayerEvent(Player.EVT_GOTO_LEVEL, superLevelId);
 		        				destinationPoint = new Position(getPosition());
-		        				destinationPoint.x -= GlobeMapModel.getLongitudeScale(getPosition().y);
+		        				destinationPoint.x -= GlobeMapModel.getSingleton().getLongitudeScale(getPosition().y);
 		        				setAnchored(true);
 		        		        super.landOn(destinationPoint);
 				        		throw new ActionCancelException();
@@ -2059,7 +2059,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	@Override
 	public void see() {
 		if (getLevel() instanceof ExpeditionLevelReader){
-			fov.setScale(GlobeMapModel.getLongitudeScale(getPosition().y()), GlobeMapModel.getLatitudeHeight());
+			fov.setScale(GlobeMapModel.getSingleton().getLongitudeScale(getPosition().y()), GlobeMapModel.getSingleton().getLatitudeHeight());
 		} else {
 			fov.setScale(1,1);
 		}
@@ -2191,8 +2191,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	public List<Position> getLandCellsAround() {
 		List<Position> ret = new ArrayList<Position>();
-		int longitudeScale = GlobeMapModel.getLongitudeScale(getLatitude());
-		int latitudeScale= GlobeMapModel.getLatitudeHeight();
+		int longitudeScale = GlobeMapModel.getSingleton().getLongitudeScale(getLatitude());
+		int latitudeScale= GlobeMapModel.getSingleton().getLatitudeHeight();
 		AbstractCell[][] around = getEnvironmentAround(1, 1).getCellsAround();
 		for (int x = 0; x < around[0].length; x++){
 			for (int y = 0; y < around.length; y++){

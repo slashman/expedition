@@ -44,7 +44,7 @@ public class WorldGenerator {
 					Culture c = ExpeditionDAO.getCulture(row[2]);
 					Position p = new Position(Integer.parseInt(row[0]),Integer.parseInt(row[1]));
 					// Translate position to lat-long
-					GlobeMapModel.transformIntoLatLong(p);
+					GlobeMapModel.getSingleton().transformIntoLatLong(p);
 					cultureCenters.add(new Pair<Position, Culture>(p,c));
 					line = r.readLine();
 				}
@@ -61,8 +61,8 @@ public class WorldGenerator {
 				int fussible = 0;
 				for (int i = 0; i < numberOfSettlements; i++){
 					Position settlementPosition = new Position(Util.rand(cultureCenter.getA().x-range, cultureCenter.getA().x+range), Util.rand(cultureCenter.getA().y-range, cultureCenter.getA().y+range));
-					settlementPosition.x = GlobeMapModel.normalizeLong(settlementPosition.y, settlementPosition.x);
-					settlementPosition.y = GlobeMapModel.normalizeLat(settlementPosition.y);
+					settlementPosition.x = GlobeMapModel.getSingleton().normalizeLong(settlementPosition.y, settlementPosition.x);
+					settlementPosition.y = GlobeMapModel.getSingleton().normalizeLat(settlementPosition.y);
 					OverworldExpeditionCell cell = (OverworldExpeditionCell) level.getMapCell(settlementPosition);
 					
 					//Check if this is land
@@ -197,8 +197,8 @@ public class WorldGenerator {
 		int lat = parseLatitude(latStr);
 		int longi = parseLongitude(longStr);
 		
-		lat = GlobeMapModel.normalizeLat(lat);
-		longi = GlobeMapModel.normalizeLong(lat, longi);
+		lat = GlobeMapModel.getSingleton().normalizeLat(lat);
+		longi = GlobeMapModel.getSingleton().normalizeLong(lat, longi);
 		
 		// Create the settlement feature
 		Settlement s = new Settlement(settlementName, "TOWN");
@@ -215,7 +215,7 @@ public class WorldGenerator {
 		int degrees = Integer.parseInt(longStr.substring(0, longStr.indexOf('º')));
 		int minutes = Integer.parseInt(longStr.substring(longStr.indexOf('º')+1, longStr.indexOf('\'')));
 		boolean west = longStr.substring(longStr.indexOf('\'')+1).equals("W");
-		return (degrees * 60 + minutes) * (west ? -1 : 1);
+		return (degrees * 60 + minutes) * 60 * (west ? -1 : 1);
 	}
 
 
@@ -223,6 +223,6 @@ public class WorldGenerator {
 		int degrees = Integer.parseInt(latStr.substring(0, latStr.indexOf("º")));
 		int minutes = Integer.parseInt(latStr.substring(latStr.indexOf("º")+1, latStr.indexOf("'")));
 		boolean north = latStr.substring(latStr.indexOf("'")+1).equals("N");
-		return (degrees * 60 + minutes )* (north ? 1 : -1);
+		return (degrees * 60 + minutes )* 60 * (north ? 1 : -1);
 	}
 }
