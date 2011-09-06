@@ -5,16 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.slashie.expedition.action.ArmExpedition;
-import net.slashie.expedition.action.Bump;
 import net.slashie.expedition.ai.NativeActionSelector;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.Culture;
-import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
-import net.slashie.serf.ai.SimpleAI;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.Appearance;
