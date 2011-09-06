@@ -838,7 +838,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		boolean isOnMacroLevel = statsExpedition.getLevel() instanceof ExpeditionMacroLevel;
 		
 		// Compose labels
-		String ui_date = gameTime.get(Calendar.YEAR)+", "+ months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE);
+		String ui_date = gameTime.get(Calendar.YEAR)+", "+ ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE);
 		String ui_time = hourStr +":"+ minuteStr+" "+ amPmStr;
 		String ui_gold = getExpedition().getAccountedGold()+" Gold";
 		String ui_food = isOnMacroLevel ? statsExpedition.getOffshoreFoodDays()+" food days" : "";
