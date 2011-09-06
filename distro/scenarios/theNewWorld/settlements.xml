@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <geopolitical>
 	<settlements>
-		<settlement id = "PALOS" lat="37°14'N" long = "6°54'W" patron = "java.koder@gmail.com" lastUpdate = "23/02/2011">
+		<settlement id = "PALOS" lat="37º14'N" long = "6º54'W" patron = "java.koder@gmail.com" lastUpdate = "23/02/2011">
 			<population>
 				<sample date = "1120" pop = "10" approximate = "approximate"/>
 				<sample date = "1322" pop = "100" approximate = "approximate"/>
@@ -15,7 +16,7 @@
 				<event date = "1248" state = "CASTILE"/>
 			</history>
 	    </settlement>
-	    <settlement id = "SAN_LUCAR" lat="36°46′N" long = "6°21′W" patron = "java.koder@gmail.com" lastUpdate = "04/04/2011">
+	    <settlement id = "SAN_LUCAR" lat="36º46'N" long = "6º21'W" patron = "java.koder@gmail.com" lastUpdate = "04/04/2011">
 	    	<population>
 	    		<sample date = "2009" pop = "65805" src = "National statistical institute of Spain 2009"/>
 	    	</population>
@@ -27,7 +28,7 @@
 	        	<event date = "1248" />
 			</history>
 		</settlement>
-		<settlement id = "CADIZ" lat="36°32′N" long ="6°17′W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
+		<settlement id = "CADIZ" lat="36º32'N" long ="6º17'W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
 			<population>
 				<sample date = "-1104" pop = "50"/>
 				<sample date = "-206" pop = "90000" src = "The ancient city had a population even greater than the 80,000 people who lived in Cádiz during the 16th and 17th century"/>
@@ -50,7 +51,7 @@
 	    		<event date = "1262" state = "CASTILE" name = "Cádiz"/>
 	    	</history>
 		</settlement>
-		<settlement id = "GIBRALTAR" lat="36.143°N" long ="5.353°W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
+		<settlement id = "GIBRALTAR" lat="36º9'N" long ="5º21'W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
 			<population>
 				<sample date = "-905" pop = "50"/>
 				<sample date = "711" pop = "50"/>
@@ -63,7 +64,7 @@
 	    		<event date = "1704" state = "ENGLAND"/>
 	    	</history>
 		</settlement>
-		<settlement id = "MALAGA" lat="36°43'N" long ="4°25'W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
+		<settlement id = "MALAGA" lat="36º43'N" long ="4º25'W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
 			<population>
 				<sample date = "-770" pop = "50"/>
 				<sample date = "2008" pop = "566447"/>
@@ -77,7 +78,7 @@
 	    		<event date = "1487" state = "SPAIN" name = "Málaga"/>
 	    	</history>
 		</settlement>
-		<settlement id = "ALMERIA" lat="36°50'N" long ="2°27'W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
+		<settlement id = "ALMERIA" lat="36º50'N" long ="2º27'W" patron = "slashie@slashware.net" lastUpdate = "04/06/2011">
 			<population>
 				<sample date = "995" pop = "50"/>
 				<sample date = "1999" pop = "169027"/>
