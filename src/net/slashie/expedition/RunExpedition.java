@@ -3,6 +3,7 @@ package net.slashie.expedition;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
@@ -298,8 +299,10 @@ public class RunExpedition {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(saves[index]));
 			currentGame = (ExpeditionGame) ois.readObject();
 			ois.close();
+		} catch (InvalidClassException ice){
+			UserInterface.getUI().showImportantMessage("This save game is not compatible with version "+ExpeditionGame.getVersion());
+			return;
 		} catch (IOException ioe){
- 
 			ioe.printStackTrace();
 		} catch (ClassNotFoundException cnfe){
 			crash("Invalid savefile or wrong version", new SworeException("Invalid savefile or wrong version"));
