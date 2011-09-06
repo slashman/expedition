@@ -11,6 +11,8 @@ import net.slashie.expedition.town.NPCFactory;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.action.AwareActor;
+import net.slashie.serf.action.EnvironmentInfo;
+import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.level.GridLevelReader;
@@ -128,10 +130,12 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 * @param y Expedition references entities with latitude instead of y
 	 */
 	@Override
-	public AbstractCell[][] getVisibleCellsAround(AwareActor watcher, 
+	public EnvironmentInfo getEnvironmentAroundActor(AwareActor watcher, 
 			int longMinutes,
 			int latMinutes, 
 			int z, int xspan, int yspan) {
+		EnvironmentInfo ret = new EnvironmentInfo();
+
 		int longitudeScale = GlobeMapModel.getLongitudeScale(latMinutes);
 		int latitudeScale= GlobeMapModel.getLatitudeHeight();
 		
@@ -141,12 +145,15 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		int ystart = latMinutes - yspan * latitudeScale;
 		int yend = latMinutes + yspan * latitudeScale;
 
-		AbstractCell [][] ret = new AbstractCell [2 * xspan + 1][2 * yspan + 1];
+		AbstractCell [][] cellsAround = new AbstractCell [2 * xspan + 1][2 * yspan + 1];
 		int px = 0;
 		int visible = 0;
+		Position runner = new Position(0,0);
 		for (int ilong = xstart; ilong <=xend; ilong+=longitudeScale){
+			runner.x = ilong;
 			int py = 0;
 			for (int ilat =  ystart ; ilat <= yend; ilat+=latitudeScale){
+				runner.y = ilat;
 				int iilong = ilong;
 				int iilat = ilat;
 				
@@ -157,14 +164,37 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 				}*/
 				
 				if (isVisible(iilong, iilat, z)){
-					ret[px][(2 * yspan) - py] = getMapCell(iilong, iilat, z);
-					watcher.seeMapCell(ret[px][py]);
+					cellsAround[px][(2 * yspan) - py] = getMapCell(iilong, iilat, z);
+					watcher.seeMapCell(cellsAround[px][py]);
 					visible++;
+					
+					List<AbstractFeature> feats = getFeaturesAt(runner);
+					if (feats != null){
+						ret.addFeature(px-xspan, yspan-py, feats);
+					}
+					
+					List<AbstractItem> items = getItemsAt(runner);
+					AbstractItem item = null;
+					if (items != null){
+						item = items.get(0);
+					}
+					if (item != null){
+						if (item.isVisible()){
+							ret.addItem(px-xspan, yspan-py, item);
+						}
+					}
+					
+					Actor actor = getActorAt(runner);
+					if (actor != getPlayer() && actor != null && !actor.isInvisible()){
+						ret.addActor(px-xspan, yspan-py, actor);
+					}
+					
 				}
 				py++;
 			}
 			px++;
 		}
+		ret.setCellsAround(cellsAround);
 		return ret;
 	}
 	
