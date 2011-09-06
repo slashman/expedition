@@ -160,7 +160,7 @@ public class ExpeditionFactory {
 		ret.setAppearanceId("EXPEDITION");
 		ret.setName(expeditionName);
 		ret.setExpeditionary(expeditionaryName);
-		ret.setAccountedGold(200);
+		ret.setAccountedGold(0);
 		ExpeditionUnit explorer = (ExpeditionUnit)ItemFactory.createItem("COLOMBUS");
 		explorer.setDescription(expeditionaryName);
 		explorer.setName(expeditionaryName);
