@@ -66,13 +66,11 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	}
 	
 	private int resolveXToLongitude(){
-		// return (int)Math.round((getPlayer().getPosition().x() - 3340)/19.6d); No longer needed since player position is now on minutes of lat and long 
-		return (int)Math.round(getPlayer().getPosition().x() / 60.0d);
+		return GlobeMapModel.getSingleton().getLongitudeDegrees(getPlayer().getPosition().x);
 	}
 	
 	private int resolveYToLatitude(){
-		// return (int)Math.round((getPlayer().getPosition().y() - 1572)/-19.47d);
-		return (int)Math.round(getPlayer().getPosition().y() / 60.0d);
+		return GlobeMapModel.getSingleton().getLatitudeDegrees(getPlayer().getPosition().y);
 	}
 	
 	private int currentTemperature = 15;

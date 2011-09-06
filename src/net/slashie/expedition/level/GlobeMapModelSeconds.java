@@ -67,5 +67,14 @@ public class GlobeMapModelSeconds extends GlobeModel{
 				longSeconds >= 180 * 60  * 60||
 				latSeconds >= 90*60 * 60);
 	}
+	
+	@Override
+	public int getLongitudeDegrees(int longitude) {
+		return (int)Math.round(longitude / 60.0d / 60.0d);
+	}
 
+	@Override
+	public int getLatitudeDegrees(int latitude) {
+		return (int)Math.round(latitude / 60.0d / 60.0d);
+	}
 }
