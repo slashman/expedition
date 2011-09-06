@@ -16,7 +16,7 @@ public class LevelMaster {
 	public static AbstractLevel createLevel(String levelID,
 			Expedition expedition) {
 		
-		if (levelID.equals("SPAIN")){
+		if (levelID.equals("PALOS")){
 			ExpeditionMicroLevel ret = new ExpeditionMicroLevel();
 			// LoadLevel spain.xml
 			StaticPattern pattern = new Spain();
@@ -30,7 +30,7 @@ public class LevelMaster {
 			ret.setLocation(new Pair<Integer,Integer>(38,-6));
 			ret.getHelper().setMusicKey("SPAIN");
 			ret.getHelper().setSuperLevelId("WORLD");
-			ret.setID("SPAIN");
+			ret.setID("PALOS");
 			ret.setDock(true);
 			ret.setZoomIn(false);
 			ret.setTemperature(20);
@@ -66,6 +66,7 @@ public class LevelMaster {
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());
 			}
+			WorldGenerator.addCities(ret);
 			WorldGenerator.addNativeSettlements(ret);
 			ret.setID("WORLD");
 			ret.setWindDirection(CardinalDirection.WEST);
