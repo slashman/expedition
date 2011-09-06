@@ -24,6 +24,7 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class Walk extends Action{
 	private boolean actionCancelled = false;
 	
@@ -89,7 +90,7 @@ public class Walk extends Action{
 		}
         
         if (expedition.getLevel() instanceof ExpeditionLevelReader){
-			var = GlobeMapModel.scaleVar(var, expedition.getPosition().y());
+			var = GlobeMapModel.getSingleton().scaleVar(var, expedition.getPosition().y());
 		}
         
         Position destinationPoint = Position.add(a.getPosition(), var);
@@ -198,7 +199,7 @@ public class Walk extends Action{
 		
 		
 		if (expedition.getLevel() instanceof ExpeditionLevelReader){
-			var = GlobeMapModel.scaleVar(var, expedition.getPosition().y());
+			var = GlobeMapModel.getSingleton().scaleVar(var, expedition.getPosition().y());
 		}
 	
 		Position destinationPoint = Position.add(performer.getPosition(), var);

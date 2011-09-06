@@ -22,8 +22,8 @@ public class MeleeAttack extends Action {
 		}
         Position var = directionToVariation(targetDirection);
         
-        _execute.x = var.x * GlobeMapModel.getLongitudeScale(performer.getPosition().y);
-        _execute.y = var.y * GlobeMapModel.getLatitudeHeight()*-1;
+        _execute.x = var.x * GlobeMapModel.getSingleton().getLongitudeScale(performer.getPosition().y);
+        _execute.y = var.y * GlobeMapModel.getSingleton().getLatitudeHeight()*-1;
 		
         Position destinationPoint = Position.add(performer.getPosition(), _execute);
         

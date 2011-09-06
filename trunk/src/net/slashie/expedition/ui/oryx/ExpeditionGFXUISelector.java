@@ -378,8 +378,8 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	private Position _advanceInDirection = new Position(0,0);
 	protected Action advanceInDirection(int direction) {
 		Position variation = Action.directionToVariation(direction);
-		_advanceInDirection.x = variation.x * GlobeMapModel.getLongitudeScale(player.getPosition().y);
-		_advanceInDirection.y = variation.y * GlobeMapModel.getLatitudeHeight() * -1;
+		_advanceInDirection.x = variation.x * GlobeMapModel.getSingleton().getLongitudeScale(player.getPosition().y);
+		_advanceInDirection.y = variation.y * GlobeMapModel.getSingleton().getLatitudeHeight() * -1;
 		Actor vMonster = player.getLevel().getActorAt(Position.add(player.getPosition(), _advanceInDirection));
 		if (vMonster != null && vMonster.isHostile() && attack.canPerform(player)){
 			attack.setDirection(direction);

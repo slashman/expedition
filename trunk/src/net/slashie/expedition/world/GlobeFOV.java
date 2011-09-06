@@ -19,7 +19,7 @@ public class GlobeFOV extends FOV{
 		int relx = x - startX;
 		int rely = y - startY;
 		int gridY = startY + rely * yScale;
-		int gridX = startX + relx * GlobeMapModel.getLongitudeScale(gridY);
+		int gridX = startX + relx * GlobeMapModel.getSingleton().getLongitudeScale(gridY);
 		return map.blockLOS(gridX,gridY);
 	}
 	
@@ -33,7 +33,7 @@ public class GlobeFOV extends FOV{
 		int relx = x - startX;
 		int rely = y - startY;
 		int gridY = startY + rely * yScale;
-		int gridX = startX + relx * GlobeMapModel.getLongitudeScale(gridY);
+		int gridX = startX + relx * GlobeMapModel.getSingleton().getLongitudeScale(gridY);
 		
 		if (circle){
 			int distance = Position.flatDistanceRound(relx, rely, 0, 0);

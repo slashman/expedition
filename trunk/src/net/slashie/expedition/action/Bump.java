@@ -26,7 +26,7 @@ public class Bump extends Action {
 		Position var = directionToVariation(targetDirection);
 		
 		if (expedition.getLevel() instanceof ExpeditionLevelReader){
-			var = GlobeMapModel.scaleVar(var, expedition.getPosition().y());
+			var = GlobeMapModel.getSingleton().scaleVar(var, expedition.getPosition().y());
 		}
         
         Position destinationPoint = Position.add(performer.getPosition(), var);

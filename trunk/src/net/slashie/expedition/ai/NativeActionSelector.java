@@ -42,8 +42,8 @@ public class NativeActionSelector implements ActionSelector {
 						potentialPower = maxPotentialPower;
 					Expedition expedition = town.deployTroops(potentialPower);
 					expedition.setPosition(town.getPosition());
-					expedition.getPosition().x = GlobeMapModel.normalizeLong(expedition.getPosition().y, expedition.getPosition().x);
-					expedition.getPosition().y = GlobeMapModel.normalizeLat(expedition.getPosition().y);
+					expedition.getPosition().x = GlobeMapModel.getSingleton().normalizeLong(expedition.getPosition().y, expedition.getPosition().x);
+					expedition.getPosition().y = GlobeMapModel.getSingleton().normalizeLat(expedition.getPosition().y);
 					town.getLevel().addActor(expedition);
 					town.getLevel().addMessage("The "+town.getDescription()+" sends out an expedition!");
 				}
@@ -53,7 +53,4 @@ public class NativeActionSelector implements ActionSelector {
 			town.reduceScaredLevel();
 		return PASS_ACTION;
 	}
-	
-	
-	
 }

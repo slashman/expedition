@@ -37,8 +37,8 @@ public class Storm implements Serializable{
 	}
 	
 	public void grow(){
-		int xScale = GlobeMapModel.getLongitudeScale(position.y);
-		int yScale = GlobeMapModel.getLatitudeHeight();
+		int xScale = GlobeMapModel.getSingleton().getLongitudeScale(position.y);
+		int yScale = GlobeMapModel.getSingleton().getLatitudeHeight();
 		usedFuel += 10;
 		List<Position> newStormlets = new ArrayList<Position>();
 		for (Position stormlet: stormlets){
@@ -61,8 +61,8 @@ public class Storm implements Serializable{
 	}
 	
 	public void shrink(){
-		int xScale = GlobeMapModel.getLongitudeScale(position.y);
-		int yScale = GlobeMapModel.getLatitudeHeight();
+		int xScale = GlobeMapModel.getSingleton().getLongitudeScale(position.y);
+		int yScale = GlobeMapModel.getSingleton().getLatitudeHeight();
 		List<Position> removableStormlets = new ArrayList<Position>();
 		Position runner = new Position(0,0);
 		for (Position stormlet: stormlets){

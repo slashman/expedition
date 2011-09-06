@@ -39,16 +39,16 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	}
 	
 	protected void darken(int x, int y, int z) {
-		int gridX = GlobeMapModel.transformLongIntoX(x);
-		int gridY = GlobeMapModel.transformLatIntoY(y);
+		int gridX = GlobeMapModel.getSingleton().transformLongIntoX(x);
+		int gridY = GlobeMapModel.getSingleton().transformLatIntoY(y);
 		if (gridY < 0 || gridY > super.getHeight())
 			return;
 		super.darken(gridX, gridY, z);
 	}
 	
 	public boolean isVisible(int x, int y, int z) {
-		int gridX = GlobeMapModel.transformLongIntoX(x);
-		int gridY = GlobeMapModel.transformLatIntoY(y);
+		int gridX = GlobeMapModel.getSingleton().transformLongIntoX(x);
+		int gridY = GlobeMapModel.getSingleton().transformLatIntoY(y);
 		if (gridY < 0 || gridY > super.getHeight())
 			return false;
 		return super.isVisible(gridX, gridY, z);
@@ -73,8 +73,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	}
 	
 	protected void markLit(int x, int y, int z) {
-		int gridX = GlobeMapModel.transformLongIntoX(x);
-		int gridY = GlobeMapModel.transformLatIntoY(y);
+		int gridX = GlobeMapModel.getSingleton().transformLongIntoX(x);
+		int gridY = GlobeMapModel.getSingleton().transformLatIntoY(y);
 		if (gridY < 0 || gridY > super.getHeight())
 			return;
 		super.markLit(gridX, gridY, z);
@@ -82,8 +82,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 
 	@Override
 	protected void markRemembered(int x, int y, int z) {
-		int gridX = GlobeMapModel.transformLongIntoX(x);
-		int gridY = GlobeMapModel.transformLatIntoY(y);
+		int gridX = GlobeMapModel.getSingleton().transformLongIntoX(x);
+		int gridY = GlobeMapModel.getSingleton().transformLatIntoY(y);
 		if (gridY < 0 || gridY > super.getHeight())
 			return;
 		super.markRemembered(gridX, gridY, z);
@@ -91,8 +91,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 
 	@Override
 	protected void markVisible(int x, int y, int z) {
-		int gridX = GlobeMapModel.transformLongIntoX(x);
-		int gridY = GlobeMapModel.transformLatIntoY(y);
+		int gridX = GlobeMapModel.getSingleton().transformLongIntoX(x);
+		int gridY = GlobeMapModel.getSingleton().transformLatIntoY(y);
 		if (gridY < 0 || gridY > super.getHeight())
 			return;
 		super.markVisible(gridX, gridY, z);	
@@ -100,8 +100,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 
 	@Override
 	protected boolean remembers(int x, int y, int z) {
-		int gridX = GlobeMapModel.transformLongIntoX(x);
-		int gridY = GlobeMapModel.transformLatIntoY(y);
+		int gridX = GlobeMapModel.getSingleton().transformLongIntoX(x);
+		int gridY = GlobeMapModel.getSingleton().transformLatIntoY(y);
 		if (gridY < 0 || gridY > super.getHeight())
 			return false;
 		return super.remembers(gridX, gridY, z);	
@@ -109,18 +109,15 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	
 	@Override
 	protected boolean isLit(Position p) {
-		p.x = GlobeMapModel.transformLongIntoX(p.x());
-		p.y = GlobeMapModel.transformLatIntoY(p.y());
+		p.x = GlobeMapModel.getSingleton().transformLongIntoX(p.x());
+		p.y = GlobeMapModel.getSingleton().transformLatIntoY(p.y());
 		if (p.y < 0 || p.y > super.getHeight())
 			return false;
 		return super.isLit(p);	
 	}
 	
 	public boolean isValidCoordinate(int longMinutes, int latMinutes){
-		return 	! (longMinutes <= -180*60 ||
-					latMinutes <= -90 * 60  ||
-					longMinutes >= 180 * 60 ||
-					latMinutes >= 90*60);
+		return GlobeMapModel.getSingleton().isValidCoordinate(longMinutes, latMinutes);
 	}
 	
 	/**
@@ -133,7 +130,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	public EnvironmentInfo getEnvironmentAroundActor(AwareActor watcher, int longMinutes, int latMinutes, int z, int xspan, int yspan) {
 		EnvironmentInfo ret = new EnvironmentInfo();
 
-		int latitudeScale= GlobeMapModel.getLatitudeHeight();
+		int latitudeScale= GlobeMapModel.getSingleton().getLatitudeHeight();
 		int ystart = latMinutes - yspan * latitudeScale;
 		int yend = latMinutes + yspan * latitudeScale;
 
@@ -145,7 +142,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		for (int ilat =  ystart ; ilat <= yend; ilat+=latitudeScale){
 			int px = 0;
 			runner.y = ilat;
-			int longitudeScale = GlobeMapModel.getLongitudeScale(ilat);
+			int longitudeScale = GlobeMapModel.getSingleton().getLongitudeScale(ilat);
 			int xstart = longMinutes - xspan * longitudeScale;
 			int xend = longMinutes + xspan * longitudeScale;
 
@@ -199,8 +196,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			int longMinutes,
 			int latMinutes, 
 			int z, int xspan, int yspan) {
-		int longitudeScale = GlobeMapModel.getLongitudeScale(latMinutes);
-		int latitudeScale= GlobeMapModel.getLatitudeHeight();
+		int longitudeScale = GlobeMapModel.getSingleton().getLongitudeScale(latMinutes);
+		int latitudeScale= GlobeMapModel.getSingleton().getLatitudeHeight();
 		
 		int xstart = longMinutes - xspan * longitudeScale;
 		int xend = longMinutes + xspan * longitudeScale;
@@ -279,9 +276,9 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 */
 	private Position recyclablePosition = new Position(0,0);
 	public Actor getActorAt(Position x){
-		int magnificationLevel = GlobeMapModel.getLongitudeScale(x.y());
+		int magnificationLevel = GlobeMapModel.getSingleton().getLongitudeScale(x.y());
 		//int start = x.x() - (int)Math.round(magnificationLevel/2.0d);
-		int start = GlobeMapModel.normalizeLong(x.y(), x.x());
+		int start = GlobeMapModel.getSingleton().normalizeLong(x.y(), x.x());
 		recyclablePosition.y = x.y();
 		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
 			recyclablePosition.x = xrow;
@@ -299,10 +296,10 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 */
 	@Override
 	public AbstractCell getMapCell(int x, int y, int z) {
-		x = GlobeMapModel.normalizeLong(y, x);
-		y = GlobeMapModel.normalizeLat(y);
-		int gridY = GlobeMapModel.transformLatIntoY(y);
-		int gridX = GlobeMapModel.transformLongIntoX(x);
+		x = GlobeMapModel.getSingleton().normalizeLong(y, x);
+		y = GlobeMapModel.getSingleton().normalizeLat(y);
+		int gridY = GlobeMapModel.getSingleton().transformLatIntoY(y);
+		int gridX = GlobeMapModel.getSingleton().transformLongIntoX(x);
 		// The map may be incomplete
 		if (gridY < 0 || gridY > super.getHeight())
 			return null;
@@ -315,8 +312,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 */
 	@Override
 	public String getExitOn(Position pos) {
-		int x = GlobeMapModel.normalizeLong(pos.y, pos.x);
-		int y = GlobeMapModel.normalizeLat(pos.y);
+		int x = GlobeMapModel.getSingleton().normalizeLong(pos.y, pos.x);
+		int y = GlobeMapModel.getSingleton().normalizeLat(pos.y);
 		recyclablePosition.y = y;
 		recyclablePosition.x = x;
 		return super.getExitOn(recyclablePosition);
@@ -332,8 +329,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		Position exitPosition = super.getExitFor(levelID);
 		Position normalized = new Position(exitPosition);
 		
-		normalized.x = GlobeMapModel.normalizeLong(normalized.y, normalized.x);
-		normalized.y = GlobeMapModel.normalizeLat(normalized.y);
+		normalized.x = GlobeMapModel.getSingleton().normalizeLong(normalized.y, normalized.x);
+		normalized.y = GlobeMapModel.getSingleton().normalizeLat(normalized.y);
 		return normalized;
 	}
 
@@ -342,8 +339,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 */
 	@Override
 	public List<AbstractFeature> getFeaturesAt(Position pos){
-		int x = GlobeMapModel.normalizeLong(pos.y, pos.x);
-		int y = GlobeMapModel.normalizeLat(pos.y);
+		int x = GlobeMapModel.getSingleton().normalizeLong(pos.y, pos.x);
+		int y = GlobeMapModel.getSingleton().normalizeLat(pos.y);
 		recyclablePosition.y = y;
 		recyclablePosition.x = x;
 		return super.getFeaturesAt(recyclablePosition);
@@ -354,8 +351,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 */
 	@Override
 	public void addFeature(AbstractFeature feature){
-		int x = GlobeMapModel.normalizeLong(feature.getPosition().y, feature.getPosition().x);
-		int y = GlobeMapModel.normalizeLat(feature.getPosition().y);
+		int x = GlobeMapModel.getSingleton().normalizeLong(feature.getPosition().y, feature.getPosition().x);
+		int y = GlobeMapModel.getSingleton().normalizeLat(feature.getPosition().y);
 		feature.setPosition(x, y, 0);
 		super.addFeature(feature, false);
 	}

@@ -143,7 +143,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	protected Position getRelativePosition(Position position, Position offset) {
 		if (getPlayer().getLevel() instanceof ExpeditionLevelReader){
-			offset = GlobeMapModel.scaleVar(offset, getPlayer().getPosition().y());
+			offset = GlobeMapModel.getSingleton().scaleVar(offset, getPlayer().getPosition().y());
 			offset.y *= -1;
 			return Position.add(player.getPosition(), offset);
 		} else {
@@ -852,7 +852,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String ui_armed = statsExpedition.isArmed()?" (Armed)":"";
 		String ui_locationDescription = getExpedition().getLocation().getDescription();
 		String ui_terrainDescription = currentCell.getDescription();
-		String ui_debug = "Scale "+GlobeMapModel.getLongitudeScale(statsExpedition.getPosition().y);
+		String ui_debug = "X " +statsExpedition.getPosition().x +" Y "+statsExpedition.getPosition().y+" Scale "+GlobeMapModel.getSingleton().getLongitudeScale(statsExpedition.getPosition().y);
 		String ui_weatherDescription =getExpedition().getLocation().getWeather().getDescription(); 
 		String ui_temperatureDescription = getExpedition().getLocation().getTemperatureDescription();
 		String ui_windDirection = getExpedition().getLocation().getWindDirection().getAbbreviation();
