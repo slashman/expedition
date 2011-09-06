@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlobeMapModelSeconds extends GlobeModel{
-	private final static int LONGITUDE_SECONDS_EQUATOR_NAUTICAL_MILES = 1; // 1 second = 1 nautical mile at equator 
+	private final static int LONGITUDE_MINUTES_EQUATOR_NAUTICAL_MILES = 1; // 1 second = 1 nautical mile at equator 
 	
 	// Note: This is calibrated for the 8colorsAmericaAndAtlantic map
 	@Override
@@ -54,8 +54,9 @@ public class GlobeMapModelSeconds extends GlobeModel{
 	 */
 	@Override
 	public double transformLongIntoNauticalMiles(int latitudeSecondsPosition, int longitudeSeconds) {
-		double nauticalMiles = Math.cos(((double)latitudeSecondsPosition / 60.0d) * (Math.PI / 180.0d));
-		nauticalMiles *= LONGITUDE_SECONDS_EQUATOR_NAUTICAL_MILES;
+		double nauticalMiles = Math.cos(((double)latitudeSecondsPosition / 60.0d / 60.0d) * (Math.PI / 180.0d));
+		nauticalMiles *= LONGITUDE_MINUTES_EQUATOR_NAUTICAL_MILES;
+		nauticalMiles /= 60.0d;
 		nauticalMiles *= longitudeSeconds;
 		return nauticalMiles;
 	}
