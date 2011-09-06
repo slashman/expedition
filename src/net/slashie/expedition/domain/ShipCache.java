@@ -68,10 +68,10 @@ public class ShipCache extends GoodsCache{
 			boolean isGFXUI = UserInterface.getUI() instanceof ExpeditionOryxUI;
 			int choice = -1;
 			if (isGFXUI){
-				choice = UserInterface.getUI().switchChat("Ships","What do you want to do?", "Transfer equipment", "Board ships");
+				choice = UserInterface.getUI().switchChat("Ships","What do you want to do?", "Transfer equipment", "Board ships", "Do nothing");
 				choice++;
 			} else {
-				choice = UserInterface.getUI().switchChat("Ships","What do you want to do?", "Transfer to expedition", "Transfer to ships", "Board ships");
+				choice = UserInterface.getUI().switchChat("Ships","What do you want to do?", "Transfer to expedition", "Transfer to ships", "Board ships", "Do nothing");
 			}
 			
 			switch (choice){
@@ -88,6 +88,8 @@ public class ShipCache extends GoodsCache{
 					UserInterface.getUI().showMessage("The ships are too full!");
 				}
 				break;
+			case 3:
+				// Do nothing
     		}
 		}
 	}
