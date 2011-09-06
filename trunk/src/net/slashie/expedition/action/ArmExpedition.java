@@ -1,7 +1,5 @@
 package net.slashie.expedition.action;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import net.slashie.expedition.domain.Armor;
@@ -10,12 +8,12 @@ import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.Weapon;
 import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.UserInterface;
 
+@SuppressWarnings("serial")
 public class ArmExpedition extends Action{
 	private boolean actionCancelled;
 	@Override
