@@ -43,6 +43,7 @@ public class DropEquipment extends Action{
 		if (standingCell.isLand()){
 			// Droping things from expedition into land caché
 			GoodsCache cache = ((ExpeditionMacroLevel)performer.getLevel()).getOrCreateCache(performer.getPosition());
+			performer.setPosition(cache.getPosition());
 			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(cache);
 			if (cache.destroyOnEmpty() && cache.getItems().size() == 0)
 				performer.getLevel().destroyFeature(cache);
@@ -111,6 +112,7 @@ public class DropEquipment extends Action{
 
         		ship.setPosition(new Position(expedition.getPosition()));
     			expedition.getLevel().addFeature(ship);
+    			expedition.setPosition(ship.getPosition());
     			if (expedition.getUnmountedUnits().size() == 0){
     				expedition.setMovementMode(MovementMode.HORSE);
 				}

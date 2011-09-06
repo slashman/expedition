@@ -203,8 +203,7 @@ public class Walk extends Action{
 		}
 	
 		Position destinationPoint = Position.add(performer.getPosition(), var);
-
-		
+	
 		AbstractCell cell = performer.getLevel().getMapCell(destinationPoint);
 
 		if (cell == null){

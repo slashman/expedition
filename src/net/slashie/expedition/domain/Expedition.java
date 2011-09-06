@@ -1207,6 +1207,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
         
         List<AbstractFeature> features = getLevel().getFeaturesAt(destinationPoint);
         if (features != null) {
+        	// Normalize destination point
+        	destinationPoint.x = GlobeMapModel.getSingleton().normalizeLong(destinationPoint.y, destinationPoint.x);
+    		
         	//Clone the collection to prevent coModification issues
         	reusableFeatureList.clear();
         	reusableFeatureList.addAll(features); 
@@ -2334,4 +2337,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public String getTypeDescription() {
 		return "Expedition";
 	}
+
+	
 }
