@@ -130,30 +130,27 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 * @param y Expedition references entities with latitude instead of y
 	 */
 	@Override
-	public EnvironmentInfo getEnvironmentAroundActor(AwareActor watcher, 
-			int longMinutes,
-			int latMinutes, 
-			int z, int xspan, int yspan) {
+	public EnvironmentInfo getEnvironmentAroundActor(AwareActor watcher, int longMinutes, int latMinutes, int z, int xspan, int yspan) {
 		EnvironmentInfo ret = new EnvironmentInfo();
 
-		int longitudeScale = GlobeMapModel.getLongitudeScale(latMinutes);
 		int latitudeScale= GlobeMapModel.getLatitudeHeight();
-		
-		int xstart = longMinutes - xspan * longitudeScale;
-		int xend = longMinutes + xspan * longitudeScale;
-		
 		int ystart = latMinutes - yspan * latitudeScale;
 		int yend = latMinutes + yspan * latitudeScale;
 
 		AbstractCell [][] cellsAround = new AbstractCell [2 * xspan + 1][2 * yspan + 1];
-		int px = 0;
+		int py = 0;
+		
 		int visible = 0;
 		Position runner = new Position(0,0);
-		for (int ilong = xstart; ilong <=xend; ilong+=longitudeScale){
-			runner.x = ilong;
-			int py = 0;
-			for (int ilat =  ystart ; ilat <= yend; ilat+=latitudeScale){
-				runner.y = ilat;
+		for (int ilat =  ystart ; ilat <= yend; ilat+=latitudeScale){
+			int px = 0;
+			runner.y = ilat;
+			int longitudeScale = GlobeMapModel.getLongitudeScale(ilat);
+			int xstart = longMinutes - xspan * longitudeScale;
+			int xend = longMinutes + xspan * longitudeScale;
+
+			for (int ilong = xstart; ilong <=xend; ilong+=longitudeScale){
+				runner.x = ilong;
 				int iilong = ilong;
 				int iilat = ilat;
 				
@@ -190,9 +187,9 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 					}
 					
 				}
-				py++;
+				px++;
 			}
-			px++;
+			py++;
 		}
 		ret.setCellsAround(cellsAround);
 		return ret;

@@ -12,8 +12,10 @@ import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
+import net.slashie.expedition.world.GlobeFOV;
 import net.slashie.expedition.world.LevelMaster;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.fov.FOV;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractLevel;
@@ -204,4 +206,8 @@ public class ExpeditionGame extends SworeGame {
 		return foodConsumers;
 	}
 
+	@Override
+	protected FOV getNewFOV() {
+		return new GlobeFOV(getExpedition());
+	}
 }
