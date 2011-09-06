@@ -112,7 +112,7 @@ public class DropEquipment extends Action{
 
         		ship.setPosition(new Position(expedition.getPosition()));
     			expedition.getLevel().addFeature(ship);
-    			expedition.setPosition(ship.getPosition());
+    			//expedition.setPosition(ship.getPosition());
     			if (expedition.getUnmountedUnits().size() == 0){
     				expedition.setMovementMode(MovementMode.HORSE);
 				}
