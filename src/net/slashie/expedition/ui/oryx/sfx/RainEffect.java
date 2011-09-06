@@ -6,6 +6,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
+import net.slashie.expedition.world.CardinalDirection;
+import net.slashie.expedition.world.ExpeditionLevel;
+import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
@@ -15,7 +18,7 @@ public class RainEffect implements Runnable{
 	protected SwingSystemInterface si;
 	protected BlockingQueue<String> commandsQueue = new LinkedBlockingQueue<String>();
 	
-	public RainEffect(SwingSystemInterface si, BlockingQueue<String> commandsQueue, int minSize, int maxSize, int deadSize, int maxRainlets, int rainSpeed, Color rainColor) {
+	public RainEffect(SwingSystemInterface si, BlockingQueue<String> commandsQueue, int minSize, int maxSize, int deadSize, int maxRainlets, int rainSpeed, Color rainColor, ExpeditionLevel level) {
 		this.si = si;
 		this.commandsQueue = commandsQueue;
 		this.minSize = minSize;
@@ -24,6 +27,7 @@ public class RainEffect implements Runnable{
 		this.maxRainlets = maxRainlets;
 		this.rainColor = rainColor;
 		this.rainSpeed = rainSpeed;
+		this.level=level; 
 	}
 
 	private int deadSize;
@@ -32,6 +36,43 @@ public class RainEffect implements Runnable{
 	private int maxSize;
 	private int rainSpeed;
 	private Color rainColor;
+	private ExpeditionLevel level;
+	
+	enum FallDirection {
+		LEFT_TO_RIGHT,
+		RIGHT_TO_LEFT,
+		UP_TO_DOWN;
+
+		public static FallDirection fromCardinalDirection(CardinalDirection windDirection) {
+			switch (windDirection){
+			case NORTHWEST:
+			case SOUTHWEST:
+			case WEST:
+				return LEFT_TO_RIGHT;
+			case NORTHEAST:
+			case SOUTHEAST:
+			case EAST:
+				return RIGHT_TO_LEFT;
+			case NORTH:
+			case SOUTH:
+			case NULL:
+				return UP_TO_DOWN;
+			}
+			return null;
+		}
+
+		public int xOffset() {
+			switch (this){
+			case LEFT_TO_RIGHT:
+				return 1;
+			case RIGHT_TO_LEFT:
+				return -1;
+			case UP_TO_DOWN:
+				return 0;
+			}
+			return 0;
+		}
+	}
 	
 	class Rainlet {
 		Position position;
@@ -113,16 +154,21 @@ public class RainEffect implements Runnable{
 			si.cleanLayer(ExpeditionOryxUI.SFX_LAYER);
 			Graphics2D g = si.getDrawingGraphics(ExpeditionOryxUI.SFX_LAYER);
 			
-			// Draw rainlets				
+		
+			// Check the wind direction
+			FallDirection fallDirection = FallDirection.fromCardinalDirection(level.getWindDirection());
+
+			// Draw rainlets
+			
 			for (Rainlet rainlet: rainlets){
 				g.setColor(rainlet.color);
 				int xOffset = 0;
 				for (int i = 0; i < rainlet.size; i++){
-					int xPosition =  rainlet.position.x - rainlet.fall*(rainlet.speed*RAIN_SIZE) + xOffset * RAIN_SIZE;
-					int yPosition =  rainlet.position.y + rainlet.fall*(rainlet.speed*RAIN_SIZE) - i * RAIN_SIZE; 
+					int xPosition =  rainlet.position.x - rainlet.fall * (rainlet.speed*RAIN_SIZE) * fallDirection.xOffset() + xOffset * RAIN_SIZE;
+					int yPosition =  rainlet.position.y + rainlet.fall * (rainlet.speed*RAIN_SIZE) - i * RAIN_SIZE; 
 					g.fillRect(xPosition, yPosition, RAIN_SIZE, RAIN_SIZE);
 					if ( (i+1) % rainlet.tearSize == 0){
-						xOffset++;
+						xOffset += fallDirection.xOffset();
 					}
 				}
 			}
