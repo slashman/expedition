@@ -49,6 +49,7 @@ public class ChopWoods extends Action{
 				f = new Forest(Util.rand(150, 250));
 				f.setPosition(new Position(expedition.getPosition()));
 				level.addFeature(f);
+				expedition.setPosition(f.getPosition());
 			} else if (((Forest)f).getAvailableWood() == 0){
 				level.addMessage("There's no more wood in this forest.");
 				return ;
