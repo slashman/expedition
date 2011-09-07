@@ -24,10 +24,10 @@ public class StoreItemInfo implements Cloneable, Serializable{
 		this.price = price;
 	}
 	
-	public StoreItemInfo(String fullId) {
+	public StoreItemInfo(String fullId, int difference) {
 		super();
 		this.fullId = fullId;
-		this.price = ItemFactory.getEuropeanPackPrize(fullId);
+		this.price = ItemFactory.getEuropeanPackPrize(fullId) + difference;
 	}
 
 	public StoreItemInfo clone(){

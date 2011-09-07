@@ -41,60 +41,55 @@ public class ExpeditionDAO {
 		
 		Store goodsStore = new Store(GoodType.SUPPLIES);
 		goodsStore.setOwnerName("Supplies Store");
-		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT"));
+		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", 0));
 		// goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", Store.LIQUID_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", Store.FOOD_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(500, new StoreItemInfo("RUM", Store.LIQUID_PACK, "barrels")); TODO: Implement
-		goodsStore.addItem(10000, new StoreItemInfo("WOOD"));
+		goodsStore.addItem(10000, new StoreItemInfo("WOOD", 0));
 		
 		//Weapons Store
 		Store weaponsStore = new Store(GoodType.ARMORY);
 		weaponsStore.setOwnerName("Armory");
-		weaponsStore.addItem(5000, new StoreItemInfo("STEEL_SPEAR"));
-		weaponsStore.addItem(1000, new StoreItemInfo("STEEL_SWORD"));
-		weaponsStore.addItem(2000, new StoreItemInfo("COMPOSITE_BOW"));
-		weaponsStore.addItem(1500, new StoreItemInfo("WOODEN_CROSSBOW"));
-		weaponsStore.addItem(1000, new StoreItemInfo("HARQUEBUS"));
-		weaponsStore.addItem(2000, new StoreItemInfo("STUDDED_VEST"));
-		weaponsStore.addItem(1000, new StoreItemInfo("BREASTPLATE"));
+		weaponsStore.addItem(5000, new StoreItemInfo("STEEL_SPEAR", 0));
+		weaponsStore.addItem(1000, new StoreItemInfo("STEEL_SWORD", 0));
+		weaponsStore.addItem(2000, new StoreItemInfo("COMPOSITE_BOW", 0));
+		weaponsStore.addItem(1500, new StoreItemInfo("WOODEN_CROSSBOW", 0));
+		weaponsStore.addItem(1000, new StoreItemInfo("HARQUEBUS", 0));
+		weaponsStore.addItem(2000, new StoreItemInfo("STUDDED_VEST", 0));
+		weaponsStore.addItem(1000, new StoreItemInfo("BREASTPLATE", 0));
 		
 		//Port
 		Store port = new Store(GoodType.VEHICLE);
 		port.setOwnerName("Harbor");
-		port.addItem(new StoreShipInfo("CARRACK", "San Pedro"));
-		port.addItem(new StoreShipInfo("CARRACK", "San Miguel"));
-		port.addItem(new StoreShipInfo("CARAVEL", "La Tunicia"));
-		port.addItem(new StoreShipInfo("CARAVEL", "Santa Ana"));
-		port.addItem(new StoreShipInfo("CARAVEL", "Trinidad"));
-		port.addItem(50, new StoreItemInfo("CAPTAIN"));
-		port.addItem(10000, new StoreItemInfo("SAILOR"));
-		port.addItem(50000, new StoreItemInfo("COLONIST"));
-		port.addItem(35000, new StoreItemInfo("ROGUE"));
+		port.addItem(new StoreShipInfo("CARRACK", "San Pedro", 1500));
+		port.addItem(new StoreShipInfo("CARRACK", "San Miguel", -2000));
+		port.addItem(new StoreShipInfo("CARAVEL", "La Tunicia", 300));
+		port.addItem(new StoreShipInfo("CARAVEL", "Santa Ana", -250));
+		port.addItem(new StoreShipInfo("CARAVEL", "Trinidad", 1000));
+		port.addItem(50, new StoreItemInfo("CAPTAIN", 0));
+		port.addItem(10000, new StoreItemInfo("SAILOR", 0));
+		port.addItem(50000, new StoreItemInfo("COLONIST", 0));
+		port.addItem(35000, new StoreItemInfo("ROGUE", 0));
 	
 		//Pub
 		Store merchant = new Store(GoodType.TRADE_GOODS);
 		merchant.setOwnerName("Trade Company");
-		merchant.addItem(10000, new StoreItemInfo("COTTON"));
-		merchant.addItem(10000, new StoreItemInfo("SUGAR"));
-		merchant.addItem(10000, new StoreItemInfo("CLOTH"));
-		merchant.addItem(200, new StoreItemInfo("COW"));
-		merchant.addItem(200, new StoreItemInfo("HORSE"));
-		merchant.addItem(200, new StoreItemInfo("PIGS"));
-		
-
-		
+		merchant.addItem(10000, new StoreItemInfo("COTTON", 0));
+		merchant.addItem(10000, new StoreItemInfo("SUGAR", 0));
+		merchant.addItem(10000, new StoreItemInfo("CLOTH", 0));
+		merchant.addItem(200, new StoreItemInfo("COW", 0));
+		merchant.addItem(200, new StoreItemInfo("HORSE", 0));
+		merchant.addItem(200, new StoreItemInfo("PIGS", 0));
 		
 		//Guild
 		Store guild = new Store(GoodType.PEOPLE);
 		guild.setOwnerName("Guild");
-		guild.addItem(7000, new StoreItemInfo("MARINE"));
-		guild.addItem(5000, new StoreItemInfo("SOLDIER"));
-		guild.addItem(1500, new StoreItemInfo("ARCHER"));
-		guild.addItem(1000, new StoreItemInfo("CARPENTER"));
-		guild.addItem(1000, new StoreItemInfo("DOCTOR"));
-		guild.addItem(200, new StoreItemInfo("EXPLORER"));
-		
-
+		guild.addItem(7000, new StoreItemInfo("MARINE", 0));
+		guild.addItem(5000, new StoreItemInfo("SOLDIER", 0));
+		guild.addItem(1500, new StoreItemInfo("ARCHER", 0));
+		guild.addItem(1000, new StoreItemInfo("CARPENTER", 0));
+		guild.addItem(1000, new StoreItemInfo("DOCTOR", 0));
+		guild.addItem(200, new StoreItemInfo("EXPLORER", 0));
 		
 		return new AbstractCell[]{
 			//Overworld cells

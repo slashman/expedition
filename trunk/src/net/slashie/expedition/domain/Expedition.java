@@ -420,14 +420,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public void setAccountedGold(int accountedGold) {
 		this.accountedGold = accountedGold;
 	}
-/*
-	public Expedition getOffshoreExpedition() {
-		return offshoreExpedition;
-	}
-
-	public void setOffshoreExpedition(Expedition offshoreExpedition) {
-		this.offshoreExpedition = offshoreExpedition;
-	}*/
 
 	public String getExpeditionary() {
 		return expeditionary;
@@ -866,6 +858,17 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		for (Equipment equipment: inventory){
 			if (equipment.getItem().getFullID().equals(itemId)){
 				goodCount += equipment.getQuantity();
+			}
+		}
+		return goodCount;
+	}
+	
+	public int getVehicleCount(String itemId) {
+		int goodCount = 0;
+		List<Vehicle> inventory = getCurrentVehicles();
+		for (Vehicle equipment: inventory){
+			if (equipment.getFullID().equals(itemId)){
+				goodCount ++;
 			}
 		}
 		return goodCount;
@@ -2367,4 +2370,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 
 	
+	public void removeVehicle(ExpeditionItem eitem) {
+		currentVehicles.remove(eitem);
+	}
 }

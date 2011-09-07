@@ -6,12 +6,15 @@ import java.awt.Image;
 import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
+import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
+import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.swing.CustomGFXMenuItem;
 
+@SuppressWarnings("serial")
 public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 	private Equipment item;
 
@@ -87,7 +90,6 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 		}
 		
 		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 12, unitImage);
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, quantity + " " + itemDescription, Color.WHITE);
 		
 		// Unit status
 		if (eitem instanceof ExpeditionUnit){
@@ -96,6 +98,15 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, "ATK: " + unit.getAttack().getString(), Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "DEF: " + unit.getDefense().getString(), Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 42, "Weight: "+unit.getWeight(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, quantity + " " + itemDescription, Color.WHITE);
+		} else if (eitem instanceof Vehicle){
+			Vehicle vehicle = (Vehicle)eitem;
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, vehicle.getName(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, "Int: "+vehicle.getResistance()+"/"+vehicle.getMaxResistance(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Cap: "+vehicle.getCarryCapacity(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 55, itemDescription, Color.WHITE);
+		} else {
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, quantity + " " + itemDescription, Color.WHITE);
 		}
 		
 	}
@@ -121,7 +132,6 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 200 - 4, 60 - 4);
 		
 		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 12, unitImage);
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, quantity + " " + itemDescription, Color.WHITE);
 		
 		// Unit status
 		if (eitem instanceof ExpeditionUnit){
@@ -133,6 +143,15 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, weaponDescription, Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, armorDescription, Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, status, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, quantity + " " + itemDescription, Color.WHITE);
+		} else if (eitem instanceof Vehicle){
+			Vehicle vehicle = (Vehicle)eitem;
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, vehicle.getName(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, "Int: "+vehicle.getResistance()+"/"+vehicle.getMaxResistance(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Cap: "+vehicle.getCarryCapacity(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 55, itemDescription, Color.WHITE);
+		} else {
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, quantity + " " + itemDescription, Color.WHITE);
 		}
 	}
 	

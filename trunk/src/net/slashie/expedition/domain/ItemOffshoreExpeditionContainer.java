@@ -82,6 +82,10 @@ public class ItemOffshoreExpeditionContainer implements ItemContainer{
 	public int getItemCount(String fullID) {
 		return getExpedition().getItemCount(fullID);
 	}
+	
+	public int getVehicleCount(String fullID) {
+		return getExpedition().getVehicleCount(fullID);
+	}
 
 	@Override
 	public int getItemCountBasic(String basicID) {
@@ -120,7 +124,12 @@ public class ItemOffshoreExpeditionContainer implements ItemContainer{
 
 	@Override
 	public void reduceQuantityOf(AbstractItem item, int quantity) {
-		getExpedition().reduceItemOffshore((ExpeditionItem) item, quantity);
+		ExpeditionItem eitem = (ExpeditionItem) item;
+		if (eitem.getGoodType() == GoodType.VEHICLE){
+			getExpedition().removeVehicle(eitem);
+		} else {
+			getExpedition().reduceItemOffshore(eitem, quantity);
+		}
 	}
 
 	@Override

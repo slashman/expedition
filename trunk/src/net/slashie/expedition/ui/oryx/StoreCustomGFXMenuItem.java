@@ -36,7 +36,6 @@ public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 		return item.getGroupClassifier();
 	}
 	
-	
 	public Image getMenuImage() {
 		return null;
 	}
@@ -91,10 +90,16 @@ public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 			for (Appearance armorAppearance: unit.getAvailableArmorAppearances()){
 				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48+i*28, y+17, ((GFXAppearance)armorAppearance).getImage());
 			}
+		} else if (item instanceof Vehicle){
+			Vehicle vehicle = (Vehicle)item;
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, vehicle.getName(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, "Int: "+vehicle.getResistance()+"/"+vehicle.getMaxResistance(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Cap: "+vehicle.getCarryCapacity(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		} else {
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "Weight "+item.getWeight(), Color.WHITE);
 			if (itemInfo != null){
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Sell: $"+itemInfo.getPrice(), Color.WHITE);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice(), Color.WHITE);
 			} else {
 				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
 			}
@@ -156,7 +161,7 @@ public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 			Vehicle vehicle = (Vehicle)item;
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, vehicle.getName(), Color.WHITE);
 			if (itemInfo != null){
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Selling for $"+itemInfo.getPrice(), Color.WHITE);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice(), Color.WHITE);
 			} else {
 				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
 			}
@@ -164,13 +169,11 @@ public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 		} else {
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "Weight "+item.getWeight(), Color.WHITE);
 			if (itemInfo != null){
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Selling for $"+itemInfo.getPrice(), Color.WHITE);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "$"+itemInfo.getPrice(), Color.WHITE);
 			} else {
 				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
 			}
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
 		}
 	}
-	
-	
 }

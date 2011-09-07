@@ -173,6 +173,10 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 		}
 		return goodCount;
 	}
+	
+	public int getVehicleCount(String fullId) {
+		return getItemCount(fullId);
+	}
 
 	@Override
 	public int getItemCountBasic(String basicID) {
