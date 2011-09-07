@@ -129,6 +129,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image BTN_MERCHANDISE;
 	public static Image BTN_WEAPONS;
 	public static Image BTN_LIVESTOCK;
+	public static Image BTN_VEHICLES;
 	public static Image BTN_CLOSE;
 	public static Image IMG_SMALL_BUTTON_BACK;
 	public static Image IMG_SMALL_BUTTON_HOVER_BACK;
@@ -226,7 +227,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Equipment.eqMode = true;
 		((GFXUISelector)getPlayer().getSelector()).deactivate();
 		
-		int startX = 480;
+		int startX = 480-40;
 		int gapX = 40;
 
 		// Create the good type buttons
@@ -245,14 +246,18 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		CleanButton livestockButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_LIVESTOCK, HAND_CURSOR);
 		livestockButton.setLocation(startX + gapX * 4,31);
 		livestockButton.setPopupText("Livestock");
+		CleanButton vehiclesButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_VEHICLES, HAND_CURSOR);
+		vehiclesButton.setLocation(startX + gapX * 5,31);
+		vehiclesButton.setPopupText("Vehicles");
 		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(startX + gapX * 6,31);
+		closeButton.setLocation(startX + gapX * 7,31);
 		
 		si.add(peopleButton);
 		si.add(suppliesButton);
 		si.add(tradeGoodsButton);
 		si.add(armoryButton);
 		si.add(livestockButton);
+		si.add(vehiclesButton);
 		si.add(closeButton);
 
 		BlockingQueue<String> inventorySelectionQueue = new LinkedBlockingQueue<String>();
@@ -262,6 +267,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		tradeGoodsButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "2"));
 		armoryButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "3"));
 		livestockButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "4"));
+		vehiclesButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "5"));
 		closeButton.addActionListener(getStringCallBackActionListener(inventorySelectionQueue, "BREAK"));
 		
 		CallbackKeyListener<String> cbkl = new CallbackKeyListener<String>(inventorySelectionQueue){
@@ -302,7 +308,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   			menuBox.setLegend(" - ");
   			
   			List<Equipment> inventory = null;
-  	  		if (typeChoice < goodTypes.length){
+  			if (typeChoice < goodTypes.length){
   	  			inventory = getExpedition().getGoods(goodTypes[typeChoice]);
   	  		}
   	  		
@@ -362,6 +368,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.remove(tradeGoodsButton);
 		si.remove(armoryButton);
 		si.remove(livestockButton);
+		si.remove(vehiclesButton);
 		si.remove(closeButton);
 		si.removeKeyListener(cbkl);
   		resetMapLayer();
@@ -578,7 +585,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
    		startWindowMode();
    		
 		
-		int startX = 480;
+		int startX = 480 - 40;
 		int gapX = 40;
 
 		// Create the good type buttons
@@ -597,14 +604,20 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		CleanButton livestockButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_LIVESTOCK, HAND_CURSOR);
 		livestockButton.setLocation(startX + gapX * 4,31);
 		livestockButton.setPopupText("Livestock");
+		
+		CleanButton vehiclesButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_VEHICLES, HAND_CURSOR);
+		vehiclesButton.setLocation(startX + gapX * 5,31);
+		vehiclesButton.setPopupText("Vehicles");
+		
 		CleanButton closeButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, BTN_CLOSE, HAND_CURSOR);
-		closeButton.setLocation(startX + gapX * 6,31);
+		closeButton.setLocation(startX + gapX * 7,31);
 		
 		si.add(peopleButton);
 		si.add(suppliesButton);
 		si.add(tradeGoodsButton);
 		si.add(armoryButton);
 		si.add(livestockButton);
+		si.add(vehiclesButton);
 		si.add(closeButton);
 		
 		
@@ -617,6 +630,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		tradeGoodsButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:2"));
 		armoryButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:3"));
 		livestockButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:4"));
+		vehiclesButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "GOOD_TYPE:5"));
 		
 		// Add callback listeners for screen close
 		closeButton.addActionListener(getStringCallBackActionListener(transferFromExpeditionHandler, "BREAK"));
@@ -646,6 +660,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 						handler.put("GOOD_TYPE:3");
 					} else if (x.code == CharKey.N5){
 						handler.put("GOOD_TYPE:4");
+					} else if (x.code == CharKey.N6){
+						handler.put("GOOD_TYPE:5");
 					}
 				} catch (InterruptedException e1) {}
 			}
@@ -789,6 +805,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.remove(tradeGoodsButton);
 		si.remove(armoryButton);
 		si.remove(livestockButton);
+		si.remove(vehiclesButton);
 		si.remove(closeButton);
   		si.removeKeyListener(cbkl);
 		menuBox.kill();
@@ -1055,14 +1072,18 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			
 			BTN_MOVE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_MOVE_BOUNDS"));
 			IMG_BOX = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
-			BTN_PEOPLE = ImageUtils.createImage(UIProperties.getProperty("BTN_PEOPLE"));
-			BTN_SUPPLIES = ImageUtils.createImage(UIProperties.getProperty("BTN_SUPPLIES"));
-			BTN_MERCHANDISE = ImageUtils.createImage(UIProperties.getProperty("BTN_MERCHANDISE"));
-			BTN_WEAPONS = ImageUtils.createImage(UIProperties.getProperty("BTN_WEAPONS"));
-			BTN_LIVESTOCK = ImageUtils.createImage(UIProperties.getProperty("BTN_LIVESTOCK"));
-			BTN_CLOSE = ImageUtils.createImage(UIProperties.getProperty("BTN_CLOSE"));
+			
+			BTN_PEOPLE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_PEOPLE_BOUNDS"));
+			BTN_SUPPLIES = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SUPPLIES_BOUNDS"));
+			BTN_MERCHANDISE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_MERCHANDISE_BOUNDS"));
+			BTN_WEAPONS = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_WEAPONS_BOUNDS"));
+			BTN_LIVESTOCK = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_LIVESTOCK_BOUNDS"));
+			BTN_VEHICLES = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_VEHICLES_BOUNDS"));
+			BTN_CLOSE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_CLOSE_BOUNDS"));
+			
 			IMG_SMALL_BUTTON_BACK = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_BACK_BOUNDS"));
 			IMG_SMALL_BUTTON_HOVER_BACK = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_HOVER_BACK_BOUNDS"));
+			
 			MORALE_IMAGES = new Image[11];
 			for (int i = 0; i <= 10; i++){
 				MORALE_IMAGES[i]= PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("IMG_MORALE_"+i));

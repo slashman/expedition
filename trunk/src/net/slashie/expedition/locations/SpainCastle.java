@@ -249,9 +249,9 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		private void stockExpedition(Expedition ret, int choice) {
 			ret.getTitle().grantTitle(Expedition.Title.EXPLORER, "of Spain");
 			List<Vehicle> startingShips = ret.getCurrentVehicles();
-			startingShips.add((Vehicle)ItemFactory.createItem("CARRACK"));
-			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
-			startingShips.add((Vehicle)ItemFactory.createItem("CARAVEL"));
+			startingShips.add((Vehicle)ItemFactory.createShip("CARRACK", "Santa Maria"));
+			startingShips.add((Vehicle)ItemFactory.createShip("CARAVEL", "Pinta"));
+			startingShips.add((Vehicle)ItemFactory.createShip("CARAVEL", "Santa Clara"));
 			//choice = 99;
 			switch (choice){
 			case 0:

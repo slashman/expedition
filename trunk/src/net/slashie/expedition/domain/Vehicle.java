@@ -12,6 +12,8 @@ import net.slashie.utils.Util;
  * @author Slash
  *
  */
+
+@SuppressWarnings("serial")
 public class Vehicle extends ExpeditionItem{
 	private boolean moveOnWater;
 	private boolean moveOnAir;
@@ -20,7 +22,14 @@ public class Vehicle extends ExpeditionItem{
 	private int resistance;
 	private boolean fakeVehicle;
 	private int maxResistance;
+	private String name;
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public boolean isMoveOnWater() {
 		return moveOnWater;
 	}
@@ -87,5 +96,18 @@ public class Vehicle extends ExpeditionItem{
 		resistance += recovery;
 		if (resistance > maxResistance)
 			resistance = maxResistance;
+	}
+	
+	@Override
+	public String getFullID(){
+		if (this instanceof ExpeditionUnit){
+			return super.getFullID();
+		} else {
+			if (getName() == null){
+				return super.getFullID();
+			} else {
+				return super.getFullID()+"_"+getName();
+			}
+		}
 	}
 }

@@ -18,7 +18,7 @@ public class GFXEffects {
 	
 	 {
 		try {
-			IMG_EFFECTS = ImageUtils.createImage("res/ui.gif");
+			IMG_EFFECTS = ImageUtils.createImage("res/ui.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

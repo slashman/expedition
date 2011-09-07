@@ -8,6 +8,7 @@ import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
+import net.slashie.expedition.domain.Vehicle;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
@@ -151,10 +152,19 @@ public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
 			}
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
+		} else if (item instanceof Vehicle){
+			Vehicle vehicle = (Vehicle)item;
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, vehicle.getName(), Color.WHITE);
+			if (itemInfo != null){
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Selling for $"+itemInfo.getPrice(), Color.WHITE);
+			} else {
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
+			}
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		} else {
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, "Weight "+item.getWeight(), Color.WHITE);
 			if (itemInfo != null){
-				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Sell: $"+itemInfo.getPrice(), Color.WHITE);
+				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Selling for $"+itemInfo.getPrice(), Color.WHITE);
 			} else {
 				si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 42, "Not interested", Color.WHITE);
 			}

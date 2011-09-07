@@ -21,7 +21,8 @@ public enum GoodType {
 		SUPPLIES,
 		TRADE_GOODS,
 		ARMORY,
-		LIVESTOCK
+		LIVESTOCK,
+		VEHICLE
 	};
 	
 	public static String[] getChoicesList() {

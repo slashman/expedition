@@ -13,6 +13,7 @@ import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.NPC;
 import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.domain.StoreItemInfo;
+import net.slashie.expedition.domain.StoreShipInfo;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
 import net.slashie.expedition.domain.Armor.ArmorType;
@@ -57,19 +58,14 @@ public class ExpeditionDAO {
 		weaponsStore.addItem(2000, new StoreItemInfo("STUDDED_VEST"));
 		weaponsStore.addItem(1000, new StoreItemInfo("BREASTPLATE"));
 		
-		weaponsStore.addItem(200, new StoreItemInfo("CARRACK"));
-		weaponsStore.addItem(200, new StoreItemInfo("CARAVEL"));
-		weaponsStore.addItem(200, new StoreItemInfo("CAPTAIN"));
-		weaponsStore.addItem(200, new StoreItemInfo("SAILOR"));
-		weaponsStore.addItem(200, new StoreItemInfo("COLONIST"));
-		weaponsStore.addItem(200, new StoreItemInfo("ROGUE"));
-		
-		
 		//Port
 		Store port = new Store(GoodType.VEHICLE);
 		port.setOwnerName("Harbor");
-		port.addItem(30, new StoreItemInfo("CARRACK"));
-		port.addItem(20, new StoreItemInfo("CARAVEL"));
+		port.addItem(new StoreShipInfo("CARRACK", "San Pedro"));
+		port.addItem(new StoreShipInfo("CARRACK", "San Miguel"));
+		port.addItem(new StoreShipInfo("CARAVEL", "La Tunicia"));
+		port.addItem(new StoreShipInfo("CARAVEL", "Santa Ana"));
+		port.addItem(new StoreShipInfo("CARAVEL", "Trinidad"));
 		port.addItem(50, new StoreItemInfo("CAPTAIN"));
 		port.addItem(10000, new StoreItemInfo("SAILOR"));
 		port.addItem(50000, new StoreItemInfo("COLONIST"));

@@ -1451,7 +1451,16 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 	
 	public List<Equipment> getGoods(GoodType goodType) {
-		return getGoods(goodType, false);
+		
+		if (goodType == GoodType.VEHICLE){
+			List<Vehicle> vehicles = getCurrentVehicles();
+			List<Equipment> vehiclesInventory = new ArrayList<Equipment>();
+			for (Vehicle vehicle: vehicles){
+				vehiclesInventory.add(new Equipment(vehicle, 1));
+			}
+			return vehiclesInventory;
+		} else 
+			return getGoods(goodType, false);
 		
 	}
 
