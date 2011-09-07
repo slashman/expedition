@@ -63,6 +63,12 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 		prices.put(item.getFullID(), info);
 	}
 	
+	public void addItem(StoreShipInfo info){
+		ExpeditionItem ship = ItemFactory.createShip(info.getType(), info.getName());
+		addItem(ship, 1);
+		prices.put(ship.getFullID(), info);
+	}
+	
 	@Override
 	public Store clone() {
 		try {

@@ -8,6 +8,7 @@ import java.util.Map;
 import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
+import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
 import net.slashie.expedition.domain.Armor.ArmorType;
 import net.slashie.expedition.domain.Weapon.WeaponType;
@@ -88,5 +89,12 @@ public class ItemFactory {
 	
 	public static List<Armor> getItemsByArmorType(ArmorType weaponType) {
 		return armorTypesMap.get(weaponType);
+	}
+
+	
+	public static ExpeditionItem createShip(String type, String name) {
+		Vehicle ship = (Vehicle) createItem(type);
+		ship.setName(name);
+		return ship;
 	}
 }
