@@ -30,4 +30,5 @@ public interface ItemContainer {
 	 * General description for this type of container (Example: "Town" instead of "La Española"
 	 */
 	String getTypeDescription();
+	int getVehicleCount(String fullID);
 }

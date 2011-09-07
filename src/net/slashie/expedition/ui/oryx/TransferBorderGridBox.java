@@ -24,6 +24,7 @@ import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.ItemContainer;
 import net.slashie.expedition.domain.ShipCache;
+import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI.ItemTransferFunctionality;
 import net.slashie.libjcsi.CharKey;
@@ -296,8 +297,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				// Just Selected
 				updateMaximumQuantities(highlight);
 				
-				sourceCurrentQuantity = source.getItemCount(highlight.getFullID());
-				destinationCurrentQuantity = destination.getItemCount(highlight.getFullID());
+				/*sourceCurrentQuantity = source.getItemCount(highlight.getFullID());
+				destinationCurrentQuantity = destination.getItemCount(highlight.getFullID());*/
 
 				// Pop components up
 			    quantitySplitterToSource.setVisible(true);
@@ -328,12 +329,20 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private void updateMaximumQuantities(ExpeditionItem eitem) {
 		if (source == null || destination == null)
 			return;
-		sourceCurrentQuantity = source.getItemCount(eitem.getFullID());
-		destinationCurrentQuantity = destination.getItemCount(eitem.getFullID());
+		if (eitem.getGoodType() == GoodType.VEHICLE){
+			sourceCurrentQuantity = source.getVehicleCount(eitem.getFullID());
+			destinationCurrentQuantity = destination.getVehicleCount(eitem.getFullID());
+		} else {
+			sourceCurrentQuantity = source.getItemCount(eitem.getFullID());
+			destinationCurrentQuantity = destination.getItemCount(eitem.getFullID());
+		}
 		
 		int allQuantity = sourceCurrentQuantity + destinationCurrentQuantity;
-		
-		sourceMaximumQuantity = source.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
+		if (eitem.getGoodType() == GoodType.VEHICLE){
+			sourceMaximumQuantity = -1; // Can always add more vehicles to the expedition (Unless they are nested vehicles but those aren't yet supported)
+		} else {
+			sourceMaximumQuantity = source.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
+		}
 		
 		if (sourceMaximumQuantity == -1){
 			// Infinite capacity, can carry all available
@@ -347,8 +356,11 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		
 		if (sourceMaximumQuantity < 0)
 			sourceMaximumQuantity = 0;
-		
-		destinationMaximumQuantity = destination.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
+		if (eitem.getGoodType() == GoodType.VEHICLE){
+			destinationMaximumQuantity = -1; // Can always add more vehicles to the expedition (Unless they are nested vehicles but those aren't yet supported)
+		} else {
+			destinationMaximumQuantity = destination.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
+		}
 		
 
 		if (destinationMaximumQuantity == -1){

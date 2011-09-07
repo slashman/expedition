@@ -3,8 +3,8 @@ package net.slashie.expedition.domain;
 @SuppressWarnings("serial")
 public class StoreShipInfo extends StoreItemInfo {
 	
-	public StoreShipInfo(String fullId, String name) {
-		super(fullId);
+	public StoreShipInfo(String fullId, String name, int difference) {
+		super(fullId, difference);
 		this.type = fullId;
 		this.name = name;
 	}
