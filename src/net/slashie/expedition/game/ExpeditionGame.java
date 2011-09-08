@@ -14,6 +14,7 @@ import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.GlobeFOV;
 import net.slashie.expedition.world.LevelMaster;
+import net.slashie.expedition.world.SettlementLevel;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.fov.FOV;
 import net.slashie.serf.game.Player;
@@ -46,6 +47,8 @@ public class ExpeditionGame extends SworeGame {
 	}
 
 	private List<FoodConsumer> foodConsumers = new ArrayList<FoodConsumer>();
+	private List<SettlementLevel> settlementLevels = new ArrayList<SettlementLevel>();
+	
 	public void addFoodConsumer(FoodConsumer foodConsumer){
 		foodConsumers.add(foodConsumer);
 	}
@@ -209,5 +212,14 @@ public class ExpeditionGame extends SworeGame {
 	@Override
 	protected FOV getNewFOV() {
 		return new GlobeFOV(getExpedition());
+	}
+
+	
+	public List<SettlementLevel> getSettlements() {
+		return settlementLevels;
+	}
+	
+	public void registerSettlement(SettlementLevel level){
+		settlementLevels.add(level);
 	}
 }

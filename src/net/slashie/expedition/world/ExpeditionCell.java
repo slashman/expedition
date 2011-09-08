@@ -1,21 +1,16 @@
 package net.slashie.expedition.world;
 
-import net.slashie.expedition.domain.Store;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.AppearanceFactory;
 
+@SuppressWarnings("serial")
 public class ExpeditionCell extends AbstractCell {
-	private Store store;
 	private String stepCommand;
 	
 	public String getStepCommand() {
 		return stepCommand;
 	}
 
-	public Store getStore() {
-		return store;
-	}
-	
 	public ExpeditionCell(String pID, String pShortDescription, boolean solid, boolean opaque){
 		super(pID, pShortDescription, pShortDescription, AppearanceFactory.getAppearanceFactory().getAppearance(pID), solid, opaque);
 	}
@@ -29,25 +24,14 @@ public class ExpeditionCell extends AbstractCell {
 		super(pID, pShortDescription, pShortDescription, AppearanceFactory.getAppearanceFactory().getAppearance(pID));
 	}
 	
-	public ExpeditionCell(String pID, String pShortDescription, Store store){
-		this(pID, pShortDescription, false, true);
-		this.store = store;
-	}
-	
 	public ExpeditionCell(String pID, String pShortDescription, String stepCommand){
 		this(pID, pShortDescription);
 		this.stepCommand = stepCommand;
 	}
 	
 	@Override
-	public boolean cloneRequired() {
-		return store != null;
-	}
-	
-	@Override
 	public AbstractCell clone() {
 		ExpeditionCell ret = (ExpeditionCell) super.clone();
-		ret.store = store.clone();
 		return ret;
 	}
 

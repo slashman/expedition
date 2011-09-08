@@ -1,10 +1,12 @@
 package net.slashie.expedition.worldGen;
 
 import net.slashie.expedition.domain.ExpeditionItem;
-import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.NPC;
+import net.slashie.expedition.domain.Store;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.town.NPCFactory;
+import net.slashie.expedition.world.SettlementLevel;
+import net.slashie.expedition.world.StoreFactory;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.levelGeneration.StaticGenerator;
 import net.slashie.utils.Position;
@@ -19,6 +21,9 @@ public class ExpeditionStaticGenerator extends StaticGenerator{
 			NPC npc = NPCFactory.createNPC(cmds[2]);
 			l.addActor(npc);
 			npc.setPosition(where.x+x,where.y+y,where.z);
+		} else if (cmds[1].equals("STORE")){
+			Store store = StoreFactory.getSingleton().createStore(cmds[2]);
+			((SettlementLevel)l).addStore(new Position(where.x+x,where.y+y,where.z), store);
 		}
 	}
 }

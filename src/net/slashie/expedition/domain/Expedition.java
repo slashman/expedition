@@ -26,6 +26,7 @@ import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.FoodConsumerDelegate;
 import net.slashie.expedition.world.OverworldExpeditionCell;
+import net.slashie.expedition.world.SettlementLevel;
 import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.expedition.world.Weather;
 import net.slashie.serf.action.Actor;
@@ -44,6 +45,7 @@ import net.slashie.utils.Circle;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class Expedition extends Player implements FoodConsumer, UnitContainer, ItemContainer{
 	private ExpeditionUnit leaderUnit;
 	
@@ -349,6 +351,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	private String expeditionary;
 
+	@SuppressWarnings("serial")
 	public static class Rank implements Serializable {
 		private Title title;
 		private String realm;
@@ -1236,14 +1239,17 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
         	}
         }
         
+        if (getLevel() instanceof SettlementLevel){
+        	Store store = ((SettlementLevel)getLevel()).getStoreAt(destinationPoint);
+        	if (store != null){
+        		((ExpeditionUserInterface)UserInterface.getUI()).launchStore(store);
+	        	throw new ActionCancelException();
+        	}
+        }
+        
         AbstractCell absCell = getLevel().getMapCell(destinationPoint);
         if (absCell instanceof ExpeditionCell){
 	        ExpeditionCell cell = (ExpeditionCell)absCell;
-	        if (cell.getStore() != null){
-	        	((ExpeditionUserInterface)UserInterface.getUI()).launchStore(cell.getStore());
-	        	throw new ActionCancelException();
-	        }
-	        
 	        if (cell.getStepCommand() != null){
 	        	if (cell.getStepCommand().equals("DEPARTURE")){
 	        		if (getTotalShips() == 0) {
