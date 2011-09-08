@@ -4,7 +4,7 @@ package net.slashie.expedition.domain;
 public class StoreShipInfo extends StoreItemInfo {
 	
 	public StoreShipInfo(String fullId, String name, int difference) {
-		super(fullId, difference);
+		super(fullId, 0, difference);
 		this.type = fullId;
 		this.name = name;
 	}

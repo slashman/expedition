@@ -2,8 +2,10 @@ package net.slashie.expedition.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.baseDomain.AbstractItem;
@@ -13,13 +15,16 @@ import net.slashie.serf.ui.Appearance;
 public class Store implements ItemContainer, Serializable, Cloneable{
 	private static final long serialVersionUID = 1L;
 	
-	private Hashtable<String, StoreItemInfo> prices = new Hashtable<String, StoreItemInfo>();
+	private Map<String, StoreItemInfo> prices = new Hashtable<String, StoreItemInfo>();
+	private List<StoreItemInfo> pricesList = new ArrayList<StoreItemInfo>();
+	
 	private List<Equipment> inventory = new ArrayList<Equipment>();
 	private String text;
 	private String ownerName;
 	private Appearance ownerAppearance;
-
 	private GoodType mainGoodType;
+
+	private Map<String, Integer> maxQuantities = new HashMap<String, Integer>();
 	
 	public Store(GoodType mainGoodType) {
 		super();
@@ -33,18 +38,23 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 	public String getText() {
 		return text;
 	}
+	
 	public void setText(String text) {
 		this.text = text;
 	}
+	
 	public String getOwnerName() {
 		return ownerName;
 	}
+	
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
 	}
+	
 	public Appearance getOwnerAppearance() {
 		return ownerAppearance;
 	}
+	
 	public void setOwnerAppearance(Appearance ownerAppearance) {
 		this.ownerAppearance = ownerAppearance;
 	}
@@ -61,12 +71,16 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 		ExpeditionItem item = ItemFactory.createItem(info.getFullId());
 		addItem(item, quantity);
 		prices.put(item.getFullID(), info);
+		pricesList.add(info);
+		maxQuantities.put(item.getFullID(), quantity);
 	}
 	
 	public void addItem(StoreShipInfo info){
 		ExpeditionItem ship = ItemFactory.createShip(info.getType(), info.getName());
 		addItem(ship, 1);
 		prices.put(ship.getFullID(), info);
+		pricesList.add(info);
+
 	}
 	
 	@Override
@@ -88,7 +102,6 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 		}
 	}
 
-	
 	public GoodType getMainGoodType() {
 		return mainGoodType;
 	}
@@ -110,6 +123,7 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 			existingEquipment.increaseQuantity(quantity);
 		}
 	}
+	
 
 	@Override
 	public boolean canCarry(ExpeditionItem item, int quantity) {
@@ -239,7 +253,6 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 		return false;
 	}
 
-	
 	//TODO: Trading arc, implement market system
 	public boolean canBuy(ExpeditionItem item, int quantity) {
 		return prices.get(item.getFullID()) != null;
@@ -247,5 +260,25 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 
 	public int getSellPrice(ExpeditionItem item) {
 		return prices.get(item.getFullID()).getPrice(); // Return the same as buy price, for now
+	}
+
+	
+	public void restock() {
+		for (StoreItemInfo storeItemInfo: pricesList){
+			int currentQuantity = getItemCount(storeItemInfo.getFullId());
+			Integer maxQuantity = maxQuantities.get(storeItemInfo.getFullId());
+			if (maxQuantity == null)
+				maxQuantity = 0;
+			if (currentQuantity < maxQuantity){
+				int restockQuantity = storeItemInfo.getWeeklyRestock();
+				if (restockQuantity + currentQuantity > maxQuantity){
+					restockQuantity = maxQuantity - currentQuantity; 
+				}
+				if (restockQuantity > 0){
+					ExpeditionItem item = ItemFactory.createItem(storeItemInfo.getFullId());
+					addItem(item, restockQuantity);
+				}
+			}
+		}
 	}
 }

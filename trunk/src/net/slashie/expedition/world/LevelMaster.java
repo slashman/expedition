@@ -1,6 +1,7 @@
 package net.slashie.expedition.world;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.locations.Spain;
 import net.slashie.expedition.locations.SpainCastle;
 import net.slashie.expedition.locations.World;
@@ -13,11 +14,11 @@ import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 
 public class LevelMaster {
-	public static AbstractLevel createLevel(String levelID,
-			Expedition expedition) {
+	public static AbstractLevel createLevel(String levelID, Expedition expedition) {
 		
 		if (levelID.equals("PALOS")){
-			ExpeditionMicroLevel ret = new ExpeditionMicroLevel();
+			SettlementLevel ret = new SettlementLevel();
+			ExpeditionGame.getCurrentGame().registerSettlement(ret);
 			// LoadLevel spain.xml
 			StaticPattern pattern = new Spain();
 			StaticGenerator generator = new ExpeditionStaticGenerator();

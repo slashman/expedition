@@ -43,6 +43,7 @@ import net.slashie.expedition.ui.oryx.ExpeditionGFXUISelector;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.expedition.ui.oryx.OryxExpeditionDisplay;
 import net.slashie.expedition.ui.oryx.effects.GFXEffects;
+import net.slashie.expedition.world.StoreFactory;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.libjcsi.jcurses.JCursesConsoleInterface;
@@ -113,6 +114,7 @@ public class RunExpedition {
 				initializeActions();
 				initializeSelectors();
 				System.out.println("Loading Data");
+				initializeStores();
 				initializeItems();
 				initializeCells();
 				initializeBuildings();
@@ -215,6 +217,10 @@ public class RunExpedition {
 			createNew = false;
     	}
 	}
+	private static void initializeStores() {
+		StoreFactory.initializeSingleton(new StoreFactory());
+	}
+	
 	private static Properties configuration;
 	private static Properties UIconfiguration;
 	private static Properties keyConfig;

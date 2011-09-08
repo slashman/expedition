@@ -13,9 +13,9 @@ public class Spain extends StaticPattern {
 			"--------------------------------------------...................h.......",
 			"--------------------------------v--------,,###......h..................",
 			"---------------------------------------,,,,,,####......................",
-			"--------------------------v---------hhhhhhhhh,,,###........hh..........",
-			"---------------------------------v--h3h1h2hhh,h,,,####X.......,........",
-			"--------------------v--v---------6==,,,,,,,,,,,,,,,,,7X.........h......",
+			"--------------------------v---------hhhhhhhhh,,,###..XXX...hh..........",
+			"---------------------------------v--h3h1h2hhh,h,,,####7#......,........",
+			"--------------------v--v---------6==,,,,,,,,,,,,,,,,,,,#........h......",
 			"---------------------------,,,------,,h4hhh,hh5h,,,,######.............",
 			"----------------------===,,,,hhh,h,,,,,,,,,,,hhh,,h,,,,,,####..........",
 			"------------v---------,,,,,,,,,,,,,hhhh,,hh,,,hhh,h,,h,,,...###........",
@@ -122,11 +122,11 @@ public class Spain extends StaticPattern {
 		charMap.put("=", "SPAIN_DOCKS");
 		charMap.put("a", "SPAIN_CASTLE");
 		charMap.put("c", "SPAIN_COLUMN");
-		charMap.put("1", "GOODS_STORE");
-		charMap.put("2", "WEAPONS_STORE");
-		charMap.put("3", "PORT");
-		charMap.put("4", "MERCHANT");
-		charMap.put("5", "GUILD");
+		charMap.put("1", "GOODS_STORE STORE PALOS_GOODS");
+		charMap.put("2", "WEAPONS_STORE STORE PALOS_ARMORY");
+		charMap.put("3", "PORT STORE PALOS_DOCKS");
+		charMap.put("4", "MERCHANT STORE PALOS_TRADE");
+		charMap.put("5", "GUILD STORE PALOS_GUILD");
 		charMap.put("6", "DEPARTURE EXIT WORLD");
 		charMap.put("7", "CASTLE_GATE EXIT SPAIN_CASTLE");
 		charMap.put("S", "SPAIN_FLOOR EXIT _START");

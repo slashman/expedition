@@ -28,6 +28,7 @@ import net.slashie.expedition.world.Culture;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionFeature;
 import net.slashie.expedition.world.OverworldExpeditionCell;
+import net.slashie.expedition.world.StoreFactory;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.serf.level.AbstractCell;
@@ -41,55 +42,60 @@ public class ExpeditionDAO {
 		
 		Store goodsStore = new Store(GoodType.SUPPLIES);
 		goodsStore.setOwnerName("Supplies Store");
-		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", 0));
+		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", 500, 0));
 		// goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", Store.LIQUID_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", Store.FOOD_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(500, new StoreItemInfo("RUM", Store.LIQUID_PACK, "barrels")); TODO: Implement
-		goodsStore.addItem(10000, new StoreItemInfo("WOOD", 0));
+		goodsStore.addItem(10000, new StoreItemInfo("WOOD", 100, 0));
+		StoreFactory.getSingleton().addStore("PALOS_GOODS", goodsStore);
 		
 		//Weapons Store
 		Store weaponsStore = new Store(GoodType.ARMORY);
 		weaponsStore.setOwnerName("Armory");
-		weaponsStore.addItem(5000, new StoreItemInfo("STEEL_SPEAR", 0));
-		weaponsStore.addItem(1000, new StoreItemInfo("STEEL_SWORD", 0));
-		weaponsStore.addItem(2000, new StoreItemInfo("COMPOSITE_BOW", 0));
-		weaponsStore.addItem(1500, new StoreItemInfo("WOODEN_CROSSBOW", 0));
-		weaponsStore.addItem(1000, new StoreItemInfo("HARQUEBUS", 0));
-		weaponsStore.addItem(2000, new StoreItemInfo("STUDDED_VEST", 0));
-		weaponsStore.addItem(1000, new StoreItemInfo("BREASTPLATE", 0));
+		weaponsStore.addItem(500, new StoreItemInfo("STEEL_SPEAR", 50, 0));
+		weaponsStore.addItem(100, new StoreItemInfo("STEEL_SWORD", 10, 0));
+		weaponsStore.addItem(200, new StoreItemInfo("COMPOSITE_BOW", 20, 0));
+		weaponsStore.addItem(150, new StoreItemInfo("WOODEN_CROSSBOW", 15, 0));
+		weaponsStore.addItem(100, new StoreItemInfo("HARQUEBUS", 10, 0));
+		weaponsStore.addItem(200, new StoreItemInfo("STUDDED_VEST", 20, 0));
+		weaponsStore.addItem(100, new StoreItemInfo("BREASTPLATE", 10, 0));
+		StoreFactory.getSingleton().addStore("PALOS_ARMORY", weaponsStore);
 		
 		//Port
 		Store port = new Store(GoodType.VEHICLE);
-		port.setOwnerName("Harbor");
+		port.setOwnerName("Docks");
 		port.addItem(new StoreShipInfo("CARRACK", "San Pedro", 1500));
 		port.addItem(new StoreShipInfo("CARRACK", "San Miguel", -2000));
 		port.addItem(new StoreShipInfo("CARAVEL", "La Tunicia", 300));
 		port.addItem(new StoreShipInfo("CARAVEL", "Santa Ana", -250));
 		port.addItem(new StoreShipInfo("CARAVEL", "Trinidad", 1000));
-		port.addItem(50, new StoreItemInfo("CAPTAIN", 0));
-		port.addItem(10000, new StoreItemInfo("SAILOR", 0));
-		port.addItem(50000, new StoreItemInfo("COLONIST", 0));
-		port.addItem(35000, new StoreItemInfo("ROGUE", 0));
+		port.addItem(10, new StoreItemInfo("CAPTAIN", 1, 0));
+		port.addItem(500, new StoreItemInfo("SAILOR", 10, 0));
+		port.addItem(1000, new StoreItemInfo("COLONIST", 50, 0));
+		port.addItem(300, new StoreItemInfo("ROGUE", 5, 0));
+		StoreFactory.getSingleton().addStore("PALOS_DOCKS", port);
 	
 		//Pub
 		Store merchant = new Store(GoodType.TRADE_GOODS);
 		merchant.setOwnerName("Trade Company");
-		merchant.addItem(10000, new StoreItemInfo("COTTON", 0));
-		merchant.addItem(10000, new StoreItemInfo("SUGAR", 0));
-		merchant.addItem(10000, new StoreItemInfo("CLOTH", 0));
-		merchant.addItem(200, new StoreItemInfo("COW", 0));
-		merchant.addItem(200, new StoreItemInfo("HORSE", 0));
-		merchant.addItem(200, new StoreItemInfo("PIGS", 0));
+		merchant.addItem(150, new StoreItemInfo("COTTON", 5, 0));
+		merchant.addItem(150, new StoreItemInfo("SUGAR", 5, 0));
+		merchant.addItem(150, new StoreItemInfo("CLOTH", 10, 0));
+		merchant.addItem(20, new StoreItemInfo("COW", 1, 0));
+		merchant.addItem(30, new StoreItemInfo("HORSE", 2, 0));
+		merchant.addItem(50, new StoreItemInfo("PIGS", 3, 0));
+		StoreFactory.getSingleton().addStore("PALOS_TRADE", merchant);
 		
 		//Guild
 		Store guild = new Store(GoodType.PEOPLE);
 		guild.setOwnerName("Guild");
-		guild.addItem(7000, new StoreItemInfo("MARINE", 0));
-		guild.addItem(5000, new StoreItemInfo("SOLDIER", 0));
-		guild.addItem(1500, new StoreItemInfo("ARCHER", 0));
-		guild.addItem(1000, new StoreItemInfo("CARPENTER", 0));
-		guild.addItem(1000, new StoreItemInfo("DOCTOR", 0));
-		guild.addItem(200, new StoreItemInfo("EXPLORER", 0));
+		guild.addItem(70, new StoreItemInfo("MARINE", 1, 0));
+		guild.addItem(50, new StoreItemInfo("SOLDIER", 1, 0));
+		guild.addItem(150, new StoreItemInfo("ARCHER", 1, 0));
+		guild.addItem(50, new StoreItemInfo("CARPENTER", 1, 0));
+		guild.addItem(10, new StoreItemInfo("DOCTOR", 1, 0));
+		guild.addItem(10, new StoreItemInfo("EXPLORER", 1, 0));
+		StoreFactory.getSingleton().addStore("PALOS_GUILD", guild);
 		
 		return new AbstractCell[]{
 			//Overworld cells
@@ -103,11 +109,11 @@ public class ExpeditionDAO {
 			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0, false, false),
 			
 			//Inworld Cells
-			new ExpeditionCell("GOODS_STORE", "Goods Store", goodsStore),
-			new ExpeditionCell("WEAPONS_STORE", "Weapons Store", weaponsStore),
-			new ExpeditionCell("PORT", "Harbor", port),
-			new ExpeditionCell("MERCHANT", "Trade Company", merchant),
-			new ExpeditionCell("GUILD", "Guild", guild),
+			new ExpeditionCell("GOODS_STORE", "Goods Store"),
+			new ExpeditionCell("WEAPONS_STORE", "Weapons Store"),
+			new ExpeditionCell("PORT", "Harbor"),
+			new ExpeditionCell("MERCHANT", "Trade Company"),
+			new ExpeditionCell("GUILD", "Guild"),
 			
 			new ExpeditionCell("SPAIN_GRASS", "Grass"),
 			new ExpeditionCell("SPAIN_GRASS_BLOCKED", "Grass", true, false),

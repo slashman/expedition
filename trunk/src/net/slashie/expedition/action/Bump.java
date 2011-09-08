@@ -15,6 +15,7 @@ import net.slashie.serf.text.EnglishGrammar;
 import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.utils.Position;
 
+@SuppressWarnings("serial")
 public class Bump extends Action {
 
 	@Override
@@ -36,10 +37,6 @@ public class Bump extends Action {
         if (absCell instanceof ExpeditionCell){
 	        ExpeditionCell cell = (ExpeditionCell)absCell;
 	        if (cell == null){
-	        	return;
-	        }
-	        
-	        if (cell.getStore() != null){
 	        	return;
 	        }
         } else {

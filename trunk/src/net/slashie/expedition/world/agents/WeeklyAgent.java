@@ -2,22 +2,25 @@ package net.slashie.expedition.world.agents;
 
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.world.SettlementLevel;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
 import net.slashie.serf.action.Actor;
 
+@SuppressWarnings("serial")
 public class WeeklyAgent extends Actor{
-	private static final long serialVersionUID = 1L;
-
 	protected static final Action BEAT = new Action() {
-		private static final long serialVersionUID = 1L;
-
 		@Override
 		public void execute() {
 			// Forage food at colonies
 			for (Town town: ExpeditionGame.getCurrentGame().getExpedition().getTowns()){
 				town.forageFood();
 				town.checkCrops();
+			}
+			
+			// Restock Palos (and other cities, in the future)
+			for (SettlementLevel town: ExpeditionGame.getCurrentGame().getSettlements()){
+				town.restockStores();
 			}
 		}
 
