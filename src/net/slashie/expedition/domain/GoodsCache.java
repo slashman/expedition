@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import net.slashie.expedition.domain.Expedition.DeathCause;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.FoodConsumer;
@@ -386,7 +387,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	}
 	
 	@Override
-	public void reduceUnits(ExpeditionUnit unit, int quantity) {
+	public void reduceUnits(ExpeditionUnit unit, int quantity, DeathCause cause) {
 		reduceQuantityOf(unit, quantity);
 	}
 	

@@ -158,7 +158,7 @@ public class FoodConsumerDelegate implements Serializable{
 				break;
 			
 		}
-		foodConsumer.checkDeath();
+		//foodConsumer.checkDeath();
 		return acumHash.values();
 	}
 
