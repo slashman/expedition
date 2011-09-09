@@ -61,8 +61,7 @@ public class ExpeditionGame extends SworeGame {
 
 	@Override
 	public void beforePlayerAction() {
-		// TODO Auto-generated method stub
-		
+		getExpedition().checkDeath();
 	}
 
 	@Override
@@ -172,7 +171,7 @@ public class ExpeditionGame extends SworeGame {
 			level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
 			level.getPlayer().setPosition(-329, 3000, 0); // North
 			*/ 
-			//level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
+			//level.getPlayer().setPosition(-4362*60, 889*60, 0); // Near the Tairona
 		}
 		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
 
