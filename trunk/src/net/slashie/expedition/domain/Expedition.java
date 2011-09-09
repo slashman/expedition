@@ -2351,6 +2351,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		resetDaysAtSea();
 	}
+	
+	public void touchPort() {
+		if (getDaysOnSea() > 20){
+			message("Land at last!");
+		}
+		resetDaysAtSea();
+	}
 
 	/**
 	 * Looks of a town around the expedition

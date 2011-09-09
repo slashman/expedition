@@ -154,7 +154,7 @@ public class ExpeditionGame extends SworeGame {
 		expeditionLevel.playMusic();
 		if (level instanceof ExpeditionMicroLevel)
 			getExpedition().setMovementMode(MovementMode.FOOT);
-		if (level.getID().equals("SPAIN")){
+		if (level.getID().equals("PALOS")){
 			int sumOfValuables = getExpedition().getSumOfValuables(); 
 			if (sumOfValuables > 0){
 				String prompt = "Do you want to cash your valuables for "+sumOfValuables+" maravedíes?";
@@ -162,7 +162,7 @@ public class ExpeditionGame extends SworeGame {
 					getExpedition().cashValuables();
 				}
 			}
-			getExpedition().touchLand();
+			getExpedition().touchPort();
 		}
 		if (level.getID().equals("WORLD")){
 			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar
