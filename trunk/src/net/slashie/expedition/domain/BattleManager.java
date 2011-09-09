@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.slashie.expedition.domain.Expedition.DeathCause;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.serf.action.Actor;
@@ -200,12 +201,12 @@ public class BattleManager {
 					// Wound
 					if (targetUnit.isWounded()){
 						// Kill unit :(
-						defendingExpedition.reduceUnits(targetUnit, 1);
+						defendingExpedition.reduceUnits(targetUnit, 1, DeathCause.DEATH_BY_SLAYING);
 						defendingEquipment.reduceQuantity(1);
 						outcome.addDeath(targetUnit);
 					} else {
 						// Add a wounded unit
-						defendingExpedition.reduceUnits(targetUnit, 1);
+						defendingExpedition.reduceUnits(targetUnit, 1, DeathCause.DEATH_BY_SLAYING);
 						ExpeditionUnit woundedUnit = (ExpeditionUnit)targetUnit.clone();
 						woundedUnit.setWounded(true);
 						defendingExpedition.addUnits(woundedUnit, 1);
@@ -214,7 +215,7 @@ public class BattleManager {
 					}
 				} else {
 					// Overkill  :(
-					defendingExpedition.reduceUnits(targetUnit, 1);
+					defendingExpedition.reduceUnits(targetUnit, 1, DeathCause.DEATH_BY_SLAYING);
 					defendingEquipment.reduceQuantity(1);
 					outcome.addDeath(targetUnit);
 				}

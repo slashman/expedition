@@ -55,7 +55,6 @@ public class Bump extends Action {
         if (actor != null){
         	if (actor instanceof Expedition && !(actor instanceof NonPrincipalExpedition)){
         		Expedition targetExpedition = (Expedition) actor;
-        		targetExpedition.setJustAttacked(true);
    				//Attack!
         		String message = EnglishGrammar.a(expedition.getDescription())+" "+expedition.getDescription()+" attacks you";
    				expedition.getLevel().addMessage(message);

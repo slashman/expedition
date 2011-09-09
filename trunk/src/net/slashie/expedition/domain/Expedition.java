@@ -391,8 +391,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 	private DeathCause deathCause;
 
-	private boolean justAttacked = false;
-	
 	public List<Vehicle> getCurrentVehicles() {
 		return currentVehicles;
 	}
@@ -581,10 +579,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public void checkDeath(){
 		if (getTotalUnits() <= 0){
 			UserInterface.getUI().refresh();
-			if (justAttacked )
+			if (deathCause == null)
 				deathCause = DeathCause.DEATH_BY_SLAYING;
-			else
-				deathCause = DeathCause.DEATH_BY_STARVATION;
 			UserInterface.getUI().onPlayerDeath();
 			informPlayerEvent (DEATH);
 		}
@@ -1118,9 +1114,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			for (Vehicle vehicle: vehiclesToRemove){
 				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLevel().getMapCell(getPosition());
 				if (cell.isRiver()){
-					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"A "+vehicle.getDescription()+" breaks into the shallow water.");
+					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We lost a "+vehicle.getDescription()+" into the shallow water.");
 				} else {
-					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"You have lost a "+vehicle.getDescription()+" to the sea!");
+					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We lost a "+vehicle.getDescription()+" to the sea.");
 				}
 				vehicles.remove(vehicle);
 			}
@@ -1159,16 +1155,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		this.heading = heading;
 	}
 
-	@Override
-	public void updateStatus() {
-		super.updateStatus();
-		justAttacked = false;
-	}
-
-	public void setJustAttacked(boolean justAttacked) {
-		this.justAttacked = justAttacked;
-	}
-	
 	List<AbstractFeature> reusableFeatureList = new ArrayList<AbstractFeature>();
 	@Override
 	public void landOn(Position destinationPoint) throws ActionCancelException {
@@ -1323,7 +1309,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		if (Util.chance(chance)){
 			ExpeditionUnit randomUnit = getRandomUnitFair();
 			UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"Accident! A "+randomUnit.getDescription()+" is injured while performing his duty on board!");
-			reduceUnits(randomUnit, 1, false);
+			reduceUnits(randomUnit, 1, DeathCause.DEATH_BY_DROWNING);
 			ExpeditionUnit woundedUnit = (ExpeditionUnit) randomUnit.clone();
 			woundedUnit.setWounded(true);
 			addUnits(woundedUnit, 1);
@@ -1412,15 +1398,14 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 	
 	@Override
-	public void reduceUnits(ExpeditionUnit unit, int quantity) {
-		reduceUnits(unit, quantity, true);
+	public void reduceUnits(ExpeditionUnit unit, int quantity, DeathCause cause) {
+		reduceUnits(unit, quantity);
+		if (cause != null)
+			deathCause = cause;
 	}
-
-	public void reduceUnits(ExpeditionUnit unit, int quantity, boolean checkDeath) {
+	
+	public void reduceUnits(ExpeditionUnit unit, int quantity) {
 		reduceQuantityOf(unit, quantity);
-		if (checkDeath)
-			checkDeath();
-		
 	}
 	
 	public List<Equipment> getTools(boolean clone) {
@@ -1556,10 +1541,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			if (cell.isRiver()){
 				if (isForaging()){
 					food = "FISH";
-					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
+					int multiplier = (int)Math.ceil(getTotalUnits()/20.0d);
+					
 					quantity *= multiplier;
 					if (quantity > 0){
-						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"Your expedition catches "+quantity+" fish!!");
+						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We have caught "+quantity+" fish!!");
 						modifyPerceivedLuck(1);
 					}
 				} else {
@@ -1571,7 +1557,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					int multiplier = (int)Math.ceil(getItemCount("SAILOR")/25.0d);
 					quantity *= multiplier;
 					if (quantity > 0){
-						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"Your expedition catches "+quantity+" fish!!");
+						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We have caught "+quantity+" fish!!");
 						modifyPerceivedLuck(1);
 					}
 				} else {
@@ -1583,7 +1569,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					int multiplier = (int)Math.ceil(getTotalUnits()/10.0d);
 					quantity *= multiplier;
 					if (quantity > 0){
-						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"Your expedition forages "+quantity+" fruit!!!");
+						UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We have foraged "+quantity+" fruit!!!");
 						modifyPerceivedLuck(1);
 					}
 				} else {
@@ -2182,7 +2168,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				ExpeditionUnit unit = (ExpeditionUnit) woundedEquipment.getItem();
 				int units = Util.rand(1, woundedEquipment.getQuantity());
 				message(units+" "+EnglishGrammar.plural(unit.getDescription(), units)+" have recovered");
-				reduceUnits((ExpeditionUnit)woundedEquipment.getItem(), units, false);
+				reduceUnits((ExpeditionUnit)woundedEquipment.getItem(), units);
 				ExpeditionUnit unwoundedUnit = (ExpeditionUnit) unit.clone();
 				unwoundedUnit.setWounded(false);
 				addUnits(unwoundedUnit, units);	
