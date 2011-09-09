@@ -109,7 +109,7 @@ public class GameFiles {
 	}
 	
 	public static void main (String [] args){
-		System.out.println(encode("-","Unregistered"));
+		System.out.println(encode("Name","Level"));
 	}
 	
 	public static class SaveGameFilenameFilter implements FilenameFilter {
