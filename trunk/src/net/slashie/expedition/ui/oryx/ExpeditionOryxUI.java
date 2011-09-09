@@ -919,7 +919,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String ui_windStrength = "<Strenght>";
 		String ui_currentDirection = "<D>";
 		String ui_currentStrength = "<Strength>";
-		String ui_seaDays = statsExpedition.getMovementMode() == MovementMode.SHIP ? statsExpedition.getDaysOnSea()+" days on sea": "";
+		String ui_seaDays = statsExpedition.getDaysOnSea() > 0 ? statsExpedition.getDaysOnSea()+" days on sea": "";
 		
 		// Draw
 		si.setColor(getUILayer(), Color.WHITE);
