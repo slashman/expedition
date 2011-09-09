@@ -46,7 +46,7 @@ public class BuildSettlement extends Action{
 		}
 		Expedition expedition = (Expedition)performer;
 		//Check if the land is claimed
-		if (expedition.getLocation().getLocation().getB() >= -30){
+		if (expedition.getLocation().getLocation().getB() >= -30 * 60){
 			msg("This land is claimed already!");
 			netTimeCost = 0;
 			return;
@@ -110,7 +110,7 @@ public class BuildSettlement extends Action{
 			return false;
 		if (standingCell.isRiver())
 			return false;
-		if (((Expedition)performer).getLocation().getLocation().getB() >= -30){
+		if (((Expedition)performer).getLocation().getLocation().getB() >= -30 * 60){
 			return false;
 		}
 		return true;
@@ -126,7 +126,7 @@ public class BuildSettlement extends Action{
 		if (standingCell.isRiver())
 			return "You can't build a town here!";
 			
-		if (((Expedition)performer).getLocation().getLocation().getB() >= -30){
+		if (((Expedition)performer).getLocation().getLocation().getB() >= -30 * 60){
 			return "This land is claimed already!";
 		}
 		return "";
