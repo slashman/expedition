@@ -12,6 +12,7 @@ import net.slashie.expedition.action.Hibernate;
 import net.slashie.expedition.domain.Armor.ArmorType;
 import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
 import net.slashie.expedition.level.ExpeditionLevelReader;
@@ -1296,6 +1297,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	        		wearOutShips(60, true);
 	        		throw new ActionCancelException();
 	        	}
+	        	break;
+        	default:
+        		if (cell.isLand() && !cell.isRiver()){
+        			touchLand();
+        		}
 	        }
 	        if (Util.chance(95)) {
 	        	//Simulate the lack of precision
@@ -1965,6 +1971,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			if (getLocation().hasStorm(getPosition())){
 				modifyPerceivedLuck(-1);
 			}
+		} else {
+			if (getDaysOnSea() > 0){
+				increaseDaysAtSea();
+			}
 		}
 		if (Util.chance(50))
 			modifyPerceivedLuck(1);
@@ -2332,15 +2342,16 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		return true;
 	}
 
-	
 	public void touchLand() {
+		if (getDaysOnSea() > 0){
+			ExpeditionMusicManager.playTune("LAND");
+		}
 		if (getDaysOnSea() > 20){
 			message("Land at last!");
 		}
 		resetDaysAtSea();
 	}
 
-	
 	/**
 	 * Looks of a town around the expedition
 	 * @return

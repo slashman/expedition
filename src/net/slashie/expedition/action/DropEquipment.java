@@ -123,8 +123,6 @@ public class DropEquipment extends Action{
     				ship.boardShips(expedition);
     				expedition.getLevel().addMessage("Disembarkment aborted");
     			} else {
-	    			expedition.touchLand();
-	    			ExpeditionMusicManager.playTune("LAND");
 	    			try {
 	    				expedition.landOn(expedition.getLandCellAround());
 	    			} catch (ActionCancelException ace){
