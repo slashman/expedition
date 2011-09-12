@@ -6,6 +6,7 @@ import java.util.List;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
@@ -39,15 +40,11 @@ public class BuildSettlement extends Action{
 	*/ 
 	@Override
 	public void execute() {
-		//Confirm
-		if (!UserInterface.getUI().promptChat("Establish a town?")){
-			netTimeCost = 0;
-			return;
-		}
 		Expedition expedition = (Expedition)performer;
 		//Check if the land is claimed
-		if (expedition.getLocation().getLocation().getB() >= -30 * 60){
-			msg("This land is claimed already!");
+		int longitudeDegrees = GlobeMapModel.getSingleton().getLongitudeDegrees(performer.getPosition().x);
+		if (longitudeDegrees >= -30){
+			msg("This land is claimed already, you can't build a town here!");
 			netTimeCost = 0;
 			return;
 		}
@@ -55,11 +52,18 @@ public class BuildSettlement extends Action{
 		// Check distance from other settlements
 		List<Town> towns = expedition.getTowns();
 		for (Town town: towns){
-			if (Position.distance(town.getPosition(), expedition.getPosition()) < 100){
-				msg("This settlement is too close to "+town.getName());
+			int milesDistance = GlobeMapModel.getSingleton().getMilesDistance(town.getPosition(), expedition.getPosition());
+			if (milesDistance < 70){
+				msg("We are about "+milesDistance+" miles away from "+town.getName()+", we can not establish another settlement that close!");
 				netTimeCost = 0;
 				return;
 			}
+		}
+		
+		//Confirm
+		if (!UserInterface.getUI().promptChat("Establish a town?")){
+			netTimeCost = 0;
+			return;
 		}
 
 		firstTownBuildings = getFirstTownBuildings();
@@ -98,7 +102,7 @@ public class BuildSettlement extends Action{
 	}
 	
 	public void msg(String message){
-        UserInterface.getUI().showMessage(message);
+        UserInterface.getUI().showImportantMessage(message);
 	}
 	
 	@Override
@@ -110,7 +114,8 @@ public class BuildSettlement extends Action{
 			return false;
 		if (standingCell.isRiver())
 			return false;
-		if (((Expedition)performer).getLocation().getLocation().getB() >= -30 * 60){
+		int longitudeDegrees = GlobeMapModel.getSingleton().getLongitudeDegrees(performer.getPosition().x);
+		if (longitudeDegrees >= -30){
 			return false;
 		}
 		return true;
@@ -126,7 +131,8 @@ public class BuildSettlement extends Action{
 		if (standingCell.isRiver())
 			return "You can't build a town here!";
 			
-		if (((Expedition)performer).getLocation().getLocation().getB() >= -30 * 60){
+		int longitudeDegrees = GlobeMapModel.getSingleton().getLongitudeDegrees(performer.getPosition().x);
+		if (longitudeDegrees >= -30){
 			return "This land is claimed already!";
 		}
 		return "";
