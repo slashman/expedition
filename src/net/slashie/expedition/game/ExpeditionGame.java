@@ -7,6 +7,7 @@ import java.util.List;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Expedition.MovementMode;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -21,7 +22,6 @@ import net.slashie.serf.game.Player;
 import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.level.LevelMetaData;
-import net.slashie.serf.ui.CommandListener;
 import net.slashie.serf.ui.UserInterface;
 
 public class ExpeditionGame extends SworeGame {
@@ -170,8 +170,12 @@ public class ExpeditionGame extends SworeGame {
 			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atlántico
 			level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
 			level.getPlayer().setPosition(-329, 3000, 0); // North
+			int lat = 889*60;
+			int longi = -4362*60;
+			lat = GlobeMapModel.getSingleton().normalizeLat(lat);
+			longi = GlobeMapModel.getSingleton().normalizeLong(lat, longi);
+			level.getPlayer().setPosition(longi, lat, 0); // Near the Tairona
 			*/ 
-			//level.getPlayer().setPosition(-4362*60, 889*60, 0); // Near the Tairona
 		}
 		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
 
@@ -179,7 +183,7 @@ public class ExpeditionGame extends SworeGame {
 	}
 	
 	public static String getVersion(){
-		return "v0.3.1 RC2";
+		return "v0.3.1 RC3";
 	}
 	
 	public Expedition getExpedition(){
