@@ -129,7 +129,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		@Override
 		public void unleash(AbstractLevel level, SworeGame game) {
 			Actor p = level.getPlayer();
-			int distance = net.slashie.utils.Position.distance(p.getPosition(), CREST_POSITION);
+			int distance = level.getDistance(p.getPosition(), CREST_POSITION);
 			if (distance <= 5){
 				interactWithKings(level);
 			}
@@ -252,6 +252,9 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			startingShips.add((Vehicle)ItemFactory.createShip("CARRACK", "La Santa Maria"));
 			startingShips.add((Vehicle)ItemFactory.createShip("CARAVEL", "La Pinta"));
 			startingShips.add((Vehicle)ItemFactory.createShip("CARAVEL", "La Santa Clara"));
+
+			// ret.addItemOffshore(ItemFactory.createItem("COLOMBUS"), 1);
+
 			//choice = 99;
 			switch (choice){
 			case 0:

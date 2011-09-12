@@ -6,6 +6,7 @@ import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.utils.Util;
 
 
+@SuppressWarnings("serial")
 public class NonPrincipalExpedition extends Expedition{
 	private String classifierId;
 	private boolean isHostile = true;

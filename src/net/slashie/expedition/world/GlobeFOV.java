@@ -36,7 +36,7 @@ public class GlobeFOV extends FOV{
 		int gridX = startX + relx * GlobeMapModel.getSingleton().getLongitudeScale(gridY);
 		
 		if (circle){
-			int distance = Position.flatDistanceRound(relx, rely, 0, 0);
+			int distance = Position.distanceRound(relx, rely, 0, 0);
 			if (distance > maxRadius)
 				return;
 		}
