@@ -24,6 +24,7 @@ import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
+import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.FoodConsumerDelegate;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -579,6 +580,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	public void checkDeath(){
 		if (getTotalUnits() <= 0){
+			if (getLevel() instanceof ExpeditionMicroLevel)
+				return;
 			UserInterface.getUI().refresh();
 			if (deathCause == null)
 				deathCause = DeathCause.DEATH_BY_SLAYING;
