@@ -625,7 +625,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 	@Override
 	public int getDarkSightRange() {
-		return getSightRange();
+		return getSightRangeInCells();
 	}
 
 	@Override
@@ -647,7 +647,16 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 
 	@Override
-	public int getSightRange() {
+	public int getSightRangeInDots() {
+		if (getLevel() instanceof ExpeditionMacroLevel){
+			return getSightRangeInCells() * GlobeMapModel.getSingleton().getLatitudeHeight(); // This is an approximation
+		} else {
+			return getSightRangeInCells();
+		}
+	}
+		
+	@Override
+	public int getSightRangeInCells() {
 		int bonus = 0;
 		int malus = 0;
 		if (getItemCount("EXPLORER")>0)
@@ -1994,8 +2003,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		if (getMovementMode() == MovementMode.SHIP){
 			boolean sawLand = false;
 			if (daysOnSea > 15 && onOpenSea()){
-				sawLand = sightLand(getSightRange() + 1) || sightLand(getSightRange() + 2);
-				if (!sawLand && Util.chance(50) && getSightRange() > 4){
+				int sightRangeInMiles = getSightRangeInCells();
+				int additionalScale = GlobeMapModel.getSingleton().getLatitudeHeight();
+				sawLand = sightLand(sightRangeInMiles + 1 * additionalScale) || sightLand(sightRangeInMiles + 2 * additionalScale);
+				if (!sawLand && Util.chance(50) && sightRangeInMiles > 4 * additionalScale){
 					sawLand = nearLandSignals(18) || nearLandSignals(19) || nearLandSignals(20);
 				}
 				// Wrong Land sight

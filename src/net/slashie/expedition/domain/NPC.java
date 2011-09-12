@@ -42,8 +42,13 @@ public class NPC extends AwareActor implements Cloneable{
 	}
 
 	@Override
-	public int getSightRange() {
+	public int getSightRangeInDots() {
 		return 5;
+	}
+	
+	@Override
+	public int getSightRangeInCells() {
+		return getSightRangeInDots();
 	}
 	
 	@Override
