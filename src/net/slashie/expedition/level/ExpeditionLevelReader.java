@@ -145,7 +145,6 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			int longitudeScale = GlobeMapModel.getSingleton().getLongitudeScale(ilat);
 			int xstart = longMinutes - xspan * longitudeScale;
 			int xend = longMinutes + xspan * longitudeScale;
-
 			for (int ilong = xstart; ilong <=xend; ilong+=longitudeScale){
 				runner.x = ilong;
 				int iilong = ilong;
@@ -179,10 +178,11 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 					}
 					
 					Actor actor = getActorAt(runner);
-					if (actor != getPlayer() && actor != null && !actor.isInvisible()){
-						ret.addActor(px-xspan, yspan-py, actor);
+					if (actor != null){
+						if (actor != getPlayer() && !actor.isInvisible()){
+							ret.addActor(px-xspan, yspan-py, actor);
+						}
 					}
-					
 				}
 				px++;
 			}
@@ -192,6 +192,36 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		return ret;
 	}
 	
+	/**
+	 * Returns a position around the given position, with no actors on it, based on it's zoom levels,
+	 * or null if no such location is found
+	 * @param p
+	 * @return
+	 */
+	public Position getFreeSquareAround(Position p){
+		List<Position> positionsAround = getPositionsAround(p);
+		for (Position position: positionsAround){
+			if (getActorAt(position) == null)
+				return position;
+		}
+		return null;
+	}
+	
+	public List<Position> getPositionsAround(Position p){
+		List<Position> ret = new ArrayList<Position>();
+		for (int x = -1; x < 2; x++){
+			for (int y = -1; y < 2; y++){
+				int latitudeScale = GlobeMapModel.getSingleton().getLatitudeHeight();
+				int globeY = p.y + y * latitudeScale;
+				int longitudeScale  = GlobeMapModel.getSingleton().getLongitudeScale(globeY);
+				int globeX = p.x + x * longitudeScale;
+				Position pos = new Position( globeX, globeY, p.z);
+				ret.add (pos);
+			}
+		}
+		return ret;
+	}
+			
 	public List<AbstractFeature> getFeaturesAround(AwareActor watcher, 
 			int longMinutes,
 			int latMinutes, 
@@ -357,4 +387,8 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 		super.addFeature(feature, false);
 	}
 
+	@Override
+	public int getDistance(Position a, Position b) {
+		return GlobeMapModel.getSingleton().getMilesDistance(a, b);
+	}
 }
