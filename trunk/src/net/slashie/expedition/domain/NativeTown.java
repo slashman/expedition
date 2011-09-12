@@ -17,6 +17,7 @@ import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
+import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 public class NativeTown extends Town{
@@ -149,7 +150,7 @@ public class NativeTown extends Town{
 	
 
 	public int getSightRange() {
-		return 8;
+		return 12;
 	}
 
 	public Culture getCulture() {
@@ -372,4 +373,6 @@ public class NativeTown extends Town{
 	public boolean requiresUnitsToContainItems() {
 		return false;
 	}
+
+
 }

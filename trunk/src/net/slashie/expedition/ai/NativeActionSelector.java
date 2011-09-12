@@ -2,6 +2,7 @@ package net.slashie.expedition.ai;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.NativeTown;
+import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.ActionSelector;
@@ -24,7 +25,8 @@ public class NativeActionSelector implements ActionSelector {
 
 	public Action selectAction(Actor who) {
 		NativeTown town = (NativeTown)  who;
-		if (Position.flatDistance(who.getPosition(), who.getLevel().getPlayer().getPosition()) > 50){
+		int milesDistance = GlobeMapModel.getSingleton().getMilesDistance(who.getPosition(), who.getLevel().getPlayer().getPosition());
+		if (milesDistance > 50){
 			//Since the player is away, we don't exist. Until the player sees us again.
 			who.die();
 			town.setDisabled(true);
@@ -32,21 +34,23 @@ public class NativeActionSelector implements ActionSelector {
 		}
 		
 		if (town.isUnfriendly()){
-			if (town.wasSeen() && Position.distance(town.getPosition(), town.getLevel().getPlayer().getPosition()) <= town.getSightRange()){
- 				int potentialPower = town.getPotentialPower(); 
-				if (potentialPower > 0){
-					int maxPotentialPower = 3;
-					if (town.getCulture().isCivilization())
-						maxPotentialPower = 5;
-					if (potentialPower > maxPotentialPower)
-						potentialPower = maxPotentialPower;
-					Expedition expedition = town.deployTroops(potentialPower);
-					expedition.setPosition(town.getPosition());
-					expedition.getPosition().x = GlobeMapModel.getSingleton().normalizeLong(expedition.getPosition().y, expedition.getPosition().x);
-					expedition.getPosition().y = GlobeMapModel.getSingleton().normalizeLat(expedition.getPosition().y);
-					town.getLevel().addActor(expedition);
-					town.getLevel().addMessage("The "+town.getDescription()+" sends out an expedition!");
+			if (town.wasSeen() && milesDistance <= town.getSightRange()){
+				Position p = ((ExpeditionLevelReader)town.getLevel()).getFreeSquareAround(town.getPosition());
+				if (p != null){
+					int potentialPower = town.getPotentialPower(); 
+					if (potentialPower > 0){
+						int maxPotentialPower = 3;
+						if (town.getCulture().isCivilization())
+							maxPotentialPower = 5;
+						if (potentialPower > maxPotentialPower)
+							potentialPower = maxPotentialPower;
+						Expedition expedition = town.deployTroops(potentialPower);
+						expedition.setPosition(p);
+						town.getLevel().addActor(expedition);
+						town.getLevel().addMessage("The "+town.getDescription()+" sends out an expedition!");
+					}
 				}
+ 				
 			}
 		}
 		if (Util.chance(20))
