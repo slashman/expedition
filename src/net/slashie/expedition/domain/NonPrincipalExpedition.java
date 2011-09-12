@@ -101,4 +101,10 @@ public class NonPrincipalExpedition extends Expedition{
 		//Do Nothing
 		MovementSpeed.NONE.getDescription();
 	}
+	
+	@Override
+	public void beforeActing() {
+		super.beforeActing();
+		checkDeath();
+	}
 }

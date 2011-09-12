@@ -110,12 +110,14 @@ public class Storm implements Serializable{
 	public int getMass() {
 		return stormlets.size();
 	}
+	
 	public void evolve() {
 		if (Util.chance(getGrowChance()))
 			grow();
 		else
 			shrink();		
 	}
+	
 	private int getGrowChance() {
 		return 100-usedFuel;
 	}
