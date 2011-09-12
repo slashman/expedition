@@ -3,6 +3,8 @@ package net.slashie.expedition.level;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.slashie.utils.Position;
+
 public class GlobeMapModelMinutes extends GlobeModel{
 	private final static int LONGITUDE_EQUATOR_NAUTICAL_MILES = 60; 
 	
@@ -80,5 +82,15 @@ public class GlobeMapModelMinutes extends GlobeModel{
 	@Override
 	public int getLatitudeDegrees(int latitude) {
 		return (int)Math.round(latitude / 60.0d);
+	}
+	
+	@Override
+	public int getMilesDistance(Position position, Position position2) {
+		// TODO Use a real long distance calculator, for now use a ver approximate flat distance :P
+		int longDistance = position.x - position2.x;
+		double longitudeMiles = transformLongIntoNauticalMiles(position.y, longDistance);
+		int latDistance = position.y - position2.y;
+		latDistance *= LONGITUDE_EQUATOR_NAUTICAL_MILES;
+		return (int) Math.sqrt(Math.pow(longitudeMiles,2) + Math.pow(latDistance,2));
 	}
 }

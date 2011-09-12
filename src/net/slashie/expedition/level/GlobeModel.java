@@ -60,5 +60,7 @@ public abstract class GlobeModel {
 	public abstract int getLongitudeDegrees(int longitude);
 
 	public abstract int getLatitudeDegrees(int latitude);
+
+	public abstract int getMilesDistance(Position position, Position position2);
 	
 }
