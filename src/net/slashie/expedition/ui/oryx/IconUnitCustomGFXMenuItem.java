@@ -5,7 +5,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import net.slashie.expedition.domain.ExpeditionItem;
-import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
@@ -52,7 +51,7 @@ public class IconUnitCustomGFXMenuItem implements CustomGFXMenuItem{
 	
 	@Override
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
-		ExpeditionUnit eitem = (ExpeditionUnit)item.getItem();
+		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
 		String itemDescription = eitem.getFullDescription();
 		
 		int textWidth = (int) si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, itemDescription);
