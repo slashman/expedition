@@ -1,16 +1,16 @@
 package net.slashie.expedition.data;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.Hashtable;
+import java.util.Map;
 
-import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.serf.game.SworeGame;
-import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.utils.ImageUtils;
 
 public class GFXAppearances {
-	private static Hashtable images = new Hashtable();
+	private static Map<String, Image> images = new Hashtable<String, Image>();
 
 	public static GFXAppearance createAppearance(String ID, int xpos, int ypos){
 		xpos--;
@@ -83,7 +83,6 @@ public class GFXAppearances {
 		
 	}
 
-	
 	public static GFXAppearance[] getGFXAppearances(){
 		
 		return new GFXAppearance[]{
@@ -246,7 +245,7 @@ public class GFXAppearances {
 				createAppearance("TOBACCO", 4 ,8),
 				createAppearance("COATS", 4 ,8),
 				createAppearance("FURS", 4 ,8),
-				createAppearance("GOLD_ARTIFACT", 4 ,8),
+				createAppearance("GOLD_ARTIFACTS", 4 ,8),
 				createAppearance("NATIVE_ARTIFACTS", 4 ,8),
 
 				
