@@ -228,8 +228,6 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		weatherChangeCounter -= lastActionTimeCost;
 		tempChangeCounter -= lastActionTimeCost;
 
-		
-		
 		if (weatherChangeCounter < 0){
 			weatherChange();
 			weatherChangeCounter = Util.rand(200,400);
@@ -256,27 +254,25 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			tempChangeCounter = Util.rand(200,400);
 		}
 		
-		if (stormBreedCounter < 0){
-			stormBreedCounter = 50;
+		if (stormBreedCounter <= 0){
 			//More storms on gale winds and hurricanes
 			int chance = 0;
-			int nextStorm = 100;
 			switch (getWeather()){
 			case STORM:
 				chance = 80;
-				nextStorm = 50;
+				stormBreedCounter = 120;
 				break;
 			case GALE_WIND:
 				chance = 80;
-				nextStorm = 100;
+				stormBreedCounter = 80;
 				break;
 			case HURRICANE:
 				chance = 100;
-				nextStorm = 25;
+				stormBreedCounter = 40;
 				break;
 			default:
 				chance = 0;
-				nextStorm = 100;
+				stormBreedCounter = 40;
 				break;
 			}
 			
@@ -284,23 +280,24 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				chance /= 3.0d;
 			}
 			if (Util.chance(chance)){
-				Position pos = new Position(getExpedition().getPosition());
-				int signX = Util.chance(50) ? 1 : -1;
-				int signY = Util.chance(50) ? 1 : -1;
-				pos.x += Util.rand(9, 15) * signX;
-				pos.y += Util.rand(9, 15) * signY;
-				Storm storm = new Storm(pos);
-				storms.add(storm);
-				storm.seed(6, 18);
-				storm.grow();
-				stormBreedCounter = nextStorm;
+				for (int i = 0; i < 3; i++){
+					Position pos = new Position(getExpedition().getPosition());
+					int signX = Util.chance(50) ? 1 : -1;
+					int signY = Util.chance(50) ? 1 : -1;
+					pos.y += Util.rand(8, 10) * signY * GlobeMapModel.getSingleton().getLatitudeHeight();
+					pos.x += Util.rand(8, 10) * signX * GlobeMapModel.getSingleton().getLongitudeScale(pos.y);
+					Storm storm = new Storm(pos);
+					storms.add(storm);
+					storm.seed(6, 18);
+					storm.grow();
+				}
 			}
 		}
-		if (stormChangeCounter > 20){
+		
+		if (stormChangeCounter >= 40){
 			List<Storm> removeList = new ArrayList<Storm>();
 			for (Storm storm: storms){
 				storm.evolve();
-				
 				if (storm.getMass() < 5){
 					removeList.add(storm);
 				}
