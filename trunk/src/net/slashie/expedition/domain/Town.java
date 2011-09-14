@@ -166,7 +166,6 @@ public class Town extends GoodsCache{
 		return "village";
 	}
 	
-	
 	public boolean canCarry(ExpeditionItem item, int quantity) {
 		if (item instanceof ExpeditionUnit){
 			int currentUnits = getTotalUnits();
@@ -175,6 +174,16 @@ public class Town extends GoodsCache{
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	
+	 public int getCarryable(ExpeditionItem item) {
+		if (item instanceof ExpeditionUnit){
+			return getPopulationCapacity() - getTotalUnits();
+		} else {
+			return super.getCarryable(item);
+		}
 	}
 
 	public void addBuilding(Building building) {
