@@ -349,32 +349,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	}
 	
 	public void killUnits(int quantity) {
-		Collection<Pair<ExpeditionUnit, Integer>> values = foodConsumerDelegate.killUnits(quantity);
-		if (wasSeen()){
-			String killMessage = "";
-			int i = 0;
-			for (Pair<ExpeditionUnit, Integer> killInfo: values){
-				if (killInfo.getB() == 0){
-					i++;
-					continue;
-				}
-				if (killInfo.getB() == 1){
-					killMessage += "A "+killInfo.getA().getDescription();
-				} else
-					killMessage += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
-				if (i == values.size()-2)
-					killMessage += " and ";
-				else if (i == values.size()-1)
-					;
-				else if (values.size()>1)
-					killMessage += ", ";
-				i++;
-			}
-			if (quantity == 1)
-				getLevel().addMessage(killMessage +" dies.");
-			else
-				getLevel().addMessage(killMessage +" die.");
-		}
+		foodConsumerDelegate.killUnits(quantity);
 	}
 
 	public boolean destroyOnEmpty() {
