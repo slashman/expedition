@@ -3,7 +3,9 @@ package net.slashie.expedition.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import net.slashie.expedition.domain.Expedition.DeathCause;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -49,8 +51,8 @@ public class BattleManager {
 		defender.setInterrupted();
 		
 		// Trim attacking and defending teams to 60, 20 ranged (if possible), 20 mounted (if possible) and the remaining.
-		List<Equipment> attackingUnits = selectSquad(attackingUnitsFullGroup);
-		List<Equipment> defendingUnits = selectSquad(defendingUnitsFullGroup);
+		List<Equipment> attackingUnits = selectSquad(cloneEquipmentList(attackingUnitsFullGroup));
+		List<Equipment> defendingUnits = selectSquad(cloneEquipmentList(defendingUnitsFullGroup));
 		List<Equipment> originalAttackingUnits = cloneEquipmentList(attackingUnits);
 		List<Equipment> originalDefendingUnits = cloneEquipmentList(defendingUnits);
 		
@@ -209,7 +211,7 @@ public class BattleManager {
 						defendingExpedition.reduceUnits(targetUnit, 1, DeathCause.DEATH_BY_SLAYING);
 						ExpeditionUnit woundedUnit = (ExpeditionUnit)targetUnit.clone();
 						woundedUnit.setWounded(true);
-						defendingExpedition.addUnits(woundedUnit, 1);
+						defendingExpedition.addUnits(woundedUnit, 1); 
 						defendingEquipment.reduceQuantity(1);
 						outcome.addWound(targetUnit);
 					}
@@ -245,117 +247,122 @@ public class BattleManager {
 		int remaining = 60;
 		int remainingRanged = 20;
 		int remainingMounted = 20;
-		List<String> usedUnitsFullIDs = new ArrayList<String>();
+		//List<String> usedUnitsFullIDs = new ArrayList<String>();
 		List<Equipment> squad = new ArrayList<Equipment>();
+		Map<String, Equipment> squadMap = new Hashtable<String, Equipment>();
 		
 		fullGroup = orderByCombatValue(fullGroup);
 		
 		// Ranged
 		for (Equipment eq: fullGroup){
+			if (eq.getQuantity() == 0)
+				continue;
 			if (remaining == 0)
+				break;
+			if (remainingRanged == 0)
 				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			if (unit.isWounded())
-				continue;
-			if (usedUnitsFullIDs.contains(unit.getFullID()))
 				continue;
 			if (unit.isRangedAttack()){
 				int quantity = eq.getQuantity();
 				if (quantity > remainingRanged){
 					quantity = remainingRanged;
 				}
-				Equipment clone = eq.clone();
-				clone.setQuantity(quantity);
-				squad.add(clone);
 				remainingRanged -= quantity;
 				remaining -= quantity;
-				usedUnitsFullIDs.add(eq.getItem().getFullID());
+				addToSquad(squad, squadMap, eq, quantity);
 			}
 		}
 		// Mounted
 		for (Equipment eq: fullGroup){
+			if (eq.getQuantity() == 0)
+				continue;
 			if (remaining == 0)
+				break;
+			if (remainingMounted == 0)
 				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			if (unit.isWounded())
-				continue;
-			if (usedUnitsFullIDs.contains(unit.getFullID()))
 				continue;
 			if (unit.isMounted()){
 				int quantity = eq.getQuantity();
 				if (quantity > remainingMounted){
 					quantity = remainingMounted;
 				}
-				Equipment clone = eq.clone();
-				clone.setQuantity(quantity);
-				squad.add(clone);
 				remainingMounted -= quantity;
 				remaining -= quantity;
-				usedUnitsFullIDs.add(eq.getItem().getFullID());
+				addToSquad(squad, squadMap, eq, quantity);
 			}
-			
 		}
-		// On foot 
+		
+		// On foot melee units
 		for (Equipment eq: fullGroup){
+			if (eq.getQuantity() == 0)
+				continue;
 			if (remaining == 0)
 				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			if (unit.isWounded())
-				continue;
-			if (usedUnitsFullIDs.contains(unit.getFullID()))
 				continue;
 			if (!unit.isMounted() && !unit.isRangedAttack()){
 				int quantity = eq.getQuantity();
 				if (quantity > remaining){
 					quantity = remaining;
 				}
-				Equipment clone = eq.clone();
-				clone.setQuantity(quantity);
-				squad.add(clone);
 				remaining -= quantity;
-				usedUnitsFullIDs.add(eq.getItem().getFullID());
+				addToSquad(squad, squadMap, eq, quantity);
 			}
 		}
 		
-		// Not wounded
+		// Unwounded, Remaining
 		for (Equipment eq: fullGroup){
+			if (eq.getQuantity() == 0)
+				continue;
 			if (remaining == 0)
 				break;
 			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			if (unit.isWounded())
 				continue;
-			if (usedUnitsFullIDs.contains(unit.getFullID()))
-				continue;
-				int quantity = eq.getQuantity();
-				if (quantity > remaining){
-					quantity = remaining;
-				}
-				Equipment clone = eq.clone();
-				clone.setQuantity(quantity);
-				squad.add(clone);
-				remaining -= quantity;
-				usedUnitsFullIDs.add(eq.getItem().getFullID());
-		}
-		
-		// Remaining
-		for (Equipment eq: fullGroup){
-			if (remaining == 0)
-				break;
-			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
-			if (usedUnitsFullIDs.contains(unit.getFullID()))
-				continue;
 			int quantity = eq.getQuantity();
 			if (quantity > remaining){
 				quantity = remaining;
 			}
+			remaining -= quantity;
+			addToSquad(squad, squadMap, eq, quantity);
+		}
+		
+		// Remaining
+		for (Equipment eq: fullGroup){
+			if (eq.getQuantity() == 0)
+				continue;
+			if (remaining == 0)
+				break;
+			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
+			int quantity = eq.getQuantity();
+			if (quantity > remaining){
+				quantity = remaining;
+			}
+			remaining -= quantity;
+			addToSquad(squad, squadMap, eq, quantity);
+		}
+		
+		
+		return squad;
+	}
+
+	private static void addToSquad(List<Equipment> squad,Map<String, Equipment> squadMap, Equipment eq, int quantity) {
+		eq.setQuantity(eq.getQuantity()-quantity);
+		Equipment current = squadMap.get(eq.getItem().getFullID());
+		if (current == null){
 			Equipment clone = eq.clone();
 			clone.setQuantity(quantity);
 			squad.add(clone);
-			remaining -= quantity;
-			usedUnitsFullIDs.add(eq.getItem().getFullID());
-
+			squadMap.put(eq.getItem().getFullID(), clone);
+		} else {
+			current.setQuantity(current.getQuantity()+quantity);
 		}
-		return squad;
+		
 	}
 
 	private static List<Equipment> orderByCombatValue(List<Equipment> fullGroup) {
