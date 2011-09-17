@@ -30,7 +30,6 @@ import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
-import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ItemContainer;
@@ -51,18 +50,15 @@ import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
-import net.slashie.expedition.ui.oryx.ExpeditionOryxUI.ItemTransferFunctionality.MenuItemType;
 import net.slashie.expedition.ui.oryx.sfx.EffectsServer;
 import net.slashie.expedition.world.ExpeditionLevel;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
-import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.expedition.world.Weather;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.action.Message;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
@@ -88,8 +84,8 @@ import net.slashie.utils.swing.CleanButton;
 import net.slashie.utils.swing.CustomGFXMenuItem;
 import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.GridBox;
-import net.slashie.utils.swing.MenuBox;
 
+@SuppressWarnings("serial")
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
 	public static final int STANDARD_ITEM_WIDTH = 237;
 	public static final int STANDARD_ITEM_HEIGHT = 62;
@@ -107,8 +103,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		}
 	}
 	
-	
 	private ItemsComparator ITEMS_COMPARATOR = new ItemsComparator();
+	
 	private Color TITLE_COLOR = new Color(224,226,108);
 	private Color TEXT_COLOR = Color.WHITE;
 	private Image BATTLE_BACKGROUND;
@@ -937,12 +933,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.print(getUILayer(), 2, 6, ui_seaDays);
 		// si.print(2, 7, ui_water); TODO: Implement
 		if (isOnMacroLevel){
-			si.drawImage(getUILayer(), 22, 171, MORALE_IMAGES[statsExpedition.getMorale()]);
-			si.print(getUILayer(), 5, 8, ui_morale);
+			si.drawImage(getUILayer(), 22, 173, MORALE_IMAGES[statsExpedition.getMorale()]);
 			si.print(getUILayer(), 2, 9, ui_carrying);
+			si.print(getUILayer(), 5, 8, ui_morale);
+			
 		}
-		si.print(getUILayer(), 2,10, ui_gold);
-		
+		//si.print(getUILayer(), 2,10, ui_gold);
+		si.print(getUILayer(), 2, 10, ui_shipStatus);
 		
 		// Right Column
 		int line2 = 63;
@@ -972,7 +969,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		si.print(getUILayer(), line2, 9, ui_movementSpeed);
 		
-		si.print(getUILayer(), line2, 10, ui_shipStatus);
+		
 		
 		
 		expeditionUnitItems.clear();
@@ -1018,6 +1015,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private GridBox unitsMenuBox;
 	private Properties UIProperties;
 	
+	@SuppressWarnings("serial")
 	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
 		super.init(psi, title, gameCommands, UIProperties, target);
 		ExpeditionCleanButton.init(si, UIProperties);
@@ -1056,7 +1054,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				return HAND_CURSOR;
 			}
 		};
-		unitsMenuBox.setLocation(641,308-92);
+		unitsMenuBox.setLocation(22,308-92);
 		
 		//unitsMenuBox.setTitle("Expedition");
   		try {

@@ -142,7 +142,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		buttonsPanel.setOpaque(false);
 		//buttonsPanel.setLayout(new GridLayout(3,4));
 		buttonsPanel.setLayout(new FlowLayout());
-		buttonsPanel.setLocation(12,350);
+		buttonsPanel.setLocation(641,350);
 		buttonsPanel.setSize(144,178);
 		
 		
