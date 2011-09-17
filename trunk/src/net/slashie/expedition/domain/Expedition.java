@@ -1058,7 +1058,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				continue;
 			}
 			if (killInfo.getB() == 1){
-				killMessage += "A "+killInfo.getA().getDescription();
+				killMessage += EnglishGrammar.a(killInfo.getA().getDescription())+" "+killInfo.getA().getDescription();
 			} else
 				killMessage += killInfo.getB()+" "+killInfo.getA().getPluralDescription();
 			if (i == values.size()-2)
@@ -1070,9 +1070,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			i++;
 		}
 		if (quantity == 1)
-			getLevel().addMessage(killMessage +" dies.");
+			getLevel().addMessage(killMessage +" starves to death.");
 		else
-			getLevel().addMessage(killMessage +" die.");
+			getLevel().addMessage(killMessage +" starve to death.");
 	}
 
 	public void addTown(Town town) {
