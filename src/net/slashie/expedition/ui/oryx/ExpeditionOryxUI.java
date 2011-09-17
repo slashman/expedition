@@ -105,8 +105,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	private ItemsComparator ITEMS_COMPARATOR = new ItemsComparator();
 	
-	private Color TITLE_COLOR = new Color(224,226,108);
-	private Color TEXT_COLOR = Color.WHITE;
+	public static Color TITLE_COLOR = new Color(224,226,108);
+	public static Color TEXT_COLOR = Color.WHITE;
 	private Image BATTLE_BACKGROUND;
 	public static Image BTN_SPLIT_UP;
 	public static Image BTN_SPLIT_DOWN;
@@ -1343,7 +1343,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				commandStr = selectionHandler.take();
 			} catch (InterruptedException e) {}
   		}
-  		
   		
   		cancel = commandStr.equals("CANCEL");
 
