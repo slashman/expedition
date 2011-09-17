@@ -536,7 +536,7 @@ public class ExpeditionDAO {
 			
 			new Weapon(WeaponType.BOW, "PLUMED_BOW", "Plumed Bow", "Plumed Bows", "Spiritual Bows [Quetzal Archer]", new Roll("1D4"), new Roll("0"), true, 95, true, 5, 20, 10),
 			new Weapon(WeaponType.BOW, "SIMPLE_BOW", "Simple Bow", "Simple Bows", "Simple Wooden Bow [Archer, Native Archer, Quetzal Archer]", new Roll("1D2"), new Roll("0"), true, 80, true, 3, 3, 5),
-			new Weapon(WeaponType.SWORD, "OBSIDIAN_SWORD", "Obsidian Sword", "Obsidian Swords", "Polished stone sword [Eagle Warrior, Jaguar Warrior]",new Roll("2D2"), new Roll("1D1"), false, 90, false, 15, 50, 100),
+			new Weapon(WeaponType.MACE, "OBSIDIAN_SWORD", "Obsidian Macuahuitl", "Obsidian Macuahuitls", "Wooden sword with prismatic blades of stone [All classes]",new Roll("2D2"), new Roll("1D1"), false, 90, false, 15, 50, 100),
 			new Weapon(WeaponType.MACE, "WOODEN_MACE", "Wooden Mace", "Wooden Maces", "Simple wooden mace [All classes]", new Roll("1D1"), new Roll("0"), false, 70, false, 10, 3, 10),
 			
 			new Armor(ArmorType.METAL_HEAVY, "BREASTPLATE", "Breastplate","Breastplates", "Metal breast armor [Soldier, Captain]", 20, 4, new Roll("1D4"), "Plate", 50, 200),
