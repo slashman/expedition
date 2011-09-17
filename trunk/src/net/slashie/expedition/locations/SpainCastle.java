@@ -159,7 +159,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				}
 				switch (choice){
 				case 0:
-					m(ferdinandSays()+"We will outfit the ships with sailors, captains and carpenters, we will also grant you 2.400 royal maravedíes and supplies for a five months voyage.");
+					m(ferdinandSays()+"We will outfit the ships with sailors, officers and carpenters, we will also grant you 2.400 royal maravedíes and supplies for a five months voyage.");
 					break;
 				case 1:
 					m(ferdinandSays()+"We will outfit the ships with crew and will assign ten soldiers to your expedition, we will also grant you 1.000 royal maravedíes and supplies for a four months voyage.");
@@ -253,9 +253,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			startingShips.add((Vehicle)ItemFactory.createShip("CARAVEL", "La Pinta"));
 			startingShips.add((Vehicle)ItemFactory.createShip("CARAVEL", "La Santa Clara"));
 
-			// ret.addItemOffshore(ItemFactory.createItem("COLOMBUS"), 1);
-
-			//choice = 99;
+			// choice = 99;
 			switch (choice){
 			case 0:
 				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);
@@ -291,7 +289,17 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				
 				ret.setAccountedGold(1000);
 				break;
-			}
+			case 99:
+				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);
+				ret.addItemOffshore(ItemFactory.createItem("CAPTAIN"), 3);
+				ret.addItemOffshore(ItemFactory.createItem("SOLDIER"), 60);
+				ret.addItemOffshore(ItemFactory.createItem("HORSE"), 64);
+				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
+				ret.addItemOffshore(ItemFactory.createItem("DOCTOR"), 2);
+				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 15000);
+				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 5000);
+			}				
+
 		}
 	}
 }

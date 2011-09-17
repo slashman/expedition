@@ -1268,7 +1268,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		    		        		if (UserInterface.getUI().promptChat("Do you want me to explain you the basics of sailing?")){
 		    		        			m("Your ships are currently anchored in front of the port. You can rotate them around to set your bearing, then you must weigh anchors to sail ahead.");
 		    		        			m("For sailing ships, speed is greatly influenced by the direction and strength of the wind, the morale of your crew and the integrity of both hull and tacking (greater than 75%)");
-		    		        			m("You must also have enough hands on board (25 sailors and a captain per ship), in order to sail at decent speeds.");
+		    		        			m("You must also have enough hands on board (25 sailors and an officer per ship), in order to sail at decent speeds.");
 		    		        			m("If you are sailing against the wind you will commonly find yourself \"On Irons\", that means that your crew was unable to outmaneuver the wind and so the ship didn't advance.");
 		    		        			m("Likewise, you may find your expedition on a becalmed sea; unless all of your ships are oar powered, you won't be able to move around..");
 		    		        			m("You ships will always move forward when unanchored. Beware sailing your ships into land! You can anchor if you are near beach, in order to avoid crashing.");

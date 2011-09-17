@@ -80,7 +80,7 @@ public class NPC extends AwareActor implements Cloneable{
 					m("My friend... how can I give advice on sailing the seas to a great navigator such as you! You have been on board since you were a child!");
 					m("As you say yourself, it is all matter of pointing your ships to your destination and letting wind run behind you, but sometimes wind just will not travel with you...");
 					m("And that's where the ships' crew has work to do! a well trained crew can sail even against the wind, but it will take them much longer, and time is precious on the sea.");
-					m("Your ships will sail much faster if you have a full crew for each one (1 captain and 25 sailors), and if they are in good shape (integrity higher than 3/4).");
+					m("Your ships will sail much faster if you have a full crew for each one (1 officer and 25 sailors), and if they are in good shape (integrity higher than 3/4).");
 					m("Our navigators have discovered strong southwestern winds on the recently conquered Canary Islands, southwest of Palos. That may be a good spot for your voyage to start.");
 					if (e.getFlag("DISCOVERED_NEW_WORLD")){
 						m("By your reckoning, the voyage will take about three months. Remember to check out your \"Food Days\" calculations before departing");
@@ -95,9 +95,9 @@ public class NPC extends AwareActor implements Cloneable{
 					break;
 				case 2:
 					m("Your expedition is made up of men of different skills, it is important to know the role of each one in order to have a successful journey.");
-					m("First off, the sailing crew. It is conformed of Sailors and Captains.");
+					m("First off, the sailing crew. It is conformed of Sailors and Officers.");
 					m("Sailors are weak in combat but you need 25 of them for each ship to achieve decent speed on adverse winds. Sailors can only use basic weapons (Lances and Maces, for instance)");
-					m("Captains can use stronger weapons and armor (Harquebus and Swords, and Breastplates or Studded Leather). You need one per ship to complete the crew.");
+					m("Officers can use stronger weapons and armor (Harquebus and Swords, and Breastplates or Studded Leather). You need one per ship to complete the crew.");
 					m("Rogues can make part of your expedition, they are survival wolves and will gladly take part of your adventure. They are stronger than sailors and can use swords.");
 					m("Marines and Soldiers are specialized and strong warriors which are trained to fight under harsh conditions. They are the strongest men you can have on board.");
 					m("Marines can handle and prefer ranged weapons like crossbows and harquebus, but they can't wear breastplate. They can also wear swords in addition to basic weapons.");
