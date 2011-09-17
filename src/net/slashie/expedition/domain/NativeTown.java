@@ -17,9 +17,9 @@ import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
-import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class NativeTown extends Town{
 	private static final String[] NATIVE_ACTIONS = new String [] {
 		"Raid the settlement",
@@ -90,13 +90,6 @@ public class NativeTown extends Town{
 		}
 		
 		setScaredLevel(getCulture().getAggresiveness()*-2);
-		/*addItem(ItemFactory.createItem("GOLD_NUGGET"), Util.rand(0, size*culture.getGoldModifier()*20));
-		addItem(ItemFactory.createItem("GOLD_BRACELET"), Util.rand(0, size*culture.getGoldModifier()*40));
-		addItem(ItemFactory.createItem("NATIVE_ARTIFACT"), Util.rand(0, size*culture.getArtifactModifier()*30));
-		addItem(ItemFactory.createItem("NATIVE_FOOD"), Util.rand(100, size*culture.getAgricultureModifier()*100));
-		*/
-		
-		
 	}
 	
 	@Override
@@ -373,6 +366,4 @@ public class NativeTown extends Town{
 	public boolean requiresUnitsToContainItems() {
 		return false;
 	}
-
-
 }

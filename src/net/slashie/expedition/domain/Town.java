@@ -20,11 +20,10 @@ import net.slashie.utils.Util;
 public class Town extends GoodsCache{
 	
 	private static final String[] TOWN_ACTIONS = new String[] { 
-		"Transfer equipment into settlement",
-		"Transfer equipment to expedition",
+		"Transfer equipment and people",
 		"Construct building on settlement",
-		"Inhabit Settlement",
-		"Enter" 
+		"Inhabit settlement",
+		"Pass through the settlement" 
 	};
 	private String name;
 	protected Expedition founderExpedition;
@@ -86,15 +85,12 @@ public class Town extends GoodsCache{
 			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(this);
 			break;
 		case 1:
-			((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the goods to transfer", null, this);
-			break;
-		case 2:
 			// Build
 			BuildBuildings buildAction = new BuildBuildings();
 			buildAction.setTown(this);
 			expedition.setNextAction(buildAction);
 			break;
-		case 3: 
+		case 2: 
 			// Inhabit
 			if (getPopulation() + expedition.getTotalUnits() + 1 <= getPopulationCapacity()){
 				Hibernate hibernate = new Hibernate(7, true);
@@ -103,7 +99,7 @@ public class Town extends GoodsCache{
 			} else {
 				expedition.getLevel().addMessage(getDescription()+" can't host all of your expedition.");
 			}
-		case 4:
+		case 3:
 			expedition.setPosition(getPosition());
 			break;
 		}
