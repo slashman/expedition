@@ -114,7 +114,7 @@ public class Walk extends Action{
 	        	if (expedition.getMovementMode() != MovementMode.SHIP){
 		        	//Trying to walk into the water
 		        	List<AbstractFeature> features =expedition.getLevel().getFeaturesAt(destinationPoint);
-		        	if (features != null){
+		        	if (features != null && features.size() > 0){
 			        	for (AbstractFeature feature: features){
 			        		if (feature instanceof ShipCache){
 			        			break;
