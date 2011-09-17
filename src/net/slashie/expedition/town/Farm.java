@@ -44,7 +44,7 @@ public class Farm extends Building {
 	@Override
 	public String getDescription() {
 		if (nextCrop != null){
-			return super.getDescription() + " (Crop: around "+ExpeditionOryxUI.months[nextCrop.get(Calendar.MONTH)]+" "+nextCrop.get(Calendar.YEAR)+")";
+			return super.getDescription() + " (Crop: around "+ExpeditionOryxUI.months[nextCrop.get(Calendar.MONTH)]+")";
 		} else {
 			return super.getDescription();
 		}

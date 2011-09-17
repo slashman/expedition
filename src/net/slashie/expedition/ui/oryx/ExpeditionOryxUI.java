@@ -1360,7 +1360,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void showCityInfo(Town town) {
 		String townInfo = CommonUI.getTownDescription(town);
 		townInfo = townInfo.replaceAll("XXX", "\n");
-   		printTextBox(townInfo, 80, 20, 600, 260);
+   		printTextBox(townInfo, 40, 20, 720, 260);
 	}
 	
 	@Override
