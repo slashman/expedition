@@ -11,24 +11,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.ItemContainer;
-import net.slashie.expedition.domain.ShipCache;
-import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI.ItemTransferFunctionality;
 import net.slashie.libjcsi.CharKey;
-import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
@@ -40,8 +35,8 @@ import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
 import net.slashie.utils.swing.GFXMenuItem;
 
+@SuppressWarnings("serial")
 public class TransferBorderGridBox extends BorderedGridBox{
-	private static final long serialVersionUID = 1L;
 	private ExpeditionItem highlight;
 	private ItemContainer source;
 	private ItemContainer destination;
@@ -52,6 +47,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	// Splitter attributes
 	private CleanButton quantitySplitterToSource;
 	private CleanButton quantitySplitterToDestination;
+	
+	private CleanButton quantitySplitterToSourceAll;
+	private CleanButton quantitySplitterToDestinationAll;
+	
 	
 	private int sourceCurrentQuantity;
 	private int sourceMaximumQuantity;
@@ -152,17 +151,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		si.addKeyListener(cbkl);
 	}
 
-	private void transferToSource() {
-		if (initialQuantity - sourceCurrentQuantity == 0)
-			changeSpeed = 1;
-		else
-			changeSpeed = (int) Math.ceil((sourceCurrentQuantity - initialQuantity )/ 5.0d);
-		
-		int transferQuantity = changeSpeed;
-		
-		// Try to do the transfer
-		updateMaximumQuantities(highlight);
-		
+	private void transferToSource(int transferQuantity){
 		if (transferQuantity == 0 || highlight == null){
 			return;
 		}
@@ -179,8 +168,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		if (!itemTransferFunctionality.validateAndPerformTransfer(destination, source, highlight, transferQuantity)){
 			return;
 		}
-		/*menuBox.resetSelection();*/
-		// setLegend(itemTransferFunctionality.getTransferedLegend(transferQuantity, highlight, source));
 		
 		// Transfer was sucessful... yay...
 		
@@ -195,6 +182,26 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		afterQuantityChange();
 	}
 	
+	private void transferToSource() {
+		if (initialQuantity - sourceCurrentQuantity == 0)
+			changeSpeed = 1;
+		else
+			changeSpeed = (int) Math.ceil((sourceCurrentQuantity - initialQuantity )/ 5.0d);
+		
+		int transferQuantity = changeSpeed;
+		
+		// Try to do the transfer
+		updateMaximumQuantities(highlight);
+		transferToSource(transferQuantity);
+	}
+	
+	private void transferToSourceAll() {
+		// Try to do the transfer
+		changeSpeed = sourceMaximumQuantity - sourceCurrentQuantity;
+		updateMaximumQuantities(highlight);
+		transferToSource(changeSpeed);
+	}
+	
 	private void transferToDestination(){
 		if (initialQuantity - destinationCurrentQuantity == 0)
 			changeSpeed = 1;
@@ -206,7 +213,17 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		
 		// Try to do the transfer
 		updateMaximumQuantities((ExpeditionItem) highlight);
-		
+		transferToDestination(transferQuantity);
+	}
+	
+	private void transferToDestinationAll(){
+		// Try to do the transfer
+		changeSpeed = destinationMaximumQuantity - destinationCurrentQuantity;
+		updateMaximumQuantities((ExpeditionItem) highlight);
+		transferToDestination(changeSpeed);	
+	}
+	
+	private void transferToDestination(int transferQuantity){
 		if (transferQuantity == 0 || highlight == null){
 			return;
 		}
@@ -236,7 +253,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			sourceCurrentQuantity = 0;
 
 		afterQuantityChange();
-		
 	}
 	
 	private void afterQuantityChange(){
@@ -302,12 +318,16 @@ public class TransferBorderGridBox extends BorderedGridBox{
 
 				// Pop components up
 			    quantitySplitterToSource.setVisible(true);
+			    quantitySplitterToSourceAll.setVisible(true);
 			    quantitySplitterToDestination.setVisible(true);
+			    quantitySplitterToDestinationAll.setVisible(true);
 				lastChoice = highlight;
 			}
 		} else {
 			quantitySplitterToSource.setVisible(false);
+			quantitySplitterToSourceAll.setVisible(false);
 			quantitySplitterToDestination.setVisible(false);
+			quantitySplitterToDestinationAll.setVisible(false);
 			lastChoice = null;
 		}
 		
@@ -362,7 +382,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			destinationMaximumQuantity = destination.getCarryable(eitem); // This is the maximum possible, unless the destination has infinite capacity
 		}
 		
-
 		if (destinationMaximumQuantity == -1){
 			// Infinite capacity, can carry all available
 			destinationMaximumQuantity = allQuantity;
@@ -391,7 +410,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			
 		};
 		final Timer transferToSourceTimer = new Timer(100, transferToSourceAction);
-
 		quantitySplitterToSource.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e){
@@ -407,10 +425,10 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				transferToSourceTimer.stop();
 			}
 		});
+		
 		quantitySplitterToDestination = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_RIGHT, ExpeditionOryxUI.BTN_SPLIT_RIGHT_HOVER, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
 		quantitySplitterToDestination.setVisible(false);
 		quantitySplitterToDestination.setLocation(661,206);
-		
 		final Action transferToDestinationAction = new AbstractAction() {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -419,7 +437,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			}
 		};
 		final Timer transferToDestinationTimer = new Timer(100, transferToDestinationAction);
-
 		quantitySplitterToDestination.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mousePressed(MouseEvent e){
@@ -435,8 +452,35 @@ public class TransferBorderGridBox extends BorderedGridBox{
 				transferToDestinationTimer.stop();
 			}
 		});
+		
+		quantitySplitterToSourceAll = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_LEFT_ALL, ExpeditionOryxUI.BTN_SPLIT_LEFT_HOVER_ALL, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterToSourceAll.setVisible(false);
+		quantitySplitterToSourceAll.setLocation(532,206);
+		quantitySplitterToSourceAll.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mousePressed(MouseEvent e){
+				if (highlight == null)
+					return;
+				transferToSourceAll();
+			}
+		});
+		
+		quantitySplitterToDestinationAll = new CleanButton(ExpeditionOryxUI.BTN_SPLIT_RIGHT_ALL, ExpeditionOryxUI.BTN_SPLIT_RIGHT_HOVER_ALL, null, ((GFXUserInterface)UserInterface.getUI()).getHandCursor());
+		quantitySplitterToDestinationAll.setVisible(false);
+		quantitySplitterToDestinationAll.setLocation(685,206);
+		quantitySplitterToDestinationAll.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mousePressed(MouseEvent e){
+				if (highlight == null)
+					return;
+				transferToDestinationAll();
+			}
+		});
+		
 		si.add(quantitySplitterToSource);
+		si.add(quantitySplitterToSourceAll);
 		si.add(quantitySplitterToDestination);
+		si.add(quantitySplitterToDestinationAll);
 		splitterArrowsListener = new KeyAdapter(){
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -531,6 +575,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		super.kill();
 		si.remove(quantitySplitterToSource);
 		si.remove(quantitySplitterToDestination);
+		si.remove(quantitySplitterToSourceAll);
+		si.remove(quantitySplitterToDestinationAll);
 		si.removeKeyListener(cbkl);
 		si.removeKeyListener(splitterArrowsListener);
 		si.removeMouseListener(cbml);
@@ -568,12 +614,12 @@ public class TransferBorderGridBox extends BorderedGridBox{
 
 	@Override
 	protected Cursor getDefaultCursor() {
-		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).POINTER_CURSOR;
+		return ExpeditionOryxUI.POINTER_CURSOR;
 	}
 	
 	@Override
 	protected Cursor getHandCursor() {
-		return ((ExpeditionOryxUI)ExpeditionOryxUI.getUI()).HAND_CURSOR;
+		return ExpeditionOryxUI.HAND_CURSOR;
 	}
 	
 	@Override

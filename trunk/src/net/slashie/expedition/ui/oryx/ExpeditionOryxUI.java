@@ -118,6 +118,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image BTN_SPLIT_LEFT_HOVER;
 	public static Image BTN_SPLIT_RIGHT_HOVER;
 	
+	public static Image BTN_SPLIT_LEFT_ALL;
+	public static Image BTN_SPLIT_RIGHT_ALL;
+	public static Image BTN_SPLIT_LEFT_HOVER_ALL;
+	public static Image BTN_SPLIT_RIGHT_HOVER_ALL;
+	
 	public static Image BTN_MOVE;
 	
 	public static Image BTN_PEOPLE;
@@ -1068,6 +1073,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			BTN_SPLIT_RIGHT = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_RIGHT_BOUNDS"));
 			BTN_SPLIT_LEFT_HOVER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_LEFT_HOVER_BOUNDS"));
 			BTN_SPLIT_RIGHT_HOVER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_RIGHT_HOVER_BOUNDS"));
+			
+			BTN_SPLIT_LEFT_ALL = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_LEFT_ALL_BOUNDS"));
+			BTN_SPLIT_RIGHT_ALL = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_RIGHT_ALL_BOUNDS"));
+			BTN_SPLIT_LEFT_HOVER_ALL = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_LEFT_ALL_HOVER_BOUNDS"));
+			BTN_SPLIT_RIGHT_HOVER_ALL = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_RIGHT_ALL_HOVER_BOUNDS"));
 			
 			BTN_MOVE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_MOVE_BOUNDS"));
 			IMG_BOX = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
