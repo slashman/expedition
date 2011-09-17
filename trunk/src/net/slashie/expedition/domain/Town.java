@@ -23,7 +23,8 @@ public class Town extends GoodsCache{
 		"Transfer equipment and people",
 		"Construct building on settlement",
 		"Inhabit settlement",
-		"Pass through the settlement" 
+		"Pass through the settlement",
+		"Do nothing"
 	};
 	private String name;
 	protected Expedition founderExpedition;
@@ -101,6 +102,8 @@ public class Town extends GoodsCache{
 			}
 		case 3:
 			expedition.setPosition(getPosition());
+			break;
+		case 4:
 			break;
 		}
 	}
