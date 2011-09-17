@@ -95,7 +95,14 @@ public class BattleManager {
 			}
 		}
 		((ExpeditionUserInterface)UserInterface.getUI()).showBattleResults(originalAttackingUnits, originalDefendingUnits, battleName, attackerRangedAttackOutcome, defenderRangedAttackOutcome, attackerMountedAttackOutcome, attackerMeleeAttackOutcome, attackerScore, defenderScore);
-		
+		if (attacker != ExpeditionGame.getCurrentGame().getPlayer()){
+			attacker.checkDeath();
+		}
+		if (defender != ExpeditionGame.getCurrentGame().getPlayer()){
+			if (defender instanceof Expedition){
+				((Expedition)defender).checkDeath();
+			}
+		}
 		
 	}
 
@@ -338,7 +345,6 @@ public class BattleManager {
 				continue;
 			if (remaining == 0)
 				break;
-			ExpeditionUnit unit = (ExpeditionUnit) eq.getItem();
 			int quantity = eq.getQuantity();
 			if (quantity > remaining){
 				quantity = remaining;

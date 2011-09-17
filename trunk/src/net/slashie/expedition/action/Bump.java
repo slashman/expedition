@@ -56,9 +56,11 @@ public class Bump extends Action {
         	if (actor instanceof Expedition && !(actor instanceof NonPrincipalExpedition)){
         		Expedition targetExpedition = (Expedition) actor;
    				//Attack!
-        		String message = EnglishGrammar.a(expedition.getDescription())+" "+expedition.getDescription()+" attacks you";
-   				expedition.getLevel().addMessage(message);
-   				BattleManager.battle(message, expedition, targetExpedition);
+        		if (targetExpedition.getTotalUnits() > 0){
+	        		String message = EnglishGrammar.a(expedition.getDescription())+" "+expedition.getDescription()+" attacks you";
+	   				expedition.getLevel().addMessage(message);
+	   				BattleManager.battle(message, expedition, targetExpedition);
+        		}
    				return;
         	}
         } else {
@@ -69,7 +71,7 @@ public class Bump extends Action {
 			}
         }
 	}
-
+	
 	@Override
 	public String getID() {
 		return "Bump";
