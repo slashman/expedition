@@ -1,7 +1,6 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
-import net.slashie.util.Pair;
 
 public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitContainer, ItemContainer{
 	private static final long serialVersionUID = 1L;
@@ -127,7 +125,6 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		} else {
 			return (int)Math.round(((double)getCurrentWeight()/(double)getCarryCapacity())*100.0d);
 		}
-		//return getCurrentWeight();
 	}
 	
 	private int getCurrentWeight(){
@@ -143,13 +140,11 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 
 	@Override
 	public AbstractFeature featureDestroyed(Actor actor) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void counterFinished(String counterId) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -237,7 +232,6 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	}
 	
 	public void checkDeath() {
-		// TODO Auto-generated method stub
 		if (getItems().size() == 0){
 			die();
 		}
@@ -254,53 +248,6 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	public List<Equipment> getInventory() {
 		return getItems();
 	}
-	/*
-	public List<Equipment> getUnits() {
-		List<Equipment> ret = new ArrayList<Equipment>();
-		List<Equipment> inventory = getItems();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof ExpeditionUnit){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}
-	
-	public List<Equipment> getTools() {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}*/
-/*
-	public List<Equipment> getGoods() {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Good && !(equipment.getItem() instanceof Weapon || equipment.getItem() instanceof Armor || equipment.getItem() instanceof Trade)){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}*/
-/*
-	public List<Equipment> getValuables() {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof Valuable){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}
-	*/
-	
-	
 	
 	public double getFoodConsumptionMultiplier() {
 		return 1;
@@ -350,6 +297,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	public void killUnits(int quantity) {
 		foodConsumerDelegate.killUnits(quantity);
+		if (destroyOnEmpty() && getItems().size() == 0){
+			getLevel().destroyFeature(this);
+		}
 	}
 
 	public boolean destroyOnEmpty() {
