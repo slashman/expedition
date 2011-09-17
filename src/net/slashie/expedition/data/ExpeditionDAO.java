@@ -391,7 +391,7 @@ public class ExpeditionDAO {
 					2,
 					new WeaponType[]{WeaponType.CROSSBOW, WeaponType.BOW, WeaponType.SPEAR, WeaponType.MACE},
 					new ArmorType[]{ArmorType.LIGHT}, 120, 150),
-			new ExpeditionUnit("CAPTAIN", "Captain","Captains", "Leads a Ship", UNIT_WEIGHT, 200,
+			new ExpeditionUnit("CAPTAIN", "Officer","Officers", "Seaman able to lead a Ship", UNIT_WEIGHT, 200,
 					new Roll("1D1"),
 					new Roll("1D1"),
 					3,
@@ -529,18 +529,18 @@ public class ExpeditionDAO {
 			
 			// Armory
 			new Weapon(WeaponType.SPEAR, "STEEL_SPEAR", "Steel Spear","Steel Spears", "Basic weapon [All classes]", new Roll("1D2"), new Roll("1D1"), false, 80, false, 8, 5, 20),
-			new Weapon(WeaponType.SWORD, "STEEL_SWORD", "Steel Sword", "Steel Swords", "Strong weapon [Marine, Soldier, Captain, Rogue]", new Roll("2D3"), new Roll("1D1"), false, 90, false, 10, 10, 50),
+			new Weapon(WeaponType.SWORD, "STEEL_SWORD", "Steel Sword", "Steel Swords", "Strong weapon [Marine, Soldier, Officer, Rogue]", new Roll("2D3"), new Roll("1D1"), false, 90, false, 10, 10, 50),
 			new Weapon(WeaponType.BOW, "COMPOSITE_BOW", "Longbow", "Longbows", "Cheap ranged weapon [Archer]", new Roll("1D3"), new Roll("0"), false, 80, true, 5, 6, 20),
 			new Weapon(WeaponType.CROSSBOW, "WOODEN_CROSSBOW", "Crossbow", "Crossbows", "Simple ranged weapon [Marine, Archer]", new Roll("2D2"), new Roll("0"), true, 95, true, 10, 25, 50),
-			new Weapon(WeaponType.MUSKET, "HARQUEBUS", "Harquebus", "Harquebus", "Strong ranged weapon [Marine, Soldier, Captain]", new Roll("3D2"), new Roll("0"), true, 70, true, 10, 30, 50),
+			new Weapon(WeaponType.MUSKET, "HARQUEBUS", "Harquebus", "Harquebus", "Strong ranged weapon [Marine, Soldier, Officer]", new Roll("3D2"), new Roll("0"), true, 70, true, 10, 30, 50),
 			
 			new Weapon(WeaponType.BOW, "PLUMED_BOW", "Plumed Bow", "Plumed Bows", "Spiritual Bows [Quetzal Archer]", new Roll("1D4"), new Roll("0"), true, 95, true, 5, 20, 10),
 			new Weapon(WeaponType.BOW, "SIMPLE_BOW", "Simple Bow", "Simple Bows", "Simple Wooden Bow [Archer, Native Archer, Quetzal Archer]", new Roll("1D2"), new Roll("0"), true, 80, true, 3, 3, 5),
 			new Weapon(WeaponType.MACE, "OBSIDIAN_SWORD", "Obsidian Macuahuitl", "Obsidian Macuahuitls", "Wooden sword with prismatic blades of stone [All classes]",new Roll("2D2"), new Roll("1D1"), false, 90, false, 15, 50, 100),
 			new Weapon(WeaponType.MACE, "WOODEN_MACE", "Wooden Mace", "Wooden Maces", "Simple wooden mace [All classes]", new Roll("1D1"), new Roll("0"), false, 70, false, 10, 3, 10),
 			
-			new Armor(ArmorType.METAL_HEAVY, "BREASTPLATE", "Breastplate","Breastplates", "Metal breast armor [Soldier, Captain]", 20, 4, new Roll("1D4"), "Plate", 50, 200),
-			new Armor(ArmorType.LIGHT, "STUDDED_VEST", "Studded Vest", "Studded Vests", "[Marine, Soldier, Archer, Captain]", 10, 1, new Roll("1D2"), "Leather", 20, 10),
+			new Armor(ArmorType.METAL_HEAVY, "BREASTPLATE", "Breastplate","Breastplates", "Metal breast armor [Soldier, Officer]", 20, 4, new Roll("1D4"), "Plate", 50, 200),
+			new Armor(ArmorType.LIGHT, "STUDDED_VEST", "Studded Vest", "Studded Vests", "[Marine, Soldier, Archer, Officer]", 10, 1, new Roll("1D2"), "Leather", 20, 10),
 			
 			// Livestock
 			new ExpeditionItem("ATTACK_DOG", "Attack Dog", "Attack Dogs", "Men best companion", "ATTACK_DOG",  50, GoodType.LIVESTOCK, 100, 50),
