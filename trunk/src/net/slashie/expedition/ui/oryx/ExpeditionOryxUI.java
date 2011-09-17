@@ -1009,7 +1009,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Collections.sort(expeditionUnitItems, ITEMS_COMPARATOR);
 		unitsMenuBox.draw(false);
 		
-		
+		si.printAtPixel(getUILayer(), 720, 575, ExpeditionGame.getVersion());
 		si.drawImage(getUILayer(), 774, 2, BTN_MOVE);
 	}
 	
