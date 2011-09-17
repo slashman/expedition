@@ -253,7 +253,6 @@ public class SpainCastle extends StaticPattern implements Serializable {
 			startingShips.add((Vehicle)ItemFactory.createShip("CARAVEL", "La Pinta"));
 			startingShips.add((Vehicle)ItemFactory.createShip("CARAVEL", "La Santa Clara"));
 
-			// choice = 99;
 			switch (choice){
 			case 0:
 				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);
@@ -289,15 +288,6 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				
 				ret.setAccountedGold(1000);
 				break;
-			case 99:
-				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);
-				ret.addItemOffshore(ItemFactory.createItem("CAPTAIN"), 3);
-				ret.addItemOffshore(ItemFactory.createItem("SOLDIER"), 60);
-				ret.addItemOffshore(ItemFactory.createItem("HORSE"), 64);
-				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
-				ret.addItemOffshore(ItemFactory.createItem("DOCTOR"), 2);
-				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 15000);
-				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 5000);
 			}				
 
 		}
