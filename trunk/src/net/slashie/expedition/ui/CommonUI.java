@@ -2,6 +2,7 @@ package net.slashie.expedition.ui;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -205,7 +206,12 @@ public class CommonUI {
 	}
 
 	public static String getTownDescription(Town town) {
-		String townInfo = town.getName()+" XXX ";
+		String townInfo = town.getName()+", ";
+		if (town.getPopulationCapacity() > 0){
+			townInfo += "Population: "+town.getPopulation()+"/"+town.getPopulationCapacity()+" XXX ";
+		} else {
+			townInfo += "Population: "+town.getPopulation()+" XXX ";
+		}
 		if (town instanceof NativeTown){
 			NativeTown nativeTown = (NativeTown) town;
 			townInfo += "Disposition: ";
@@ -215,7 +221,7 @@ public class CommonUI {
 				townInfo += "Friendly ";
 			}
 			if (nativeTown.getScaredLevel()>0){
-				townInfo += "Afraid ";
+				townInfo += "(Afraid)";
 			}
 			townInfo += " XXX ";
 		}
@@ -223,11 +229,7 @@ public class CommonUI {
 		if (town.getFoundedIn() != null){
 			townInfo += "Founded on "+ DateFormat.getDateInstance(DateFormat.MEDIUM).format(town.getFoundedIn())+" by "+town.getFounderExpedition().getExpeditionaryTitle()+" XXX ";
 		}
-		if (town.getPopulationCapacity() > 0){
-			townInfo += "Population: "+town.getPopulation()+"/"+town.getPopulationCapacity()+" XXX ";
-		} else {
-			townInfo += "Population: "+town.getPopulation()+" XXX ";
-		}
+
 		
 		Map<String, Pair<Building, Integer>> buildingsMap = new HashMap<String, Pair<Building,Integer>>();
 		for (Building building: town.getBuildings()){
@@ -240,11 +242,14 @@ public class CommonUI {
 			}
 		}
 		int i = 1;
-		for (Pair<Building, Integer> pair: buildingsMap.values()){
+		List<String> keys = new ArrayList<String>(buildingsMap.keySet());
+		Collections.sort(keys);
+		for (String key: keys){
+			Pair<Building, Integer> pair = buildingsMap.get(key);
 			if (pair.getA().isPluralizableDescription())
 				townInfo += pair.getB()+" "+EnglishGrammar.plural(pair.getA().getDescription(),pair.getB());
 			else
-				townInfo += pair.getB()+" "+pair.getB()+" "+pair.getA().getDescription();
+				townInfo += pair.getB()+" "+pair.getA().getDescription();
 			if (i < buildingsMap.values().size())
 				townInfo += ", ";
 			i++;
