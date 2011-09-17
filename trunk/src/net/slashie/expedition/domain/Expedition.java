@@ -2370,6 +2370,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		if (getDaysOnSea() > 20){
 			message("Land at last!");
 		}
+		if (getDeducedReckonWest() != 0){
+			if (UserInterface.getUI().promptChat("Do you want to reset your deduced reckon?")){
+				resetDeducedReckonWest();
+			}
+		}
 		resetDaysAtSea();
 	}
 
