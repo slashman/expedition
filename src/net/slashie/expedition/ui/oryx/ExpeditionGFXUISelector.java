@@ -20,7 +20,6 @@ import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
-import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.action.Message;
@@ -34,8 +33,8 @@ import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
 
+@SuppressWarnings("serial")
 public class ExpeditionGFXUISelector extends GFXUISelector{
-	private static final long serialVersionUID = 1L;
 	private CleanButton armButton;
 	private CleanButton buildButton;
 	private CleanButton dropButton;
@@ -63,8 +62,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	public void init(SwingSystemInterface psi, UserAction[] gameActions,
 			Properties uiProperties, Action advance, Action target,
 			Action attack, GFXUserInterface ui, Properties keyBindings) {
-		super.init(psi, gameActions, uiProperties, advance, target, attack, ui,
-				keyBindings);
+		super.init(psi, gameActions, uiProperties, advance, target, attack, ui, keyBindings);
 		HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
 		
 		try {
@@ -113,21 +111,21 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		saveButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("PROMPT_SAVE_KEY")));
 		quitButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("QUIT_KEY")));
 		
-		armButton.setPopupText("Arm Expedition");
-		buildButton.setPopupText("Build Settlement");
-		dropButton.setPopupText("Transfer Equipment");
-		inventoryButton.setPopupText("Inventory");
-		lookButton.setPopupText("Examine Surroundings");
-		mountButton.setPopupText("Ride Mounts");
-		repairButton.setPopupText("Repair Ships");
-		resetButton.setPopupText("Reset Dead' Reckon");
-		chopButton.setPopupText("Chop Woods");
-		anchorButton.setPopupText("Anchor Ships");
+		armButton.setPopupText("Arm Expedition (a)");
+		buildButton.setPopupText("Build Settlement (b)");
+		dropButton.setPopupText("Transfer Equipment (d)");
+		inventoryButton.setPopupText("Inventory (i)");
+		lookButton.setPopupText("Examine Surroundings (l)");
+		mountButton.setPopupText("Ride Mounts (m)");
+		repairButton.setPopupText("Repair Ships (r)");
+		resetButton.setPopupText("Reset Dead' Reckon (R)");
+		chopButton.setPopupText("Chop Woods (w)");
+		anchorButton.setPopupText("Anchor Ships (A)");
 		
-		musicButton.setPopupText("Switch Music");
-		sfxButton.setPopupText("Switch SFX");
-		saveButton.setPopupText("Save and Quit");
-		quitButton.setPopupText("Quit");
+		musicButton.setPopupText("Switch Music (m)");
+		sfxButton.setPopupText("Switch SFX (f)");
+		saveButton.setPopupText("Save and Quit (S)");
+		quitButton.setPopupText("Quit (Q)");
 		
 		armButton.setVisible(false);
 		buildButton.setVisible(false);
@@ -179,24 +177,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		
 		si.add(buttonsPanel);
 	}
-	/*
-	private MouseListener getPopupMouseListener(final CleanButton cleanButton) {
-		return new MouseAdapter(){
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				//setSelectionActive(false);
-				Component b = (Component) e.getSource();
-				legendLabel.setText(cleanButton.getPopupText());
-				legendLabel.setLocation(b.getX()+36+12, b.getY()+18+350);
-				legendLabel.setVisible(true);
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				legendLabel.setVisible(false);
-			}
-		};
-	}*/
 
 	@Override
 	public void activate() {
@@ -252,7 +232,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 				try {
 					handler.put(option);
 				} catch (InterruptedException e1) {}
-				// legendLabel.setVisible(false); HERE
 				si.recoverFocus();
 			}
 		};
@@ -270,12 +249,12 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		if (expedition.isMounted()){
 			mountButton.setVisible(true);
 			mountButton.setFace(unmountImage);
-			mountButton.setPopupText("Unmount");
+			mountButton.setPopupText("Unmount (m)");
 			si.revalidate();
 		} else if (expedition.getItemCountBasic("HORSE") > 0){
 			mountButton.setVisible(true);
 			mountButton.setFace(mountImage);
-			mountButton.setPopupText("Ride Mounts");
+			mountButton.setPopupText("Ride Mounts (m)");
 			si.revalidate();
 		} else {
 			mountButton.setVisible(false);
@@ -283,18 +262,18 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		
 		if (expedition.isArmed()){
 			armButton.setFace(disarmImage);
-			armButton.setPopupText("Disarm Expedition");
+			armButton.setPopupText("Disarm Expedition (a)");
 			si.revalidate();
 		} else {
 			armButton.setFace(armImage);
-			armButton.setPopupText("Arm Expedition");
+			armButton.setPopupText("Arm Expedition (a)");
 			si.revalidate();
 		}
 		
 		if (expedition.isAnchored()){
-			anchorButton.setPopupText("Weigh Anchors");
+			anchorButton.setPopupText("Weigh Anchors (A)");
 		} else {
-			anchorButton.setPopupText("Drop Anchors");
+			anchorButton.setPopupText("Drop Anchors (A)");
 		}
 		
 		
@@ -308,7 +287,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		} else if (expedition.getMovementMode().isLandMovement()){
 			buildButton.setVisible(true);
 			dropButton.setVisible(true);
-			dropButton.setPopupText("Caché Equipment");
+			dropButton.setPopupText("Caché Equipment (d)");
 			repairButton.setVisible(false);
 			resetButton.setVisible(true);
 			chopButton.setVisible(true);
@@ -316,7 +295,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		} else {
 			buildButton.setVisible(false);
 			dropButton.setVisible(true);
-			dropButton.setPopupText("Landfall / Drop");
+			dropButton.setPopupText("Landfall / Drop (d)");
 			repairButton.setVisible(true);
 			resetButton.setVisible(true);
 			chopButton.setVisible(false);
