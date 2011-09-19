@@ -183,7 +183,7 @@ public class ExpeditionGame extends SworeGame {
 	}
 	
 	public static String getVersion(){
-		return "v0.3.1 RC4";
+		return "v0.3.1";
 	}
 	
 	public Expedition getExpedition(){
