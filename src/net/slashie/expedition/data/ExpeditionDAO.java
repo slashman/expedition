@@ -42,7 +42,7 @@ public class ExpeditionDAO {
 		
 		Store goodsStore = new Store(GoodType.SUPPLIES);
 		goodsStore.setOwnerName("Supplies Store");
-		goodsStore.addItem(10000, new StoreItemInfo("BISCUIT", 500, 0));
+		goodsStore.addItem(50000, new StoreItemInfo("BISCUIT", 500, 0));
 		// goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", Store.LIQUID_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", Store.FOOD_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(500, new StoreItemInfo("RUM", Store.LIQUID_PACK, "barrels")); TODO: Implement
