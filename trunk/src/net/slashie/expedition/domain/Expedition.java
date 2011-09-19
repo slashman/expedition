@@ -793,7 +793,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		return null;
 	}
 
-
 	private AbstractCell getCurrentCell() {
 		return getLocation().getMapCell(getPosition());
 	}

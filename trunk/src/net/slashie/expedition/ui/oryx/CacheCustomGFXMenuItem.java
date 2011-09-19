@@ -7,6 +7,7 @@ import net.slashie.expedition.domain.Armor;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.ItemContainer;
+import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
@@ -91,6 +92,10 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 15, "ATK: " + unit.getAttack().getString(), Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 28, "DEF: " + unit.getDefense().getString(), Color.WHITE);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+198, y + 42, "Weight: "+unit.getWeight(), Color.WHITE);
+		} else if (item instanceof Vehicle){
+			Vehicle vehicle = (Vehicle)item;
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, vehicle.getName(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
 		} else {
 			int inventory = from.getItemCount(item.getFullID());
 			int current = to.getItemCount(item.getFullID());
@@ -123,9 +128,15 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 		
 		si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 12, y + 12, unitImage);
 		
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getTypeDescription()+": "+inventory, Color.WHITE);
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getTypeDescription()+": "+current, Color.WHITE);
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
+		if (item instanceof Vehicle){
+			Vehicle vehicle = (Vehicle)item;
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, vehicle.getName(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " + itemDescription, Color.WHITE);
+		} else {
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 15, from.getTypeDescription()+": "+inventory, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48, y + 28, to.getTypeDescription()+": "+current, Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+5, y + 55, (char)(CharKey.a + index + 1) + ". " +itemDescription, Color.WHITE);
+		}
 	}
 	
 	
