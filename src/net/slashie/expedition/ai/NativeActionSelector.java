@@ -35,7 +35,7 @@ public class NativeActionSelector implements ActionSelector {
 		
 		if (town.isUnfriendly()){
 			if (town.wasSeen() && milesDistance <= town.getSightRange()){
-				Position p = ((ExpeditionLevelReader)town.getLevel()).getFreeSquareAround(town.getPosition());
+				Position p = ((ExpeditionLevelReader)town.getLevel()).getFreeLandSquareAround(town.getPosition());
 				if (p != null){
 					int potentialPower = town.getPotentialPower(); 
 					if (potentialPower > 0){
