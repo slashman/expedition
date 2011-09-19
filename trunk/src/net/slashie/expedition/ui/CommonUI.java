@@ -86,8 +86,8 @@ public class CommonUI {
 			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits, String battleName,
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
-			AssaultOutcome[] mountedAttackOutcome,
-			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
+			Pair<AssaultOutcome, AssaultOutcome> mountedAttackOutcome,
+			Pair<AssaultOutcome, AssaultOutcome> meleeAttackOutcome, int attackerScore, int defenderScore) {
 		List<String> ret = new ArrayList<String>();
 		
 		String message = battleName+" XXX ";
@@ -129,19 +129,19 @@ public class CommonUI {
 		message = "";
 		
 		// Charge Phase
-		if (mountedAttackOutcome[0].hasEvents()){
+		if (mountedAttackOutcome.getA().hasEvents()){
 			message += "    >> Mounted charge outcome << XXX ";
 			nothingHappened = false;
 		}
 		
-		if (mountedAttackOutcome[0].hasDeaths()){
-			message += mountedAttackOutcome[0].getDeathsString()+" XXX ";
+		if (mountedAttackOutcome.getA().hasDeaths()){
+			message += mountedAttackOutcome.getA().getDeathsString()+" XXX ";
 		}
-		if (mountedAttackOutcome[0].hasWounds()){
-			message += mountedAttackOutcome[0].getWoundsString()+" XXX ";
+		if (mountedAttackOutcome.getA().hasWounds()){
+			message += mountedAttackOutcome.getA().getWoundsString()+" XXX ";
 		}
 		
-		if (mountedAttackOutcome[1].hasEvents()){
+		if (mountedAttackOutcome.getB().hasEvents()){
 			message += "    >> Mounted charge losses << XXX " ;
 			nothingHappened = false;
 		}
@@ -149,43 +149,43 @@ public class CommonUI {
 			ret.add(message);
 		message = "";
 		
-		if (mountedAttackOutcome[1].hasDeaths()){
-			message += mountedAttackOutcome[1].getDeathsString()+" XXX ";
+		if (mountedAttackOutcome.getB().hasDeaths()){
+			message += mountedAttackOutcome.getB().getDeathsString()+" XXX ";
 		}
-		if (mountedAttackOutcome[1].hasWounds()){
-			message += mountedAttackOutcome[1].getWoundsString()+" XXX ";
+		if (mountedAttackOutcome.getB().hasWounds()){
+			message += mountedAttackOutcome.getB().getWoundsString()+" XXX ";
 		}
 		if (!message.equals(""))
 			ret.add(message);
 		message = "";
 		
 		// Melee Phase
-		if (meleeAttackOutcome[0].hasEvents()){
+		if (meleeAttackOutcome.getA().hasEvents()){
 			message += "    >> Melee outcome << XXX ";
 			nothingHappened = false;
 		}
 		
-		if (meleeAttackOutcome[0].hasDeaths()){
-			message += meleeAttackOutcome[0].getDeathsString()+" XXX ";
+		if (meleeAttackOutcome.getA().hasDeaths()){
+			message += meleeAttackOutcome.getA().getDeathsString()+" XXX ";
 		}
 		
-		if (meleeAttackOutcome[0].hasWounds()){
-			message += meleeAttackOutcome[0].getWoundsString()+" XXX ";
+		if (meleeAttackOutcome.getA().hasWounds()){
+			message += meleeAttackOutcome.getA().getWoundsString()+" XXX ";
 		}
 		if (!message.equals(""))
 			ret.add(message);
 		message = "";
 		
-		if (meleeAttackOutcome[1].hasEvents()){
+		if (meleeAttackOutcome.getB().hasEvents()){
 			message += "    >> Melee losses << XXX ";
 			nothingHappened = false;
 		}
 		
-		if (meleeAttackOutcome[1].hasDeaths()){
-			message += meleeAttackOutcome[1].getDeathsString()+" XXX ";
+		if (meleeAttackOutcome.getB().hasDeaths()){
+			message += meleeAttackOutcome.getB().getDeathsString()+" XXX ";
 		}
-		if (meleeAttackOutcome[1].hasWounds()){
-			message += meleeAttackOutcome[1].getWoundsString()+" XXX ";
+		if (meleeAttackOutcome.getB().hasWounds()){
+			message += meleeAttackOutcome.getB().getWoundsString()+" XXX ";
 		}
 		if (!message.equals(""))
 			ret.add(message);

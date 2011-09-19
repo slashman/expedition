@@ -12,6 +12,7 @@ import net.slashie.expedition.town.Building;
 import net.slashie.expedition.world.Weather;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.ui.Appearance;
+import net.slashie.util.Pair;
 
 public interface ExpeditionUserInterface {
 	public void launchStore(Store store);
@@ -45,8 +46,8 @@ public interface ExpeditionUserInterface {
 			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits, String battleTitle,
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
-			AssaultOutcome[] mountedAttackOutcome,
-			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore);
+			Pair<AssaultOutcome, AssaultOutcome> mountedAttackOutcome,
+			Pair<AssaultOutcome, AssaultOutcome> meleeAttackOutcome, int attackerScore, int defenderScore);
 	
 	public void showBattleScene(
 			String battleTitle, 

@@ -1219,8 +1219,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			List<Equipment> originalAttackingUnits, List<Equipment> originalDefendingUnits,
 			String battleTitle, AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
-			AssaultOutcome[] mountedAttackOutcome,
-			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
+			Pair<AssaultOutcome, AssaultOutcome> mountedAttackOutcome,
+			Pair<AssaultOutcome, AssaultOutcome> meleeAttackOutcome, int attackerScore, int defenderScore) {
 		List<String> messages = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits, battleTitle,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome, attackerScore, defenderScore);
 		messages.remove(0); // Ignore the first message, since it's replaced with the formation grid
 		int i = 0;

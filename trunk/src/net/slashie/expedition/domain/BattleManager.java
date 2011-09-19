@@ -23,6 +23,8 @@ public class BattleManager {
 		List<Equipment> defendingUnitsFullGroup = null;
 		
 		int attackingMoraleModifier = attacker.getMoraleAttackModifier();
+		if (Util.chance(20))
+			attackingMoraleModifier = 0;
 		int defendingMoraleModifier = 0;
 		if (defender instanceof NativeTown){
 			//Select a defending group from the town inhabitants
@@ -42,6 +44,8 @@ public class BattleManager {
 			Expedition npe = (Expedition)defender;
 			defendingUnitsFullGroup = npe.getGoods(GoodType.PEOPLE);
 			defendingMoraleModifier = npe.getMoraleAttackModifier();
+			if (Util.chance(20))
+				defendingMoraleModifier = 0;
 		} else {
 			//Invalid Defender
 			return;
@@ -63,20 +67,20 @@ public class BattleManager {
 		AssaultOutcome defenderRangedAttackOutcome = rangedAttack(defendingUnits, defendingMoraleModifier, attackingUnits, attackingMoraleModifier, attacker);
 		
 		// Mounted phase: Mounted units from attacker attack (Defender will attack back)
-		AssaultOutcome[] attackerMountedAttackOutcome = mountedAttack(attackingUnits, attackingMoraleModifier, attacker, defendingUnits, defendingMoraleModifier, (UnitContainer)defender);
+		Pair<AssaultOutcome, AssaultOutcome> attackerMountedAttackOutcome = mountedAttack(attackingUnits, attackingMoraleModifier, attacker, defendingUnits, defendingMoraleModifier, (UnitContainer)defender);
 		
 		// Melee phase: Attacker charges (Defender will attack back)
-		AssaultOutcome[] attackerMeleeAttackOutcome = meleeAttack(attackingUnits, attackingMoraleModifier, attacker, defendingUnits, defendingMoraleModifier, (UnitContainer)defender);
+		Pair<AssaultOutcome, AssaultOutcome> attackerMeleeAttackOutcome = meleeAttack(attackingUnits, attackingMoraleModifier, attacker, defendingUnits, defendingMoraleModifier, (UnitContainer)defender);
 		
 		// Score outcomes to see who won
 		int attackerScore = 0;
 		int defenderScore = 0;
 		attackerScore += eval(attackerRangedAttackOutcome);
 		defenderScore += eval(defenderRangedAttackOutcome);
-		attackerScore += eval(attackerMountedAttackOutcome[0]);
-		defenderScore += eval(attackerMountedAttackOutcome[0]);
-		attackerScore += eval(attackerMeleeAttackOutcome[0]);
-		defenderScore += eval(attackerMeleeAttackOutcome[0]);
+		attackerScore += eval(attackerMountedAttackOutcome.getA());
+		defenderScore += eval(attackerMountedAttackOutcome.getB());
+		attackerScore += eval(attackerMeleeAttackOutcome.getA());
+		defenderScore += eval(attackerMeleeAttackOutcome.getB());
 		/*System.out.println("Attacker Score "+attackerScore);
 		System.out.println("Defender Score "+defenderScore);*/
 		if (attackerScore > defenderScore){
@@ -126,10 +130,10 @@ public class BattleManager {
 		return clonedList;
 	}
 
-	private static AssaultOutcome[] meleeAttack(List<Equipment> attackingUnits, 
+	private static Pair<AssaultOutcome, AssaultOutcome> meleeAttack(List<Equipment> attackingUnits, 
 			int attackingMoraleModifier, UnitContainer attackingExpedition,
 			List<Equipment> defendingUnits, int defendingMoraleModifier, UnitContainer defendingExpedition) {
-		AssaultOutcome[] ret = new AssaultOutcome[]{ new AssaultOutcome(), new AssaultOutcome() };
+		Pair<AssaultOutcome, AssaultOutcome> ret = new Pair<AssaultOutcome, AssaultOutcome> (new AssaultOutcome(), new AssaultOutcome());
 		for (Equipment equipment: attackingUnits){
 			for (int i = 0; i < equipment.getQuantity(); i++){
 				Equipment randomTarget = pickRandomTargetFairly(defendingUnits);
@@ -137,8 +141,8 @@ public class BattleManager {
 					//Noone left to attack
 					return ret;
 				}
-				singleAttack(equipment, attackingMoraleModifier, randomTarget, defendingMoraleModifier, defendingExpedition, ret[0]);
-				singleAttack(randomTarget, defendingMoraleModifier,  equipment, attackingMoraleModifier, attackingExpedition, ret[1]);
+				singleAttack(equipment, attackingMoraleModifier, randomTarget, defendingExpedition, ret.getA());
+				singleAttack(randomTarget, defendingMoraleModifier,  equipment, attackingExpedition, ret.getB());
 				if (randomTarget.getQuantity() == 0){
 					defendingUnits.remove(randomTarget);
 				}
@@ -147,9 +151,9 @@ public class BattleManager {
 		return ret;
 	}
 	
-	private static AssaultOutcome[] mountedAttack(List<Equipment> attackingUnits, int attackingMoraleModifier, UnitContainer attackingExpedition,
+	private static Pair<AssaultOutcome, AssaultOutcome> mountedAttack(List<Equipment> attackingUnits, int attackingMoraleModifier, UnitContainer attackingExpedition,
 			List<Equipment> defendingUnits, int defendingMoraleModifier, UnitContainer defendingExpedition) {
-		AssaultOutcome[] ret = new AssaultOutcome[]{ new AssaultOutcome(), new AssaultOutcome() };
+		Pair<AssaultOutcome, AssaultOutcome> ret = new Pair<AssaultOutcome, AssaultOutcome>(new AssaultOutcome(), new AssaultOutcome());
 		for (Equipment equipment: attackingUnits){
 			ExpeditionUnit unit = (ExpeditionUnit)equipment.getItem(); 
 			if ( !unit.isRangedAttack() && unit.isMounted()){
@@ -159,8 +163,8 @@ public class BattleManager {
 						//Noone left to attack
 						return ret;
 					}
-					singleAttack(equipment, attackingMoraleModifier, randomTarget, defendingMoraleModifier, defendingExpedition, ret[0]);
-					singleAttack(randomTarget, defendingMoraleModifier, equipment, attackingMoraleModifier, attackingExpedition, ret[1]);
+					singleAttack(equipment, attackingMoraleModifier, randomTarget, defendingExpedition, ret.getA());
+					singleAttack(randomTarget, defendingMoraleModifier, equipment, attackingExpedition, ret.getB());
 					if (randomTarget.getQuantity() == 0){
 						defendingUnits.remove(randomTarget);
 					}
@@ -181,7 +185,7 @@ public class BattleManager {
 						//Noone left to attack
 						return ret;
 					}
-					singleAttack(equipment, attackingMoraleModifier, randomTarget, defendingMoraleModifier, defendingExpedition, ret);
+					singleAttack(equipment, attackingMoraleModifier, randomTarget, defendingExpedition, ret);
 					if (randomTarget.getQuantity() == 0){
 						defendingUnits.remove(randomTarget);
 					}
@@ -191,7 +195,7 @@ public class BattleManager {
 		return ret;
 	}
 	
-	private static void singleAttack(Equipment attackerEquipment, int attackingMoraleModifier, Equipment defendingEquipment, int defendingMoraleModifier, UnitContainer defendingExpedition, AssaultOutcome outcome) {
+	private static void singleAttack(Equipment attackerEquipment, int attackingMoraleModifier, Equipment defendingEquipment, UnitContainer defendingExpedition, AssaultOutcome outcome) {
 		ExpeditionUnit attackingUnit = (ExpeditionUnit)attackerEquipment.getItem();
 		ExpeditionUnit defendingUnit = (ExpeditionUnit)defendingEquipment.getItem();
 		if (Util.chance(attackingUnit.getHitChance())){
@@ -202,7 +206,6 @@ public class BattleManager {
 				int damage = attackingUnit.getAttack().roll();
 				damage += attackingMoraleModifier;
 				int defense = targetUnit.getDefense().roll();
-				defense += defendingMoraleModifier;
 				int realDamage = damage - defense;
 				if (realDamage <= 0){
 					// Shrug off

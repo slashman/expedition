@@ -1790,8 +1790,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public int getMoraleAttackModifier(){
 		int morale = getMorale();
 		if (morale == 10)
-			return 3;
-		if (morale >= 8)
 			return 2;
 		if (morale >= 6)
 			return 1;
