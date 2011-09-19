@@ -848,8 +848,8 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			String battleName, 
 			AssaultOutcome attackerRangedAttackOutcome,
 			AssaultOutcome defenderRangedAttackOutcome,
-			AssaultOutcome[] mountedAttackOutcome,
-			AssaultOutcome[] meleeAttackOutcome, int attackerScore, int defenderScore) {
+			Pair<AssaultOutcome,AssaultOutcome> mountedAttackOutcome,
+			Pair<AssaultOutcome,AssaultOutcome> meleeAttackOutcome, int attackerScore, int defenderScore) {
 		csi.saveBuffer();
 		List<String> messages = CommonUI.getBattleResultsString(originalAttackingUnits, originalDefendingUnits,battleName,attackerRangedAttackOutcome,defenderRangedAttackOutcome,mountedAttackOutcome,meleeAttackOutcome, attackerScore, defenderScore);
 		for (String message: messages){
