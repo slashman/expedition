@@ -198,6 +198,21 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 * @param p
 	 * @return
 	 */
+	public Position getFreeLandSquareAround(Position p){
+		List<Position> positionsAround = getPositionsAround(p);
+		for (Position position: positionsAround){
+			if (getActorAt(position) == null && !getMapCell(position).isWater())
+				return position;
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns a position around the given position, with no actors on it, based on it's zoom levels,
+	 * or null if no such location is found
+	 * @param p
+	 * @return
+	 */
 	public Position getFreeSquareAround(Position p){
 		List<Position> positionsAround = getPositionsAround(p);
 		for (Position position: positionsAround){
