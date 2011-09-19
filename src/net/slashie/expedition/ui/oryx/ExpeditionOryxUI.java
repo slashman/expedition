@@ -499,14 +499,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	
 	public void transferFromExpedition(GoodsCache toCache, int destinationMinUnits) {
-		// Create the button to confirm transfer and add it to the UI
-		//ItemTransferFunctionality transferFromExpeditionFunctionality = new TransferFromExpeditionFunctionality(minUnits);
 		ItemTransferFunctionality transferFromExpeditionFunctionality = new DualTransferFunctionality(destinationMinUnits, 1);
 		transferItems("Select the goods to transfer", null, getExpedition(), toCache, transferFromExpeditionFunctionality);
 	}
 	
 	public void transferFromCache(String prompt, GoodType preselectedGoodType, GoodsCache fromCache) {
-		//ItemTransferFunctionality transferFromCacheFunctionality = new TransferFromCacheFunctionality();
 		ItemTransferFunctionality dualTransferFunctionality = new DualTransferFunctionality(-1,-1);
 		transferItems(prompt, preselectedGoodType, fromCache, getExpedition(), dualTransferFunctionality);
 		if (fromCache.destroyOnEmpty() && fromCache.getItems().size() == 0)
@@ -1565,6 +1562,11 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		@Override
 		public boolean validateAndPerformTransfer(ItemContainer from, ItemContainer to, ExpeditionItem choice, int quantity) {
+			if (choice.getGoodType() == GoodType.VEHICLE){
+				showBlockingMessage("You can't abandon "+((Vehicle)choice).getName());
+				return false;
+			}
+			
 			if (!to.canCarry(choice, quantity)){
 				showBlockingMessage("Not enough room in the "+to.getDescription());
 				return false;
