@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<roadmap>
+	<facet id = "LND" name = "Land Exploration" implementationOrder = "3">
+		<functionalComponent name = "Hunting" description = "Allow expedition to enter “hunt” mode, spot animals and decide if will try to hunt them. Add hunting encounter, pick members from the expedition and try to ambush animals. (Abstracted, similar to combat mode)" complexity = "3"/>
+		<functionalComponent name = "Fishing" description = "Allow expedition to enter “fishing” mode, spot fish banks and decide if will try to fish them. Add fishing encounter, zoom into the location (Generate river shape) and split your expeditions in groups of five, placing them in locations to fish and have a command to “pass time”. Have patience decrease on the fishing groups, and add some fishes (or not) everytime the time passes. Same for fishing on sea" complexity = "8"/>
+		<functionalComponent name = "Camping" description = "Add expedition fatigue, allow to make camp for the night, and sleep on the ships. Allow to sleep at a settlement. (Different levels for resting.) Add ambushes by wild animals and natives." complexity = "7"/>
+		<functionalComponent name = "Land Vehicles / Mounts" description = "Add land vehicles you can use to carry more, restricting movement to some terrain types. Make mounts unable to cross some terrains." complexity = "6"/>
+		<functionalComponent name = "River Exploration" description = "Add rowboats to explore shallow waters. Make rivers unpassable otherwise. Add rapids and their dangers" complexity = "8"/>
+		<functionalComponent name = "Zoomed in areas" description = "Generate zoomed in areas for mountain passes, caverns and towns, allow zooming into them." complexity = "9"/>
+		<functionalComponent name = "Supplying" description = "Add expiry time for food. Make water necessary to keep the expedition hydratated. Allow refilling water barrels from water sources. Use food based on expiry time." complexity = "7"/>
+		<functionalComponent name = "Paid Transportation" description = "Allow boarding vehicles as passengers to transport expeditions between cities for a fee" complexity = "6"/>
+	</facet>
+	<facet id = "DIS" name = "Discoveries" implementationOrder = "5">
+		<functionalComponent name = "Cartography" description = "Allow creating topographic maps on parchments with a certain scale. (The higher the scale the higher requirements for cartography skill). Allow “glueing” maps together to create a master world map." complexity = "15"/>
+		<functionalComponent name = "Archeology" description = "Finding and exploring ruins and add them to the discovery log. Report back to gain fame. Generate ruins and treasures." complexity = "12"/>
+		<functionalComponent name = "Natural Wonders" description = "Finding natural wonders, naming them and add them to the discovery log. Report back to gain fame." complexity = "4"/>
+		<functionalComponent name = "Botany" description = "Add scienticists into the expedition, find exotic plants and add them to the discovery log. Report back to gain fame. Add plants to the world according to biome" complexity = "8"/>
+		<functionalComponent name = "Zoology" description = "Add scienticists into the expedition, find exotic animals and add them to the discovery log. Try to capture the animal. Report back to gain fame." complexity = "7"/>
+	</facet>
+	<facet id = "SEA" name = "Seafaring" implementationOrder = "7">
+		<functionalComponent name = "Nautical charts" description = "Allow accounting roumbs from one spot into another and place them into maps. Have landmarks into such roumbs" complexity = "8"/>
+		<functionalComponent name = "Autosailing" description = "Allow following roumbs automatically. Retake control for adverse weather and resume roumb if possible" complexity = "12"/>
+		<functionalComponent name = "Fleet customization" description = "Allow customizing the ship masts, sails, quarters, weapon bays, cargo bays, figureheads, hull materials, names." complexity = "12"/>
+		<functionalComponent name = "Shipwrecks" description = "Spread cargo on ships and lose it to the sea. Spread some of it over beaches if possible based on sea current. Allow surviving a shipwreck." complexity = "8"/>
+		<functionalComponent name = "Ship manteinance" description = "Assign crew to ship manteinance works, enhance repairing." complexity = "4"/>
+		<functionalComponent name = "Shipwrights" description = "Allow commisioning ships to be built based on specs, including size, shape, masts, materials, cargo space, crew space" complexity = "8"/>
+		<functionalComponent name = "Ships Market" description = "Allow buying and selling ship deeds at the harbors, assign commanders into them to add them to the Expedition." complexity = "8"/>
+		<functionalComponent name = "Passenger expeditions" description = "Allow boarding ships as passengers by paying a fee, to transport your land expedition between cities." complexity = "8"/>
+	</facet>
+	<facet id = "PPL" name = "People" implementationOrder = "17">
+		<functionalComponent name = "Mutinies" description = "Restrict trading with crew members as items, add mutinies for low morale situations (Split expedition between mutinies and loyal members and make them fight), restrict ability to abandon and drop units into the sea." complexity = "9"/>
+		<functionalComponent name = "Delegate Leaders" description = "Allow appointing an unit as expedition leader and split expeditions. Command the delegate leader to travel or to do an action (taking temporary control). Interact with these “delegate” expeditions. Join back with the expedition (or not, depending on loyalty)" complexity = "11"/>
+		<functionalComponent name = "Unit stats" description = "Have morale, wound recovery and hunger diseases be handled by unit. Handle level, loyalty age and diseases by individual unit." complexity = "4"/>
+		<functionalComponent name = "Special characters" description = "Add leader units, named and with special stats." complexity = "3"/>
+	</facet>
+	<facet id = "COL" name = "Colonization" implementationOrder = "1">
+		<functionalComponent name = "Colonies production" description = "Allow colonies to produce goods based on the resources they have access to, the available buildings and the workforce. Allow balancing the production (depending on the level of governance over the colony). Restrict production transference based on the governance level. Allow creating buildings and assign workers to them, to transform raw material. Allow recollecting raw materials from the map." complexity = "11"/>
+		<functionalComponent name = "Colonies growth" description = "Make colonies grow on size on themselves and consume construction resources around them (wood, stone)." complexity = "6"/>
+		<functionalComponent name = "Military buildings" description = "Allow building barracks to train colonists into soldiers. Allow building walled fortresses and towers." complexity = "6"/>
+		<functionalComponent name = "Road making" description = "Allow creating roads of different quality. Units can move faster over them, mounted units and vehicles get an additional bonus." complexity = "6"/>
+		<functionalComponent name = "Mines" description = "Allow finding veins and creating mines, linking them to colonies. Set conditions for mine workers" complexity = "8"/>
+		<functionalComponent name = "Colonist specialization" description = "Allow colonists to acquire jobs based on their occupation and their assignations." complexity = "6"/>
+	</facet>
+	<facet id = "HIS" name = "Historic Content" implementationOrder = "12">
+		<functionalComponent name = "American settlements" description = "Add native cultural centers. Add cities in the XV to XIX century range. Add units and items particular to the continent." complexity = "4"/>
+		<functionalComponent name = "European settlements" description = "Add native cultural centers. Add cities in the XV to XIX century range. Add units and items particular to the continent." complexity = "4"/>
+		<functionalComponent name = "African settlements" description = "Add native cultural centers. Add cities in the XV to XIX century range. Add units and items particular to the continent." complexity = "4"/>
+		<functionalComponent name = "Asian settlements" description = "Add native cultural centers. Add cities in the XV to XIX century range. Add units and items particular to the continent." complexity = "4"/>
+		<functionalComponent name = "Oceania settlements" description = "Add native cultural centers. Add cities in the XV to XIX century range. Add units and items particular to the continent." complexity = "4"/>
+		<functionalComponent name = "Languages / Translators" description = "Support for languages and translators for each culture. Add spoken languages stat. Simulate partial language knowledge when interacting." complexity = "12"/>
+	</facet>
+	<facet id = "RWG" name = "Random world generator" implementationOrder = "13">
+		<functionalComponent name = "Landmass" description = "Generate landmass using a procedural method seedable with the name of the world and parameterizable with world size, landmass % and weather patterns. Include natural landmarks." complexity = "24"/>
+		<functionalComponent name = "Cultural centers and settlements" description = "Place cultural centers and cities into the landmass, using a procedural method seedable with the name of the world and parameterizable with the cultures to be added based on a loaded data-pack" complexity = "11"/>
+		<functionalComponent name = "Worlds management" description = "Allow saving, sharing and using generated worlds." complexity = "4"/>
+	</facet>
+	<facet id = "SIM" name = "Agent simulation" implementationOrder = "14">
+		<functionalComponent name = "Wandering ships" description = "Add ships wandering from port to port selling goods. Allow interacting with these ships (Trading items with them, asking for supplies)." complexity = "12"/>
+		<functionalComponent name = "Wandering caravans" description = "Add caravans trading from city to city. Allow interacting with them (Trading items with them, asking for supplies, assaulting)." complexity = "11"/>
+		<functionalComponent name = "Competing expeditions" description = "Add ships from colonial powers sailing from europe to the new world. Add navies protecting ports. Add conquistador expeditions exploring in-land and  making colonies, allow interacting with them (Hailing, Assaulting, Trading Supplies, Cooperate). Add armies protecting cities. Add not owned colonies" complexity = "22"/>
+	</facet>
+	<facet id = "NAT" name = "Nature" implementationOrder = "15">
+		<functionalComponent name = "Snowy areas" description = "Cover ground in snow after snowy weather happens. Make snow stay for a while and then melt. Make snow block roads and allow cleaning. Add movement penalty for snow. Add permanent snow on high mountain ranges." complexity = "6"/>
+		<functionalComponent name = "Deserts" description = "Add desert areas with high temperatures and water requirements. Include sand storms and sandy terrain" complexity = "6"/>
+		<functionalComponent name = "Polar areas" description = "Add cold deserts with low temperatures and high food requirements. Add accidents (ice-layers breaking, falling into water). Add blizards" complexity = "6"/>
+		<functionalComponent name = "Swamp and Marsh terrain" description = "Add wetlands with and without vegetation. Add risk of illness while travelling and for nearby settlements. Allow drying wetland. Add penalty for crossing." complexity = "8"/>
+		<functionalComponent name = "Jungle terrain" description = "Add Jungle (Different from woods), with a higher crossing penalty, higher risk of wild animal attacks. Different kind of wood (and less quantity than forests)" complexity = "6"/>
+		<functionalComponent name = "Wild animals" description = "Add wild animals which may either ambush the expedition or be hunted. Place the animals on each biome accordingly." complexity = "11"/>
+		<functionalComponent name = "Diseases spreading" description = "Simulate diseases spreading through the continents and killing unprepared population (both native and european). Add diseases spreading on the expedition requiring to dismiss units for the sake of all." complexity = "8"/>
+		<functionalComponent name = "Natural resources placement" description = "Place natural resources over the world map (Silver, Gold, Stone, Wood, Iron, Cooper)" complexity = "8"/>
+		<functionalComponent name = "Life and death" description = "Make livestock breed with time, and consume fooder (or die off starvation).  Make livestock and units die with the time" complexity = "8"/>
+	</facet>
+	<facet id = "GEO" name = "Geodesy / Geology" implementationOrder = "16">
+		<functionalComponent name = "Globe map model" description = "Represent the map as a globe instead of a plane, theoretical circumnavigation in east-west direction should be much smaller near the poles than the equator. Locate all expeditions, settlements and features into the globe model and ensure everything is transparent to the player. Allow continuous warping for east-west movement. Add polar warping when getting past north and south pole." complexity = "11"/>
+		<functionalComponent name = "Day / Night model" description = "Add day and night cycles. Have line of sight be decreased greatly on night. Enable “autosleep” to order the expedition to sleep automatically on night (recovering from fatigue and waking up again at dawn). Add torches to increase Line of Sight at night" complexity = "7"/>
+		<functionalComponent name = "Seasons model" description = "Add seasons for some latitudes, change weather patterns depending on the date of the year. Change appearance of all tiles on spring, summer, fall and winter." complexity = "8"/>
+		<functionalComponent name = "Temperature model" description = "Simulate the world temperature based on latitude, weather, height and biome. Make it affect food consumption and morale. Add frostbite for cold temperatures." complexity = "4"/>
+		<functionalComponent name = "Wind model" description = "Simulate wind current based on latitude, beaches, mountain ranges. Simulate hurricanes and cyclons." complexity = "8"/>
+		<functionalComponent name = "Rivers" description = "Simulate the rivers flowing into the sea, add river current." complexity = "11"/>
+	</facet>
+	<facet id = "COM" name = "Combat" implementationOrder = "6">
+		<functionalComponent name = "Mass scale" description = "Simulate combat between groups of units, by selecting combat groups from both expeditions and piting them against each other in different phases." complexity = "8"/>
+		<functionalComponent name = "Personal scale" description = "Simulate combat on a personal scale for exploring zoomed-in areas and special encounters between unique units." complexity = "8"/>
+		<functionalComponent name = "Cannons and artillery" description = "Add carriable war machines that can be used in combat but make expedition slower. Allow having horses pull the cannons. Add special units (Cannonners) for handling the artillery" complexity = "4"/>
+		<functionalComponent name = "Long term wars" description = "Add wars between states, which may cause enemy expeditions to attack you on sight. Allow to take part on military campaigns for a commanding nation, keeping track of all batle outcomes. Allow playing the role of commander and directing expeditions to attack enemy positions." complexity = "16"/>
+		<functionalComponent name = "Military rank" description = "Allow units to have a military rank associated based on their actions (Including commanding actions)" complexity = "4"/>
+		<functionalComponent name = "Naval combat" description = "Sailing ships attacking each other using cannons with different kind of shot. Detailed damage over all ships. Turns based tactics having wind direction in mind. Allow crashing into other ships. Allow boarding ships and fighting (using mass scale combat)" complexity = "16"/>
+	</facet>
+	<facet id = "TRD" name = "Trading" implementationOrder = "10">
+		<functionalComponent name = "Market prices" description = "Calculate the price of all goods based on supply and demand. Do the same for ships and salary costs." complexity = "8"/>
+		<functionalComponent name = "Goods restocking" description = "Restock stores in cities based on the supply chain." complexity = "6"/>
+		<functionalComponent name = "Merchant missions" description = "Generate missions to deliver certain ammount of cargo from a city into another one within a time frame." complexity = "8"/>
+		<functionalComponent name = "City Supplies" description = "Calculate the goods each city can offer based on their location and history data" complexity = "8"/>
+		<functionalComponent name = "Fame as a trader" description = "Allow obtaining lower buy and higher sales prices bases on your fame as a trader. This fame is built on each city for each sucessful delivery on time and safe. It's also built with each trading operation based on its value." complexity = "8"/>
+	</facet>
+	<facet id = "PIR" name = "Piracy / Crime" implementationOrder = "8">
+		<functionalComponent name = "Pirate towns" description = "Add towns without royal presence and in which crews can be rounded up easily and ships can be sold without a deed. " complexity = "4"/>
+		<functionalComponent name = "Pirates" description = "Allow becoming a pirate by commiting acts of piracy and letting the rumor spread. Make nations relate with pirates according to the target of their acts (be friendly or hostile). Add fame as a pirate" complexity = "8"/>
+		<functionalComponent name = "Treasure caves and maps" description = "Add maps to pirate treasures, and allow burying treasures." complexity = "11"/>
+		<functionalComponent name = "Recruiting rogues" description = "Allow rounding up crew in taberns and harbors. Effectiveness depends on fame as a pirate and offered conditions." complexity = "4"/>
+		<functionalComponent name = "Treasure splitting" description = "Allow dividing the spoils between the crew after assaulting ships" complexity = "6"/>
+		<functionalComponent name = "Crimes Investigation" description = "Allow acting as an international agent, following the footprints of a criminal from city to city, having to travel between cities and finding clues on his next location." complexity = "12"/>
+	</facet>
+	<facet id = "GAM" name = "Gambling" implementationOrder = "18">
+		<functionalComponent name = "Blackjack" description = "Add gambling activity as a turn based minigame" complexity = "8"/>
+		<functionalComponent name = "Dices" description = "Add gambling activity as a turn based minigame" complexity = "8"/>
+		<functionalComponent name = "Darts" description = "Add gambling activity as a turn based minigame. Based on agility skill and the choice between different shooting styles with higher risk but greater return." complexity = "8"/>
+		<functionalComponent name = "Coin flipping" description = "Add gambling activity as a turn based minigame" complexity = "4"/>
+	</facet>
+	<facet id = "REL" name = "Religion" implementationOrder = "9">
+		<functionalComponent name = "Churchs, missions" description = "Allow building churches and missions in your settlements, for a specific religion. Make them generate faith for the population and around." complexity = "8"/>
+		<functionalComponent name = "Priests" description = "Add priest and missionary units, place them in settlements to spread a specific faith." complexity = "4"/>
+		<functionalComponent name = "Religious States" description = "Add religious states that spread all around the world based on the support of other states. Allow obtaining support from these states and other cosupporters. Allow playing as an expedition supported by a religious state." complexity = "12"/>
+		<functionalComponent name = "Praying" description = "Allow praying as a way to increase the morale of your expedition members running the risk of making them unbelievers upon adversity." complexity = "3"/>
+		<functionalComponent name = "Donations" description = "Allow donating to religious institutions to enhance your standing with their state." complexity = "3"/>
+		<functionalComponent name = "Inquisition" description = "Allow establishing inquisitory missions for preventing other religions to interfere with a religion. Seek out figureheads of these religions and execute them." complexity = "8"/>
+		<functionalComponent name = "Cultural conversion" description = "Allow converting people from other religions via religious influence." complexity = "6"/>
+	</facet>
+	<facet id = "POL" name = "Politics" implementationOrder = "11">
+		<functionalComponent name = "States (Kingdoms / Empires)" description = "Add states and interaction between them. Make settlements belong to a state. Handle relationships between state leaders." complexity = "8"/>
+		<functionalComponent name = "Treaties between states" description = "Add military, territorial and trade treaties between states, affecting your posibilities as an expedition depending on your flag." complexity = "6"/>
+		<functionalComponent name = "Royal titles" description = "Allow obtaining royal titles from a state" complexity = "8"/>
+		<functionalComponent name = "Territorial boundaries" description = "Add territorial boundaries claimed by an state. Make states defend their territory." complexity = "8"/>
+		<functionalComponent name = "Independence" description = "Allow changing the flag of the Expedition. Allow declaring independence from any state and founding your own. Influence settlements to join your state. Add loyalty to expedition members (to the leader and to the leader state)" complexity = "8"/>
+		<functionalComponent name = "Governance" description = "Have a level of governance over each colony based on its State and your relationship with that State. Have colonies rebel and other governors assigned. Allow assigning a governor to automatize production." complexity = "12"/>
+	</facet>
+	<facet id = "EXT" name = "Externalization" implementationOrder = "2">
+		<functionalComponent name = "Modding" description = "Allow power users to generate their own scenarios by editing the data files. Allow power users to create their own data packs (Units, weapons, items)" complexity = "8"/>
+		<functionalComponent name = "Scenario Creator Tool" description = "Add a specialized tool for not so powerful users to create their own scenarios." complexity = "12"/>
+		<functionalComponent name = "Adventure mode" description = "Allow creating your own adventure by picking the starting date, the world in which you want to play, the state and the type of expedition." complexity = "12"/>
+	</facet>
+	<facet id = "ACS" name = "Accessibility" implementationOrder = "4">
+		<functionalComponent name = "High resolution UI" description = "Add a full screen modern user interface with 32x32 pixels graphics." complexity = "12"/>
+		<functionalComponent name = "Tutorial Mode" description = "Add a tutorial mode for people to get introduced into all game mechanics" complexity = "8"/>
+		<functionalComponent name = "Contextual Guidance" description = "Add in-game guide for every first-time a mechanic or event happens, to explain the newbies the next steps to take." complexity = "8"/>
+		<functionalComponent name = "Usability enhancements" description = "Make the game fully mouse playable with all commands easily accessible" complexity = "8"/>
+	</facet>
+</roadmap>
