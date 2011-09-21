@@ -1,0 +1,88 @@
+body {
+	background-image: url('img/background.png');
+	font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+	
+}
+
+.titleDiv {
+	text-align: center;	
+}
+
+.titleTable {
+	width: 60%;
+	margin-left: auto;
+	margin-right: auto;
+	border-spacing: 0;
+}
+
+.titleTable td {
+	padding: 0px;
+}
+
+.facetTable {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	border-spacing: 0;
+}
+
+.facetTable td {
+	padding: 0px;
+}
+
+.nwCell {
+	background-image: url('img/nw.png');
+	width: 64px;
+	height: 32px;
+	background-repeat: no-repeat;
+}
+
+.nCell {
+	background-image: url('img/n.png');
+	height: 32px;
+	background-repeat: repeat-x;
+}
+
+.neCell {
+	background-image: url('img/ne.png');
+	width: 64px;
+	height: 32px;
+	background-repeat: no-repeat;
+}
+
+.wCell {
+	background-image: url('img/w.png');
+	width: 64px;
+	background-repeat: repeat-y;
+}
+
+.cCell {
+	background-image: url('img/c.png');
+	background-repeat: repeat;	
+}
+
+.eCell {
+	background-image: url('img/e.png');
+	width: 64px;
+	background-repeat: repeat-y;	
+}
+
+.swCell {
+	background-image: url('img/sw.png');
+	width: 64px;
+	height: 32px;
+	background-repeat: no-repeat;
+}
+
+.seCell {
+	background-image: url('img/se.png');
+	width: 64px;
+	height: 32px;
+	background-repeat: no-repeat;
+}
+
+.sCell {
+	background-image: url('img/s.png');
+	height: 32px;
+	background-repeat: repeat-x;
+}
