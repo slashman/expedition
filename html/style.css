@@ -1,7 +1,7 @@
 body {
 	background-image: url('img/background.png');
 	font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-	
+	background-attachment:fixed;	
 }
 
 .titleDiv {
@@ -9,14 +9,16 @@ body {
 }
 
 .titleTable {
-	width: 60%;
 	margin-left: auto;
 	margin-right: auto;
 	border-spacing: 0;
 }
 
-.titleTable td {
-	padding: 0px;
+.videoTable {
+	width: 560px;
+	margin-left: auto;
+	margin-right: auto;
+	border-spacing: 0;
 }
 
 .facetTable {
@@ -26,63 +28,74 @@ body {
 	border-spacing: 0;
 }
 
-.facetTable td {
-	padding: 0px;
-}
-
 .nwCell {
 	background-image: url('img/nw.png');
 	width: 64px;
+	min-width: 64px;
 	height: 32px;
 	background-repeat: no-repeat;
+	padding: 0px;
 }
 
 .nCell {
 	background-image: url('img/n.png');
 	height: 32px;
 	background-repeat: repeat-x;
+	padding: 0px;
 }
 
 .neCell {
 	background-image: url('img/ne.png');
 	width: 64px;
+	min-width: 64px;
 	height: 32px;
 	background-repeat: no-repeat;
+	padding: 0px;
 }
 
 .wCell {
 	background-image: url('img/w.png');
 	width: 64px;
+	min-width: 64px;
 	background-repeat: repeat-y;
+	padding: 0px;
 }
 
 .cCell {
 	background-image: url('img/c.png');
 	background-repeat: repeat;	
+	padding: 5px;
 }
 
 .eCell {
 	background-image: url('img/e.png');
 	width: 64px;
-	background-repeat: repeat-y;	
+	min-width: 64px;
+	background-repeat: repeat-y;
+	padding: 0px;	
 }
 
 .swCell {
 	background-image: url('img/sw.png');
 	width: 64px;
+	min-width: 64px;
 	height: 32px;
 	background-repeat: no-repeat;
+	padding: 0px;
 }
 
 .seCell {
 	background-image: url('img/se.png');
 	width: 64px;
+	min-width: 64px;
 	height: 32px;
 	background-repeat: no-repeat;
+	padding: 0px;
 }
 
 .sCell {
 	background-image: url('img/s.png');
 	height: 32px;
 	background-repeat: repeat-x;
+	padding: 0px;
 }
