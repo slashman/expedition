@@ -253,8 +253,8 @@ public class NativeTown extends Town{
 					interestedString += EnglishGrammar.stringList(strings);
 				}
 				
-				int goodTypeChoice = UserInterface.getUI().switchChat(interestedString, "What goods are you looking for?", GoodType.getChoicesList());
-				GoodType goodType = GoodType.fromChoice(goodTypeChoice);
+				int goodTypeChoice = UserInterface.getUI().switchChat(interestedString, "What goods are you looking for?", AVAILABLE_GOOD_TYPES_TO_TRADE_NAMES);
+				GoodType goodType = AVAILABLE_GOOD_TYPES_TO_TRADE[goodTypeChoice];
 				if (goodType == null){
 					//Cancelled
 					break;
@@ -265,7 +265,23 @@ public class NativeTown extends Town{
 						//Cancelled
 						break;
 					}
-					//if (UserInterface.getUI().promptChat("Are you sure?")){
+					// Check if offer contains units.
+					boolean offerContainsUnits = false;
+					for (Equipment equipment: offer){
+						if (((ExpeditionItem)equipment.getItem()).getGoodType() == GoodType.PEOPLE){
+							if (equipment.getQuantity() == 1){
+								showBlockingMessage(EnglishGrammar.a(equipment.getItem().getDescription())+" "+ equipment.getItem().getDescription()+" refuses to take part on the deal..");
+							} else {
+								showBlockingMessage("The "+((ExpeditionUnit)equipment.getItem()).getPluralDescription()+" refuse to take part on the deal.");
+							}
+							offerContainsUnits = true;
+							break;
+						}
+					}
+					if (offerContainsUnits)
+						break;
+					
+					
 					if ( ((ExpeditionUserInterface)UserInterface.getUI()).promptUnitList(offer, "Offer", "Will you make this offer?")){
 						List<Equipment> townOffer = nativeTown.calculateOffer(goodType, offer);
 						if (townOffer == null || townOffer.size() == 0){
@@ -296,8 +312,8 @@ public class NativeTown extends Town{
 				setUnfriendly(true);
 				setScaredLevel(0);
 			} else {
-				int goodTypeChoice = UserInterface.getUI().switchChat("Threatening "+nativeTown.getDescription(),"Please spare us! what do you want?", GoodType.getChoicesList());
-				GoodType goodType = GoodType.fromChoice(goodTypeChoice);
+				int goodTypeChoice = UserInterface.getUI().switchChat("Threatening "+nativeTown.getDescription(),"Please spare us! what do you want?", AVAILABLE_GOOD_TYPES_TO_TRADE_NAMES);
+				GoodType goodType = AVAILABLE_GOOD_TYPES_TO_TRADE[goodTypeChoice];
 				if (goodType == null){
 					//Cancelled
 					break;
@@ -325,6 +341,9 @@ public class NativeTown extends Town{
 			break;
 		}
 	}
+
+	private final static GoodType[] AVAILABLE_GOOD_TYPES_TO_TRADE = new GoodType[]{GoodType.TRADE_GOODS, GoodType.SUPPLIES, GoodType.LIVESTOCK, GoodType.ARMORY};
+	private final static String[] AVAILABLE_GOOD_TYPES_TO_TRADE_NAMES = new String[]{"Trade Goods", "Supplies", "Livestock", "Weapons"};
 
 	public int getScaredLevel() {
 		return scaredLevel;
