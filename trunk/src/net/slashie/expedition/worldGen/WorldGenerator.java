@@ -71,7 +71,8 @@ public class WorldGenerator {
 						NativeTown t = new NativeTown(ExpeditionGame.getCurrentGame(), cultureCenter.getB(), cultureCenter.getB().getASize());
 						t.setPosition(new Position(settlementPosition));
 						t.setUnfriendly(Util.chance(30*cultureCenter.getB().getAggresiveness()));
-						level.addFeature(t);
+						level.addNativeTown(t);
+						//level.addFeature(t);
 					} else {
 						fussible++;
 						if (fussible < 1000){

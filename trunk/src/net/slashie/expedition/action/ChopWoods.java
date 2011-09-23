@@ -5,33 +5,48 @@ import java.util.List;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.NativeTown;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.Forest;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.action.Action;
-import net.slashie.serf.action.Actor;
-import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class ChopWoods extends Action{
 
 	@Override
 	public void execute() {
+		actionCost = 50;
 		Expedition expedition = (Expedition) performer;
 		
 		ExpeditionMacroLevel level = (ExpeditionMacroLevel)  expedition.getLocation();
 		
-		if (expedition.getLocation().getLocation().getB() >= -30){
-			level.addMessage("This forest is not your property!");
-			return;
-		}
-
-		
 		OverworldExpeditionCell cell = (OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition());
 		if (cell.isWood()){
+			// Are we in the old world?
+			if (GlobeMapModel.getSingleton().getLongitudeDegrees(expedition.getPosition().x()) >= -30){
+				level.addMessage("This forest is not your property!");
+				actionCost = 0;
+				return;
+			}
+			
+			// Is there a neaby village?
+			// Check distance from other settlements
+			List<NativeTown> towns = level.getNativeTowns();
+			for (NativeTown town: towns){
+				int milesDistance = GlobeMapModel.getSingleton().getMilesDistance(town.getPosition(), expedition.getPosition());
+				if (milesDistance < 40){
+					level.addMessage("This forest is claimed by the "+town.getCulture().getName());
+					actionCost = 0;
+					return;
+				}
+			}
+			
 			AbstractFeature f = null;
 			List<AbstractFeature> otherFeatures = level.getFeaturesAt(expedition.getPosition());
 			if (otherFeatures == null){
@@ -52,6 +67,7 @@ public class ChopWoods extends Action{
 				expedition.setPosition(f.getPosition());
 			} else if (((Forest)f).getAvailableWood() == 0){
 				level.addMessage("There's no more wood in this forest.");
+				actionCost = 0;
 				return ;
 			}
 			
@@ -83,49 +99,6 @@ public class ChopWoods extends Action{
 		
 	}
 	
-	private String invalidationMessage;
-	@Override
-	public boolean canPerform(Actor a) {
-		Expedition expedition = (Expedition) a;
-		performer = a;
-		if (!(performer.getLevel() instanceof ExpeditionMacroLevel)){
-			invalidationMessage = "You can't chop here";
-			return false;
-		}
-		ExpeditionMacroLevel level = (ExpeditionMacroLevel)  expedition.getLocation();
-		
-		if (expedition.getLocation().getLocation().getB() >= -30){
-			invalidationMessage = "This forest is not your property!";
-			return false;
-		}
-		
-		OverworldExpeditionCell cell = (OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition());
-		if (cell.isWood()){
-			AbstractFeature f = null;
-			List<AbstractFeature> otherFeatures = level.getFeaturesAt(expedition.getPosition());
-			if (otherFeatures == null){
-				
-			} else {
-				for (AbstractFeature feature: otherFeatures){
-					if (feature instanceof Forest){
-						f = feature;
-						break;
-					}
-				}
-			}
-			if ( f == null ) {
-				
-			} else if (((Forest)f).getAvailableWood() == 0){
-				invalidationMessage = "There is no more wood here.";
-				return false;
-			}
-		} else {
-			invalidationMessage = "There is no wood here.";
-			return false;
-		}
-		return true;
-	}
-	
 	@Override
 	public String getInvalidationMessage() {
 		return invalidationMessage;
@@ -135,5 +108,10 @@ public class ChopWoods extends Action{
 	public String getID() {
 		return "ChopWoods";
 	}
-
+	
+	private int actionCost;
+	@Override
+	public int getCost() {
+		return actionCost;
+	}
 }
