@@ -133,8 +133,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		DEATH_BY_SLAYING
 	}
 	
-//	public static final int  = 1,  = 2,  = 3;
-
 	private static final String[] MORALE_DESCRIPTIONS = new String[] {
 		"Depressed",
 		"Cracking Apart",
@@ -937,26 +935,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 	}
 
-	
-
-	/*public List<Equipment> getUnitsOverRange(int distance) {
-		List<Equipment> ret = new ArrayList<Equipment>();  
-		List<Equipment> inventory = getInventory();
-		for (Equipment equipment: inventory){
-			if (equipment.getItem() instanceof ExpeditionUnit && ((ExpeditionUnit)equipment.getItem()).getRange() >= distance){
-				ret.add(equipment);
-			}
-		}
-		return ret;
-	}
-	 */
 	public int getSumOfValuables() {
 		int currentValuable = 0;
 		List<Equipment> inventory = getInventory();
 		for (Equipment equipment: inventory){
 			if (((ExpeditionItem)equipment.getItem()).getGoodType()== GoodType.TRADE_GOODS){
 				ExpeditionItem good = (ExpeditionItem)equipment.getItem();
-				currentValuable += Math.round(good.getEuropeValue() * (double)equipment.getQuantity());
+				currentValuable += good.getPalosStoreValue() * equipment.getQuantity();
 			}
 		}
 		return currentValuable;
@@ -1036,16 +1021,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		return ret;
 	}
-
-/*	public int getMaxFiringRange() {
-		int maxRange = -1;
-		for (Equipment unit: getUnits()){
-			if (((ExpeditionUnit)unit.getItem()).getRange() > maxRange){
-				maxRange = ((ExpeditionUnit)unit.getItem()).getRange();
-			}
-		}
-		return maxRange;
-	}*/
 
 	public void killUnits(int quantity) {
 		Collection<Pair<ExpeditionUnit, Integer>> values = foodConsumerDelegate.killUnits(quantity);
@@ -1604,12 +1579,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 
 	private String getEventDatePreffix() {
 		Calendar gameTime = ((ExpeditionGame)getGame()).getGameTime();
-		String hourStr = gameTime.get(Calendar.HOUR) == 0 ? "12" : gameTime.get(Calendar.HOUR)+"";
-		String minuteStr = gameTime.get(Calendar.MINUTE) < 10 ? "0"+gameTime.get(Calendar.MINUTE) : gameTime.get(Calendar.MINUTE)+"";
-		String amPmStr = gameTime.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";
-		
 		return gameTime.get(Calendar.YEAR)+", "+ ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+" XXX "; 
-		
 	}
 
 	public boolean isForaging() {

@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.slashie.expedition.domain.Armor.ArmorType;
 import net.slashie.expedition.domain.Weapon.WeaponType;
-import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.text.EnglishGrammar;
@@ -14,9 +13,8 @@ import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.util.Pair;
 import net.slashie.utils.roll.Roll;
 
+@SuppressWarnings("serial")
 public class ExpeditionUnit extends Vehicle{
-	private static final long serialVersionUID = 1L;
-
 	public enum ContractType {
 		LIFETIME,
 		MONTHLY,
@@ -33,7 +31,6 @@ public class ExpeditionUnit extends Vehicle{
 	}
 	
 	private String name;
-	private int movement; //TODO: Make this affect expedition speed?
 	private int resistance;  //TODO: Make this affect battle performance
 	private int dailyFoodConsumption;
 	private int baseHitChance;
@@ -48,7 +45,6 @@ public class ExpeditionUnit extends Vehicle{
 	
 	private WeaponType[] weaponTypes;
 	private ArmorType[] armorTypes;
-	private String special;
 	private Weapon weapon;
 	private Armor armor;
 	private Mount mount;
@@ -102,28 +98,12 @@ public class ExpeditionUnit extends Vehicle{
 		this.name = name;
 	}
 
-	public int getMovement() {
-		return movement;
-	}
-
-	public void setMovement(int movement) {
-		this.movement = movement;
-	}
-
 	public int getResistance() {
 		return resistance;
 	}
 
 	public void setResistance(int resistance) {
 		this.resistance = resistance;
-	}
-
-	public String getSpecial() {
-		return special;
-	}
-
-	public void setSpecial(String special) {
-		this.special = special;
 	}
 
 	public ExpeditionUnit(String classifierId, 
@@ -138,18 +118,16 @@ public class ExpeditionUnit extends Vehicle{
 			int baseHitChance,
 			int evadeChance,
 			int dailyFoodConsumption,
-			WeaponType[] weaponTypes, ArmorType[] armorTypes, int europeValue, int americaValue) {
-		super(classifierId, description, pluralDescription, longDescription, weight, false,
-				false, 1, carryCapacity, 1, true, GoodType.PEOPLE, europeValue, americaValue);
+			WeaponType[] weaponTypes, ArmorType[] armorTypes, int palosStoreValue) {
+		super(classifierId, description, pluralDescription, longDescription, weight, false, false, 1, carryCapacity, 1, true, GoodType.PEOPLE, palosStoreValue, 999999999);
+		// A life is too expensive to trade with it (Slavery isn't yet added)
 		this.name = description;
 		this.baseAttack = baseAttack;
 		this.baseDefense = baseDefense;
 		this.baseHitChance = baseHitChance;
 		this.evadeChance = evadeChance;
-		this.movement = movement;
 		this.resistance = resistance;
 		this.dailyFoodConsumption = dailyFoodConsumption;
-		this.special = special;
 		this.weaponTypes = weaponTypes;
 		this.armorTypes = armorTypes;
 		updateCompositeVariables();

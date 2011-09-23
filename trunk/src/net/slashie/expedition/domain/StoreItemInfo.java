@@ -25,7 +25,7 @@ public class StoreItemInfo implements Cloneable, Serializable{
 	public StoreItemInfo(String fullId, int weeklyRestock, int difference) {
 		super();
 		this.fullId = fullId;
-		this.price = ItemFactory.getEuropeanPackPrize(fullId) + difference;
+		this.price = ItemFactory.getPalosStorePrice(fullId) + difference;
 		this.weeklyRestock = weeklyRestock;
 	}
 
