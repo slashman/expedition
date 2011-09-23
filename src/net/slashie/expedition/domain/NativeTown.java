@@ -78,13 +78,11 @@ public class NativeTown extends Town{
 		}
 		
 		//Add items
-		for (String item: culture.getItems()){
-			ExpeditionItem i = ItemFactory.createItem(item);
-			double value = i.getAmericaValue();
-			if (value == 0.0d)
+		for (Pair<Double, String> itemDistribution: culture.getItemsDistribution()){
+			int items = (int)Math.round((double)targetPopulation*itemDistribution.getA());
+			if (items == 0.0d)
 				continue;
-			double scarse = 1.0d / value; 
-			int items = (int)Math.round((double)targetPopulation*scarse); 
+			ExpeditionItem i = ItemFactory.createItem(itemDistribution.getB());
 			items += Util.rand(-items*0.1d, items*0.1d);
 			addItem(i, items);
 		}
@@ -184,9 +182,7 @@ public class NativeTown extends Town{
 		return goodTypeCount > 0;
 	}
 
-	public List<Equipment> calculateOffer(
-			GoodType goodType,
-			double offerValue) {
+	public List<Equipment> calculateOffer(GoodType goodType, double offerValue) {
 		List<Equipment> townOffer = new ArrayList<Equipment>();
 		List<Equipment> townGoods = getGoods(goodType);
 		for (Equipment townGood: townGoods){
@@ -209,9 +205,7 @@ public class NativeTown extends Town{
 		}
 		return townOffer;
 	}
-	public List<Equipment> calculateOffer(
-			GoodType goodType,
-			List<Equipment> offer) {
+	public List<Equipment> calculateOffer(GoodType goodType, List<Equipment> offer) {
 		double value = 0;
 		for (Equipment eqOffer: offer){
 			ExpeditionItem good = (ExpeditionItem) eqOffer.getItem();
@@ -221,7 +215,7 @@ public class NativeTown extends Town{
 	}
 
 	private double evalItem(ExpeditionItem good) {
-		return good.getAmericaValue()*getGoodTypeModifier(good.getGoodType());
+		return good.getBaseTradingValue()*getGoodTypeModifier(good.getGoodType());
 	}
 
 	private double getGoodTypeModifier(GoodType goodType) {
