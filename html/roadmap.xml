@@ -86,6 +86,7 @@
 		<functionalComponent name = "Long term wars" description = "Add wars between states, which may cause enemy expeditions to attack you on sight. Allow to take part on military campaigns for a commanding nation, keeping track of all batle outcomes. Allow playing the role of commander and directing expeditions to attack enemy positions." complexity = "16"/>
 		<functionalComponent name = "Military rank" description = "Allow units to have a military rank associated based on their actions (Including commanding actions)" complexity = "4"/>
 		<functionalComponent name = "Naval combat" description = "Sailing ships attacking each other using cannons with different kind of shot. Detailed damage over all ships. Turns based tactics having wind direction in mind. Allow crashing into other ships. Allow boarding ships and fighting (using mass scale combat)" complexity = "16"/>
+		<functionalComponent name = "Sieges and Conquest" description = "Allow taking over settlements after enough battles, and claiming them for your" complexity = "16"/>
 	</facet>
 	<facet id = "TRD" name = "Trading" implementationOrder = "10">
 		<functionalComponent name = "Market prices" description = "Calculate the price of all goods based on supply and demand. Do the same for ships and salary costs." complexity = "8"/>
