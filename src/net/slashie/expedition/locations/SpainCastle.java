@@ -159,10 +159,10 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				}
 				switch (choice){
 				case 0:
-					m(ferdinandSays()+"We will outfit the ships with sailors, officers and carpenters, we will also grant you 2.400 royal maravedíes and supplies for a five months voyage.");
+					m(ferdinandSays()+"We will outfit the ships with sailors, officers and carpenters, we will also grant you 23.500 royal maravedíes and supplies for a five months voyage.");
 					break;
 				case 1:
-					m(ferdinandSays()+"We will outfit the ships with crew and will assign ten soldiers to your expedition, we will also grant you 1.000 royal maravedíes and supplies for a four months voyage.");
+					m(ferdinandSays()+"We will outfit the ships with crew and will assign ten soldiers to your expedition, we will also grant you 10.000 royal maravedíes and supplies for a four months voyage.");
 					break;
 				}
 				stockExpedition(exp, choice);
@@ -170,23 +170,23 @@ public class SpainCastle extends StaticPattern implements Serializable {
 					choice = -1;
 					while (choice == -1){
 						choice = (UserInterface.getUI()).switchChat("Audience with the King and Queen","How much would you need?",
-								"By my accounts, I need 24.990 Maravedíes.",
-								"12.000 Maravedíes will be more than enough",
-								"6.000 Maravedíes, and your blessing."
+								"By my accounts, I need 103.550 Maravedíes.",
+								"70.000 Maravedíes will be more than enough",
+								"40.000 Maravedíes, and your blessing."
 								);
 					}
 					switch (choice){
 					case 0:
-						m(isabellaSays()+"Then, we trust 24.990 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
-						exp.setAccountedGold(24990);
+						m(isabellaSays()+"Then, we trust 103.550 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						exp.setAccountedGold(103550);
 						break;
 					case 1:
-						m(isabellaSays()+"Then, we trust 12.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
-						exp.setAccountedGold(12000);
+						m(isabellaSays()+"Then, we trust 70.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						exp.setAccountedGold(70000);
 						break;
 					case 2:
-						m(ferdinandSays()+"Are you sure? You are a brave explorer. We trust 6.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
-						exp.setAccountedGold(6000);
+						m(ferdinandSays()+"Are you sure? You are a brave explorer. We trust 40.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						exp.setAccountedGold(40000);
 						break;
 					}
 				}
@@ -265,7 +265,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
 				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 15000);
 				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 100);
-				ret.setAccountedGold(2400);
+				ret.setAccountedGold(23500);
 				break;
 			case 1:
 				ret.addItemOffshore(ItemFactory.createItem("SAILOR"), 75);
@@ -286,7 +286,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				ret.addItemOffshore(ItemFactory.createItem("STUDDED_VEST"), 5);
 				ret.addItemOffshore(ItemFactory.createItem("HARQUEBUS"), 5);
 				
-				ret.setAccountedGold(1000);
+				ret.setAccountedGold(10000);
 				break;
 			}				
 

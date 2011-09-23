@@ -1700,7 +1700,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			expeditionMorale ++;
 		}
 		// Loot
-		if (getSumOfValuables() > 5000){
+		if (getSumOfValuables() > 50000){
 			if (Util.chance(20)) message("We are rich!");
 			expeditionMorale ++;
 		}
