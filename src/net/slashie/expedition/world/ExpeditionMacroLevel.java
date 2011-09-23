@@ -8,6 +8,7 @@ import java.util.List;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
+import net.slashie.expedition.domain.NativeTown;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
@@ -28,9 +29,8 @@ import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class ExpeditionMacroLevel extends ExpeditionLevelReader{
-	private static final long serialVersionUID = 1L;
-	
 	private Actor currentWindAgent;
 	private Actor currentDayShiftAgent;
 	private Actor currentForageAgent;
@@ -40,8 +40,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
 			int levelHeight, int gridWidth, int gridHeight,
 			Hashtable<String, String> charmap, Position startPosition) {
-		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap,
-				startPosition);
+		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap, startPosition);
 		currentWindAgent = new WindAgent();
 		currentDayShiftAgent = new DayShiftAgent();
 		currentForageAgent = new ForageAgent();
@@ -58,7 +57,6 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	private Weather weather = Weather.CLEAR;
 	
-
 	public Pair<Integer, Integer> getLocation() {
 		handyReusablePair.setA(resolveYToLatitude());
 		handyReusablePair.setB(resolveXToLongitude());
@@ -105,6 +103,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 		return handyReusableObject;
 	}
+	
 	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
 
 	private int weatherChangeCounter;
@@ -631,5 +630,16 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	@Override
 	public void enterLevel() {
 		lastPlayedLevelTune = -1;	
+	}
+
+	
+	private List<NativeTown> nativeTowns = new ArrayList<NativeTown>();
+	public void addNativeTown(NativeTown t) {
+		nativeTowns.add(t);
+		addFeature(t);
+	}
+	
+	public List<NativeTown> getNativeTowns(){
+		return nativeTowns;
 	}
 }
