@@ -32,7 +32,6 @@ public class Weapon extends ExpeditionItem{
 		}
 	}
 	
-	private int burden;
 	private Roll attack;
 	private Roll defense;
 	private boolean isTool;
@@ -40,10 +39,6 @@ public class Weapon extends ExpeditionItem{
 	private boolean isRanged;
 	private WeaponType weaponType;
 	
-	public int getBurden() {
-		return burden;
-	}
-
 	public Roll getAttack() {
 		return attack;
 	}
@@ -53,19 +48,15 @@ public class Weapon extends ExpeditionItem{
 	}
 
 	public Weapon(WeaponType weaponType, String classifierId, String description, String pluralDescription, String longDescription,
-			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight, int europeValue, int americaValue) {
-		super(classifierId, description, pluralDescription, longDescription, classifierId, weight, GoodType.ARMORY, europeValue, americaValue);
+			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight, int palosStoreValue, int baseTradingValue) {
+		super(classifierId, description, pluralDescription, longDescription, classifierId, weight, GoodType.ARMORY, palosStoreValue, baseTradingValue);
 		this.weaponType = weaponType;
-		this.burden = burden;
 		this.isTool = isTool;
 		this.attack = attack;
 		this.defense = defense;
 		this.hitChance = hitChance;
 		this.isRanged = isRanged;
-				
 	}
-
-
 	
 	public boolean isTool() {
 		return isTool;

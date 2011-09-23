@@ -6,26 +6,25 @@ import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 
+@SuppressWarnings("serial")
 public class ExpeditionItem extends AbstractItem implements Cloneable{
 	private String classifierId;
 	private String description;
 	private String longDescription;
 	private GoodType goodType;
-	private int europeValue;
-	private int americaValue;
+	private int palosStoreValue;
+	private int baseTradingValue;
 	private transient Appearance appearance;
 	private String appearanceId;
 	private int weight;
 	private String pluralDescription;
-	// Determines by how many individual units are the europe and america values calculated
-	private int valuePack = 1;
 	
 	public int getWeight() {
 		return weight;
 	}
 
-	public ExpeditionItem(String classifierId, String description, String pluralDescription, String longDescription,
-			String appearanceId, int weight, GoodType goodType, int europeValue, int americaValue) {
+	public ExpeditionItem(String classifierId, String description, String pluralDescription, String longDescription, String appearanceId, int weight, GoodType goodType, 
+			int palosStoreValue, int baseTradingValue) {
 		super(appearanceId);
 		this.classifierId = classifierId;
 		this.description = description;
@@ -34,8 +33,8 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 		this.weight = weight;
 		this.pluralDescription = pluralDescription;
 		this.goodType = goodType;
-		this.europeValue = europeValue;
-		this.americaValue = americaValue;
+		this.palosStoreValue = palosStoreValue;
+		this.baseTradingValue = baseTradingValue;
 	}
 	
 	public GoodType getGoodType() {
@@ -119,7 +118,6 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 			return null;
 		}
 	}
-
 	
 	public String getGroupClassifier() {
 		if (getGoodType() == GoodType.PEOPLE)
@@ -129,20 +127,12 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 		}
 	}
 
-	public double getEuropeValue() {
-		return (double)europeValue / (double)valuePack;
+	public int getPalosStoreValue() {
+		return palosStoreValue;
 	}
 
-	public double getAmericaValue() {
-		return (double)americaValue / (double)valuePack;
-	}
-
-	public int getValuePack() {
-		return valuePack;
-	}
-
-	public void setValuePack(int valuePack) {
-		this.valuePack = valuePack;
+	public int getBaseTradingValue() {
+		return baseTradingValue;
 	}
 
 	public String getLongDescription() {

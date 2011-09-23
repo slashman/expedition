@@ -56,14 +56,13 @@ public class ItemFactory {
 		return null;
 	}
 
-	public static int getEuropeanPackPrize(String fullId) {
+	public static int getPalosStorePrice(String fullId) {
 		ExpeditionItem ret = definitions.get(fullId);
 		if (ret == null){
 			return 0;
 		}
-		return (int) Math.round(ret.getEuropeValue() * ret.getValuePack());
+		return ret.getPalosStoreValue();
 	}
-
 	
 	public static String getItemNameById(String itemId) {
 		ExpeditionItem ret = definitions.get(itemId);

@@ -8,13 +8,14 @@ import net.slashie.expedition.domain.GoodType;
 import net.slashie.util.Pair;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class Culture implements Serializable{
 	private String code;
 	private String name;
 	private boolean isCivilization;
 	private int aggresiveness;
 	private List<Pair<Double, String>> classDistribution;
-	private String[] items;
+	private List<Pair<Double, String>> itemsDistribution;
 	private List<Pair<GoodType, Double>> goodTypeValuationModifiers;
 	private List<GoodType> mostValuedGoodTypes = new ArrayList<GoodType>();
 	public List<Pair<GoodType, Double>> getGoodTypeValuationModifiers() {
@@ -26,7 +27,7 @@ public class Culture implements Serializable{
 	public Culture(String code, String name, boolean isCivilization, int aggresiveness, 
 			List<Pair<Double, String>> classDistribution, 
 			List<Pair<GoodType, Double>> goodTypeValuationModifiers,
-			String[] items,
+			List<Pair<Double, String>> itemsDistribution,
 			int goldModifier, int artifactModifier, int agricultureModifier) {
 		super();
 		this.code = code;
@@ -38,7 +39,7 @@ public class Culture implements Serializable{
 		this.artifactModifier = artifactModifier;
 		this.agricultureModifier = agricultureModifier;
 		this.goodTypeValuationModifiers = goodTypeValuationModifiers;
-		this.items = items;
+		this.itemsDistribution = itemsDistribution;
 		for (Pair<GoodType, Double> goodTypeValuationModifier: goodTypeValuationModifiers){
 			if (goodTypeValuationModifier.getB() > 1.0d){
 				mostValuedGoodTypes.add(goodTypeValuationModifier.getA());
@@ -84,8 +85,8 @@ public class Culture implements Serializable{
 		return agricultureModifier;
 	}
 
-	public String[] getItems() {
-		return items;
+	public List<Pair<Double, String>> getItemsDistribution() {
+		return itemsDistribution;
 	}
 
 	public List<GoodType> getMostValuedGoodTypes() {
