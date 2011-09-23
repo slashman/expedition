@@ -6,6 +6,7 @@ import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class Forest extends AbstractFeature{
 	private static final Appearance CHOPPED_FOREST = AppearanceFactory.getAppearanceFactory().getAppearance("CHOPPED_FOREST");
 	private int availableWood;
@@ -36,7 +37,6 @@ public class Forest extends AbstractFeature{
 	public boolean isRelevant() {
 		return false;
 	}
-	
 	
 	@Override
 	public String getClassifierID() {
