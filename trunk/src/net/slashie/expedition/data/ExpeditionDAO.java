@@ -493,7 +493,7 @@ public class ExpeditionDAO {
 			//Goods
 			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 1, 1),
 			new Food("BREAD", "Bread", "Bread", "Food Ration", 1, 1, 1, 2),
-			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 2, 1, 2,1),
+			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 2, 1, 1,1),
 			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 2, 1, 2,1),
 			
 			new Food("BEANS", "Beans", "Beans", "Food Ration", 2, 1, 4,1),
@@ -501,13 +501,13 @@ public class ExpeditionDAO {
 			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 1,2),
 			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 5, 1, 4,1),
 			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 2, 1, 4,1),
-			new Food("FISH", "Fish", "Fish", "Food Ration", 1, 1, 1, 2),
+			new Food("FISH", "Fish", "Fish", "Food Ration", 1, 1, 1, 1),
 			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 1, 1),
 			
 			new ExpeditionItem("FRESHWATER", "Freshwater", "Freshwater", "Liquid of Life", "FRESHWATER", 2, GoodType.SUPPLIES, 20,5),
 			new ExpeditionItem("RUM", "Rum", "Rum", "Liquid of Life", "RUM", 2, GoodType.SUPPLIES, 400,500),
 			
-			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "Wood piece", "WOOD", 10, GoodType.SUPPLIES, 3,1),
+			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "Wood piece", "WOOD", 10, GoodType.SUPPLIES, 1,1),
 			
 			// Trade Goods, Old world
 			new ExpeditionItem("COTTON", "Cotton", "Cotton", "Trade Good", "COTTON", 200, GoodType.TRADE_GOODS, 200 , 400),
