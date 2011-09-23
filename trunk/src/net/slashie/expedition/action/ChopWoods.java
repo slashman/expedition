@@ -61,7 +61,7 @@ public class ChopWoods extends Action{
 			}
 			if ( f == null ) {
 				//No feature here yet, but since this is a forest, let's add a forest feature;
-				f = new Forest(Util.rand(150, 250));
+				f = new Forest(Util.rand(500, 750));
 				f.setPosition(new Position(expedition.getPosition()));
 				level.addFeature(f);
 				expedition.setPosition(f.getPosition());
