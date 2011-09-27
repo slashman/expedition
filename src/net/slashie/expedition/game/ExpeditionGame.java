@@ -24,6 +24,7 @@ import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.level.LevelMetaData;
 import net.slashie.serf.ui.UserInterface;
 
+@SuppressWarnings("serial")
 public class ExpeditionGame extends SworeGame {
 	private static ExpeditionGame currentGame;
 	private int lastExpeditionId = 1;
@@ -117,7 +118,7 @@ public class ExpeditionGame extends SworeGame {
 		loadLevel("SPAIN_CASTLE");
 		((ExpeditionUserInterface)UserInterface.getUI()).reactivate();
 
-		setGameTime(3,8,1492);
+		setGameTime(3,8,1492,13,0);
 	}
 	
 	private void loadMetadata() {
@@ -131,11 +132,13 @@ public class ExpeditionGame extends SworeGame {
 		
 	}
 
-	private void setGameTime(int day, int month, int year) {
+	private void setGameTime(int day, int month, int year, int hours, int minutes) {
 		currentTime = Calendar.getInstance();
 		currentTime.set(Calendar.YEAR, year);
 		currentTime.set(Calendar.MONTH, month-1);
 		currentTime.set(Calendar.DATE, day);
+		currentTime.set(Calendar.HOUR_OF_DAY, hours);
+		currentTime.set(Calendar.MINUTE, minutes);
 	}
 	
 	public Calendar getGameTime(){
@@ -175,7 +178,7 @@ public class ExpeditionGame extends SworeGame {
 			lat = GlobeMapModel.getSingleton().normalizeLat(lat);
 			longi = GlobeMapModel.getSingleton().normalizeLong(lat, longi);
 			level.getPlayer().setPosition(longi, lat, 0); // Near the Tairona
-			*/ 
+			/**/ 
 		}
 		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
 
