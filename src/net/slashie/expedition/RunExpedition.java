@@ -382,6 +382,7 @@ public class RunExpedition {
 		keyBindings.put("SHOW_INVENTORY_KEY", readKeyString(keyConfig, "SHOWINVEN"));
 		keyBindings.put("SWITCH_MUSIC_KEY", readKeyString(keyConfig, "SWITCHMUSIC"));
 		keyBindings.put("SWITCH_SFX_KEY", readKeyString(keyConfig, "SWITCHSFX"));
+		keyBindings.put("MESSAGE_LOG_KEY", readKeyString(keyConfig, "MESSAGE_LOG"));
 		
 		UserAction[] userActions = new UserAction[] {
 			    new UserAction(dropEquipment, i(keyBindings.getProperty("DROP_EQUIPMENT_KEY"))),
@@ -403,6 +404,7 @@ public class RunExpedition {
 			new UserCommand(CommandListener.Command.SHOWINVEN, i(keyBindings.getProperty("SHOW_INVENTORY_KEY"))),
 			new UserCommand(CommandListener.Command.SWITCHMUSIC, i(keyBindings.getProperty("SWITCH_MUSIC_KEY"))),
 			new UserCommand(CommandListener.Command.SWITCHSFX, i(keyBindings.getProperty("SWITCH_SFX_KEY"))),
+			new UserCommand(CommandListener.Command.SHOWMESSAGEHISTORY, i(keyBindings.getProperty("MESSAGE_LOG_KEY"))),
 		};
 		
 		switch (mode){

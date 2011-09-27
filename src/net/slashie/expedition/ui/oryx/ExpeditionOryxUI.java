@@ -592,7 +592,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void transferItems(String prompt, GoodType preselectedGoodType, ItemContainer from, ItemContainer to, ItemTransferFunctionality itemTransferFunctionality) {
 		// Change UI Mode
    		Equipment.eqMode = true;
-   		startWindowMode();
+   		enterScreen();
    		
 		
 		int startX = 480 - 40;
@@ -820,22 +820,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
   		si.removeKeyListener(cbkl);
 		menuBox.kill();
 		Equipment.eqMode = false;
-		stopWindowMode();
+		leaveScreen();
 		si.loadLayer(getUILayer());
 	}
 	
-	private void stopWindowMode() {
-		unitsMenuBox.setHoverDisabled(false);
-		vehiclesMenuBox.setHoverDisabled(false);
-	}
-
-	private void startWindowMode() {
-		((GFXUISelector)getPlayer().getSelector()).deactivate();
-   		clearTextBox();
-   		unitsMenuBox.setHoverDisabled(true);
-   		vehiclesMenuBox.setHoverDisabled(true);
-	}
-
 	public void beforeDrawLevel() {
 		if (getExpedition().getMovementMode() == MovementMode.SHIP)
 			setFlipEnabled(false);
@@ -1770,6 +1758,22 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public void reactivate() {
 		unitsMenuBox.reactivate();
 		vehiclesMenuBox.reactivate();
+	}
+	
+	@Override
+	protected void enterScreen() {
+		super.enterScreen();
+		((GFXUISelector)getPlayer().getSelector()).deactivate();
+   		clearTextBox();
+   		unitsMenuBox.setHoverDisabled(true);
+   		vehiclesMenuBox.setHoverDisabled(true);
+	}
+	
+	@Override
+	protected void leaveScreen() {
+		super.leaveScreen();
+		unitsMenuBox.setHoverDisabled(false);
+		vehiclesMenuBox.setHoverDisabled(false);
 	}
 	
 }
