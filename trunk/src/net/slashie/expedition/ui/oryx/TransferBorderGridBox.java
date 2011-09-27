@@ -58,7 +58,6 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	private int destinationCurrentQuantity;
 	private int destinationMaximumQuantity;
 	
-	private int changeSpeed;
 	private int initialQuantity;
 	private KeyListener splitterArrowsListener;
 	private boolean kbLaunchedTimer = false;
@@ -160,8 +159,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			if (sourceCurrentQuantity >= sourceMaximumQuantity){
 				return;
 			} else {
-				transferQuantity = 1;
-				initialQuantity = sourceCurrentQuantity;
+				transferQuantity = sourceMaximumQuantity - sourceCurrentQuantity;
 			}
 		}
 		
@@ -171,8 +169,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		
 		// Transfer was sucessful... yay...
 		
-		sourceCurrentQuantity += changeSpeed;
-		destinationCurrentQuantity -= changeSpeed;
+		sourceCurrentQuantity += transferQuantity;
+		destinationCurrentQuantity -= transferQuantity;
 		
 		// Perform the transfer
 		if (sourceCurrentQuantity > sourceMaximumQuantity)
@@ -183,6 +181,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	}
 	
 	private void transferToSource() {
+		int changeSpeed = 0;
 		if (initialQuantity - sourceCurrentQuantity == 0)
 			changeSpeed = 1;
 		else
@@ -197,12 +196,13 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	
 	private void transferToSourceAll() {
 		// Try to do the transfer
-		changeSpeed = sourceMaximumQuantity - sourceCurrentQuantity;
+		int changeSpeed = sourceMaximumQuantity - sourceCurrentQuantity;
 		updateMaximumQuantities(highlight);
 		transferToSource(changeSpeed);
 	}
 	
 	private void transferToDestination(){
+		int changeSpeed = 0;
 		if (initialQuantity - destinationCurrentQuantity == 0)
 			changeSpeed = 1;
 		else
@@ -218,7 +218,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	
 	private void transferToDestinationAll(){
 		// Try to do the transfer
-		changeSpeed = destinationMaximumQuantity - destinationCurrentQuantity;
+		int changeSpeed = destinationMaximumQuantity - destinationCurrentQuantity;
 		updateMaximumQuantities((ExpeditionItem) highlight);
 		transferToDestination(changeSpeed);	
 	}
@@ -232,8 +232,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			if (destinationCurrentQuantity >= destinationMaximumQuantity){
 				return;
 			} else {
-				transferQuantity = 1;
-				initialQuantity = destinationCurrentQuantity;
+				transferQuantity = destinationMaximumQuantity - destinationCurrentQuantity;
 			}
 		}
 		
@@ -245,8 +244,8 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		
 		// Transfer was sucessful... yay...
 		
-		destinationCurrentQuantity += changeSpeed;
-		sourceCurrentQuantity -= changeSpeed;
+		destinationCurrentQuantity += transferQuantity;
+		sourceCurrentQuantity -= transferQuantity;
 		if (destinationCurrentQuantity > destinationMaximumQuantity)
 			destinationCurrentQuantity = destinationMaximumQuantity;
 		if (sourceCurrentQuantity < 0)
