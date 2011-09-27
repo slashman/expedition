@@ -110,4 +110,8 @@ public class Vehicle extends ExpeditionItem{
 			}
 		}
 	}
+	
+	public int getIntegrityPercent() {
+		return (int)Math.floor(100.0d*((double)getResistance()/(double)getMaxResistance()));
+	}
 }

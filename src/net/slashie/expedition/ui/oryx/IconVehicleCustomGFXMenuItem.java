@@ -78,7 +78,12 @@ public class IconVehicleCustomGFXMenuItem implements CustomGFXMenuItem{
 			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y, unitImage);
 
 		}
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 24 + 12, "["+vehicle.getResistance()+"]", Color.WHITE);
+		int integrity = vehicle.getIntegrityPercent();
+		Color integrityColor = Color.WHITE;
+		if (integrity < 75){
+			integrityColor = Color.RED;
+		}
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y + 24 + 12, "["+integrity+"%]", integrityColor);
 	}
 	
 	
