@@ -101,9 +101,14 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	public void addAllGoods(Expedition expedition){
 		for (Equipment equipment: expedition.getInventory()){
 			if (equipment.getQuantity() > 0) {
-				Equipment new_ = equipment.clone();
-				itemsHash.put(equipment.getItem().getFullID(), new_);
-				items.add(new_);
+				Equipment current = itemsHash.get(equipment.getItem().getFullID());
+				if (current == null){
+					Equipment new_ = equipment.clone();
+					itemsHash.put(equipment.getItem().getFullID(), new_);
+					items.add(new_);
+				} else {
+					current.increaseQuantity(equipment.getQuantity());
+				}
 			}
 		}
 	}
