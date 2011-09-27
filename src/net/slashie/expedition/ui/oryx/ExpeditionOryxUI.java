@@ -427,7 +427,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public int switchChat(String title, String prompt, String... options) {
 		((GFXUISelector)getPlayer().getSelector()).deactivate();
-		return super.switchChat(title, prompt, TITLE_COLOR, TEXT_COLOR, options);
+		hideStandardMessageBox();
+		int ret = super.switchChat(title, prompt, TITLE_COLOR, TEXT_COLOR, options);
+		showStandardMessageBox();
+		return ret;
 	}
 	
 	public String inputBox(String prompt, int x, int y, int w, int h, int xp, int yp, int length){
@@ -868,7 +871,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String minuteStr = gameTime.get(Calendar.MINUTE) < 10 ? "0"+gameTime.get(Calendar.MINUTE) : gameTime.get(Calendar.MINUTE)+"";
 		String amPmStr = gameTime.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";*/
 		
-		String generalStr = getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR));
+		String generalStr = getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
 		// Define showing
 		boolean showWind = statsExpedition.getMovementMode().equals(MovementMode.SHIP);
 		boolean showCurrent = false;
@@ -985,8 +988,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.printAtPixel(getUILayer(), 174, 478, ui_date);
 		si.printAtPixel(getUILayer(), 534, 478, ui_time);
 
-		
-		
 		expeditionVehicleItems.clear();
 		for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
 			expeditionVehicleItems.add(new IconVehicleCustomGFXMenuItem(expeditionVehicle, false));
