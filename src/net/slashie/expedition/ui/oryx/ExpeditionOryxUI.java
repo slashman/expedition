@@ -59,6 +59,7 @@ import net.slashie.expedition.world.Weather;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.action.Message;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
@@ -859,7 +860,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String minuteStr = gameTime.get(Calendar.MINUTE) < 10 ? "0"+gameTime.get(Calendar.MINUTE) : gameTime.get(Calendar.MINUTE)+"";
 		String amPmStr = gameTime.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM";*/
 		
-		String generalStr = getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
+		String generalStr = ExpeditionMacroLevel.getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
 		// Define showing
 		boolean showWind = statsExpedition.getMovementMode().equals(MovementMode.SHIP);
 		boolean showCurrent = false;
@@ -1016,23 +1017,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.drawImage(getUILayer(), 774, 2, BTN_MOVE);
 	}
 	
-	private String getTimeDescriptionFromHour(int i) {
-		if (i > 22){
-			return "Midnight";
-		} else if (i > 18){
-			return "Night";
-		} else if (i > 14){
-			return "Afternoon";
-		} else if (i > 10){
-			return "Noon";
-		} else if (i > 6){
-			return "Morning";
-		} else if (i > 4){
-			return "Dawn";
-		} else {
-			return "Midnight";
-		}
-	}
+
 
 	@SuppressWarnings("serial")
 	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
@@ -1775,5 +1760,4 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		unitsMenuBox.setHoverDisabled(false);
 		vehiclesMenuBox.setHoverDisabled(false);
 	}
-	
 }
