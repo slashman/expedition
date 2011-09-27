@@ -1378,6 +1378,25 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	}
 	
 	public void addAllItems(List<Equipment> items){
+		// Order, put livestock last to ensure they can be added to the expedition
+		Collections.sort(items, new Comparator<Equipment>(){
+			@Override
+			public int compare(Equipment o1, Equipment o2) {
+				boolean firstLiveStock = ((ExpeditionItem)o1.getItem()).getGoodType() == GoodType.LIVESTOCK;
+				boolean secondLiveStock = ((ExpeditionItem)o2.getItem()).getGoodType() == GoodType.LIVESTOCK;
+				if (firstLiveStock && secondLiveStock){
+					return 0;
+				} else if (!firstLiveStock && !secondLiveStock){
+					return 0;
+				} else {
+					if (firstLiveStock){
+						return 1;
+					} else {
+						return -1;
+					}
+				}
+			}
+		});
 		for (Equipment equipment: items){
 			if (canCarry(equipment.getItem(), equipment.getQuantity())){
 				addItem(equipment.getItem(), equipment.getQuantity());

@@ -15,7 +15,6 @@ import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.domain.LandingParty.LandingSpec;
 import net.slashie.expedition.game.ExpeditionGame;
-import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -23,7 +22,6 @@ import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
-import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
@@ -33,9 +31,9 @@ import net.slashie.utils.Position;
  * @author Slash
  *
  */
-public class DropEquipment extends Action{
-	private static final long serialVersionUID = 1L;
 
+@SuppressWarnings("serial")
+public class DropEquipment extends Action{
 	@Override
 	public void execute(){
 		Expedition expedition = (Expedition)performer;
