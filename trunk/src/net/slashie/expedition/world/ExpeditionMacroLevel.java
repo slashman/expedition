@@ -22,6 +22,7 @@ import net.slashie.expedition.world.agents.RandomEventAgent;
 import net.slashie.expedition.world.agents.WeeklyAgent;
 import net.slashie.expedition.world.agents.WindAgent;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.action.Message;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.Appearance;
@@ -643,4 +644,32 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	public List<NativeTown> getNativeTowns(){
 		return nativeTowns;
 	}
+	
+	public void addMessage(String what, Position where){
+		addMessage(new Message(what, where, formatTime(ExpeditionGame.getCurrentGame().getGameTime())));
+	}
+
+	private String formatTime(Calendar gameTime) {
+		return ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+", "+getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
+	}
+	
+	public static String getTimeDescriptionFromHour(int i) {
+		if (i > 22){
+			return "Midnight";
+		} else if (i > 18){
+			return "Night";
+		} else if (i > 14){
+			return "Afternoon";
+		} else if (i > 10){
+			return "Noon";
+		} else if (i > 6){
+			return "Morning";
+		} else if (i > 4){
+			return "Dawn";
+		} else {
+			return "Midnight";
+		}
+	}
+	
+	
 }

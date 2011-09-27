@@ -1,7 +1,12 @@
 package net.slashie.expedition.world;
 
+import java.util.Calendar;
+
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.level.BufferedExpeditionLevel;
+import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.serf.action.Message;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
 
@@ -96,5 +101,31 @@ public class ExpeditionMicroLevel extends BufferedExpeditionLevel{
 	
 	@Override
 	public void enterLevel() {
+	}
+	
+	public void addMessage(String what, Position where){
+		addMessage(new Message(what, where, formatTime(ExpeditionGame.getCurrentGame().getGameTime())));
+	}
+
+	private String formatTime(Calendar gameTime) {
+		return ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+", "+getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
+	}
+	
+	public static String getTimeDescriptionFromHour(int i) {
+		if (i > 22){
+			return "Midnight";
+		} else if (i > 18){
+			return "Night";
+		} else if (i > 14){
+			return "Afternoon";
+		} else if (i > 10){
+			return "Noon";
+		} else if (i > 6){
+			return "Morning";
+		} else if (i > 4){
+			return "Dawn";
+		} else {
+			return "Midnight";
+		}
 	}
 }

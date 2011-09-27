@@ -390,7 +390,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			if (advance.canPerform(player)){
 				return advance;
 			} else {
-				ui().addMessage(new Message(advance.getInvalidationMessage(), player.getPosition()));
+				player.getLevel().addMessage(advance.getInvalidationMessage());
 				return null;
 			}
 		}
