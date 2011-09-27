@@ -663,7 +663,7 @@ public class ExpeditionDAO {
 		Culture[] cultures = new Culture[] { 
 			new Culture("MOUNT", "Fort Ancient", true, 3, 
 					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,20"),
-					gtvm(1.0d,1.0d,1.0d,1.0d),
+					gtvm(1.0d,1.0d,1.0d,1.0d,1.0d),
 					composePairList("SIMPLE_BOW,5","WOODEN_MACE,10","BEANS,200","MAIZE,100","FISH,50","CLOTH,10","STRAWBERRIES,10","TOBACCO,10","COATS,5","FURS,5","NATIVE_ARTIFACTS,1"),
 					1, 3, 2), 
 			new Culture("MISSI", "Missisipians", true, 2, 
@@ -772,6 +772,8 @@ public class ExpeditionDAO {
 	}
 
 	private static List<Pair<GoodType, Double>> gtvm(double... d) {
+		if (d.length != 5)
+			throw new RuntimeException("Invalid values for good type evaluation");
 		List<Pair<GoodType, Double>> ret = new ArrayList<Pair<GoodType,Double>>();
 		int i = 0;
 		for (Double value: d){
