@@ -1406,8 +1406,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String townInfo = CommonUI.getTownDescription(town);
 		townInfo = townInfo.replaceAll("XXX", "\n");
    		printTextBox(townInfo, 40, 20, 720, 260);
-	}
-	
+	}	
 	@Override
 	public void afterTownAction() {
 		clearTextBox();
@@ -1428,6 +1427,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		super.onPlayerDeath();
 		((GFXUISelector)getPlayer().getSelector()).deactivate();
 	}
+	
+
 	
 	interface ItemTransferFunctionality {
 		public enum MenuItemType {

@@ -16,6 +16,7 @@ import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.OutParameter;
 
+@SuppressWarnings("serial")
 public class BuildBuildings extends Action{
 	private int netTimeCost;
 	private Town town;

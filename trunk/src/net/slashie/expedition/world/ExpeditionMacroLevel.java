@@ -17,6 +17,7 @@ import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.expedition.world.agents.ForageAgent;
+import net.slashie.expedition.world.agents.HourShiftAgent;
 import net.slashie.expedition.world.agents.RandomEventAgent;
 import net.slashie.expedition.world.agents.WeeklyAgent;
 import net.slashie.expedition.world.agents.WindAgent;
@@ -32,7 +33,7 @@ import net.slashie.utils.Util;
 @SuppressWarnings("serial")
 public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	private Actor currentWindAgent;
-	private Actor currentDayShiftAgent;
+	private Actor currentHourShiftAgent;
 	private Actor currentForageAgent;
 	private Actor currentWeeklyAgent;
 	private Actor currentRandomEventsAgent;
@@ -42,12 +43,12 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			Hashtable<String, String> charmap, Position startPosition) {
 		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap, startPosition);
 		currentWindAgent = new WindAgent();
-		currentDayShiftAgent = new DayShiftAgent();
+		currentHourShiftAgent = new HourShiftAgent();
 		currentForageAgent = new ForageAgent();
 		currentWeeklyAgent = new WeeklyAgent();
 		currentRandomEventsAgent = new RandomEventAgent();
 		addActor(currentWindAgent);
-		addActor(currentDayShiftAgent);
+		addActor(currentHourShiftAgent);
 		addActor(currentForageAgent);
 		addActor(currentWeeklyAgent);
 		addActor(currentRandomEventsAgent);
