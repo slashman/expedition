@@ -2,7 +2,6 @@ package net.slashie.expedition.ui.oryx;
 
 import java.awt.Image;
 
-import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.utils.swing.GFXMenuItem;
