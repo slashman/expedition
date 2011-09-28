@@ -1748,7 +1748,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	protected void enterScreen() {
 		super.enterScreen();
-		((GFXUISelector)getPlayer().getSelector()).deactivate();
+		if (getPlayer() != null && getPlayer().getSelector() != null)
+			((GFXUISelector)getPlayer().getSelector()).deactivate();
    		clearTextBox();
    		unitsMenuBox.setHoverDisabled(true);
    		vehiclesMenuBox.setHoverDisabled(true);
