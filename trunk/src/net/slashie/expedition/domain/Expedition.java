@@ -1705,7 +1705,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			expeditionMorale --;
 		}
 
-		
 		//Bonuses
 		// Military Wins
 		if (winBalance > 2)
@@ -1725,7 +1724,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		// Ship in good health
 		if (getMovementMode() == MovementMode.SHIP && getShipHealth() > 95 ){
-			if (Util.chance(20)) message("Our ships are in good health.");
+			if (Util.chance(20)) message("Our ships are in good shape.");
 			expeditionMorale ++;
 		}
 		// Rum for the sailors
@@ -1977,6 +1976,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		if (Util.chance(50))
 			modifyPerceivedLuck(1);
 		
+		if (!hasFullShipCrew()){
+			if (Util.chance(50))
+				getLevel().addMessage("We are struggling to sail our ships");
+		}
 		// Heal units
 		heal();
 
