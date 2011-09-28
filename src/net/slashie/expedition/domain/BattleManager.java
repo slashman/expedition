@@ -198,6 +198,7 @@ public class BattleManager {
 	private static void singleAttack(Equipment attackerEquipment, int attackingMoraleModifier, Equipment defendingEquipment, UnitContainer defendingExpedition, AssaultOutcome outcome) {
 		ExpeditionUnit attackingUnit = (ExpeditionUnit)attackerEquipment.getItem();
 		ExpeditionUnit defendingUnit = (ExpeditionUnit)defendingEquipment.getItem();
+
 		if (Util.chance(attackingUnit.getHitChance())){
 			//Pick a random target from the enemies
 			if (!Util.chance(defendingUnit.getEvadeChance())){
@@ -244,6 +245,8 @@ public class BattleManager {
 		int rand = Util.rand(0, count-1);
 		count = 0;
 		for (Equipment eq: targetUnits){
+			if (eq.getQuantity() == 0)
+				continue;
 			count += eq.getQuantity();
 			if (rand < count)
 				return eq;

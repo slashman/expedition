@@ -263,6 +263,16 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 			Equipment equipment = (Equipment) items.get(i);
 			if (equipment.getItem().equals(item)){
 				equipment.reduceQuantity(quantity);
+				if (equipment.getQuantity() < 0){
+					// This should never happen
+					System.out.println("WARNING: Invalid scenario has just happened. Please contact us with this information:");
+					equipment.setQuantity(0);
+					try {
+						throw new RuntimeException();
+					} catch (RuntimeException e){
+						e.printStackTrace();
+					}
+				}
 				if (equipment.isEmpty()){
 					items.remove(equipment);
 					itemsHash.remove(equipment.getItem().getFullID());
@@ -277,6 +287,16 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 			Equipment equipment = (Equipment) items.get(i);
 			if (equipment.getItem().getFullID().equals(itemId)){
 				equipment.reduceQuantity(quantity);
+				if (equipment.getQuantity() < 0){
+					// This should never happen
+					System.out.println("WARNING: Invalid scenario has just happened. Please contact us with this information:");
+					equipment.setQuantity(0);
+					try {
+						throw new RuntimeException();
+					} catch (RuntimeException e){
+						e.printStackTrace();
+					}
+				}
 				if (equipment.isEmpty()){
 					items.remove(equipment);
 					itemsHash.remove(equipment.getItem().getFullID());
