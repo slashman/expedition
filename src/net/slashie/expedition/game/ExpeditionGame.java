@@ -186,7 +186,7 @@ public class ExpeditionGame extends SworeGame {
 	}
 	
 	public static String getVersion(){
-		return "v0.3.1";
+		return "v0.4RC1";
 	}
 	
 	public Expedition getExpedition(){
