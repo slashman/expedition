@@ -12,6 +12,8 @@ import java.util.Properties;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 
+import org.apache.commons.httpclient.HttpException;
+
 import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.BuildSettlement;
 import net.slashie.expedition.action.ChopWoods;
@@ -27,6 +29,7 @@ import net.slashie.expedition.data.GFXAppearances;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.game.GameFiles;
+import net.slashie.expedition.game.ExpeditionGame.ExpeditionVersion;
 import net.slashie.expedition.game.GameFiles.SaveGameFilenameFilter;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.level.FlatMapModelSeconds;
@@ -421,7 +424,22 @@ public class RunExpedition {
 				ExpeditionDisplay.thus = new OryxExpeditionDisplay(ssi, UIconfiguration);
 				ui = UserInterface.getUI();
 				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, null);
-				
+			}
+			if (((ExpeditionOryxUI)ui).promptChat("Do you want to check for new versions?",140,388,520,200)){
+				try {
+					ExpeditionVersion latestVersion = ExpeditionGame.checkNewVersion();
+					if (latestVersion == null){
+						UserInterface.getUI().showImportantMessage("Error connecting to expeditionworld.net. Please browse to ensure you have the latest version :)");
+					} else if (latestVersion.equals(ExpeditionGame.getExpeditionVersion())){
+						UserInterface.getUI().showImportantMessage("You are up to date :)");
+					} else {
+						UserInterface.getUI().showImportantMessage("A newer version, "+latestVersion.getCode()+" from "+latestVersion.getFormattedDate()+" is available at the website! Please download it from http://expeditionworld.net");
+					}
+				} catch (HttpException e) {
+					UserInterface.getUI().showImportantMessage("Error connecting to expeditionworld.net. Please browse to ensure you have the latest version :)");
+				} catch (IOException e) {
+					UserInterface.getUI().showImportantMessage("Error connecting to expeditionworld.net. Please browse to ensure you have the latest version :)");
+				}
 			}
 			uiSelector = new ExpeditionGFXUISelector();
 			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings);
