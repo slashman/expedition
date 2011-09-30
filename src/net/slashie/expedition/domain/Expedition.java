@@ -2050,7 +2050,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		for (Position point: points){
 			if (Util.chance(15)){
 				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLocation().getMapCell(point);
-				if (cell != null && cell.isLand()){
+				if (cell != null && !cell.isWater()){
 					CardinalDirection d = CardinalDirection.getGeneralDirection(getPosition(), point);
 					message("You see land to the "+d.getDescription()+"!");
 					return true;

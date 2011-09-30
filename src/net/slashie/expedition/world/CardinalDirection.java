@@ -79,19 +79,19 @@ public enum CardinalDirection {
 		if (angle > 338)
 			return CardinalDirection.EAST;
 		else if (angle > 293)
-			return CardinalDirection.SOUTHEAST;
+			return CardinalDirection.NORTHEAST;
 		else if (angle > 248)
-			return CardinalDirection.SOUTH;
+			return CardinalDirection.NORTH;
 		else if (angle > 203)
-			return CardinalDirection.SOUTHWEST;
+			return CardinalDirection.NORTHWEST;
 		else if (angle > 158)
 			return CardinalDirection.WEST;
 		else if (angle > 113)
-			return CardinalDirection.NORTHWEST;
+			return CardinalDirection.SOUTHWEST;
 		else if (angle > 68)
-			return CardinalDirection.NORTH;
+			return CardinalDirection.SOUTH;
 		else if (angle > 23)
-			return CardinalDirection.NORTHEAST;
+			return CardinalDirection.SOUTHEAST;
 		else 
 			return CardinalDirection.EAST;
 	}
