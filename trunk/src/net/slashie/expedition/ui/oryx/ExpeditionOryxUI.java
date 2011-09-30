@@ -929,7 +929,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Draw
 		si.setColor(getUILayer(), Color.WHITE);
 		
-		si.print(getUILayer(),20, 1, ui_debug);
+		si.print(getUILayer(),20, 2, ui_debug);
 		
 		// Left Column
 		si.print(getUILayer(), leftColumnX, leftColumnY+2, ui_weatherDescription);
@@ -966,7 +966,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			si.print(getUILayer(), leftColumnX+8, leftColumnY+14, ui_morale);
 			si.print(getUILayer(), leftColumnX, leftColumnY+15, ui_seaDays);
 			si.print(getUILayer(), leftColumnX, leftColumnY+16, "Supplies", TITLE_COLOR);
-			si.print(getUILayer(), leftColumnX+2, leftColumnY+17, ui_food + ui_foodModifier);	
+			si.print(getUILayer(), leftColumnX+2, leftColumnY+17, ui_food);	
+			si.print(getUILayer(), leftColumnX, leftColumnY+18, ui_foodModifier);
 			
 			si.drawImage(getUILayer(), 172, 436, MORALE_IMAGES[statsExpedition.getMorale()]);
 		}
