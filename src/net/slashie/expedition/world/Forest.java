@@ -64,5 +64,8 @@ public class Forest extends AbstractFeature{
 		return wood;
 	}
 	
+	public boolean overrideOpacity() {
+		return getAvailableWood() <= 0;
+	}
 
 }
