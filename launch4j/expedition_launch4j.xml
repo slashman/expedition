@@ -1,0 +1,51 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>E:\Proyectos\Software\Expedition\distro\expedition.jar</jar>
+  <outfile>E:\Proyectos\Software\Expedition\launch4j\expedition.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>false</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>E:\Proyectos\Software\Expedition\distro\res\expedition_icon.ico</icon>
+  <classPath>
+    <mainClass>net.slashie.expedition.RunExpedition</mainClass>
+    <cp>lib/jcurses-x.jar</cp>
+    <cp>lib/libjcsi.jar</cp>
+    <cp>lib/serf1.18.jar</cp>
+    <cp>lib/basicPlayer/basicplayer3.0.jar</cp>
+    <cp>lib/basicPlayer/commons-logging-api.jar</cp>
+    <cp>lib/basicPlayer/jl1.0.jar</cp>
+    <cp>lib/basicPlayer/jogg-0.0.7.jar</cp>
+    <cp>lib/basicPlayer/jorbis-0.0.15.jar</cp>
+    <cp>lib/basicPlayer/jspeex0.9.7.jar</cp>
+    <cp>lib/basicPlayer/mp3spi1.9.4.jar</cp>
+    <cp>lib/basicPlayer/tritonus_share.jar</cp>
+    <cp>lib/basicPlayer/vorbisspi1.0.2.jar</cp>
+  </classPath>
+  <jre>
+    <path>jre6\</path>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <initialHeapSize>512</initialHeapSize>
+    <maxHeapSize>512</maxHeapSize>
+  </jre>
+  <versionInfo>
+    <fileVersion>0.3.0.0</fileVersion>
+    <txtFileVersion>0.3</txtFileVersion>
+    <fileDescription>Expedition: The New World </fileDescription>
+    <copyright>Slashware Interactive 2009-2011</copyright>
+    <productVersion>0.3.0.0</productVersion>
+    <txtProductVersion>0.3</txtProductVersion>
+    <productName>Expedition: The New World v0.3</productName>
+    <companyName>Slashware Interactive</companyName>
+    <internalName>Expedition v0.3</internalName>
+    <originalFilename>expedition.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>
