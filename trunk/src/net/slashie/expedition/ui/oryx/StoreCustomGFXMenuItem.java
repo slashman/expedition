@@ -89,6 +89,7 @@ public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 			}
 			for (Appearance armorAppearance: unit.getAvailableArmorAppearances()){
 				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+48+i*28, y+17, ((GFXAppearance)armorAppearance).getImage());
+				i++;
 			}
 		} else if (item instanceof Vehicle){
 			Vehicle vehicle = (Vehicle)item;
