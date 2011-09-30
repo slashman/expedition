@@ -170,15 +170,15 @@ public class SpainCastle extends StaticPattern implements Serializable {
 					choice = -1;
 					while (choice == -1){
 						choice = (UserInterface.getUI()).switchChat("Audience with the King and Queen","How much would you need?",
-								"By my accounts, I need 103.550 Maravedíes.",
+								"By my accounts, I need 111.650 Maravedíes.",
 								"70.000 Maravedíes will be more than enough",
 								"40.000 Maravedíes, and your blessing."
 								);
 					}
 					switch (choice){
 					case 0:
-						m(isabellaSays()+"Then, we trust 103.550 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
-						exp.setAccountedGold(103550);
+						m(isabellaSays()+"Then, we trust 111.650 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						exp.setAccountedGold(111650);
 						break;
 					case 1:
 						m(isabellaSays()+"Then, we trust 70.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
