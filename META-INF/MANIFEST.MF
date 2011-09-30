@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 Created-By: (Slash)
 Main-Class: net.slashie.expedition.RunExpedition
-Class-Path: lib/jcurses-x.jar lib/libjcsi.jar lib/serf1.24.jar lib/basicPlayer/basicplayer3.0.jar lib/basicPlayer/commons-logging-api.jar lib/basicPlayer/jl1.0.jar lib/basicPlayer/jogg-0.0.7.jar lib/basicPlayer/jorbis-0.0.15.jar lib/basicPlayer/jspeex0.9.7.jar lib/basicPlayer/mp3spi1.9.4.jar lib/basicPlayer/tritonus_share.jar lib/basicPlayer/vorbisspi1.0.2.jar 
+Class-Path: lib/jcurses-x.jar lib/libjcsi.jar lib/serf1.24.jar lib/basicPlayer/basicplayer3.0.jar lib/basicPlayer/commons-logging-api.jar lib/basicPlayer/jl1.0.jar lib/basicPlayer/jogg-0.0.7.jar lib/basicPlayer/jorbis-0.0.15.jar lib/basicPlayer/jspeex0.9.7.jar lib/basicPlayer/mp3spi1.9.4.jar lib/basicPlayer/tritonus_share.jar lib/basicPlayer/vorbisspi1.0.2.jar lib/commons-httpclient-3.0.1.jar lib/commons-codec-1.4.jar 
 
