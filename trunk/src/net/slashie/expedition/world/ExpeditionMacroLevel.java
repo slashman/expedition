@@ -593,14 +593,18 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		if (!isValidCoordinate(x,y))
 			return true;
 		List<AbstractFeature> feats = getFeaturesAt(LOSPosition);
+		AbstractCell cell = getMapCell(x, y, getPlayer().getPosition().z);
+
 		if (feats != null)
 			for (AbstractFeature feat: feats){
 				if (feat != null && feat.isOpaque())
 					return true;
+				if (feat != null && feat.overrideOpacity() && cell.isOpaque()){
+					return false;
+				}
 				if (feat != null)
 					feat.onSeenByPlayer();
 			}
-		AbstractCell cell = getMapCell(x, y, getPlayer().getPosition().z);
 		if (cell == null)
 			return false;
 		else {
