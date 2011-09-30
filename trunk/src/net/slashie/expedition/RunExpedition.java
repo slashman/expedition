@@ -29,6 +29,7 @@ import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.game.GameFiles.SaveGameFilenameFilter;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.level.FlatMapModelSeconds;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.level.GlobeMapModelMinutes;
 import net.slashie.expedition.level.GlobeMapModelSeconds;
@@ -176,7 +177,7 @@ public class RunExpedition {
             } catch (SworeException crle){
             	crash("Error initializing", crle);
             }
-            GlobeMapModel.setSingleton(new GlobeMapModelSeconds());
+            GlobeMapModel.setSingleton(new FlatMapModelSeconds());
             STMusicManagerNew.initManager();
             ExpeditionMusicManager.init();
         	if (configuration.getProperty("enableSound") != null && configuration.getProperty("enableSound").equals("true")){ // Sound
