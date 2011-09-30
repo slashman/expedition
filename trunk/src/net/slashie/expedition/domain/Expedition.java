@@ -53,13 +53,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	public enum Title {
 		EXPLORER (1, "Explorador", 0, 0, 0, 0),
-		HIDALGO  (2, "Hidalgo",    0, 0, 1, 20000),
-		LORD     (3, "Señor",      0, 1, 2, 50000),
-		VIZCOUNT (4, "Vizconde",   1, 2, 5, 100000),
-		COUNT    (5, "Conde",      2, 5,10, 150000),
-		MARCHIS  (6, "Marqués",    5,10,30, 300000),
-		DUKE     (7, "Duque",     10,30,60, 500000),
-		VICEROY  (8, "Virrey",    30,60,90, 950000)
+		HIDALGO  (2, "Hidalgo",    0, 0, 1, 200000),
+		LORD     (3, "Señor",      0, 1, 2, 500000),
+		VIZCOUNT (4, "Vizconde",   1, 2, 5, 1000000),
+		COUNT    (5, "Conde",      2, 5,10, 1500000),
+		MARCHIS  (6, "Marqués",    5,10,30, 3000000),
+		DUKE     (7, "Duque",     10,30,60, 5000000),
+		VICEROY  (8, "Virrey",    30,60,90, 9500000)
 		;
 		private int requiredCities, requiredTowns, requiredVillages;
 		private int rank;
