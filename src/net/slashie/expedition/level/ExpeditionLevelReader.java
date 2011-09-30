@@ -321,8 +321,9 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 	 */
 	private Position recyclablePosition = new Position(0,0);
 	public Actor getActorAt(Position x){
+		return super.getActorAt(x);
+		/* TODO: Activate this with the GEO facet
 		int magnificationLevel = GlobeMapModel.getSingleton().getLongitudeScale(x.y());
-		//int start = x.x() - (int)Math.round(magnificationLevel/2.0d);
 		int start = GlobeMapModel.getSingleton().normalizeLong(x.y(), x.x());
 		recyclablePosition.y = x.y();
 		for (int xrow = start; xrow < start + magnificationLevel; xrow ++){
@@ -331,7 +332,7 @@ public abstract class ExpeditionLevelReader extends GridLevelReader implements E
 			if (a != null)
 				return a;
 		}
-		return null;
+		return null;*/
 	}
 	
 	/**
