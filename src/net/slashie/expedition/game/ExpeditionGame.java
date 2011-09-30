@@ -1,8 +1,16 @@
 package net.slashie.expedition.game;
 
+import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
@@ -26,6 +34,36 @@ import net.slashie.serf.ui.UserInterface;
 
 @SuppressWarnings("serial")
 public class ExpeditionGame extends SworeGame {
+	public static class ExpeditionVersion {
+		public ExpeditionVersion(String code, int year, int month, int date) {
+			this.code = code;
+			Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+			c.set(year, month, date);
+			this.date = c.getTime();
+		}
+		
+		@Override
+		public boolean equals(Object arg0) {
+			return ((ExpeditionVersion)arg0).getCode().equals(code);
+		}
+		
+		String code;
+		Date date;
+		
+		public String getCode() {
+			return code;
+		}
+
+		DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM);
+		public String getFormattedDate() {
+			return sdf.format(date);
+		}
+		
+		
+	}
+
+	private static final ExpeditionVersion THIS_VERSION = new ExpeditionVersion ("0.4RC2-InDev", 2011, 9, 29);
+	
 	private static ExpeditionGame currentGame;
 	private int lastExpeditionId = 1;
 	private Calendar currentTime;
@@ -185,8 +223,12 @@ public class ExpeditionGame extends SworeGame {
 		
 	}
 	
+	public static ExpeditionVersion getExpeditionVersion(){
+		return THIS_VERSION;
+	}
+	
 	public static String getVersion(){
-		return "v0.4RC1";
+		return THIS_VERSION.code;
 	}
 	
 	public Expedition getExpedition(){
@@ -227,5 +269,22 @@ public class ExpeditionGame extends SworeGame {
 	
 	public void registerSettlement(SettlementLevel level){
 		settlementLevels.add(level);
+	}
+
+	
+	public static ExpeditionVersion checkNewVersion() throws HttpException, IOException {
+		String url = "http://expeditionworld.net/latestVersion";
+		HttpClient client = new HttpClient();
+		GetMethod latestVersion = new GetMethod(url);
+		client.executeMethod(latestVersion);
+		String str = latestVersion.getResponseBodyAsString();
+		String[] info = str.split(",");
+		latestVersion.releaseConnection();
+		try {
+			return new ExpeditionVersion(info[0], Integer.parseInt(info[1]), Integer.parseInt(info[2]), Integer.parseInt(info[3]));
+		} catch (NumberFormatException e) {
+			System.out.println("Invalid content for latest version URL: "+str);
+			return null;
+		}
 	}
 }
