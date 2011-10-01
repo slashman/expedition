@@ -132,8 +132,8 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.setCursor(GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4));
 
 		si.drawImage(0, IMG_TITLE);
-		si.printAtPixel(0, 30, 540, "Version "+ExpeditionGame.getVersion()+", Slashware Interactive 2009-2011", Color.WHITE);
-		si.printAtPixel(0, 30, 558, "Artwork by Oryx - Music by Mingos and Jice", Color.WHITE);
+		si.printAtPixel(0, 30, 550, "Version "+ExpeditionGame.getVersion()+", ", Color.WHITE);
+		si.printAtPixel(0, 30, 568, "A production of Slashware Interactive 2009-2011", Color.WHITE);
 		
    	
     	// Read the license info 
