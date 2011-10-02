@@ -316,6 +316,10 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	private void performMovement() {
 		if (!selectionActive)
 			return;
+		// If there's a command already on the queue, do naught to avoid confusion
+		if (selectionHandler.size() > 0)
+			return;
+		
 		int quadrant = defineQuadrant(mousePosition.x, mousePosition.y);
 		mouseDirection = QDIRECTIONS[quadrant-1];
 		
@@ -324,6 +328,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			// Compare with heading and move in the correct direction
 			CardinalDirection heading = expedition.getHeading();
 			CardinalDirection wantedHeading = CardinalDirection.translateFromActionDirection(mouseDirection);
+			//System.out.println("WH: "+wantedHeading+", H: "+heading);
 			if (wantedHeading == CardinalDirection.NULL){
 				// move forward
 				try {
