@@ -6,12 +6,50 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import net.slashie.serf.game.SworeGame;
+import net.slashie.serf.ui.Appearance;
+import net.slashie.serf.ui.oryxUI.AnimatedGFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
+import net.slashie.util.Pair;
 import net.slashie.utils.ImageUtils;
+import net.slashie.utils.Position;
 
 public class GFXAppearances {
 	private static Map<String, Image> images = new Hashtable<String, Image>();
 
+	
+	public static AnimatedGFXAppearance createAnimatedAppearance(String ID, Position... positions){
+		String filename = "res/expedition.png";
+		String darkfilename = "res/expedition_d.png";
+		BufferedImage bigImage = (BufferedImage) images.get(filename);
+		BufferedImage bigDarkImage = (BufferedImage) images.get(darkfilename);
+		if (bigImage == null){
+			try {
+				bigImage = ImageUtils.createImage(filename);
+			} catch (Exception e){
+				SworeGame.crash("Error loading image "+filename, e);
+			}
+			images.put(filename, bigImage);
+			try {
+				bigDarkImage = ImageUtils.createImage(darkfilename);
+			} catch (Exception e){
+				SworeGame.crash("Error loading image "+darkfilename, e);
+			}
+			images.put(darkfilename, bigDarkImage);
+		}
+		
+		Image[] frames = new Image[positions.length];
+		int i = 0;
+		for (Position position: positions){
+			int xpos = position.x - 1;
+			int ypos = position.y - 1;
+			frames[i] = ImageUtils.crearImagen(bigImage,  xpos*24, ypos*24, 24, 24);
+			i++;
+		}
+		AnimatedGFXAppearance ret = new AnimatedGFXAppearance(ID, frames, 0,0, 500);
+		
+		return ret;
+	}
+	
 	public static GFXAppearance createAppearance(String ID, int xpos, int ypos){
 		xpos--;
 		ypos--;
@@ -36,7 +74,7 @@ public class GFXAppearances {
 		try {
 			BufferedImage img = ImageUtils.crearImagen(bigImage,  xpos*24, ypos*24, 24, 24);
 			BufferedImage imgd = ImageUtils.crearImagen(bigDarkImage,  xpos*24, ypos*24, 24, 24);
-			GFXAppearance ret = new GFXAppearance(ID, img, imgd, 0,0);
+			GFXAppearance ret = new GFXAppearance(ID, img, 0,0);
 			return ret;
 		} catch (Exception e){
 			SworeGame.crash("Error loading image "+filename, e);
@@ -74,7 +112,7 @@ public class GFXAppearances {
 			BufferedImage imgd2 = ImageUtils.crearImagen(bigDarkImage,  xpos2*24, ypos2*24, 24, 24);
 			BufferedImage imgSum = ImageUtils.overlay(img1, img2, 0, 0);
 			BufferedImage imgSumD = ImageUtils.overlay(imgd1, imgd2, 0, 0);
-			GFXAppearance ret = new GFXAppearance(ID, imgSum, imgSumD, 0,0);
+			GFXAppearance ret = new GFXAppearance(ID, imgSum, 0,0);
 			return ret;
 		} catch (Exception e){
 			SworeGame.crash("Error loading image "+filename, e);
@@ -83,9 +121,9 @@ public class GFXAppearances {
 		
 	}
 
-	public static GFXAppearance[] getGFXAppearances(){
+	public static Appearance[] getGFXAppearances(){
 		
-		return new GFXAppearance[]{
+		return new Appearance[]{
 				//Expeditions
 				createAppearance("EXPEDITION", 1,16),
 				createAppearance("SHIP_EXPEDITION_N", 1 ,15),
@@ -108,8 +146,8 @@ public class GFXAppearances {
 				//Overworld Terrain
 				createAppearance("GRASS", 3 ,3),
 				createAppearance("PLAINS", 4 ,3),
-				createAppearance("WATER", 2 ,1),
-				createAppearance("WATER2", 3 ,1),
+				createAnimatedAppearance("WATER", new Position[] { new Position(2,1), new Position(2,2)}),
+				createAnimatedAppearance("WATER2", new Position[] { new Position(3,1), new Position(3,2)}),
 				createAppearance("WATER_SHADOW", 4 ,20),
 				createAppearance("MOUNTAIN", 5 ,17),
 				createAppearance("SNOWY_MOUNTAIN", 6 ,17),
@@ -130,12 +168,12 @@ public class GFXAppearances {
 				createAppearance("SPAIN_WALL", 7 ,3),
 				createAppearance("DEPARTURE", 5 ,4),
 				createAppearance("CITY_GRASS", 4 ,3),
-				createAppearance("CITY_SEA", 2,1),
+				createAnimatedAppearance("CITY_SEA", new Position[] { new Position(2,1), new Position(2,2)}),
 				
 				createAppearance("SPAIN_GRASS", 4 ,3),
 				createAppearance("SPAIN_GRASS_BLOCKED", 4 ,3),
 				createAppearance("SPAIN_FLOOR", 7 ,4),
-				createAppearance("SPAIN_WATER", 1 ,2),
+				createAnimatedAppearance("SPAIN_WATER", new Position[] { new Position(1,1), new Position(1,2)}),
 				createAppearance("SPAIN_HOUSE", 11 ,6),
 				createAppearance("SPAIN_SHIP", 1 ,5),
 				createAppearance("SPAIN_DOCKS", 5 ,4),
