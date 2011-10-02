@@ -123,7 +123,7 @@ public class RainEffect implements Runnable{
 				}
 				if (command.equals("KILL")){
 					si.cleanLayer(ExpeditionOryxUI.SFX_LAYER);
-					si.commitLayer(ExpeditionOryxUI.SFX_LAYER);
+					si.commitLayer(ExpeditionOryxUI.SFX_LAYER, true);
 
 					break;
 				}
@@ -172,7 +172,7 @@ public class RainEffect implements Runnable{
 					}
 				}
 			}
-			si.commitLayer(ExpeditionOryxUI.SFX_LAYER);
+			si.commitLayer(ExpeditionOryxUI.SFX_LAYER, true);
 			
 			try {
 				Thread.sleep(sleep);

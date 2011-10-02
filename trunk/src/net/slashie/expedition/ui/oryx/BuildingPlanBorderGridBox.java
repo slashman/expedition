@@ -146,7 +146,7 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 					quantitySplitterDown.setVisible(true);
 					GFXMenuItem item = (GFXMenuItem) shownItems.get(selectedItem.selectedIndex);
 					((CustomGFXMenuItem) item).drawTooltip(si, xpos, ypos, selectedItem.selectedIndex);
-					si.commitLayer(getDrawingLayer());
+					si.commitLayer(getDrawingLayer(), true);
 					si.setCursor(getHandCursor());
 					
 				} else {
@@ -269,6 +269,6 @@ public class BuildingPlanBorderGridBox extends BorderedGridBox{
 		si.printAtPixel(getDrawingLayer(), 600, 238+24*2, "Required Wood", ExpeditionOryxUI.TITLE_COLOR);
 		si.printAtPixel(getDrawingLayer(), 640, 238+24*3, requiredWood+"", Color.WHITE);
 		if (refresh)
-			si.commitLayer(getDrawingLayer());
+			si.commitLayer(getDrawingLayer(), true);
 	}
 }

@@ -59,7 +59,6 @@ import net.slashie.expedition.world.Weather;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.action.Message;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
@@ -90,9 +89,10 @@ import net.slashie.utils.swing.GridBox;
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
 	public static final int STANDARD_ITEM_WIDTH = 237;
 	public static final int STANDARD_ITEM_HEIGHT = 62;
-	public static final int UI_WIDGETS_LAYER = 2;
-	public static final int SFX_LAYER = 1;
 	public static final int MAP_LAYER = 0;
+	public static final int SFX_LAYER = 4;
+	public static final int UI_WIDGETS_LAYER = 5;
+	
 	public static final Color ITEM_BOX_COLOR = new Color(90,51,7);
 	public static final Color ITEM_BOX_BORDER_COLOR = new Color(188,158,76);
 	public static final Color ITEM_BOX_HIGHLIGHT_COLOR = new Color(140,76,12);
@@ -1401,8 +1401,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		super.onPlayerDeath();
 		((GFXUISelector)getPlayer().getSelector()).deactivate();
 	}
-	
-
 	
 	interface ItemTransferFunctionality {
 		public enum MenuItemType {

@@ -9,10 +9,7 @@ import java.lang.reflect.Field;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-
-import org.apache.commons.httpclient.HttpException;
 
 import net.slashie.expedition.action.ArmExpedition;
 import net.slashie.expedition.action.BuildSettlement;
@@ -34,8 +31,6 @@ import net.slashie.expedition.game.GameFiles.SaveGameFilenameFilter;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.level.FlatMapModelSeconds;
 import net.slashie.expedition.level.GlobeMapModel;
-import net.slashie.expedition.level.GlobeMapModelMinutes;
-import net.slashie.expedition.level.GlobeMapModelSeconds;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.town.NPCFactory;
 import net.slashie.expedition.ui.ExpeditionDisplay;
@@ -78,10 +73,11 @@ import net.slashie.serf.ui.oryxUI.effects.GFXEffectFactory;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.sound.midi.STMidiPlayer;
 
-
+import org.apache.commons.httpclient.HttpException;
 
 public class RunExpedition {
 	private final static int JCURSES_CONSOLE = 0, SWING_GFX = 1, SWING_CONSOLE = 2;
+	private static final int LAYERS = 6;
 	//private static SystemInterface si;
 	private static UserInterface ui;
 	private static UISelector uiSelector;
@@ -131,15 +127,14 @@ public class RunExpedition {
 				switch (mode){
 				case SWING_GFX:
 					System.out.println("Initializing Swing GFX System Interface");
-					SwingSystemInterface si = new SwingSystemInterface(3, false, PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
+					SwingSystemInterface si = new SwingSystemInterface(LAYERS, false, PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
 					System.out.println("Initializing Oryx GFX User Interface");
 					UserInterface.setSingleton(new ExpeditionOryxUI());
-					ExpeditionDisplay.thus = new OryxExpeditionDisplay(si, UIconfiguration);
-					
 					EffectFactory.setSingleton(new GFXEffectFactory());
 					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(new GFXEffects().getEffects());
 					ui = UserInterface.getUI();
 					initializeUI(si);
+					ExpeditionDisplay.thus = new OryxExpeditionDisplay(si, UIconfiguration);
 					break;
 				case JCURSES_CONSOLE:
 					System.out.println("Initializing JCurses System Interface");
@@ -417,7 +412,7 @@ public class RunExpedition {
 			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, null);
 			UserInterface.getUI().showImportantMessage("Thank you for trying out this version of Expedition: The New World.\n\nThis game is in active development, if you like the game please visit http://slashware.net to learn about ways to help us complete it!");
 			if (((ExpeditionOryxUI)ui).promptChat(" Do you want to enable full screen mode?",140,388,520,200)){
-				si = new SwingSystemInterface(3, true, PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
+				si = new SwingSystemInterface(LAYERS, true, PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
 				ssi = (SwingSystemInterface)si;
 				System.out.println("Initializing Oryx GFX User Interface");
 				UserInterface.setSingleton(new ExpeditionOryxUI());
