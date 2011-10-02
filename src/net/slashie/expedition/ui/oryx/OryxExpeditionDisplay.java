@@ -568,7 +568,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		String name = "";
 		while (name.trim().equals("")){
-			name = si.input(2, 222, 463, Color.WHITE, 20 , defaultName);
+			name = si.input(ExpeditionOryxUI.UI_WIDGETS_LAYER, 222, 463, Color.WHITE, 20 , defaultName);
 			if (name.trim().equals("")){
 				UserInterface.getUI().showSystemMessage("Please enter a name for the Expedition.");
 				si.commitLayer(0);
