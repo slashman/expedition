@@ -26,6 +26,7 @@ import net.slashie.serf.action.Message;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.level.AbstractFeature;
 import net.slashie.serf.ui.Appearance;
+import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
 import net.slashie.utils.Position;
@@ -86,7 +87,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	}
 	
 	public Weather getWeather() {
-		return weather ;
+		return weather;
 	}
 	
 	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
@@ -675,5 +676,12 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 	}
 	
-	
+	@Override
+	public Appearance filterAppearance(Appearance appearance) {
+		if (getWeather() == Weather.FOG){
+			return AppearanceFactory.getAppearanceFactory().getAppearance(appearance.getID()+"_FOG");
+		} else {
+			return super.filterAppearance(appearance);
+		}
+	}
 }
