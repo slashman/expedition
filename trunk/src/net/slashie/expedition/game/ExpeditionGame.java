@@ -8,14 +8,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.GetMethod;
-
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Expedition.MovementMode;
-import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -31,6 +26,10 @@ import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.serf.level.LevelMetaData;
 import net.slashie.serf.ui.UserInterface;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 @SuppressWarnings("serial")
 public class ExpeditionGame extends SworeGame {
@@ -62,7 +61,7 @@ public class ExpeditionGame extends SworeGame {
 		
 	}
 
-	private static final ExpeditionVersion THIS_VERSION = new ExpeditionVersion ("0.4RC2-InDev", 2011, 9, 29);
+	private static final ExpeditionVersion THIS_VERSION = new ExpeditionVersion ("0.4RC2", 2011, 10, 3);
 	
 	private static ExpeditionGame currentGame;
 	private int lastExpeditionId = 1;
