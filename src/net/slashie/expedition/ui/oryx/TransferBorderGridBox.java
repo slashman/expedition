@@ -70,7 +70,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			SwingSystemInterface g, Color backgroundColor, Color borderIn,
 			Color borderOut, int borderWidth, int outsideBound, int inBound,
 			int insideBound, int itemHeight, int itemWidth, int gridX,
-			int gridY, BufferedImage box, 
+			int gridY, Image box, 
 			CleanButton closeButton, 
 			ItemContainer source, ItemContainer destination, 
 			BlockingQueue<String> transferSelectionHandler,
