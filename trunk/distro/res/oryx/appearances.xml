@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphicsPack>
+	<appearances file = "img/expedition.png" tileWidth = "24" tileHeight = "24">
+		<!-- Main Expedition -->
+		<appearance id = "EXPEDITION" x = "1" y = "16"/>
+		<appearance id = "SHIP_EXPEDITION_N" x = "1" y = "15"/>
+		<appearance id = "SHIP_EXPEDITION_E" x = "2" y = "15"/>
+		<appearance id = "SHIP_EXPEDITION_S" x = "3" y = "15"/>
+		<appearance id = "SHIP_EXPEDITION_W" x = "4" y = "15"/>
+		<appearance id = "SHIP_EXPEDITION_NE" x = "5" y = "15"/>
+		<appearance id = "SHIP_EXPEDITION_SE" x = "6" y = "15"/>
+		<appearance id = "SHIP_EXPEDITION_SW" x = "7" y = "15"/>
+		<appearance id = "SHIP_EXPEDITION_NW" x = "8" y = "15"/>
+		<appearance id = "BOAT_EXPEDITION" x = "3" y = "16"/>
+		<appearance id = "HORSE_EXPEDITION" x = "2" y = "16"/>
+		<!-- Native Expedition -->
+		<appearance id = "HOSTILE_EXPEDITION" x = "6" y = "16"/>
+		<appearance id = "BOAT_HOSTILE_EXPEDITION" x = "8" y = "16"/>
+		<!-- Overworld Terrain -->
+		<appearance id = "GRASS" x = "3" y = "3"/>
+		<appearance id = "PLAINS" x = "4" y = "3"/>
+		<appearance id = "WATER_SHADOW" x = "4" y = "20"/>
+		<appearance id = "MOUNTAIN" x = "5" y = "17"/>
+		<appearance id = "SNOWY_MOUNTAIN" x = "6" y = "17"/>
+		<appearance id = "FOREST" x = "2" y = "17"/>
+		<appearance id = "CHOPPED_FOREST" x = "4" y = "17"/>
+		<appearance id = "PORT_CITY" x = "11" y = "6"/>
+		<appearance id = "STORM" x = "1" y = "17"/>
+		<animatedAppearance id = "WATER" x = "2,2" y = "1,2" delay = "500"/>
+		<animatedAppearance id = "WATER2" x = "3,3" y = "1,2" delay = "500"/>
+		<!-- Overworld Features -->
+		<appearance id = "SHIP" x = "1" y = "5"/>
+		<appearance id = "GOODS_CACHE" x = "9" y = "6"/>
+		<appearance id = "TOWN" x = "11" y = "6"/>
+		<appearance id = "NATIVE_VILLAGE" x = "10" y = "6"/>
+		<appearance id = "NATIVE_TOWN" x = "10" y = "6"/>
+		<appearance id = "NATIVE_CITY" x = "11" y = "6"/>		
+		<!-- Town Terrain-->
+		<appearance id = "SPAIN_WALL" x = "7" y = "3"/> <!-- Check if this is being used? -->
+		<appearance id = "DEPARTURE" x = "5" y = "4"/> <!-- Check if this is being used? -->
+		<appearance id = "CITY_GRASS" x = "4" y = "3"/> <!-- Check if this is being used? -->
+		<animatedAppearance id = "CITY_SEA" x = "2,2" y = "1,2" delay = "500"/> <!-- Check if this is being used? -->
+		<appearance id = "SPAIN_GRASS" x = "4" y = "3"/>
+		<appearance id = "SPAIN_GRASS_BLOCKED" x = "4" y = "3"/>
+		<appearance id = "SPAIN_FLOOR" x = "7" y = "4"/>
+		<animatedAppearance id = "SPAIN_WATER" x = "1,1" y = "1,2" delay = "500"/>
+		<appearance id = "SPAIN_HOUSE" x = "11" y = "6"/>
+		<appearance id = "SPAIN_SHIP" x = "1" y = "5"/>
+		<appearance id = "SPAIN_DOCKS" x = "5" y = "4"/>
+		<appearance id = "SPAIN_COLUMN" x = "8" y = "4"/>
+		<appearance id = "SPAIN_CASTLE" x = "8" y = "3"/>
+		<appearance id = "GOODS_STORE" x = "3" y = "6"/>
+		<appearance id = "WEAPONS_STORE" x = "7" y = "6"/>
+		<appearance id = "PORT" x = "2" y = "6"/>
+		<appearance id = "MERCHANT" x = "4" y = "6"/>
+		<appearance id = "GUILD" x = "5" y = "6"/>
+		<!-- Castle tiles -->		
+		<appearance id = "CASTLE_FLOOR" x = "9" y = "3"/>
+		<appearance id = "CASTLE_PLAZA" x = "4" y = "3"/>
+		<appearance id = "CASTLE_TREE" x = "2" y = "4"/>
+		<appearance id = "BLUE_CARPET" x = "11" y = "3"/>
+		<appearance id = "RED_CARPET" x = "10" y = "3"/>
+		<appearance id = "CASTLE_WALL" x = "8" y = "3"/>
+		<appearance id = "CASTLE_WINDOW" x = "10" y = "4"/>
+		<appearance id = "SPAIN_BANNER" x = "2" y = "13"/>
+		<appearance id = "THRONE" x = "3" y = "13"/>
+		<appearance id = "SPAIN_CREST" x = "1" y = "13"/>
+		<appearance id = "CASTLE_CURTAIN" x = "4" y = "13"/>
+		<appearance id = "CASTLE_GATE" x = "11" y = "4"/>
+		<appearance id = "BOOKSHELF_L" x = "1" y = "20"/>
+		<appearance id = "BOOKSHELF" x = "2" y = "20"/>
+		<appearance id = "BOOKSHELF_R" x = "3" y = "20"/>
+		<!-- NPCs -->
+		<appearance id = "KING_FERDINAND" x = "11" y = "10"/>
+		<appearance id = "QUEEN_ISABELLE" x = "12" y = "10"/>
+		<appearance id = "DOMINIK" x = "1" y = "19"/>
+		<appearance id = "COLOMBUS" x = "2" y = "19"/>
+		<appearance id = "BIZCOCHO" x = "4" y = "19"/>
+		<appearance id = "CRISTOFORO" x = "5" y = "19"/>
+		<appearance id = "SANTIAGO" x = "6" y = "19"/>
+		<!-- Units -->
+		<appearance id = "SAILOR" x = "1" y = "10"/>
+		<appearance id = "ROGUE" x = "2" y = "10"/>
+		<appearance id = "MARINE" x = "3" y = "10"/>
+		<appearance id = "SOLDIER" x = "6" y = "10"/>
+		<appearance id = "GUARD" x = "7" y = "19"/>
+		<appearance id = "ARCHER" x = "5" y = "10"/>
+		<appearance id = "CAPTAIN" x = "7" y = "10"/>
+		<appearance id = "EXPLORER" x = "8" y = "10"/>
+		<appearance id = "CARPENTER" x = "9" y = "10"/>
+		<appearance id = "COLONIST" x = "10" y = "10"/>
+		<appearance id = "NATIVE_WARRIOR" x = "1" y = "11"/>
+		<appearance id = "NATIVE_ARCHER" x = "3" y = "11"/>
+		<appearance id = "NATIVE_COMMONER" x = "3" y = "19"/>
+		<appearance id = "NATIVE_SHAMAN" x = "3" y = "11"/>
+		<appearance id = "QUETZAL_ARCHER" x = "8" y = "19"/>
+		<appearance id = "EAGLE_WARRIOR" x = "9" y = "19"/>
+		<appearance id = "JAGUAR_WARRIOR" x = "10" y = "19"/>
+		<appearance id = "DOCTOR" x = "11" y = "19"/>
+		<compositeAppearance id = "SAILOR_MOUNTED" x1 = "1" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "ROGUE_MOUNTED" x1 = "2" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "MARINE_MOUNTED" x1 = "3" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "SOLDIER_MOUNTED" x1 = "6" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "GUARD_MOUNTED" x1 = "7" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "ARCHER_MOUNTED" x1 = "5" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "CAPTAIN_MOUNTED" x1 = "7" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "EXPLORER_MOUNTED" x1 = "8" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "CARPENTER_MOUNTED" x1 = "9" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "COLONIST_MOUNTED" x1 = "10" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "COLOMBUS_MOUNTED" x1 = "2" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "NATIVE_WARRIOR_MOUNTED" x1 = "1" y1 = "11" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "NATIVE_ARCHER_MOUNTED" x1 = "3" y1 = "11" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "NATIVE_COMMONER_MOUNTED" x1 = "3" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "NATIVE_SHAMAN_MOUNTED" x1 = "3" y1 = "11" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "QUETZAL_ARCHER_MOUNTED" x1 = "8" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "EAGLE_WARRIOR_MOUNTED" x1 = "9" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "JAGUAR_WARRIOR_MOUNTED" x1 = "10" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DOCTOR_MOUNTED" x1 = "11" y1 = "19" x2 = "1" y2 = "25"/>
+		<!-- Supplies -->
+		<appearance id = "BISCUIT" x = "6" y = "8"/>
+		<appearance id = "FRUIT" x = "7" y = "7"/>
+		<appearance id = "BREAD" x = "7" y = "7"/>
+		<appearance id = "DRIED_MEAT" x = "4" y = "7"/>
+		<appearance id = "RUM" x = "5" y = "8"/>
+		<appearance id = "WOOD" x = "4" y = "24"/>
+		<appearance id = "FRESHWATER" x = "8" y = "7"/>
+		<appearance id = "SAUERKRAUT" x = "9" y = "7"/>
+		<appearance id = "BEANS" x = "1" y = "24"/>
+		<appearance id = "MAIZE" x = "6" y = "7"/>
+		<appearance id = "WHEAT" x = "5" y = "24"/>
+		<appearance id = "POTATOES" x = "2" y = "24"/>
+		<appearance id = "TOMATOES" x = "3" y = "24"/>
+		<appearance id = "FISH" x = "1" y = "22"/>
+		<!-- Trade Goods -->
+		<appearance id = "COTTON" x = "4" y = "8"/>
+		<appearance id = "SUGAR" x = "4" y = "8"/>
+		<appearance id = "CLOTH" x = "4" y = "8"/>
+		<appearance id = "COCA" x = "4" y = "8"/>
+		<appearance id = "COCOA" x = "4" y = "8"/>
+		<appearance id = "CHILI_PEPPER" x = "4" y = "8"/>
+		<appearance id = "PINEAPPLE" x = "4" y = "8"/>
+		<appearance id = "STRAWBERRIES" x = "4" y = "8"/>
+		<appearance id = "TOBACCO" x = "4" y = "8"/>
+		<appearance id = "COATS" x = "4" y = "8"/>
+		<appearance id = "FURS" x = "4" y = "8"/>
+		<appearance id = "GOLD_ARTIFACTS" x = "4" y = "8"/>
+		<appearance id = "NATIVE_ARTIFACTS" x = "4" y = "8"/>
+		<!-- Weapons -->
+		<appearance id = "STEEL_SPEAR" x = "1" y = "9"/>
+		<appearance id = "STEEL_SWORD" x = "2" y = "9"/>
+		<appearance id = "WOODEN_CROSSBOW" x = "4" y = "9"/>
+		<appearance id = "COMPOSITE_BOW" x = "3" y = "17"/>
+		<appearance id = "HARQUEBUS" x = "6" y = "9"/>
+		<appearance id = "STUDDED_VEST" x = "7" y = "9"/>
+		<appearance id = "BREASTPLATE" x = "8" y = "9"/>
+		<appearance id = "PLUMED_BOW" x = "2" y = "23"/>
+		<appearance id = "SIMPLE_BOW" x = "1" y = "23"/>
+		<appearance id = "OBSIDIAN_SWORD" x = "4" y = "23"/>
+		<appearance id = "WOODEN_MACE" x = "3" y = "23"/>
+		<!-- Livestock -->
+		<appearance id = "ATTACK_DOG" x = "1" y = "21"/>
+		<appearance id = "COW" x = "2" y = "21"/>
+		<appearance id = "HORSE" x = "3" y = "21"/>
+		<appearance id = "PIGS" x = "4" y = "21"/>
+		<appearance id = "LLAMA" x = "5" y = "21"/>
+		<!-- Vehicles -->
+		<appearance id = "CARRACK" x = "5" y = "5"/>
+		<appearance id = "CARAVEL" x = "1" y = "5"/>
+		<!-- Corpses -->
+		<appearance id = "DEAD_NATIVE" x = "4" y = "12"/>
+	</appearances>
+	<appearances file = "img/expedition_fog.png" tileWidth = "24" tileHeight = "24">
+		<appearance id = "GRASS_FOG" x = "3" y = "3"/>
+		<appearance id = "PLAINS_FOG" x = "4" y = "3"/>
+		<appearance id = "WATER_SHADOW_FOG" x = "4" y = "20"/>
+		<appearance id = "MOUNTAIN_FOG" x = "5" y = "17"/>
+		<appearance id = "SNOWY_MOUNTAIN_FOG" x = "6" y = "17"/>
+		<appearance id = "FOREST_FOG" x = "2" y = "17"/>
+		<appearance id = "CHOPPED_FOREST_FOG" x = "4" y = "17"/>
+		<appearance id = "PORT_CITY_FOG" x = "11" y = "6"/>
+		<appearance id = "STORM_FOG" x = "1" y = "17"/>
+		<animatedAppearance id = "WATER_FOG" x = "2,2" y = "1,2" delay = "500"/>
+		<animatedAppearance id = "WATER2_FOG" x = "3,3" y = "1,2" delay = "500"/>
+	</appearances>
+</graphicsPack>
