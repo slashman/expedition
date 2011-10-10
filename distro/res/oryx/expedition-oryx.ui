@@ -24,15 +24,15 @@ POS_LEVELDESC_X = 20
 POS_LEVELDESC_Y = 40
 
 
-IMG_STATUSSCR_BGROUND = res/brownbg.png
-BATTLE_BACKGROUND = res/grass-battle.png
-IMG_ICON = res/expedition_icon.gif
-IMG_TITLE = res/title.png
-IMG_BLANK = res/blank.png
-IMG_BLANK2 = res/blank2.png
-IMG_PROLOGUE = res/blank.png
-IMG_SAVED = res/blank.png
-IMG_FRAME = res/blank.png
+IMG_STATUSSCR_BGROUND = brownbg.png
+BATTLE_BACKGROUND = grass-battle.png
+IMG_ICON = expedition_icon.gif
+IMG_TITLE = title.png
+IMG_BLANK = blank.png
+IMG_BLANK2 = blank2.png
+IMG_PROLOGUE = blank.png
+IMG_SAVED = blank.png
+IMG_FRAME = blank.png
 
 
 WINDOW_WIDTH = 800
@@ -45,35 +45,35 @@ COLOR_BORDER_IN = 164,138,68
 COLOR_BORDER_OUT = 52,42,20
 COLOR_BOLD = 163,165,74
 
-IMG_PICKER = res/ui.png
+IMG_PICKER = ui.png
 IMG_PICKER_BOUNDS = 0,48,24,24
-IMG_BORDERS = res/ui.png
+IMG_BORDERS = ui.png
 IMG_BORDERS_BOUNDS = 0,0,133,34
-IMG_GADGETS = res/ui.png
+IMG_GADGETS = ui.png
 IMG_GADGETS_BOUNDS = 48,24,72,24
 
 # Fonts
-FNT_TITLE = res/REDENSEK.TTF
+FNT_TITLE = REDENSEK.TTF
 FNT_TITLE_SIZE = 39
 
-FNT_TEXT = res/REDENSEK.TTF
+FNT_TEXT = REDENSEK.TTF
 FNT_TEXT_SIZE = 26
 
-FNT_MONO = res/REDENSEK.TTF
+FNT_MONO = REDENSEK.TTF
 FNT_MONO_SIZE = 13
 
-FNT_MESSAGEBOX = res/REDENSEK.TTF
+FNT_MESSAGEBOX = REDENSEK.TTF
 FNT_MESSAGEBOX_SIZE = 26
 
-FNT_PERSISTANTMESSAGEBOX = res/REDENSEK.TTF
+FNT_PERSISTANTMESSAGEBOX = REDENSEK.TTF
 FNT_PERSISTANTMESSAGEBOX_SIZE = 26
 
 # Buttons
-BTN_HISTORY = res/historicScenarioButton.png
-BTN_EXPEDITION = res/newExpeditionButton.png
-BTN_CONTINUE = res/continueJourneyButton.png 
-BTN_EXIT = res/exitButton.png
-BTN_OK = res/okButton.png
+BTN_HISTORY = historicScenarioButton.png
+BTN_EXPEDITION = newExpeditionButton.png
+BTN_CONTINUE = continueJourneyButton.png 
+BTN_EXIT = exitButton.png
+BTN_OK = okButton.png
 
 BTN_PEOPLE_BOUNDS = 0,96,24,24
 BTN_SUPPLIES_BOUNDS = 24,96,24,24
@@ -83,10 +83,10 @@ BTN_LIVESTOCK_BOUNDS = 96,96,24,24
 BTN_VEHICLES_BOUNDS = 120,96,24,24
 BTN_CLOSE_BOUNDS = 168,96,24,24
 
-IMG_BOX = res/boxIcon.png
+IMG_BOX = boxIcon.png
 
-IMG_CURSORS = res/ui.png
-IMG_UI = res/ui.png
+IMG_CURSORS = ui.png
+IMG_UI = ui.png
 BTN_SPLIT_UP_BOUNDS = 168,72,24,24
 BTN_SPLIT_DOWN_BOUNDS = 168,48,24,24
 BTN_SPLIT_UP_HOVER_BOUNDS = 192,72,24,24
@@ -138,7 +138,7 @@ BTN_SIZE8_HOVER_BOUNDS = 24,384,240,48
 
 BTN_MOVE_BOUNDS = 120,24,24,24
 
-IMG_SMALL_BUTTON = res/smallButton.png
+IMG_SMALL_BUTTON = smallButton.png
 IMG_SMALL_BUTTON_BACK_BOUNDS = 0,0,36,36
 IMG_SMALL_BUTTON_HOVER_BACK_BOUNDS = 0,36,36,36
 
@@ -156,5 +156,5 @@ IMG_MORALE_0 = 240,432,24,24
 
 
 # The New World
-BTN_THE_NEW_WORLD = res/theNewWorld.png
-IMG_THE_NEW_WORLD_INTRO = res/theNewWorldIntro.png
+BTN_THE_NEW_WORLD = theNewWorld.png
+IMG_THE_NEW_WORLD_INTRO = theNewWorldIntro.png
