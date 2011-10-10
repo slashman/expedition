@@ -7,6 +7,7 @@ import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 
 import javax.sound.midi.MidiUnavailableException;
@@ -22,7 +23,6 @@ import net.slashie.expedition.action.Walk;
 import net.slashie.expedition.action.navigation.Anchor;
 import net.slashie.expedition.action.navigation.ResetDeadReckon;
 import net.slashie.expedition.data.ExpeditionDAO;
-import net.slashie.expedition.data.GFXAppearances;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.game.GameFiles;
@@ -66,9 +66,12 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.consoleUI.ConsoleUISelector;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
 import net.slashie.serf.ui.consoleUI.effects.CharEffectFactory;
+import net.slashie.serf.ui.oryxUI.Assets;
+import net.slashie.serf.ui.oryxUI.GFXAppearances;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
+import net.slashie.serf.ui.oryxUI.UIAssetsLoader;
 import net.slashie.serf.ui.oryxUI.effects.GFXEffectFactory;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.sound.midi.STMidiPlayer;
@@ -76,15 +79,20 @@ import net.slashie.utils.sound.midi.STMidiPlayer;
 import org.apache.commons.httpclient.HttpException;
 
 public class RunExpedition {
-	private final static int JCURSES_CONSOLE = 0, SWING_GFX = 1, SWING_CONSOLE = 2;
+	enum DisplayMode {
+		JCURSES_CONSOLE,
+		SWING_GFX,
+		SWING_CONSOLE
+	}
+	
 	private static final int LAYERS = 6;
-	//private static SystemInterface si;
 	private static UserInterface ui;
 	private static UISelector uiSelector;
 	
 	private static ExpeditionGame currentGame;
 	private static boolean createNew = true;
-	private static int mode;
+	private static DisplayMode mode;
+	private static Assets assets;
 	
 	public static String getConfigurationVal(String key){
 		return configuration.getProperty(key);
@@ -93,7 +101,7 @@ public class RunExpedition {
 	private static void init(){
 		if (createNew){
 			System.out.println("Expedition "+ExpeditionGame.getVersion());
-			System.out.println("Slash ~ 2009-2011");
+			System.out.println("Slashware Interactive ~ 2009-2011");
 			System.out.println("Powered By Serf "+SworeGame.getVersion());
 			System.out.println("Reading configuration");
 	    	readConfiguration();
@@ -102,7 +110,7 @@ public class RunExpedition {
     			switch (mode){
 				case SWING_GFX:
 					System.out.println("Initializing Graphics Appearances");
-					initializeGAppearances();
+					initializeGAppearances(graphicsPackDir, "appearances.xml");
 					break;
 				case JCURSES_CONSOLE:
 				case SWING_CONSOLE:
@@ -119,22 +127,21 @@ public class RunExpedition {
 				initializeCells();
 				initializeBuildings();
 				initializeNPCS();
-				
-				
-				/*initializeMonsters();
-				initializeNPCs();*/
 				initializeFeatures();
 				switch (mode){
 				case SWING_GFX:
 					System.out.println("Initializing Swing GFX System Interface");
 					SwingSystemInterface si = new SwingSystemInterface(LAYERS, false, PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
+					
 					System.out.println("Initializing Oryx GFX User Interface");
+					assets = loadUIAssets(graphicsPackDir);
 					UserInterface.setSingleton(new ExpeditionOryxUI());
+					
 					EffectFactory.setSingleton(new GFXEffectFactory());
 					((GFXEffectFactory)EffectFactory.getSingleton()).setEffects(new GFXEffects().getEffects());
 					ui = UserInterface.getUI();
 					initializeUI(si);
-					ExpeditionDisplay.thus = new OryxExpeditionDisplay(si, UIconfiguration);
+					ExpeditionDisplay.thus = new OryxExpeditionDisplay(si, assets, UIconfiguration);
 					break;
 				case JCURSES_CONSOLE:
 					System.out.println("Initializing JCurses System Interface");
@@ -213,6 +220,10 @@ public class RunExpedition {
 			createNew = false;
     	}
 	}
+	private static Assets loadUIAssets(String graphicsPackDir) {
+		return UIAssetsLoader.getAssets(graphicsPackDir, "uiAssets.xml");
+	}
+
 	private static void initializeStores() {
 		StoreFactory.initializeSingleton(new StoreFactory());
 	}
@@ -221,7 +232,9 @@ public class RunExpedition {
 	private static Properties UIconfiguration;
 	private static Properties keyConfig;
 	private static Properties keyBindings;
-	private static String uiFile;
+	
+	private static String preselectedUIFile;
+	private static String graphicsPackDir;
 	
 	private static void readConfiguration(){
 		configuration = new Properties();
@@ -232,6 +245,11 @@ public class RunExpedition {
 	    	System.exit(-1);
 	    }
 	    
+	    String uiFile = preselectedUIFile;
+	    
+	    if (uiFile == null){
+	    	uiFile = configuration.getProperty("graphicsPack");
+	    }
 	    
 	    keyConfig = new Properties();
 	    try {
@@ -242,9 +260,11 @@ public class RunExpedition {
 	    	System.exit(-1);
 	    }
 	    
-	    if (mode == SWING_GFX){
+	    if (mode == DisplayMode.SWING_GFX){
 		    UIconfiguration = new Properties();
 		    try {
+		    	System.out.println("Loading "+uiFile+" graphics pack.");
+		    	graphicsPackDir = new File(uiFile).getParent();
 		    	UIconfiguration.load(new FileInputStream(uiFile));
 		    } catch (IOException e) {
 		    	System.out.println("Error loading configuration file, please confirm existence of "+uiFile);
@@ -409,16 +429,16 @@ public class RunExpedition {
 		switch (mode){
 		case SWING_GFX:
 			SwingSystemInterface ssi = (SwingSystemInterface)si;
-			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, null);
+			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
 			UserInterface.getUI().showImportantMessage("Thank you for trying out this version of Expedition: The New World.\n\nThis game is in active development, if you like the game please visit http://slashware.net to learn about ways to help us complete it!");
 			if (((ExpeditionOryxUI)ui).promptChat(" Do you want to enable full screen mode?",140,388,520,200)){
 				si = new SwingSystemInterface(LAYERS, true, PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
 				ssi = (SwingSystemInterface)si;
 				System.out.println("Initializing Oryx GFX User Interface");
 				UserInterface.setSingleton(new ExpeditionOryxUI());
-				ExpeditionDisplay.thus = new OryxExpeditionDisplay(ssi, UIconfiguration);
+				ExpeditionDisplay.thus = new OryxExpeditionDisplay(ssi, assets, UIconfiguration);
 				ui = UserInterface.getUI();
-				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, null);
+				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
 			}
 			if (((ExpeditionOryxUI)ui).promptChat("Do you want to check for new versions?",140,388,520,200)){
 				try {
@@ -437,7 +457,7 @@ public class RunExpedition {
 				}
 			}
 			uiSelector = new ExpeditionGFXUISelector();
-			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings);
+			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings, assets);
 			break;
 		case JCURSES_CONSOLE: case SWING_CONSOLE:
 			((ExpeditionConsoleUI)ui).init((ConsoleSystemInterface)si, userCommands, null);
@@ -453,25 +473,18 @@ public class RunExpedition {
 	}
 	
 	public static void main(String args[]){
-		//mode = SWING_GFX;
-		//mode = SWING_CONSOLE;
-		uiFile = "expedition-oryx.ui";
 		if (args!= null && args.length > 0){
 			if (args[0].equalsIgnoreCase("gfx")){
-				mode = SWING_GFX;
+				mode = DisplayMode.SWING_GFX;
 				if (args.length > 1)
-					uiFile = args[1];
-				else
-					uiFile = "expedition-oryx.ui";
+					preselectedUIFile = args[1];
 			}
 			else if (args[0].equalsIgnoreCase("jc"))
-				mode = JCURSES_CONSOLE;
+				mode = DisplayMode.JCURSES_CONSOLE;
 			else if (args[0].equalsIgnoreCase("sc"))
-				mode = SWING_CONSOLE;
+				mode = DisplayMode.SWING_CONSOLE;
 		} else {
-			mode = SWING_GFX;
-			uiFile = "expedition-oryx.ui";
-
+			mode = DisplayMode.SWING_GFX;
 		}
 		
 		init();
@@ -512,10 +525,10 @@ public class RunExpedition {
 			throw new RuntimeException("Error reading field : "+fieldName);
 		}
 	}
-	private static void initializeGAppearances(){
-		Appearance[] definitions = GFXAppearances.getGFXAppearances();
-		for (int i=0; i<definitions.length; i++){
-			AppearanceFactory.getAppearanceFactory().addDefinition(definitions[i]);
+	private static void initializeGAppearances(String graphicsPackPath, String graphicsPackXMLFile){
+		List<Appearance> definitions = GFXAppearances.getGFXAppearances(graphicsPackPath, graphicsPackXMLFile);
+		for (Appearance definition: definitions){
+			AppearanceFactory.getAppearanceFactory().addDefinition(definition);
 		}
 	}
 	

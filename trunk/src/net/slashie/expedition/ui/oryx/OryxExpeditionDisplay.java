@@ -1,10 +1,7 @@
 package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -12,16 +9,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JTextArea;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
@@ -33,11 +27,10 @@ import net.slashie.expedition.ui.CommonUI;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.serf.game.SworeGame;
-import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.serf.ui.oryxUI.AddornedBorderTextArea;
+import net.slashie.serf.ui.oryxUI.Assets;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
-import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.PropertyFilters;
@@ -50,51 +43,22 @@ import net.slashie.utils.swing.SimpleGFXMenuItem;
 
 public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	private SwingSystemInterface si;
-	
-	private String IMG_TITLE;
-	private String IMG_BLANK;
-	public static Font FNT_TEXT;
-	public static Font FNT_TITLE;
-	public static Font FNT_DIALOGUEIN;
-	public static Font FNT_MONO;
-	private static BufferedImage IMG_PICKER;
-	private static BufferedImage IMG_BORDERS;
-	private static Properties uiProperties;
-	public static Color COLOR_BOLD;
-	private Cursor HAND_CURSOR;
-	
-	private void initProperties(Properties p){
-		uiProperties = p;
-		IMG_TITLE = p.getProperty("IMG_TITLE");
-		IMG_BLANK = p.getProperty("IMG_BLANK");
-		COLOR_BOLD = PropertyFilters.getColor(p.getProperty("COLOR_BOLD"));
-		HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
-		try {
-			IMG_PICKER = PropertyFilters.getImage(p.getProperty("IMG_PICKER"), p.getProperty("IMG_PICKER_BOUNDS"));
-			IMG_BORDERS = PropertyFilters.getImage(p.getProperty("IMG_BORDERS"), p.getProperty("IMG_BORDERS_BOUNDS"));
-			FNT_TITLE = PropertyFilters.getFont(p.getProperty("FNT_TITLE"), p.getProperty("FNT_TITLE_SIZE"));
-			FNT_TEXT = PropertyFilters.getFont(p.getProperty("FNT_TEXT"), p.getProperty("FNT_TEXT_SIZE"));
-			FNT_DIALOGUEIN  = FNT_TEXT;
-			FNT_MONO = PropertyFilters.getFont(p.getProperty("FNT_MONO"), p.getProperty("FNT_MONO_SIZE"));
-		} catch (FontFormatException ffe){
-			SworeGame.crash("Error loading the font", ffe);
-		} catch (IOException ioe){
-			SworeGame.crash("Error loading the font", ioe);
-		} catch (Exception e){
-			SworeGame.crash("Error loading images", e);
-		}
-	}
-	
-	private AddornedBorderTextArea addornedTextArea;
 
-	public OryxExpeditionDisplay(SwingSystemInterface si, Properties p){
-		initProperties(p);
+	private AddornedBorderTextArea addornedTextArea;
+	
+	public static Color COLOR_BOLD;
+	private Assets assets;
+
+	public OryxExpeditionDisplay(SwingSystemInterface si, Assets assets, Properties p){
+		this.assets = assets;
+		COLOR_BOLD = PropertyFilters.getColor(p.getProperty("COLOR_BOLD"));
+		BufferedImage IMG_BORDERS = (BufferedImage) assets.getImageAsset("IMG_BORDERS");
+		
 		this.si = si;
 		try {
-			//BufferedImage BORDERS = ImageUtils.createImage(IMG_BORDERS);
 			int tileSize = PropertyFilters.inte(p.getProperty("TILE_SIZE"));
 			
-			BufferedImage BORDER1 = ImageUtils.crearImagen(IMG_BORDERS, tileSize,0,tileSize,tileSize);
+			BufferedImage BORDER1 = ImageUtils.createImage(IMG_BORDERS, tileSize,0,tileSize,tileSize);
 			BufferedImage BORDER2 = ImageUtils.crearImagen(IMG_BORDERS, 0,0,tileSize,tileSize);
 			BufferedImage BORDER3 = ImageUtils.crearImagen(IMG_BORDERS, tileSize*3,0,tileSize,tileSize);
 			BufferedImage BORDER4 = ImageUtils.crearImagen(IMG_BORDERS, tileSize*2,0, tileSize,tileSize);
@@ -113,7 +77,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			addornedTextArea.setEnabled(false);
 			addornedTextArea.setForeground(Color.WHITE);
 			addornedTextArea.setBackground(Color.BLACK);
-			addornedTextArea.setFont(FNT_DIALOGUEIN);
+			addornedTextArea.setFont(assets.getFontAsset("FNT_DIALOGUE"));
 			addornedTextArea.setOpaque(false);
 		}
 		 catch (Exception e){
@@ -128,13 +92,11 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		oui.persistantMessageBox.setVisible(false);
 		ExpeditionMusicManager.playTune("TITLE");
 		
-		si.setFont(0, FNT_TEXT);
-		si.setCursor(GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4));
-
-		si.drawImage(0, IMG_TITLE);
+		si.setFont(0, assets.getFontAsset("FNT_TEXT"));
+		si.setCursor(assets.getCursorAsset("HAND_CURSOR"));
+		si.drawImage(0, getImageAsset("IMG_TITLE"));
 		si.printAtPixel(0, 30, 550, "Version "+ExpeditionGame.getVersion()+", ", Color.WHITE);
 		si.printAtPixel(0, 30, 568, "A production of Slashware Interactive 2009-2011", Color.WHITE);
-		
    	
     	// Read the license info 
     	LicenseInfo licenseInfo = GameFiles.getLicenseInfo();
@@ -257,17 +219,15 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 	}
 	
+	private Image getImageAsset(String assetId) {
+		return assets.getImageAsset(assetId);
+	}
+
 	public int selectScenario(){
-		si.drawImage(0, uiProperties.getProperty("IMG_BLANK2"));
+		si.drawImage(0, assets.getImageAsset("IMG_SCENARIO_SELECTION"));
 		si.print(0, 24, 100, "Please select an scenario", COLOR_BOLD);
 		
-		Image image = null;
-		try {
-			image = ImageUtils.createImage(uiProperties.getProperty("BTN_THE_NEW_WORLD"));
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-		CleanButton theNewWorldButton = new CleanButton(image, HAND_CURSOR);
+		CleanButton theNewWorldButton = new CleanButton(assets.getImageAsset("BTN_THE_NEW_WORLD"), assets.getCursorAsset("HAND_CURSOR"));
 		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
 		ExpeditionCleanButton useButton = new ExpeditionCleanButton(2, "Use");
 		useButton.setLocation(622,291);
@@ -314,7 +274,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 			public void actionPerformed(ActionEvent ev2) {
 				int xstart = 3;
 				int ystart = 5;
-				si.drawImage(0, uiProperties.getProperty("IMG_BLANK2"));
+				si.drawImage(0, assets.getImageAsset("IMG_SCENARIO_SELECTION"));
 				si.print(0, xstart, ystart + 1, "The New World", COLOR_BOLD);
 				si.print(0, xstart+3, ystart + 2, "Official Scenario by Slashware Interactive", Color.WHITE);
 				si.print(0, xstart, ystart + 3, "Date", COLOR_BOLD);
@@ -365,7 +325,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public void showIntro(Expedition e){
-		si.drawImage(0, uiProperties.getProperty("IMG_THE_NEW_WORLD_INTRO"));
+		si.drawImage(0, assets.getImageAsset("IMG_THE_NEW_WORLD_INTRO"));
 		si.commitLayer(0);
 		String message = CommonUI.getIntroText();
 		message = message.replaceAll("XXX", "\n");
@@ -425,7 +385,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public int showSavedGames(File[] saveFiles){
-		si.drawImage(0, IMG_BLANK);
+		si.drawImage(0, assets.getImageAsset("IMG_RESTORE_GAME"));
 		
 		if (saveFiles == null || saveFiles.length == 0){
 			
@@ -522,29 +482,9 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.loadLayer(0);
 	}
 
-	public static JTextArea createTempArea(int xpos, int ypos, int w, int h){
-		JTextArea ret = new JTextArea();
-		ret.setOpaque(false);
-		ret.setForeground(Color.WHITE);
-		ret.setVisible(true);
-		ret.setEditable(false);
-		ret.setFocusable(false);
-		ret.setBounds(xpos, ypos, w, h);
-		ret.setLineWrap(true);
-		ret.setWrapStyleWord(true);
-		ret.setFont(FNT_TEXT);
-		return ret;
-	}
-	
 	@Override
 	public Expedition createExpedition(ExpeditionGame game) {
-		Image image = null;
-		try {
-			image = ImageUtils.createImage(uiProperties.getProperty("BTN_THE_NEW_WORLD"));
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		}
-		si.drawImage(0, 560, 15, image);
+		si.drawImage(0, 560, 15, assets.getImageAsset("BTN_THE_NEW_WORLD"));
 
 		ExpeditionCleanButton okButton = new ExpeditionCleanButton(4, "Ok");
 		okButton.setLocation(350, 495);

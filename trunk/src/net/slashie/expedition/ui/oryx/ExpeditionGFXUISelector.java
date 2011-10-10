@@ -24,6 +24,7 @@ import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.action.Message;
 import net.slashie.serf.ui.UserAction;
+import net.slashie.serf.ui.oryxUI.Assets;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
@@ -62,41 +63,38 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	@Override
 	public void init(SwingSystemInterface psi, UserAction[] gameActions,
 			Properties uiProperties, Action advance, Action target,
-			Action attack, GFXUserInterface ui, Properties keyBindings) {
-		super.init(psi, gameActions, uiProperties, advance, target, attack, ui, keyBindings);
-		HAND_CURSOR = GFXUserInterface.createCursor(uiProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
+			Action attack, GFXUserInterface ui, Properties keyBindings, Assets assets) {
+		super.init(psi, gameActions, uiProperties, advance, target, attack, ui, keyBindings, assets);
+		HAND_CURSOR = assets.getCursorAsset("HAND_CURSOR");
 		
-		try {
-			Image smallButtonBack = PropertyFilters.getImage(uiProperties.getProperty("IMG_SMALL_BUTTON"), uiProperties.getProperty("IMG_SMALL_BUTTON_BACK_BOUNDS"));
-			Image smallButtonHover = PropertyFilters.getImage(uiProperties.getProperty("IMG_SMALL_BUTTON"), uiProperties.getProperty("IMG_SMALL_BUTTON_HOVER_BACK_BOUNDS"));
-
-			
-			buildButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_BUILD_BOUNDS")), HAND_CURSOR);
-			dropButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DROP_BOUNDS")), HAND_CURSOR);
-			inventoryButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_INVENTORY_BOUNDS")), HAND_CURSOR);
-			lookButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_LOOK_BOUNDS")), HAND_CURSOR);
-			
-			armImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ARM_BOUNDS"));
-			mountImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MOUNT_BOUNDS"));
-			unmountImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_UNMOUNT_BOUNDS"));
-			disarmImage = PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_DISARM_BOUNDS"));
-			
-			armButton = new CleanButton(smallButtonBack, smallButtonHover, armImage, HAND_CURSOR);			
-			mountButton = new CleanButton(smallButtonBack, smallButtonHover, mountImage, HAND_CURSOR);
-			
-			repairButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_REPAIR_BOUNDS")), HAND_CURSOR);
-			resetButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_RESET_BOUNDS")), HAND_CURSOR);
-			chopButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_CHOP_BOUNDS")), HAND_CURSOR);
-			anchorButton = new CleanButton(smallButtonBack, smallButtonHover, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_ANCHOR_BOUNDS")), HAND_CURSOR);
-			
-			musicButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MUSIC_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_MUSIC_BOUNDS")), HAND_CURSOR);
-			sfxButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SFX_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SFX_BOUNDS")), HAND_CURSOR);
-			saveButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_SAVE_BOUNDS")), HAND_CURSOR);
-			quitButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_QUIT_BOUNDS")), HAND_CURSOR);
-			logButton = new CleanButton(null, PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_LOG_BOUNDS")), PropertyFilters.getImage(uiProperties.getProperty("IMG_UI"), uiProperties.getProperty("BTN_LOG_BOUNDS")), HAND_CURSOR);
-		} catch (IOException e) {
-			ExpeditionGame.crash("Error loading buttons", e);
-		}
+		
+		Image smallButtonBack = assets.getImageAsset("IMG_SMALL_BUTTON_BACK");
+		Image smallButtonHover = assets.getImageAsset("IMG_SMALL_BUTTON_HOVER_BACK");
+		
+		buildButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_BUILD"), HAND_CURSOR);
+		dropButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_DROP"), HAND_CURSOR);
+		inventoryButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_INVENTORY"), HAND_CURSOR);
+		lookButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_LOOK"), HAND_CURSOR);
+		
+		armImage = assets.getImageAsset("BTN_ARM");
+		mountImage = assets.getImageAsset("BTN_MOUNT");
+		unmountImage = assets.getImageAsset("BTN_UNMOUNT");
+		disarmImage = assets.getImageAsset("BTN_DISARM");
+		
+		armButton = new CleanButton(smallButtonBack, smallButtonHover, armImage, HAND_CURSOR);			
+		mountButton = new CleanButton(smallButtonBack, smallButtonHover, mountImage, HAND_CURSOR);
+		
+		repairButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_REPAIR"), HAND_CURSOR);
+		resetButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_RESET"), HAND_CURSOR);
+		chopButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_CHOP"), HAND_CURSOR);
+		anchorButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_ANCHOR"), HAND_CURSOR);
+		
+		musicButton = new CleanButton(null, assets.getImageAsset("BTN_MUSIC"), assets.getImageAsset("BTN_MUSIC"), HAND_CURSOR);
+		sfxButton = new CleanButton(null, assets.getImageAsset("BTN_SFX"), assets.getImageAsset("BTN_SFX"), HAND_CURSOR);
+		saveButton = new CleanButton(null, assets.getImageAsset("BTN_SAVE"), assets.getImageAsset("BTN_SAVE"), HAND_CURSOR);
+		quitButton = new CleanButton(null, assets.getImageAsset("BTN_QUIT"), assets.getImageAsset("BTN_QUIT"), HAND_CURSOR);
+		logButton = new CleanButton(null, assets.getImageAsset("BTN_LOG"), assets.getImageAsset("BTN_LOG"), HAND_CURSOR);
+		
 		
 		armButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("ARM_EXPEDITION_KEY")));
 		buildButton.addActionListener(getStringCallBackActionListener(selectionHandler, "KEY:"+keyBindings.getProperty("BUILD_SETTLEMENT_KEY")));

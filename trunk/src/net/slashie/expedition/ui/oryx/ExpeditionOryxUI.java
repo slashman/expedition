@@ -2,7 +2,6 @@ package net.slashie.expedition.ui.oryx;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,6 +65,7 @@ import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.CommandListener;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
+import net.slashie.serf.ui.oryxUI.Assets;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
@@ -108,7 +107,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	public static Color TITLE_COLOR = new Color(224,226,108);
 	public static Color TEXT_COLOR = Color.WHITE;
-	private Image BATTLE_BACKGROUND;
 	public static Image BTN_SPLIT_UP;
 	public static Image BTN_SPLIT_DOWN;
 	public static Image BTN_SPLIT_UP_HOVER;
@@ -137,7 +135,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image IMG_SMALL_BUTTON_HOVER_BACK;
 	public static Image[] MORALE_IMAGES;
 	
-	private BufferedImage IMG_BOX;
+	private Image IMG_BOX;
 	public static Cursor HAND_CURSOR;
 	public static Cursor POINTER_CURSOR;
 	private SimplifiedUnitGFXMenuItem mainUnitMenuItem;
@@ -1018,35 +1016,24 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.drawImage(getUILayer(), 774, 2, BTN_MOVE);
 	}
 	
-
-
 	@SuppressWarnings("serial")
-	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Action target){
-		super.init(psi, title, gameCommands, UIProperties, target);
-		ExpeditionCleanButton.init(si, UIProperties);
+	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Assets assets, Action target){
+		super.init(psi, title, gameCommands, UIProperties, assets, target);
+		ExpeditionCleanButton.init(si, assets);
 		
-		try {
-			FNT_TEXT = PropertyFilters.getFont(UIProperties.getProperty("FNT_TEXT"), UIProperties.getProperty("FNT_TEXT_SIZE"));
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (FontFormatException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		psi.setFont(getUILayer(), FNT_TEXT);
-		psi.setFont(getMapLayer(), FNT_TEXT);
+		psi.setFont(getUILayer(), getFontAsset("FNT_TEXT"));
+		psi.setFont(getMapLayer(), getFontAsset("FNT_TEXT"));
 		
 		JLabel legendLabel = new JLabel();
-		legendLabel.setFont(FNT_TEXT);
+		legendLabel.setFont(getFontAsset("FNT_TEXT"));
 		legendLabel.setVisible(false);
 		legendLabel.setForeground(Color.WHITE);
 		legendLabel.setSize(800,15);
 		si.add(legendLabel);
 		CleanButton.init(legendLabel, si);
 		
-		HAND_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 2, 10, 4);
-		POINTER_CURSOR = GFXUserInterface.createCursor(UIProperties.getProperty("IMG_CURSORS"), 6, 3, 4, 4);
+		HAND_CURSOR = getCursorAsset("HAND_CURSOR");
+		POINTER_CURSOR = getCursorAsset("POINTER_CURSOR");
 
 		unitsMenuBox = new GridBox(si, 42, 42, 5, 5){;
 			@Override
@@ -1074,45 +1061,38 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		};
 		vehiclesMenuBox.setLocation(640,418-54);
 		
-		//unitsMenuBox.setTitle("Expedition");
-  		try {
-			BATTLE_BACKGROUND = ImageUtils.createImage(UIProperties.getProperty("BATTLE_BACKGROUND"));
-			BTN_SPLIT_UP = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_UP_BOUNDS"));
-			BTN_SPLIT_DOWN = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_DOWN_BOUNDS"));
-			BTN_SPLIT_UP_HOVER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_UP_HOVER_BOUNDS"));
-			BTN_SPLIT_DOWN_HOVER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_DOWN_HOVER_BOUNDS"));
-			
-			BTN_SPLIT_LEFT = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_LEFT_BOUNDS"));
-			BTN_SPLIT_RIGHT = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_RIGHT_BOUNDS"));
-			BTN_SPLIT_LEFT_HOVER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_LEFT_HOVER_BOUNDS"));
-			BTN_SPLIT_RIGHT_HOVER = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_RIGHT_HOVER_BOUNDS"));
-			
-			BTN_SPLIT_LEFT_ALL = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_LEFT_ALL_BOUNDS"));
-			BTN_SPLIT_RIGHT_ALL = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_RIGHT_ALL_BOUNDS"));
-			BTN_SPLIT_LEFT_HOVER_ALL = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_LEFT_ALL_HOVER_BOUNDS"));
-			BTN_SPLIT_RIGHT_HOVER_ALL = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SPLIT_RIGHT_ALL_HOVER_BOUNDS"));
-			
-			BTN_MOVE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_MOVE_BOUNDS"));
-			IMG_BOX = ImageUtils.createImage(UIProperties.getProperty("IMG_BOX"));
-			
-			BTN_PEOPLE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_PEOPLE_BOUNDS"));
-			BTN_SUPPLIES = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_SUPPLIES_BOUNDS"));
-			BTN_MERCHANDISE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_MERCHANDISE_BOUNDS"));
-			BTN_WEAPONS = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_WEAPONS_BOUNDS"));
-			BTN_LIVESTOCK = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_LIVESTOCK_BOUNDS"));
-			BTN_VEHICLES = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_VEHICLES_BOUNDS"));
-			BTN_CLOSE = PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("BTN_CLOSE_BOUNDS"));
-			
-			IMG_SMALL_BUTTON_BACK = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_BACK_BOUNDS"));
-			IMG_SMALL_BUTTON_HOVER_BACK = PropertyFilters.getImage(UIProperties.getProperty("IMG_SMALL_BUTTON"), UIProperties.getProperty("IMG_SMALL_BUTTON_HOVER_BACK_BOUNDS"));
-			
-			MORALE_IMAGES = new Image[11];
-			for (int i = 0; i <= 10; i++){
-				MORALE_IMAGES[i]= PropertyFilters.getImage(UIProperties.getProperty("IMG_UI"), UIProperties.getProperty("IMG_MORALE_"+i));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			ExpeditionGame.crash("Error loading images", e);
+		BTN_SPLIT_UP = assets.getImageAsset("BTN_SPLIT_UP");
+		BTN_SPLIT_DOWN = assets.getImageAsset("BTN_SPLIT_DOWN");
+		BTN_SPLIT_UP_HOVER = assets.getImageAsset("BTN_SPLIT_UP_HOVER");
+		BTN_SPLIT_DOWN_HOVER = assets.getImageAsset("BTN_SPLIT_DOWN_HOVER");
+		
+		BTN_SPLIT_LEFT = assets.getImageAsset("BTN_SPLIT_LEFT");
+		BTN_SPLIT_RIGHT = assets.getImageAsset("BTN_SPLIT_RIGHT");
+		BTN_SPLIT_LEFT_HOVER = assets.getImageAsset("BTN_SPLIT_LEFT_HOVER");
+		BTN_SPLIT_RIGHT_HOVER = assets.getImageAsset("BTN_SPLIT_RIGHT_HOVER");
+		
+		BTN_SPLIT_LEFT_ALL = assets.getImageAsset("BTN_SPLIT_LEFT_ALL");
+		BTN_SPLIT_RIGHT_ALL = assets.getImageAsset("BTN_SPLIT_RIGHT_ALL");
+		BTN_SPLIT_LEFT_HOVER_ALL = assets.getImageAsset("BTN_SPLIT_LEFT_HOVER_ALL");
+		BTN_SPLIT_RIGHT_HOVER_ALL = assets.getImageAsset("BTN_SPLIT_RIGHT_HOVER_ALL");
+		
+		BTN_MOVE = assets.getImageAsset("BTN_MOVE");
+		
+		BTN_PEOPLE = assets.getImageAsset("BTN_PEOPLE");
+		BTN_SUPPLIES = assets.getImageAsset("BTN_SUPPLIES");
+		BTN_MERCHANDISE = assets.getImageAsset("BTN_MERCHANDISE");
+		BTN_WEAPONS = assets.getImageAsset("BTN_WEAPONS");
+		BTN_LIVESTOCK = assets.getImageAsset("BTN_LIVESTOCK");
+		BTN_VEHICLES = assets.getImageAsset("BTN_VEHICLES");
+		BTN_CLOSE = assets.getImageAsset("BTN_CLOSE");
+		
+		IMG_BOX = assets.getImageAsset("IMG_BOX");
+		IMG_SMALL_BUTTON_BACK = assets.getImageAsset("IMG_SMALL_BUTTON_BACK");
+		IMG_SMALL_BUTTON_HOVER_BACK = assets.getImageAsset("IMG_SMALL_BUTTON_HOVER_BACK");
+		
+		MORALE_IMAGES = new Image[11];
+		for (int i = 0; i <= 10; i++){
+			MORALE_IMAGES[i]= assets.getImageAsset("IMG_MORALE_"+i);
 		}
 		
 		HORSES_ITEM = ItemFactory.createItem("HORSE");
@@ -1124,26 +1104,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	
 	private BlockingQueue<String> sfxQueue;
-	
-	private int readQuantity(int x, int y, String spaces, int inputLength){
-		int quantity = -1;
-		while (quantity == -1){
-			si.print(getUILayer(), x,y,spaces);
-			si.commitLayer(getUILayer());
-			String strInput = si.input(getUILayer(), x,y,TEXT_COLOR,inputLength);
-			if (strInput == null)
-				continue;
-			strInput = strInput.trim();
-			try {
-				quantity = Integer.parseInt(strInput);
-			}catch (NumberFormatException e) {
-			}
-			if (quantity < 0)
-				quantity = -1;
-		}
-		return quantity;
-	}
-	
+		
 	@Override
 	public void showBattleScene(String battleTitle, List<Equipment> attackingUnits,
 			List<Equipment> defendingUnits) {
@@ -1189,7 +1150,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		int xBase = 192;
 		int yBase = 48;
-		si.drawImage(getUILayer(), 168, yBase - 24, BATTLE_BACKGROUND);
+		si.drawImage(getUILayer(), 168, yBase - 24, getImageAsset("BATTLE_BACKGROUND"));
 		int gridX = 0;
 		int gridY = 0;
 		for (Equipment equipment: attackingUnits){
