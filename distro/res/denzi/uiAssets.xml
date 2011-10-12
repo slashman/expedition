@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uiAssets>
+	<image id = "IMG_ICON" file = "img/expedition_icon.gif"/>
+	<image id = "IMG_STATUSSCR_BGROUND" file = "img/brownbg.png"/>
+	<image id = "BATTLE_BACKGROUND" file = "img/grass-battle.png"/>
+	<image id = "IMG_SCENARIO_SELECTION" file = "img/blank2.png"/>
+	<image id = "IMG_RESTORE_GAME" file = "img/blank.png"/>
+	<image id = "IMG_BOX" file = "img/boxIcon.png"/>
+	<image id = "IMG_TITLE" file = "img/title.png"/>
+	<image id = "BTN_THE_NEW_WORLD" file = "img/theNewWorld.png"/>
+	<image id = "IMG_THE_NEW_WORLD_INTRO" file = "img/theNewWorldIntro.png"/>
+	
+	<font id = "FNT_TEXT" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "26"/>
+	<font id = "FNT_MESSAGEBOX" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "26"/>
+	<font id = "FNT_PERSISTANTMESSAGEBOX" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "26"/>
+	<font id = "FNT_DIALOGUE" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "26"/>
+	
+	<cursor id = "HAND_CURSOR" file = "img/DenziUI.png" x = "0" y = "0" width = "16" height = "16" hotX = "4" hotY = "4"/>
+	<cursor id = "POINTER_CURSOR" file = "img/DenziUI.png" x = "16" y = "0" width = "16" height = "16" hotX = "0" hotY = "0"/>
+	<cursor id = "LOOK_CURSOR" file = "img/DenziUI.png" x = "32" y = "0" width = "16" height = "16" hotX = "8" hotY = "8"/>
+	
+	<cursor id = "QUADRANT_0_CURSOR" file = "img/DenziUI.png" x = "48" y = "0" hotX = "0" hotY = "0" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_1_CURSOR" file = "img/DenziUI.png" x = "64" y = "0" hotX = "8" hotY = "0" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_2_CURSOR" file = "img/DenziUI.png" x = "80" y = "0" hotX = "15" hotY = "0" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_3_CURSOR" file = "img/DenziUI.png" x = "96" y = "0" hotX = "15" hotY = "8" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_4_CURSOR" file = "img/DenziUI.png" x = "112" y = "0" hotX = "8" hotY = "8" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_5_CURSOR" file = "img/DenziUI.png" x = "128" y = "0" hotX = "15" hotY = "15" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_6_CURSOR" file = "img/DenziUI.png" x = "144" y = "0" hotX = "8" hotY = "15" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_7_CURSOR" file = "img/DenziUI.png" x = "160" y = "0" hotX = "0" hotY = "15" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_8_CURSOR" file = "img/DenziUI.png" x = "172" y = "0" hotX = "0" hotY = "8" width = "16" height = "16"/>
+	
+	<tileSet file = "img/DenziDenziUI.png">
+		<!-- Buttons -->
+		<image id = "IMG_SMALL_BUTTON_BACK" bounds = "0,32,32,32"/>
+		<image id = "BTN_SIZE2" bounds = "64,32,64,32"/>
+		<image id = "BTN_SIZE3" bounds = "192,32,96,32"/>
+		<image id = "BTN_SIZE4" bounds = "0,64,128,32"/>
+		<image id = "BTN_SIZE8" bounds = "0,96,256,32"/>
+
+		<image id = "IMG_SMALL_BUTTON_HOVER_BACK" bounds = "32,32,32,32"/>		
+		<image id = "BTN_SIZE2_HOVER" bounds = "128,32,64,32"/>
+		<image id = "BTN_SIZE3_HOVER" bounds = "288,32,96,32"/>
+		<image id = "BTN_SIZE4_HOVER" bounds = "128,64,128,32"/>
+		<image id = "BTN_SIZE8_HOVER" bounds = "256,96,256,32"/>
+		
+		<image id = "BTN_SPLIT_UP" bounds = "0,16,16,16"/>
+		<image id = "BTN_SPLIT_DOWN" bounds = "32,16,16,16"/>
+		<image id = "BTN_SPLIT_UP_HOVER" bounds = "16,16,16,16"/>
+		<image id = "BTN_SPLIT_DOWN_HOVER" bounds = "48,16,16,16"/>
+
+		<image id = "BTN_SPLIT_LEFT" bounds = "64,16,16,16"/>
+		<image id = "BTN_SPLIT_RIGHT" bounds = "96,16,16,16"/>
+		<image id = "BTN_SPLIT_LEFT_HOVER" bounds = "80,16,16,16"/>
+		<image id = "BTN_SPLIT_RIGHT_HOVER" bounds = "112,16,16,16"/>
+
+		<image id = "BTN_SPLIT_LEFT_ALL" bounds = "0,128,32,16"/>
+		<image id = "BTN_SPLIT_RIGHT_ALL" bounds = "64,128,32,16"/>
+		<image id = "BTN_SPLIT_LEFT_HOVER_ALL" bounds = "32,128,32,16"/>
+		<image id = "BTN_SPLIT_RIGHT_HOVER_ALL" bounds = "96,128,32,16"/>
+
+		<image id = "BTN_YES" bounds = "256,64,64,32"/>
+		<image id = "BTN_NO" bounds = "384,64,64,32"/>
+		<image id = "BTN_YES_HOVER" bounds = "320,64,64,32"/>
+		<image id = "BTN_NO_HOVER" bounds = "448,64,64,32"/>
+
+		<image id = "BTN_ARM" bounds = "0,160,32,32"/>
+		<image id = "BTN_BUILD" bounds = "32,160,32,32"/>
+		<image id = "BTN_DROP" bounds = "64,160,32,32"/>
+		<image id = "BTN_INVENTORY" bounds = "96,160,32,32"/>
+		<image id = "BTN_LOOK" bounds = "128,160,32,32"/>
+		<image id = "BTN_MOUNT" bounds = "160,160,32,32"/>
+		<image id = "BTN_REPAIR" bounds = "192,160,32,32"/>
+		<image id = "BTN_RESET" bounds = "224,160,32,32"/>
+		<image id = "BTN_CHOP" bounds = "256,160,32,32"/>
+		<image id = "BTN_MUSIC" bounds = "288,160,32,32"/>
+		<image id = "BTN_SFX" bounds = "320,160,32,32"/>
+		<image id = "BTN_SAVE" bounds = "352,160,32,32"/>
+		<image id = "BTN_QUIT" bounds = "384,160,32,32"/>
+		<image id = "BTN_LOG" bounds = "416,160,32,32"/>
+
+		<image id = "BTN_DISARM" bounds = "448,160,32,32"/>
+		<image id = "BTN_UNMOUNT" bounds = "480,160,32,32"/>
+		<image id = "BTN_ANCHOR" bounds = "512,160,32,32"/>
+
+		<image id = "BTN_MOVE" bounds = "32,0,16,16"/>
+
+		<image id = "BTN_PEOPLE" bounds = "0,192,32,32"/>
+		<image id = "BTN_SUPPLIES" bounds = "32,192,32,32"/>
+		<image id = "BTN_MERCHANDISE" bounds = "64,192,32,32"/>
+		<image id = "BTN_WEAPONS" bounds = "96,192,32,32"/>
+		<image id = "BTN_LIVESTOCK" bounds = "128,192,32,32"/>
+		<image id = "BTN_VEHICLES" bounds = "160,192,32,32"/>
+		<image id = "BTN_CLOSE" bounds = "192,192,32,32"/>
+		
+		<image id = "IMG_BORDERS" bounds = "0,224,128,32"/>
+		
+		<image id = "TILE_LINE_AIM" bounds = "32,0,16,16"/>
+		<image id = "TILE_SCAN" bounds = "32,0,16,16"/>
+		<image id = "TILE_LINE_STEPS" bounds = "192,0,16,16"/>
+		
+		<image id = "IMG_MORALE_10" bounds = "224,0,16,16"/>
+		<image id = "IMG_MORALE_9" bounds = "240,0,16,16"/>
+		<image id = "IMG_MORALE_8" bounds = "256,0,16,16"/>
+		<image id = "IMG_MORALE_7" bounds = "272,0,16,16"/>
+		<image id = "IMG_MORALE_6" bounds = "288,0,16,16"/>
+		<image id = "IMG_MORALE_5" bounds = "304,0,16,16"/>
+		<image id = "IMG_MORALE_4" bounds = "320,0,16,16"/>
+		<image id = "IMG_MORALE_3" bounds = "336,0,16,16"/>
+		<image id = "IMG_MORALE_2" bounds = "352,0,16,16"/>
+		<image id = "IMG_MORALE_1" bounds = "368,0,16,16"/>
+		<image id = "IMG_MORALE_0" bounds = "384,0,16,16"/>
+	</tileSet>
+</uiAssets>
