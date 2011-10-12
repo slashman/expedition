@@ -10,10 +10,10 @@
 	<image id = "BTN_THE_NEW_WORLD" file = "img/theNewWorld.png"/>
 	<image id = "IMG_THE_NEW_WORLD_INTRO" file = "img/theNewWorldIntro.png"/>
 	
-	<font id = "FNT_TEXT" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "26"/>
-	<font id = "FNT_MESSAGEBOX" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "26"/>
-	<font id = "FNT_PERSISTANTMESSAGEBOX" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "26"/>
-	<font id = "FNT_DIALOGUE" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "26"/>
+	<font id = "FNT_TEXT" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "18"/>
+	<font id = "FNT_MESSAGEBOX" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "18"/>
+	<font id = "FNT_PERSISTANTMESSAGEBOX" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "18"/>
+	<font id = "FNT_DIALOGUE" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "18"/>
 	
 	<cursor id = "HAND_CURSOR" file = "img/DenziUI.png" x = "0" y = "0" width = "16" height = "16" hotX = "4" hotY = "4"/>
 	<cursor id = "POINTER_CURSOR" file = "img/DenziUI.png" x = "16" y = "0" width = "16" height = "16" hotX = "0" hotY = "0"/>
@@ -22,14 +22,14 @@
 	<cursor id = "QUADRANT_0_CURSOR" file = "img/DenziUI.png" x = "48" y = "0" hotX = "0" hotY = "0" width = "16" height = "16"/>
 	<cursor id = "QUADRANT_1_CURSOR" file = "img/DenziUI.png" x = "64" y = "0" hotX = "8" hotY = "0" width = "16" height = "16"/>
 	<cursor id = "QUADRANT_2_CURSOR" file = "img/DenziUI.png" x = "80" y = "0" hotX = "15" hotY = "0" width = "16" height = "16"/>
-	<cursor id = "QUADRANT_3_CURSOR" file = "img/DenziUI.png" x = "96" y = "0" hotX = "15" hotY = "8" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_3_CURSOR" file = "img/DenziUI.png" x = "96" y = "0" hotX = "0" hotY = "8" width = "16" height = "16"/>
 	<cursor id = "QUADRANT_4_CURSOR" file = "img/DenziUI.png" x = "112" y = "0" hotX = "8" hotY = "8" width = "16" height = "16"/>
-	<cursor id = "QUADRANT_5_CURSOR" file = "img/DenziUI.png" x = "128" y = "0" hotX = "15" hotY = "15" width = "16" height = "16"/>
-	<cursor id = "QUADRANT_6_CURSOR" file = "img/DenziUI.png" x = "144" y = "0" hotX = "8" hotY = "15" width = "16" height = "16"/>
-	<cursor id = "QUADRANT_7_CURSOR" file = "img/DenziUI.png" x = "160" y = "0" hotX = "0" hotY = "15" width = "16" height = "16"/>
-	<cursor id = "QUADRANT_8_CURSOR" file = "img/DenziUI.png" x = "172" y = "0" hotX = "0" hotY = "8" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_5_CURSOR" file = "img/DenziUI.png" x = "128" y = "0" hotX = "15" hotY = "8" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_6_CURSOR" file = "img/DenziUI.png" x = "144" y = "0" hotX = "0" hotY = "15" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_7_CURSOR" file = "img/DenziUI.png" x = "160" y = "0" hotX = "8" hotY = "15" width = "16" height = "16"/>
+	<cursor id = "QUADRANT_8_CURSOR" file = "img/DenziUI.png" x = "176" y = "0" hotX = "15" hotY = "15" width = "16" height = "16"/>
 	
-	<tileSet file = "img/DenziDenziUI.png">
+	<tileSet file = "img/DenziUI.png">
 		<!-- Buttons -->
 		<image id = "IMG_SMALL_BUTTON_BACK" bounds = "0,32,32,32"/>
 		<image id = "BTN_SIZE2" bounds = "64,32,64,32"/>
