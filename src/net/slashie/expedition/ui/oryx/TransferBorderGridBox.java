@@ -24,7 +24,9 @@ import net.slashie.expedition.domain.ItemContainer;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI.ItemTransferFunctionality;
 import net.slashie.libjcsi.CharKey;
+import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.UserInterface;
+import net.slashie.serf.ui.oryxUI.AnimatedGFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
@@ -532,12 +534,18 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	}
 	
 	private void drawContainerInfo(int x, int y, ItemContainer container, boolean alignRight) {
-		GFXAppearance containerAppearance = (GFXAppearance)container.getAppearance();
+		Appearance containerAppearance = container.getAppearance();
 		if (containerAppearance != null){
+			Image containerImage = null;
+			if (containerAppearance instanceof GFXAppearance){
+				containerImage = ((GFXAppearance)containerAppearance).getImage();
+			} else if (containerAppearance instanceof AnimatedGFXAppearance){
+				containerImage = ((AnimatedGFXAppearance)containerAppearance).getImage(0);
+			}
 			if (alignRight)
-				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x - 40, y+10, containerAppearance.getImage());
+				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x - 40, y+10, containerImage);
 			else
-				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 20, y+10, containerAppearance.getImage());
+				si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 20, y+10, containerImage);
 		}
 		
 		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y+52, container.getTypeDescription(), OryxExpeditionDisplay.COLOR_BOLD, alignRight);		
