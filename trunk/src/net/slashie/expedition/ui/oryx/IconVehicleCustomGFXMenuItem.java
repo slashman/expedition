@@ -53,8 +53,8 @@ public class IconVehicleCustomGFXMenuItem implements CustomGFXMenuItem{
 		int textWidth = (int) si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, itemDescription);
 
 		// Check if the tooltip will go outa the screen
-		if (x + 30 + textWidth > 800){
-			int diff = x + 30 + textWidth - 800;
+		if (x + 30 + textWidth > si.getScreenWidth()){
+			int diff = x + 30 + textWidth - si.getScreenWidth();
 			x -= diff;
 		}
 		

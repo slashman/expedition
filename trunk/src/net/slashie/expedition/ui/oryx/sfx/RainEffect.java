@@ -133,14 +133,14 @@ public class RainEffect implements Runnable{
 			
 			for (int i = 0; i < maxRainlets; i++){
 				if (rainlets[i] == null){
-					rainlets[i] = new Rainlet(new Position(Util.rand(0, 800), Util.rand(0, 600)), Util.rand(minSize, maxSize), Util.rand(rainSpeed, rainSpeed+2));
+					rainlets[i] = new Rainlet(new Position(Util.rand(0, si.getScreenWidth()), Util.rand(0, si.getScreenHeight())), Util.rand(minSize, maxSize), Util.rand(rainSpeed, rainSpeed+2));
 					rainlets[i].color = rainColors[currentRainColor];
 					currentRainColor++;
 					if (currentRainColor > 4)
 						currentRainColor = 0;
 				} else if (rainlets[i].dead) {
-					rainlets[i].position.x = Util.rand(0, 800);
-					rainlets[i].position.y = Util.rand(0, 600);
+					rainlets[i].position.x = Util.rand(0, si.getScreenWidth());
+					rainlets[i].position.y = Util.rand(0, si.getScreenHeight());
 					rainlets[i].size = Util.rand(minSize, maxSize);
 					rainlets[i].speed = Util.rand(rainSpeed, rainSpeed+2);
 					rainlets[i].fall = 0;
