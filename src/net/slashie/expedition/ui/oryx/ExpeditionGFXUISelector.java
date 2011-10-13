@@ -132,16 +132,16 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		quitButton.setPopupText("Quit (Q)");
 		logButton.setPopupText("Message Log (L)");
 		
-		armButton.setVisible(false);
-		buildButton.setVisible(false);
-		dropButton.setVisible(false);
-		inventoryButton.setVisible(false);
-		lookButton.setVisible(false);
-		mountButton.setVisible(false);
-		repairButton.setVisible(false);
-		resetButton.setVisible(false);
-		chopButton.setVisible(false);
-		anchorButton.setVisible(false);
+		armButton.setVisible(true);
+		buildButton.setVisible(true);
+		dropButton.setVisible(true);
+		inventoryButton.setVisible(true);
+		lookButton.setVisible(true);
+		mountButton.setVisible(true);
+		repairButton.setVisible(true);
+		resetButton.setVisible(true);
+		chopButton.setVisible(true);
+		anchorButton.setVisible(true);
 		
 		buttonsPanel = new JPanel();
 		buttonsPanel.setOpaque(false);
@@ -182,6 +182,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		si.add(quitButton);
 		si.add(logButton);
 		
+		buttonsPanel.setVisible(false);
 		si.add(buttonsPanel);
 	}
 
@@ -189,30 +190,44 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	public void activate() {
 		super.activate();
 		buttonsPanel.setVisible(true);
-		
-		armButton.setVisible(true);
-		//buildButton.setVisible(true);
-		//dropButton.setVisible(true);
-		inventoryButton.setVisible(true);
-		lookButton.setVisible(true);
-		//mountButton.setVisible(true);
-		//repairButton.setVisible(true);
-		//resetButton.setVisible(true);
-		//chopButton.setVisible(true);
-		
 		musicButton.setVisible(true);
 		sfxButton.setVisible(true);
 		saveButton.setVisible(true);
 		quitButton.setVisible(true);
 		logButton.setVisible(true);
 		
+		armButton.setEnabled(true);
+		//buildButton.setVisible(true);
+		//dropButton.setVisible(true);
+		inventoryButton.setEnabled(true);
+		lookButton.setEnabled(true);
+		//mountButton.setVisible(true);
+		//repairButton.setVisible(true);
+		//resetButton.setVisible(true);
+		//chopButton.setVisible(true);
+		
+		musicButton.setEnabled(true);
+		sfxButton.setEnabled(true);
+		saveButton.setEnabled(true);
+		quitButton.setEnabled(true);
+		logButton.setEnabled(true);
+		
 		updateButtonStatus();
 	}
 	
+	public void shutdown() {
+		buttonsPanel.setVisible(false);
+		musicButton.setVisible(false);
+		sfxButton.setVisible(false);
+		saveButton.setVisible(false);
+		quitButton.setVisible(false);
+		logButton.setVisible(false);
+	}
+		
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		buttonsPanel.setVisible(false);
+		/*buttonsPanel.setVisible(false);
 
 		armButton.setVisible(false);
 		buildButton.setVisible(false);
@@ -229,7 +244,27 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		sfxButton.setVisible(false);
 		saveButton.setVisible(false);
 		quitButton.setVisible(false);
-		logButton.setVisible(false);
+		logButton.setVisible(false);*/
+		
+		buttonsPanel.setEnabled(false);
+
+		armButton.setEnabled(false);
+		buildButton.setEnabled(false);
+		dropButton.setEnabled(false);
+		inventoryButton.setEnabled(false);
+		lookButton.setEnabled(false);
+		mountButton.setEnabled(false);
+		repairButton.setEnabled(false);
+		resetButton.setEnabled(false);
+		anchorButton.setEnabled(false);
+		chopButton.setEnabled(false);
+		
+		musicButton.setEnabled(false);
+		sfxButton.setEnabled(false);
+		saveButton.setEnabled(false);
+		quitButton.setEnabled(false);
+		logButton.setEnabled(false);
+
 		
 		
 	}
