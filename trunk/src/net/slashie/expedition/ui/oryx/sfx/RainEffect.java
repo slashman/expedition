@@ -8,7 +8,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionLevel;
-import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.Position;
 import net.slashie.utils.Util;
@@ -106,7 +105,7 @@ public class RainEffect implements Runnable{
 	@Override
 	public void run() {
 		Rainlet[] rainlets = new Rainlet[maxRainlets];
-		int sleep = (int)Math.round((double)si.getFrameRate() * (5.0d/4.0d));
+		//int sleep = (int)Math.round((double)si.getFrameRate() * (5.0d/4.0d));
 		Color[] rainColors = new Color[5];
 		for (int i = 0; i < 5; i++){
 			int variation = Util.rand(-20, 20);
@@ -175,7 +174,7 @@ public class RainEffect implements Runnable{
 			si.commitLayer(ExpeditionOryxUI.SFX_LAYER, true);
 			
 			try {
-				Thread.sleep(sleep);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {}
 		}
 	}
