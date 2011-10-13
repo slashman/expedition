@@ -98,7 +98,22 @@ public class RunExpedition {
 		return configuration.getProperty(key);
 	}
 
-	private static void init(){
+	private static void init(String[] args){
+		boolean fullscreen = true;
+		if (args!= null && args.length > 0){
+			if (args[0].equalsIgnoreCase("gfx")){
+				mode = DisplayMode.SWING_GFX;
+				preselectedUIFile = args[1];
+				fullscreen = args[2].equals("fullscreen");
+			} else if (args[0].equalsIgnoreCase("jc"))
+				mode = DisplayMode.JCURSES_CONSOLE;
+			else if (args[0].equalsIgnoreCase("sc"))
+				mode = DisplayMode.SWING_CONSOLE;
+		} else {
+			mode = DisplayMode.SWING_GFX;
+			fullscreen = true;
+		}
+		
 		if (createNew){
 			System.out.println("Expedition "+ExpeditionGame.getVersion());
 			System.out.println("Slashware Interactive ~ 2009-2011");
@@ -131,7 +146,7 @@ public class RunExpedition {
 				switch (mode){
 				case SWING_GFX:
 					System.out.println("Initializing Swing GFX System Interface");
-					SwingSystemInterface si = new SwingSystemInterface(LAYERS, false, 
+					SwingSystemInterface si = new SwingSystemInterface(LAYERS, fullscreen, 
 							PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_WIDTH")), 
 							PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_HEIGHT")), 
 							PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
@@ -245,6 +260,7 @@ public class RunExpedition {
 	    	configuration.load(new FileInputStream("expedition.properties"));
 	    } catch (IOException e) {
 	    	System.out.println("Error loading configuration file, please confirm existence of expedition.properties");
+	    	e.printStackTrace();
 	    	System.exit(-1);
 	    }
 	    
@@ -434,7 +450,7 @@ public class RunExpedition {
 			SwingSystemInterface ssi = (SwingSystemInterface)si;
 			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
 			UserInterface.getUI().showImportantMessage("Thank you for trying out this version of Expedition: The New World.\n\nThis game is in active development, if you like the game please visit http://slashware.net to learn about ways to help us complete it!");
-			if (((ExpeditionOryxUI)ui).promptChat(" Do you want to enable full screen mode?")){
+			/*if (((ExpeditionOryxUI)ui).promptChat(" Do you want to enable full screen mode?")){
 				si = new SwingSystemInterface(LAYERS, true, 
 						PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_WIDTH")), 
 						PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_HEIGHT")), 
@@ -445,7 +461,7 @@ public class RunExpedition {
 				ExpeditionDisplay.thus = new OryxExpeditionDisplay(ssi, assets, UIconfiguration);
 				ui = UserInterface.getUI();
 				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
-			}
+			}*/
 			if (((ExpeditionOryxUI)ui).promptChat("Do you want to check for new versions?")){
 				try {
 					ExpeditionVersion latestVersion = ExpeditionGame.checkNewVersion();
@@ -479,21 +495,7 @@ public class RunExpedition {
 	}
 	
 	public static void main(String args[]){
-		if (args!= null && args.length > 0){
-			if (args[0].equalsIgnoreCase("gfx")){
-				mode = DisplayMode.SWING_GFX;
-				if (args.length > 1)
-					preselectedUIFile = args[1];
-			}
-			else if (args[0].equalsIgnoreCase("jc"))
-				mode = DisplayMode.JCURSES_CONSOLE;
-			else if (args[0].equalsIgnoreCase("sc"))
-				mode = DisplayMode.SWING_CONSOLE;
-		} else {
-			mode = DisplayMode.SWING_GFX;
-		}
-		
-		init();
+		init(args);
 		System.out.println("Launching game");
 		try {
 			while (true){
