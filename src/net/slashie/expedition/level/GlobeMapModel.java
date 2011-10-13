@@ -1,6 +1,6 @@
 package net.slashie.expedition.level;
 
-public class GlobeMapModel{
+public class GlobeMapModel {
 	private static GlobeModel singleton;
 	
 	public static GlobeModel getSingleton() {

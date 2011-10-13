@@ -1,8 +1,10 @@
 package net.slashie.expedition.level;
 
+import java.io.Serializable;
+
 import net.slashie.utils.Position;
 
-public abstract class GlobeModel {
+public abstract class GlobeModel implements Serializable{
 	public abstract int transformLongIntoX(int longSeconds);
 
 	public abstract int transformLatIntoY(int latSeconds);

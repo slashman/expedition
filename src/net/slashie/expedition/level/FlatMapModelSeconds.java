@@ -2,6 +2,7 @@ package net.slashie.expedition.level;
 
 import net.slashie.utils.Position;
 
+@SuppressWarnings("serial")
 public class FlatMapModelSeconds extends GlobeModel{
 	private final static int LONGITUDE_MINUTES_EQUATOR_NAUTICAL_MILES = 1; // 1 second = 1 nautical mile at equator 
 	

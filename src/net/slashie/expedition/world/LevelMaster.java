@@ -2,6 +2,7 @@ package net.slashie.expedition.world;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.game.ExpeditionGame;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.locations.Spain;
 import net.slashie.expedition.locations.SpainCastle;
 import net.slashie.expedition.locations.World;
@@ -62,7 +63,7 @@ public class LevelMaster {
 			"world", 150,150,50,50, pattern.getCharMap(), new Pair<String, Position>("_START", new Position(3198,801)));*/
 			
 			//ExpeditionMacroLevel ret = new ExpeditionMacroLevel("scenarios/theNewWorld/world", 3374,2939,50,50, pattern.getCharMap(), new Position(3236,834));
-			ExpeditionMacroLevel ret = new ExpeditionMacroLevel("scenarios/theNewWorld/world", 3374,2939,50,50, pattern.getCharMap(), new Position(-427,2235));
+			ExpeditionMacroLevel ret = new ExpeditionMacroLevel("scenarios/theNewWorld/world", 3374,2939,50,50, pattern.getCharMap(), new Position(-427,2235), GlobeMapModel.getSingleton());
 			ret.setDescription(pattern.getDescription());
 			if (pattern.getUnleashers() != null){
 				ret.setUnleashers(pattern.getUnleashers());

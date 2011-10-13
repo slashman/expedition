@@ -13,9 +13,8 @@ import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.level.ExpeditionLevelReader;
-import net.slashie.expedition.level.GlobeMapModel;
+import net.slashie.expedition.level.GlobeModel;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
-import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.expedition.world.agents.ForageAgent;
 import net.slashie.expedition.world.agents.HourShiftAgent;
 import net.slashie.expedition.world.agents.RandomEventAgent;
@@ -42,8 +41,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
 			int levelHeight, int gridWidth, int gridHeight,
-			Hashtable<String, String> charmap, Position startPosition) {
-		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap, startPosition);
+			Hashtable<String, String> charmap, Position startPosition, GlobeModel globeModel) {
+		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap, startPosition, globeModel);
 		currentWindAgent = new WindAgent();
 		currentHourShiftAgent = new HourShiftAgent();
 		currentForageAgent = new ForageAgent();
@@ -67,11 +66,11 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 	}
 	
 	private int resolveXToLongitude(){
-		return GlobeMapModel.getSingleton().getLongitudeDegrees(getPlayer().getPosition().x);
+		return globeModel.getLongitudeDegrees(getPlayer().getPosition().x);
 	}
 	
 	private int resolveYToLatitude(){
-		return GlobeMapModel.getSingleton().getLatitudeDegrees(getPlayer().getPosition().y);
+		return globeModel.getLatitudeDegrees(getPlayer().getPosition().y);
 	}
 	
 	private int currentTemperature = 15;
@@ -286,8 +285,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 					Position pos = new Position(getExpedition().getPosition());
 					int signX = Util.chance(50) ? 1 : -1;
 					int signY = Util.chance(50) ? 1 : -1;
-					pos.y += Util.rand(8, 10) * signY * GlobeMapModel.getSingleton().getLatitudeHeight();
-					pos.x += Util.rand(8, 10) * signX * GlobeMapModel.getSingleton().getLongitudeScale(pos.y);
+					pos.y += Util.rand(8, 10) * signY * globeModel.getLatitudeHeight();
+					pos.x += Util.rand(8, 10) * signX * globeModel.getLongitudeScale(pos.y);
 					Storm storm = new Storm(pos);
 					storms.add(storm);
 					storm.seed(6, 18);
@@ -493,7 +492,7 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		if (ret == null && cell != null && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
 			// Get cell to the wind shadow
 			Position var = new Position(getWindDirection().getVectors());
-			var = GlobeMapModel.getSingleton().scaleVar(var, getExpedition().getLatitude());
+			var = globeModel.scaleVar(var, getExpedition().getLatitude());
 			if (tempP.equals(Position.add(getExpedition().getPosition(), var))){
 				if (ret == null)
 					ret = new ArrayList<AbstractFeature>();
