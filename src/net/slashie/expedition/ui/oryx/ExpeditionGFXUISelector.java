@@ -227,25 +227,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		/*buttonsPanel.setVisible(false);
-
-		armButton.setVisible(false);
-		buildButton.setVisible(false);
-		dropButton.setVisible(false);
-		inventoryButton.setVisible(false);
-		lookButton.setVisible(false);
-		mountButton.setVisible(false);
-		repairButton.setVisible(false);
-		resetButton.setVisible(false);
-		anchorButton.setVisible(false);
-		chopButton.setVisible(false);
-		
-		musicButton.setVisible(false);
-		sfxButton.setVisible(false);
-		saveButton.setVisible(false);
-		quitButton.setVisible(false);
-		logButton.setVisible(false);*/
-		
 		buttonsPanel.setEnabled(false);
 
 		armButton.setEnabled(false);
