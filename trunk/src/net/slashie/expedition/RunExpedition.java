@@ -85,7 +85,7 @@ public class RunExpedition {
 		SWING_CONSOLE
 	}
 	
-	private static final int LAYERS = 6;
+	private static final int LAYERS = 4;
 	private static UserInterface ui;
 	private static UISelector uiSelector;
 	
