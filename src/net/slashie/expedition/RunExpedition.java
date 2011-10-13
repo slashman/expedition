@@ -434,7 +434,7 @@ public class RunExpedition {
 			SwingSystemInterface ssi = (SwingSystemInterface)si;
 			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
 			UserInterface.getUI().showImportantMessage("Thank you for trying out this version of Expedition: The New World.\n\nThis game is in active development, if you like the game please visit http://slashware.net to learn about ways to help us complete it!");
-			if (((ExpeditionOryxUI)ui).promptChat(" Do you want to enable full screen mode?",140,388,520,200)){
+			if (((ExpeditionOryxUI)ui).promptChat(" Do you want to enable full screen mode?")){
 				si = new SwingSystemInterface(LAYERS, true, 
 						PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_WIDTH")), 
 						PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_HEIGHT")), 
@@ -446,7 +446,7 @@ public class RunExpedition {
 				ui = UserInterface.getUI();
 				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
 			}
-			if (((ExpeditionOryxUI)ui).promptChat("Do you want to check for new versions?",140,388,520,200)){
+			if (((ExpeditionOryxUI)ui).promptChat("Do you want to check for new versions?")){
 				try {
 					ExpeditionVersion latestVersion = ExpeditionGame.checkNewVersion();
 					if (latestVersion == null){

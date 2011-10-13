@@ -90,31 +90,32 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		ExpeditionOryxUI oui = ((ExpeditionOryxUI)UserInterface.getUI()); 
 		oui.messageBox.setVisible(false);
 		oui.persistantMessageBox.setVisible(false);
+		Layout layout = oui.getLayout();
 		ExpeditionMusicManager.playTune("TITLE");
 		
 		si.setFont(0, assets.getFontAsset("FNT_TEXT"));
 		si.setCursor(assets.getCursorAsset("HAND_CURSOR"));
 		si.drawImage(0, getImageAsset("IMG_TITLE"));
-		si.printAtPixel(0, 30, 550, "Version "+ExpeditionGame.getVersion()+", ", Color.WHITE);
-		si.printAtPixel(0, 30, 568, "A production of Slashware Interactive 2009-2011", Color.WHITE);
+		si.printAtPixel(0, layout.POS_TITLE_VERSION.x, layout.POS_TITLE_VERSION.y, "Version "+ExpeditionGame.getVersion()+", ", Color.WHITE);
+		si.printAtPixel(0, layout.POS_TITLE_ABOUT.x, layout.POS_TITLE_ABOUT.y, "A production of Slashware Interactive 2009-2011", Color.WHITE);
    	
     	// Read the license info 
     	LicenseInfo licenseInfo = GameFiles.getLicenseInfo();
 		
 		if (licenseInfo.licensee == null || licenseInfo.licensee.equals("unregistered")){
-			si.printAtPixel(0, 30, 586, "Unregistered Version", Color.WHITE);
+			si.printAtPixel(0, layout.POS_TITLE_LICENSE.x, layout.POS_TITLE_LICENSE.y, "Unregistered Version", Color.WHITE);
 		} else {
-			si.printAtPixel(0, 30, 586, "Registered for "+licenseInfo.licenseLevel+" "+licenseInfo.licensee+"!", Color.YELLOW);
+			si.printAtPixel(0, layout.POS_TITLE_LICENSE.x, layout.POS_TITLE_LICENSE.y, "Registered for "+licenseInfo.licenseLevel+" "+licenseInfo.licensee+"!", Color.YELLOW);
 		}
 
 		ExpeditionCleanButton historyButton = new ExpeditionCleanButton(8, "Historic Scenario");
-		historyButton.setLocation(558, 30);
+		historyButton.setLocation(layout.POS_TITLE_HISTORY.x, layout.POS_TITLE_HISTORY.y);
 		ExpeditionCleanButton expeditionButton = new ExpeditionCleanButton(8, "New Expedition");
-		expeditionButton.setLocation(558, 82);
+		expeditionButton.setLocation(layout.POS_TITLE_NEW.x, layout.POS_TITLE_NEW.y);
 		ExpeditionCleanButton resumeButton = new ExpeditionCleanButton(8, "Continue Journey");
-		resumeButton.setLocation(558, 134);
+		resumeButton.setLocation(layout.POS_TITLE_CONTINUE.x, layout.POS_TITLE_CONTINUE.y);
 		ExpeditionCleanButton exitButton = new ExpeditionCleanButton(8, "Exit");
-		exitButton.setLocation(558, 186);
+		exitButton.setLocation(layout.POS_TITLE_EXIT.x, layout.POS_TITLE_EXIT.y);
 		
 		expeditionButton.setVisible(false); // This isn't yet implemented
 		
@@ -325,11 +326,13 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 	
 	public void showIntro(Expedition e){
+		ExpeditionOryxUI oui = ((ExpeditionOryxUI)UserInterface.getUI()); 
+		Layout l = oui.getLayout();
 		si.drawImage(0, assets.getImageAsset("IMG_THE_NEW_WORLD_INTRO"));
 		si.commitLayer(0);
 		String message = CommonUI.getIntroText();
 		message = message.replaceAll("XXX", "\n");
-		((ExpeditionOryxUI)UserInterface.getUI()).showTextBox(message, 16, 216, 776, 376);
+		((ExpeditionOryxUI)UserInterface.getUI()).showTextBox(message, l.INTRO_TEXT_BOUNDS.x, l.INTRO_TEXT_BOUNDS.y, l.INTRO_TEXT_BOUNDS.width, l.INTRO_TEXT_BOUNDS.height);
 		
 	}
 

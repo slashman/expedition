@@ -7,7 +7,10 @@ import net.slashie.utils.Position;
 import net.slashie.utils.PropertyFilters;
 
 public class Layout {
+	public Rectangle PROMPTBOX_BOUNDS;
+	public Rectangle POPUPMESSAGE_BOUNDS;
 	public Rectangle MSGBOX_BOUNDS;
+	public Rectangle INTRO_TEXT_BOUNDS;
 	public Position POS_UNITS_BOX;
 	public Position POS_VEHICLES_BOX;
 	public Position POS_WEATHER;
@@ -45,9 +48,20 @@ public class Layout {
 	public Position POS_VERSION;
 	public Position POS_MOVE_ACTION;
 	
+	public Position POS_TITLE_VERSION;
+	public Position POS_TITLE_ABOUT;
+	public Position POS_TITLE_LICENSE;
+	public Position POS_TITLE_HISTORY;
+	public Position POS_TITLE_NEW;
+	public Position POS_TITLE_CONTINUE;
+	public Position POS_TITLE_EXIT;
+	
 	public void initialize(Properties p){
 		MSGBOX_BOUNDS = PropertyFilters.getRectangle(p.getProperty("MSGBOX_BOUNDS"));
 		ACTIONS_PANEL_BOUNDS = PropertyFilters.getRectangle(p.getProperty("ACTIONS_PANEL_BOUNDS"));
+		PROMPTBOX_BOUNDS = PropertyFilters.getRectangle(p.getProperty("PROMPTBOX_BOUNDS"));
+		POPUPMESSAGE_BOUNDS = PropertyFilters.getRectangle(p.getProperty("POPUPMESSAGE_BOUNDS"));
+		INTRO_TEXT_BOUNDS = PropertyFilters.getRectangle(p.getProperty("INTRO_TEXT_BOUNDS"));
 		
 		POS_UNITS_BOX = PropertyFilters.getPosition(p.getProperty("POS_UNITS_BOX"));
 		POS_VEHICLES_BOX = PropertyFilters.getPosition(p.getProperty("POS_VEHICLES_BOX"));
@@ -85,5 +99,13 @@ public class Layout {
 		POS_SFX_ACTION = PropertyFilters.getPosition(p.getProperty("POS_SFX_ACTION"));
 		POS_SAVE_ACTION = PropertyFilters.getPosition(p.getProperty("POS_SAVE_ACTION"));
 		POS_EXIT_ACTION = PropertyFilters.getPosition(p.getProperty("POS_EXIT_ACTION"));
+		
+		POS_TITLE_VERSION = PropertyFilters.getPosition(p.getProperty("POS_TITLE_VERSION"));
+		POS_TITLE_ABOUT = PropertyFilters.getPosition(p.getProperty("POS_TITLE_ABOUT"));
+		POS_TITLE_LICENSE = PropertyFilters.getPosition(p.getProperty("POS_TITLE_LICENSE"));
+		POS_TITLE_HISTORY = PropertyFilters.getPosition(p.getProperty("POS_TITLE_HISTORY"));
+		POS_TITLE_NEW = PropertyFilters.getPosition(p.getProperty("POS_TITLE_NEW"));
+		POS_TITLE_CONTINUE = PropertyFilters.getPosition(p.getProperty("POS_TITLE_CONTINUE"));
+		POS_TITLE_EXIT = PropertyFilters.getPosition(p.getProperty("POS_TITLE_EXIT"));
 	}
 }
