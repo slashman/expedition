@@ -476,7 +476,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 
 	public void showBlockingMessage(String message, boolean keepMessage) {
-		showBlockingMessage(message, 140, 300, 520, 250, keepMessage);
+		showBlockingMessage(message, layout.POPUPMESSAGE_BOUNDS.x, layout.POPUPMESSAGE_BOUNDS.y, layout.POPUPMESSAGE_BOUNDS.width,  layout.POPUPMESSAGE_BOUNDS.height, keepMessage);
 	}
 	
 	public void showBlockingMessage(String message, int x, int y, int w, int h, boolean keepMessage) {
@@ -501,7 +501,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		if (getPlayer() != null && getPlayer().getSelector() != null)
 			((GFXUISelector)getPlayer().getSelector()).deactivate();
 		message = message.replaceAll("XXX", "\n");
-		return promptChat(message, 140,388,520,200);
+		return promptChat(message, layout.PROMPTBOX_BOUNDS.x, layout.PROMPTBOX_BOUNDS.y, layout.PROMPTBOX_BOUNDS.width,  layout.PROMPTBOX_BOUNDS.height);
 	}
 	
 	public void transferFromExpedition(GoodsCache toCache) {
@@ -1722,5 +1722,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		super.leaveScreen();
 		unitsMenuBox.setHoverDisabled(false);
 		vehiclesMenuBox.setHoverDisabled(false);
+	}
+
+	
+	public Layout getLayout() {
+		return layout;
 	}
 }
