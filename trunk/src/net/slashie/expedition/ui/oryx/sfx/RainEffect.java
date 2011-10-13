@@ -83,10 +83,13 @@ public class RainEffect implements Runnable{
 		//Determines the angle of the raindrop
 		private int tearSize;
 		
+		private int initialSize;
+		
 		
 		Rainlet(Position position, int size, int speed){
 			this.position = position;
 			this.size = size;
+			initialSize = size;
 			this.speed = speed;
 			this.tearSize = Util.chance(85) ? 1 : 2;
 			if (this.tearSize > 1)
@@ -100,6 +103,12 @@ public class RainEffect implements Runnable{
 			} else {
 				size --;
 			}
+		}
+
+		public void resurrect() {
+			size = initialSize;
+			fall = 0;
+			dead = false;
 		}
 	}
 	@Override
@@ -140,10 +149,11 @@ public class RainEffect implements Runnable{
 				} else if (rainlets[i].dead) {
 					rainlets[i].position.x = Util.rand(0, si.getScreenWidth());
 					rainlets[i].position.y = Util.rand(0, si.getScreenHeight());
-					rainlets[i].size = Util.rand(minSize, maxSize);
-					rainlets[i].speed = Util.rand(rainSpeed, rainSpeed+2);
-					rainlets[i].fall = 0;
+					rainlets[i].size = rainlets[i].initialSize;
+					//rainlets[i].speed = Util.rand(rainSpeed, rainSpeed+2);
 					rainlets[i].dead = false;
+					rainlets[i].fall = 0;
+					//rainlets[i].resurrect();
 				} else {
 					rainlets[i].evolve();
 				}
