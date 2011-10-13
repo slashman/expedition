@@ -65,6 +65,9 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			Properties uiProperties, Action advance, Action target,
 			Action attack, GFXUserInterface ui, Properties keyBindings, Assets assets) {
 		super.init(psi, gameActions, uiProperties, advance, target, attack, ui, keyBindings, assets);
+		Layout layout = new Layout();
+		layout.initialize(uiProperties);
+		
 		HAND_CURSOR = assets.getCursorAsset("HAND_CURSOR");
 		
 		
@@ -144,9 +147,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		buttonsPanel.setOpaque(false);
 		//buttonsPanel.setLayout(new GridLayout(3,4));
 		buttonsPanel.setLayout(new FlowLayout());
-		buttonsPanel.setLocation(630,8);
-		buttonsPanel.setSize(144,178);
-		
+		buttonsPanel.setBounds(layout.ACTIONS_PANEL_BOUNDS);
 		
 		buttonsPanel.add(inventoryButton);
 		buttonsPanel.add(lookButton);
@@ -168,12 +169,12 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		saveButton.setVisible(false);
 		quitButton.setVisible(false);
 		logButton.setVisible(false);
-		logButton.setLocation(774, 32 + 24 * 0);
-		musicButton.setLocation(774, 32 + 24 * 1);
-		sfxButton.setLocation(774, 32 + 24 * 2);
-		saveButton.setLocation(774, 32 + 24 * 3);
-		quitButton.setLocation(774, 32 + 24 * 4);
 		
+		logButton.setLocation(layout.POS_JOURNAL_ACTION.x, layout.POS_JOURNAL_ACTION.y);
+		musicButton.setLocation(layout.POS_MUSIC_ACTION.x, layout.POS_MUSIC_ACTION.y);
+		sfxButton.setLocation(layout.POS_SFX_ACTION.x, layout.POS_SFX_ACTION.y);
+		saveButton.setLocation(layout.POS_SAVE_ACTION.x, layout.POS_SAVE_ACTION.y);
+		quitButton.setLocation(layout.POS_EXIT_ACTION.x, layout.POS_EXIT_ACTION.y);
 		
 		si.add(musicButton);
 		si.add(sfxButton);
