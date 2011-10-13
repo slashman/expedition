@@ -225,16 +225,19 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 	}
 
 	public int selectScenario(){
+		ExpeditionOryxUI oui = ((ExpeditionOryxUI)UserInterface.getUI()); 
+		Layout l = oui.getLayout();
+		
 		si.drawImage(0, assets.getImageAsset("IMG_SCENARIO_SELECTION"));
 		si.print(0, 24, 100, "Please select an scenario", COLOR_BOLD);
 		
 		CleanButton theNewWorldButton = new CleanButton(assets.getImageAsset("BTN_THE_NEW_WORLD"), assets.getCursorAsset("HAND_CURSOR"));
-		theNewWorldButton.setBounds(new Rectangle(560, 15, 230, 264));
+		theNewWorldButton.setBounds(l.NEW_WORLD_BUTTON_BOUNDS);
 		ExpeditionCleanButton useButton = new ExpeditionCleanButton(2, "Use");
-		useButton.setLocation(622,291);
+		useButton.setLocation(l.POS_SCENARIO_USE.x, l.POS_SCENARIO_USE.y);
 		
 		ExpeditionCleanButton backButton = new ExpeditionCleanButton(2, "< Back");
-		backButton.setLocation(622,400);
+		backButton.setLocation(l.POS_SCENARIO_BACK.x, l.POS_SCENARIO_BACK.y);
 		
 		si.add(theNewWorldButton);
 		si.add(useButton);
@@ -487,7 +490,9 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 
 	@Override
 	public Expedition createExpedition(ExpeditionGame game) {
-		si.drawImage(0, 560, 15, assets.getImageAsset("BTN_THE_NEW_WORLD"));
+		ExpeditionOryxUI oui = ((ExpeditionOryxUI)UserInterface.getUI()); 
+		Layout l = oui.getLayout();
+		si.drawImage(0, l.NEW_WORLD_BUTTON_BOUNDS.x, l.NEW_WORLD_BUTTON_BOUNDS.y, assets.getImageAsset("BTN_THE_NEW_WORLD"));
 
 		ExpeditionCleanButton okButton = new ExpeditionCleanButton(4, "Ok");
 		okButton.setLocation(350, 495);
