@@ -11,6 +11,7 @@ public class Layout {
 	public Rectangle POPUPMESSAGE_BOUNDS;
 	public Rectangle MSGBOX_BOUNDS;
 	public Rectangle INTRO_TEXT_BOUNDS;
+	public Rectangle NEW_WORLD_BUTTON_BOUNDS;
 	public Position POS_UNITS_BOX;
 	public Position POS_VEHICLES_BOX;
 	public Position POS_WEATHER;
@@ -56,12 +57,16 @@ public class Layout {
 	public Position POS_TITLE_CONTINUE;
 	public Position POS_TITLE_EXIT;
 	
+	public Position POS_SCENARIO_USE;
+	public Position POS_SCENARIO_BACK;
+	
 	public void initialize(Properties p){
 		MSGBOX_BOUNDS = PropertyFilters.getRectangle(p.getProperty("MSGBOX_BOUNDS"));
 		ACTIONS_PANEL_BOUNDS = PropertyFilters.getRectangle(p.getProperty("ACTIONS_PANEL_BOUNDS"));
 		PROMPTBOX_BOUNDS = PropertyFilters.getRectangle(p.getProperty("PROMPTBOX_BOUNDS"));
 		POPUPMESSAGE_BOUNDS = PropertyFilters.getRectangle(p.getProperty("POPUPMESSAGE_BOUNDS"));
 		INTRO_TEXT_BOUNDS = PropertyFilters.getRectangle(p.getProperty("INTRO_TEXT_BOUNDS"));
+		NEW_WORLD_BUTTON_BOUNDS = PropertyFilters.getRectangle(p.getProperty("NEW_WORLD_BUTTON_BOUNDS"));
 		
 		POS_UNITS_BOX = PropertyFilters.getPosition(p.getProperty("POS_UNITS_BOX"));
 		POS_VEHICLES_BOX = PropertyFilters.getPosition(p.getProperty("POS_VEHICLES_BOX"));
@@ -107,5 +112,8 @@ public class Layout {
 		POS_TITLE_NEW = PropertyFilters.getPosition(p.getProperty("POS_TITLE_NEW"));
 		POS_TITLE_CONTINUE = PropertyFilters.getPosition(p.getProperty("POS_TITLE_CONTINUE"));
 		POS_TITLE_EXIT = PropertyFilters.getPosition(p.getProperty("POS_TITLE_EXIT"));
+		
+		POS_SCENARIO_USE = PropertyFilters.getPosition(p.getProperty("POS_SCENARIO_USE"));
+		POS_SCENARIO_BACK = PropertyFilters.getPosition(p.getProperty("POS_SCENARIO_BACK"));
 	}
 }
