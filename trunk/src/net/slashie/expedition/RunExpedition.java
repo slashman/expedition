@@ -131,7 +131,10 @@ public class RunExpedition {
 				switch (mode){
 				case SWING_GFX:
 					System.out.println("Initializing Swing GFX System Interface");
-					SwingSystemInterface si = new SwingSystemInterface(LAYERS, false, PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
+					SwingSystemInterface si = new SwingSystemInterface(LAYERS, false, 
+							PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_WIDTH")), 
+							PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_HEIGHT")), 
+							PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
 					
 					System.out.println("Initializing Oryx GFX User Interface");
 					assets = loadUIAssets(graphicsPackDir);
@@ -432,7 +435,10 @@ public class RunExpedition {
 			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
 			UserInterface.getUI().showImportantMessage("Thank you for trying out this version of Expedition: The New World.\n\nThis game is in active development, if you like the game please visit http://slashware.net to learn about ways to help us complete it!");
 			if (((ExpeditionOryxUI)ui).promptChat(" Do you want to enable full screen mode?",140,388,520,200)){
-				si = new SwingSystemInterface(LAYERS, true, PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
+				si = new SwingSystemInterface(LAYERS, true, 
+						PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_WIDTH")), 
+						PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_HEIGHT")), 
+						PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
 				ssi = (SwingSystemInterface)si;
 				System.out.println("Initializing Oryx GFX User Interface");
 				UserInterface.setSingleton(new ExpeditionOryxUI());

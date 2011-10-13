@@ -9,7 +9,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -147,7 +146,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private List<Equipment> expeditionUnitsTemp = new ArrayList<Equipment>();
 	private GridBox unitsMenuBox;
 	private GridBox vehiclesMenuBox;
-
+	private Layout layout;
 	
 	@Override
 	protected Position getRelativePosition(Position position, Position offset) {
@@ -927,54 +926,54 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Draw
 		si.setColor(getUILayer(), Color.WHITE);
 		
-		si.print(getUILayer(),20, 2, ui_debug);
+		si.printAtPixel(getUILayer(), 200, 20, ui_debug);
 		
 		// Left Column
-		si.print(getUILayer(), leftColumnX, leftColumnY+2, ui_weatherDescription);
-		si.print(getUILayer(), leftColumnX, leftColumnY+3, ui_temperatureDescription);
-		si.print(getUILayer(), leftColumnX, leftColumnY+4, ui_terrainDescription);
+		si.printAtPixel(getUILayer(), layout.POS_WEATHER.x, layout.POS_WEATHER.y, ui_weatherDescription);
+		si.printAtPixel(getUILayer(), layout.POS_TEMPERATURE.x, layout.POS_TEMPERATURE.y, ui_temperatureDescription);
+		si.printAtPixel(getUILayer(), layout.POS_TERRAIN.x, layout.POS_TERRAIN.y, ui_terrainDescription);
 		
 		if (showWind){
-			si.print(getUILayer(), leftColumnX, leftColumnY+5, "WIND", TITLE_COLOR);
-				si.print(getUILayer(), leftColumnX+9, leftColumnY+5, ui_windDirection);
-			// si.print(line2+2, 6, ui_windStrength); TODO: Implement
+			si.printAtPixel(getUILayer(), layout.POS_WIND_TITLE.x, layout.POS_WIND_TITLE.y, "WIND", TITLE_COLOR);
+				si.printAtPixel(getUILayer(), layout.POS_WIND.x, layout.POS_WIND.y, ui_windDirection);
+			// si.printAtPixel(line2+2, 6, ui_windStrength); TODO: Implement
 		}
 		
 		if (showCurrent){
-			//si.print(leftColumnX, 5, "CURRENT", TITLE_COLOR); TODO: Implement
-				//si.print(leftColumnX+9, 5, ui_currentDirection); TODO: Implement
-			//si.print(leftColumnX+2, 6, ui_currentStrength); TODO: Implement
+			//si.printAtPixel(leftColumnX, 5, "CURRENT", TITLE_COLOR); TODO: Implement
+				//si.printAtPixel(leftColumnX+9, 5, ui_currentDirection); TODO: Implement
+			//si.printAtPixel(leftColumnX+2, 6, ui_currentStrength); TODO: Implement
 		}
 		
-		si.print(getUILayer(), leftColumnX, leftColumnY+7, locationLabels.getA(), TITLE_COLOR);
-		si.print(getUILayer(), leftColumnX+6, leftColumnY+7, locationDescription.getA());
-		si.print(getUILayer(), leftColumnX, leftColumnY+8, locationLabels.getB(), TITLE_COLOR);
-		si.print(getUILayer(), leftColumnX+6, leftColumnY+8, locationDescription.getB());
+		si.printAtPixel(getUILayer(), layout.POS_LAT_TITLE.x, layout.POS_LAT_TITLE.y, locationLabels.getA(), TITLE_COLOR);
+		si.printAtPixel(getUILayer(), layout.POS_LAT.x, layout.POS_LAT.y, locationDescription.getA());
+		si.printAtPixel(getUILayer(), layout.POS_LONG_TITLE.x, layout.POS_LONG_TITLE.y, locationLabels.getB(), TITLE_COLOR);
+		si.printAtPixel(getUILayer(), layout.POS_LONG.x, layout.POS_LONG.y, locationDescription.getB());
 		
 		if (showHeading){
-			si.print(getUILayer(), leftColumnX, leftColumnY+9, "HEADING", TITLE_COLOR);
-				si.print(getUILayer(), leftColumnX+9, leftColumnY+9, ui_headingDirection);
-			si.print(getUILayer(), leftColumnX, leftColumnY+10, ui_bearing);
+			si.printAtPixel(getUILayer(), layout.POS_HEADING_TITLE.x, layout.POS_HEADING_TITLE.y, "HEADING", TITLE_COLOR);
+				si.printAtPixel(getUILayer(), layout.POS_HEADING.x, layout.POS_HEADING.y, ui_headingDirection);
+			si.printAtPixel(getUILayer(), layout.POS_BEARING.x, layout.POS_BEARING.y, ui_bearing);
 		}
-		si.print(getUILayer(), leftColumnX, leftColumnY+11, ui_movementSpeed);
+		si.printAtPixel(getUILayer(), layout.POS_SPEED.x, layout.POS_SPEED.y, ui_movementSpeed);
 		if (isOnMacroLevel){
-			si.print(getUILayer(), leftColumnX, leftColumnY+13, "Burden", TITLE_COLOR);
-			si.print(getUILayer(), leftColumnX+8, leftColumnY+13, ui_carrying);
-			si.print(getUILayer(), leftColumnX, leftColumnY+14, "Mood", TITLE_COLOR);
-			si.print(getUILayer(), leftColumnX+8, leftColumnY+14, ui_morale);
-			si.print(getUILayer(), leftColumnX, leftColumnY+15, ui_seaDays);
-			si.print(getUILayer(), leftColumnX, leftColumnY+16, "Supplies", TITLE_COLOR);
-			si.print(getUILayer(), leftColumnX+2, leftColumnY+17, ui_food);	
-			si.print(getUILayer(), leftColumnX, leftColumnY+18, ui_foodModifier);
+			si.printAtPixel(getUILayer(), layout.POS_BURDEN_TITLE.x, layout.POS_BURDEN_TITLE.y, "Burden", TITLE_COLOR);
+			si.printAtPixel(getUILayer(), layout.POS_BURDEN.x, layout.POS_BURDEN.y, ui_carrying);
+			si.printAtPixel(getUILayer(), layout.POS_MOOD_TITLE.x, layout.POS_MOOD_TITLE.y, "Mood", TITLE_COLOR);
+			si.printAtPixel(getUILayer(), layout.POS_MOOD.x, layout.POS_MOOD.y, ui_morale);
+			si.printAtPixel(getUILayer(), layout.POS_SEADAYS.x, layout.POS_SEADAYS.y, ui_seaDays);
+			si.printAtPixel(getUILayer(), layout.POS_SUPPLIES_TITLE.x, layout.POS_SUPPLIES_TITLE.y, "Supplies", TITLE_COLOR);
+			si.printAtPixel(getUILayer(), layout.POS_SUPPLIES.x, layout.POS_SUPPLIES.y, ui_food);	
+			si.printAtPixel(getUILayer(), layout.POS_SUPPLIES_MOD.x, layout.POS_SUPPLIES_MOD.y, ui_foodModifier);
 			
-			si.drawImage(getUILayer(), 172, 436, MORALE_IMAGES[statsExpedition.getMorale()]);
+			si.drawImage(getUILayer(), layout.POS_MOOD_ICON.x, layout.POS_MOOD_ICON.y, MORALE_IMAGES[statsExpedition.getMorale()]);
 		}
 		
 		
 		// Middle
-		si.printCentered(getUILayer(), 20, ui_locationDescription, Color.WHITE);
-		si.printAtPixel(getUILayer(), 174, 478, ui_date);
-		si.printAtPixel(getUILayer(), 534, 478, ui_time);
+		si.printCentered(getUILayer(), layout.POS_LOCATION_Y, ui_locationDescription, Color.WHITE);
+		si.printAtPixel(getUILayer(), layout.POS_DATE.x, layout.POS_DATE.y, ui_date);
+		si.printAtPixel(getUILayer(), layout.POS_TIME.x, layout.POS_TIME.y, ui_time);
 
 		expeditionVehicleItems.clear();
 		for (Vehicle expeditionVehicle: statsExpedition.getCurrentVehicles()){
@@ -1012,13 +1011,15 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		vehiclesMenuBox.setUsedBuffer(1);
 		vehiclesMenuBox.draw(false);
 		
-		si.printAtPixel(getUILayer(), 720, 575, ExpeditionGame.getVersion());
-		si.drawImage(getUILayer(), 774, 2, BTN_MOVE);
+		si.printAtPixel(getUILayer(), layout.POS_VERSION.x, layout.POS_VERSION.y, ExpeditionGame.getVersion());
+		si.drawImage(getUILayer(), layout.POS_MOVE_ACTION.x, layout.POS_MOVE_ACTION.y, BTN_MOVE);
 	}
 	
 	@SuppressWarnings("serial")
 	public void init(SwingSystemInterface psi, String title, UserCommand[] gameCommands, Properties UIProperties, Assets assets, Action target){
 		super.init(psi, title, gameCommands, UIProperties, assets, target);
+		layout = new Layout();
+		layout.initialize(UIProperties);
 		ExpeditionCleanButton.init(si, assets);
 		
 		psi.setFont(getUILayer(), getFontAsset("FNT_TEXT"));
@@ -1028,13 +1029,14 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		legendLabel.setFont(getFontAsset("FNT_TEXT"));
 		legendLabel.setVisible(false);
 		legendLabel.setForeground(Color.WHITE);
-		legendLabel.setSize(800,15);
+		legendLabel.setSize(PropertyFilters.inte(UIProperties.getProperty("WINDOW_WIDTH")),15);
 		si.add(legendLabel);
 		CleanButton.init(legendLabel, si);
 		
 		HAND_CURSOR = getCursorAsset("HAND_CURSOR");
 		POINTER_CURSOR = getCursorAsset("POINTER_CURSOR");
 
+		
 		unitsMenuBox = new GridBox(si, 42, 42, 5, 5){;
 			@Override
 			public int getDrawingLayer() {
@@ -1046,7 +1048,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				return HAND_CURSOR;
 			}
 		};
-		unitsMenuBox.setLocation(640,189-54);
+		unitsMenuBox.setLocation(PropertyFilters.getPoint(UIProperties.getProperty("POS_UNITS_BOX")));
 		
 		vehiclesMenuBox = new GridBox(si, 42, 42, 5, 3){;
 			@Override
@@ -1059,7 +1061,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				return HAND_CURSOR;
 			}
 		};
-		vehiclesMenuBox.setLocation(640,418-54);
+		vehiclesMenuBox.setLocation(PropertyFilters.getPoint(UIProperties.getProperty("POS_VEHICLES_BOX")));
 		
 		BTN_SPLIT_UP = assets.getImageAsset("BTN_SPLIT_UP");
 		BTN_SPLIT_DOWN = assets.getImageAsset("BTN_SPLIT_DOWN");
