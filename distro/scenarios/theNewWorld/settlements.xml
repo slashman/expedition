@@ -16,7 +16,7 @@
 				<event date = "1248" state = "CASTILE"/>
 			</history>
 	    </settlement>
-	    <settlement id = "SAN_LUCAR" lat="36º46'N" long = "6º21'W" patron = "java.koder@gmail.com" lastUpdate = "04/04/2011">
+<!-- 	    <settlement id = "SAN_LUCAR" lat="36º46'N" long = "6º21'W" patron = "java.koder@gmail.com" lastUpdate = "04/04/2011">
 	    	<population>
 	    		<sample date = "2009" pop = "65805" src = "National statistical institute of Spain 2009"/>
 	    	</population>
@@ -91,6 +91,7 @@
 	    		<event date = "1489" state = "SPAIN" name = "Almería"/>
 	    	</history>
 		</settlement>
+		 -->
 	</settlements>
 
 	<states>
