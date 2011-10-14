@@ -227,7 +227,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			sfxQueue.put("STOP");
 			ExpeditionMusicManager.stopWeather();
 		} catch (InterruptedException e) {}
-		((ExpeditionGFXUISelector)getPlayer().getSelector()).shutdown();
+		if (getPlayer().getSelector() != null)
+			((ExpeditionGFXUISelector)getPlayer().getSelector()).shutdown();
 		super.shutdown();
 	}
 
