@@ -61,7 +61,7 @@ public class ExpeditionGame extends SworeGame {
 		
 	}
 
-	private static final ExpeditionVersion THIS_VERSION = new ExpeditionVersion ("0.4", 2011, 11, 12);
+	private static final ExpeditionVersion THIS_VERSION = new ExpeditionVersion ("0.4.1", 2011, 11, 13);
 	
 	private static ExpeditionGame currentGame;
 	private int lastExpeditionId = 1;
