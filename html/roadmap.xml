@@ -10,6 +10,16 @@
 		<functionalComponent name = "Supplying" description = "Add expiry time for food. Make water necessary to keep the expedition hydratated. Allow refilling water barrels from water sources. Use food based on expiry time." complexity = "7"/>
 		<functionalComponent name = "Paid Transportation" description = "Allow boarding vehicles as passengers to transport expeditions between cities for a fee" complexity = "6"/>
 	</facet>
+	<facet id = "LND" name = "Land Exploration" implementationOrder = "3">
+		<functionalComponent name = "Hunting" description = "Allow expedition to enter &quot;hunt&quot; mode, spot animals and decide if will try to hunt them. Add hunting encounter, pick members from the expedition and try to ambush animals. (Abstracted, similar to combat mode)" complexity = "3"/>
+		<functionalComponent name = "Fishing" description = "Allow expedition to enter &quot;fishing&quot; mode, spot fish banks and decide if will try to fish them. Add fishing encounter, zoom into the location (Generate river shape) and split your expeditions in groups of five, placing them in locations to fish and have a command to &quot;pass time&quot;. Have patience decrease on the fishing groups, and add some fishes (or not) everytime the time passes. Same for fishing on sea" complexity = "8"/>
+		<functionalComponent name = "Camping" description = "Add expedition fatigue, allow to make camp for the night, and sleep on the ships. Allow to sleep at a settlement. (Different levels for resting.) Add ambushes by wild animals and natives." complexity = "7"/>
+		<functionalComponent name = "Land Vehicles / Mounts" description = "Add land vehicles you can use to carry more, restricting movement to some terrain types. Make mounts unable to cross some terrains." complexity = "6"/>
+		<functionalComponent name = "River Exploration" description = "Add rowboats to explore shallow waters. Make rivers unpassable otherwise. Add rapids and their dangers" complexity = "8"/>
+		<functionalComponent name = "Zoomed in areas" description = "Generate zoomed in areas for mountain passes, caverns and towns, allow zooming into them." complexity = "9"/>
+		<functionalComponent name = "Supplying" description = "Add expiry time for food. Make water necessary to keep the expedition hydratated. Allow refilling water barrels from water sources. Use food based on expiry time." complexity = "7"/>
+		<functionalComponent name = "Paid Transportation" description = "Allow boarding vehicles as passengers to transport expeditions between cities for a fee" complexity = "6"/>
+	</facet>
 	<facet id = "DIS" name = "Discoveries" implementationOrder = "5">
 		<functionalComponent name = "Cartography" description = "Allow creating topographic maps on parchments with a certain scale. (The higher the scale the higher requirements for cartography skill). Allow &quot;glueing&quot; maps together to create a master world map." complexity = "15"/>
 		<functionalComponent name = "Archeology" description = "Finding and exploring ruins and add them to the discovery log. Report back to gain fame. Generate ruins and treasures." complexity = "12"/>
@@ -34,6 +44,7 @@
 		<functionalComponent name = "Special characters" description = "Add leader units, named and with special stats." complexity = "3"/>
 	</facet>
 	<facet id = "COL" name = "Colonization" implementationOrder = "1" projectedRelease = "21-nov-2011">
+		<fundingCampaign name = "IndieGoGo" url = "http://www.indiegogo.com/expedition-colonization" goal = "1.393 USD" deadline ="25-nov-2011"/>
 		<functionalComponent name = "Colonies production" description = "Allow colonies to produce goods based on the resources they have access to, the available buildings and the workforce. Allow balancing the production (depending on the level of governance over the colony). Restrict production transference based on the governance level. Allow creating buildings and assign workers to them, to transform raw material. Allow recollecting raw materials from the map." complexity = "11"/>
 		<functionalComponent name = "Colonies growth" description = "Make colonies grow on size on themselves and consume construction resources around them (wood, stone)." complexity = "6"/>
 		<functionalComponent name = "Military buildings" description = "Allow building barracks to train colonists into soldiers. Allow building walled fortresses and towers." complexity = "6"/>
