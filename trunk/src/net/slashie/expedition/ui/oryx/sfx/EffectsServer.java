@@ -47,6 +47,8 @@ public class EffectsServer implements Runnable{
 	}
 	
 	public void rain(String[] cmd){
+		if (true)
+			return;
 		stopEffect();
 		currentEffectQueue = new LinkedBlockingQueue<String>();
 		int minSize = Integer.parseInt(cmd[1]);
