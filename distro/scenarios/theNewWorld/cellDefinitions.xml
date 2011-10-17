@@ -12,6 +12,9 @@
 		forageQuantity = "20" 
 		isForest = "false" 
 		isDeepWater = "false">
+		<resources>
+			<resource id = "FRUIT" quantity = "2"/>
+		</resources>
 	</overworldCell>
 	<overworldCell id = "PLAINS" 
 		description = "Plains" 
@@ -25,6 +28,9 @@
 		forageQuantity = "20" 
 		isForest = "false" 
 		isDeepWater = "false">
+		<resources>
+			<resource id = "FRUIT" quantity = "1"/>
+		</resources>
 	</overworldCell>
 	<overworldCell id = "WATER" 
 		description = "Deep Water" 
@@ -38,6 +44,9 @@
 		forageQuantity = "10" 
 		isForest = "false" 
 		isDeepWater = "true">
+		<resources>
+			<resource id = "FISH" quantity = "2"/>
+		</resources>
 	</overworldCell>
 	<overworldCell id = "WATER2" 
 		description = "Shallow Water" 
@@ -51,6 +60,9 @@
 		forageQuantity = "20" 
 		isForest = "false" 
 		isDeepWater = "false">
+		<resources>
+			<resource id = "FISH" quantity = "2"/>
+		</resources>
 	</overworldCell>
 	<overworldCell id = "MOUNTAIN" 
 		description = "Mountain" 
@@ -90,6 +102,9 @@
 		forageQuantity = "20" 
 		isForest = "true" 
 		isDeepWater = "false">
+		<resources>
+			<resource id = "WOOD" quantity = "2"/>
+		</resources>
 	</overworldCell>
 	
 	<!-- Palos -->
