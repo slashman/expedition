@@ -1,5 +1,6 @@
 package net.slashie.expedition.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -9,7 +10,8 @@ import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 
-public class Inventory {
+@SuppressWarnings("serial")
+public class Inventory implements Serializable{
 	private List<Equipment> items = new ArrayList<Equipment>();
 	private Map<String, Equipment> itemsHash = new Hashtable<String, Equipment>();
 	
