@@ -23,6 +23,7 @@ import net.slashie.expedition.action.Walk;
 import net.slashie.expedition.action.navigation.Anchor;
 import net.slashie.expedition.action.navigation.ResetDeadReckon;
 import net.slashie.expedition.data.ExpeditionDAO;
+import net.slashie.expedition.data.MapCellsLoader;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.game.GameFiles;
@@ -139,6 +140,7 @@ public class RunExpedition {
 				System.out.println("Loading Data");
 				initializeStores();
 				initializeItems();
+				ExpeditionDAO.initializeStoresFactory();
 				initializeCells();
 				initializeBuildings();
 				initializeNPCS();
@@ -556,7 +558,7 @@ public class RunExpedition {
 	}
 	
 	private static void initializeCells(){
-		MapCellFactory.getMapCellFactory().init(ExpeditionDAO.getCellDefinitions(AppearanceFactory.getAppearanceFactory()));
+		MapCellFactory.getMapCellFactory().init(MapCellsLoader.getCells("scenarios/theNewWorld/cellDefinitions.xml"));
 	}
 
 	private static void initializeFeatures(){
