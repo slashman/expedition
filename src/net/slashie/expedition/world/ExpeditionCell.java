@@ -34,5 +34,9 @@ public class ExpeditionCell extends AbstractCell {
 		ExpeditionCell ret = (ExpeditionCell) super.clone();
 		return ret;
 	}
+	
+	public void setStepCommand(String stepCommand) {
+		this.stepCommand = stepCommand;
+	}
 
 }
