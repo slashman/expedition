@@ -11,7 +11,6 @@ public class World extends FileStaticPattern {
 		charMap.put("-", "WATER");
 		charMap.put("m", "MOUNTAIN");
 		charMap.put("f", "FOREST");
-		//charMap.put("S", "PORT_CITY EXIT_GLOBE_COORDINATES SPAIN");
 		charMap.put("S", "GRASS");
 		
 		charMap.put("$", "SNOWY_MOUNTAIN"); // Very high mountains
