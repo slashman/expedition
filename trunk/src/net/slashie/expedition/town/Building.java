@@ -64,7 +64,10 @@ public class Building implements Cloneable, Serializable{
 	}
 
 	public int getStorageCapacity(StorageType storageType){
-		return storageCapacity.get(storageType);
+		Integer ret = storageCapacity.get(storageType);
+		if (ret == null)
+			return 0;
+		else return ret;
 	}
 	
 	public boolean isPluralizableDescription() {

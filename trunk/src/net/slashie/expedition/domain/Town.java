@@ -76,6 +76,7 @@ public class Town extends GoodsCache{
 		founderExpedition = game.getExpedition();
 		foundedIn = game.getGameTime().getTime();
 		governance = founderExpedition.getBaseGovernance();
+		localInventory = new Inventory();
 	}
 	
 	/**
