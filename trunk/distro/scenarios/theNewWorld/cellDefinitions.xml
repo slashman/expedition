@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cells>
+	<overworldCell id = "GRASS" 
+		description = "Grass" 
+		isLand = "true" 
+		height = "0" 
+		isShallowWater = "false" 
+		isSolid = "false" 
+		isWood = "false" 
+		isOpaque = "false" 
+		forageChance = "25" 
+		forageQuantity = "20" 
+		isForest = "false" 
+		isDeepWater = "false">
+	</overworldCell>
+	<overworldCell id = "PLAINS" 
+		description = "Plains" 
+		isLand = "true" 
+		height = "0" 
+		isShallowWater = "false" 
+		isSolid = "false" 
+		isWood = "false" 
+		isOpaque = "false" 
+		forageChance = "25" 
+		forageQuantity = "20" 
+		isForest = "false" 
+		isDeepWater = "false">
+	</overworldCell>
+	<overworldCell id = "WATER" 
+		description = "Deep Water" 
+		isLand = "false" 
+		height = "0" 
+		isShallowWater = "false" 
+		isSolid = "false" 
+		isWood = "false" 
+		isOpaque = "false" 
+		forageChance = "5" 
+		forageQuantity = "10" 
+		isForest = "false" 
+		isDeepWater = "true">
+	</overworldCell>
+	<overworldCell id = "WATER2" 
+		description = "Shallow Water" 
+		isLand = "true" 
+		height = "0" 
+		isShallowWater = "true" 
+		isSolid = "false" 
+		isWood = "false" 
+		isOpaque = "false" 
+		forageChance = "25" 
+		forageQuantity = "20" 
+		isForest = "false" 
+		isDeepWater = "false">
+	</overworldCell>
+	<overworldCell id = "MOUNTAIN" 
+		description = "Mountain" 
+		isLand = "true" 
+		height = "1" 
+		isShallowWater = "false" 
+		isSolid = "false" 
+		isWood = "false" 
+		isOpaque = "false" 
+		forageChance = "10" 
+		forageQuantity = "5" 
+		isForest = "false" 
+		isDeepWater = "false">
+	</overworldCell>
+	<overworldCell id = "SNOWY_MOUNTAIN" 
+		description = "Snow Mountain" 
+		isLand = "true" 
+		height = "2" 
+		isShallowWater = "false" 
+		isSolid = "false" 
+		isWood = "false" 
+		isOpaque = "false" 
+		forageChance = "0" 
+		forageQuantity = "0" 
+		isForest = "false" 
+		isDeepWater = "false">
+	</overworldCell>
+	<overworldCell id = "FOREST" 
+		description = "Forest" 
+		isLand = "true" 
+		height = "0" 
+		isShallowWater = "false" 
+		isSolid = "false" 
+		isWood = "true" 
+		isOpaque = "true" 
+		forageChance = "20" 
+		forageQuantity = "20" 
+		isForest = "true" 
+		isDeepWater = "false">
+	</overworldCell>
+	
+	<!-- Palos -->
+	<zoomedCell id = "GOODS_STORE" description = "Goods Store"/>
+	<zoomedCell id = "WEAPONS_STORE" description = "Weapons Store"/>
+	<zoomedCell id = "PORT" description = "Harbor"/>
+	<zoomedCell id = "MERCHANT" description = "Trade Company"/>
+	<zoomedCell id = "GUILD" description = "Guild"/>
+	<zoomedCell id = "SPAIN_GRASS" description = "Grass"/>
+	<zoomedCell id = "SPAIN_GRASS_BLOCKED" description = "Grass" isSolid = "true" isOpaque = "false"/>
+	<zoomedCell id = "SPAIN_FLOOR" description = "Stone Floor"/>
+	<zoomedCell id = "SPAIN_DOCKS" description = "Docks"/>
+	<zoomedCell id = "SPAIN_WATER" description = "Ocean" isSolid = "false" isOpaque = "false" isWater = "true"/>
+	<zoomedCell id = "SPAIN_WALL" description = "Stone Wall" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "SPAIN_HOUSE" description = "Houses" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "SPAIN_SHIP" description = "Ships" isSolid = "false" isOpaque = "false" isWater = "true"/>
+	<zoomedCell id = "SPAIN_COLUMN" description = "Column" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "SPAIN_CASTLE" description = "Spain Castle" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "DEPARTURE" description = "Docks" stepCommand = "DEPARTURE"/>
+	<zoomedCell id = "CASTLE_GATE" description = "Castle Gate" stepCommand = "TRAVEL_CASTLE"/>
+	
+	<!-- Alcazar of Cordova -->
+	<zoomedCell id = "BOOKSHELF" description = "Bookshelf" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "BOOKSHELF_R" description = "Bookshelf" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "BOOKSHELF_L" description = "Bookshelf" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "CASTLE_FLOOR" description = "Castle Floor"/>
+	<zoomedCell id = "CASTLE_PLAZA" description = "Garden"/>
+	<zoomedCell id = "CASTLE_TREE" description = "Tree" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "BLUE_CARPET" description = "Carpet"/>
+	<zoomedCell id = "RED_CARPET" description = "Carpet"/>
+	<zoomedCell id = "CASTLE_WALL" description = "Castle Wall" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "SPAIN_BANNER" description = "Banner of Spain" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "CASTLE_WINDOW" description = "Castle Window" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "THRONE" description = "Throne of Spain" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "SPAIN_CREST" description = "The Spain Coat of Arms" isSolid = "true" isOpaque = "true"/>
+	<zoomedCell id = "CASTLE_CURTAIN" description = "Curtain" isSolid = "true" isOpaque = "true"/>
+</cells>
+		
+			
+			
+			
+			

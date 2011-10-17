@@ -38,8 +38,8 @@ import net.slashie.util.Pair;
 import net.slashie.utils.roll.Roll;
 
 public class ExpeditionDAO {
-	public static AbstractCell[] getCellDefinitions (AppearanceFactory appFactory){
-		
+	public static void initializeStoresFactory(){
+
 		Store goodsStore = new Store(GoodType.SUPPLIES);
 		goodsStore.setOwnerName("Supplies Store");
 		goodsStore.addItem(50000, new StoreItemInfo("BISCUIT", 500, 0));
@@ -96,60 +96,6 @@ public class ExpeditionDAO {
 		guild.addItem(10, new StoreItemInfo("DOCTOR", 1, 0));
 		guild.addItem(10, new StoreItemInfo("EXPLORER", 1, 0));
 		StoreFactory.getSingleton().addStore("PALOS_GUILD", guild);
-		
-		return new AbstractCell[]{
-			//Overworld cells
-			new OverworldExpeditionCell("GRASS", "Grass", true, 0, false, false, false, false, 25, 20, false, false),
-			new OverworldExpeditionCell("PLAINS", "Grass", true, 0, false, false, false,false, 25, 20, false, false),
-			new OverworldExpeditionCell("WATER", "Deep Water", false, 0, false, false, false,false, 5, 10, false, true),
-			new OverworldExpeditionCell("WATER2", "Shallow Water", true, 0, true, false, false,false, 25, 20, false, false),
-			new OverworldExpeditionCell("MOUNTAIN", "Mountain", true, 1, false, false, false,false, 10, 5, false, false),
-			new OverworldExpeditionCell("SNOWY_MOUNTAIN", "Snow Mountain", true, 2, false, false, false,false, 0, 0, false, false),
-			new OverworldExpeditionCell("FOREST", "Forest", true, 0, false, false, true,true, 20, 20, true, false),
-			new OverworldExpeditionCell("PORT_CITY", "Port City", false, 0, false, false, false,false,0,0, false, false),
-			
-			//Inworld Cells
-			new ExpeditionCell("GOODS_STORE", "Goods Store"),
-			new ExpeditionCell("WEAPONS_STORE", "Weapons Store"),
-			new ExpeditionCell("PORT", "Harbor"),
-			new ExpeditionCell("MERCHANT", "Trade Company"),
-			new ExpeditionCell("GUILD", "Guild"),
-			
-			new ExpeditionCell("SPAIN_GRASS", "Grass"),
-			new ExpeditionCell("SPAIN_GRASS_BLOCKED", "Grass", true, false),
-			new ExpeditionCell("SPAIN_FLOOR", "Stone Floor"),
-			new ExpeditionCell("SPAIN_DOCKS", "Docks"),
-			new ExpeditionCell("SPAIN_WATER", "Ocean", false, false, true),
-			new ExpeditionCell("SPAIN_WALL", "Stone Wall", true, true),
-			new ExpeditionCell("BOOKSHELF", "Bookshelf", true, true),
-			new ExpeditionCell("BOOKSHELF_R", "Bookshelf", true, true),
-			new ExpeditionCell("BOOKSHELF_L", "Bookshelf", true, true),
-			new ExpeditionCell("SPAIN_HOUSE", "Houses", true, true),
-			new ExpeditionCell("SPAIN_SHIP", "Ships", false, false, true),
-			new ExpeditionCell("SPAIN_COLUMN", "Column", true, true),
-			new ExpeditionCell("SPAIN_CASTLE", "Spain Castle", true, true),
-					
-			new ExpeditionCell("DEPARTURE", "Docks", "DEPARTURE"),
-			
-			
-			new ExpeditionCell("CASTLE_GATE", "Castle Gate", "TRAVEL_CASTLE"),
-			
-			new ExpeditionCell("CASTLE_FLOOR", "Castle Floor"),
-			new ExpeditionCell("CASTLE_PLAZA", "Garden"),
-			new ExpeditionCell("CASTLE_TREE", "Tree", true, true),
-			new ExpeditionCell("BLUE_CARPET", "Carpet"),
-			new ExpeditionCell("RED_CARPET", "Carpet"),
-			new ExpeditionCell("CASTLE_WALL", "Castle Wall", true, true),
-			new ExpeditionCell("SPAIN_BANNER", "Banner of Spain", true,true),
-			new ExpeditionCell("CASTLE_WINDOW", "Castle Window", true, true),
-			new ExpeditionCell("THRONE", "Throne of Spain", true, true),
-			new ExpeditionCell("KING_FERDINAND", "Ferdinand II, King of Aragon", true, true),
-			new ExpeditionCell("QUEEN_ISABELLE", "Isabella, Queen of Castile and León", true, true),
-			
-			new ExpeditionCell("SPAIN_CREST", "The Spain Coat of Arms", true, true),
-			new ExpeditionCell("CASTLE_CURTAIN", "Curtain", true,true),
-			
-		};
 	}
 	
 	public static CharAppearance[] getCharAppearances(){
