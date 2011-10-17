@@ -31,6 +31,7 @@ import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.expedition.world.SettlementLevel;
 import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.expedition.world.Weather;
+import net.slashie.lang.Percentage;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
@@ -2390,5 +2391,17 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	public void removeVehicle(ExpeditionItem eitem) {
 		currentVehicles.remove(eitem);
+	}
+
+	
+	/**
+	 * Represents how much governance the Expeditionary has
+	 * over newly-founded colonies.
+	 * 
+	 * It's associated with the morale
+	 * @return
+	 */
+	public Percentage getBaseGovernance() {
+		return new Percentage(getMorale()*10);
 	}
 }

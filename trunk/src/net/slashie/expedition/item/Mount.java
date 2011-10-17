@@ -13,7 +13,7 @@ public class Mount extends ExpeditionItem{
 			String appearanceId, int weight, GoodType goodType,
 			int palosStoreValue, int baseTradingValue, int carryCapacity, MovementSpeed speed) {
 		super(classifierId, description, pluralDescription, longDescription,
-				appearanceId, weight, goodType, palosStoreValue, baseTradingValue);
+				appearanceId, weight, goodType, palosStoreValue, baseTradingValue, StorageType.BARN);
 		this.carryCapacity = carryCapacity;
 		this.speed = speed;
 	}

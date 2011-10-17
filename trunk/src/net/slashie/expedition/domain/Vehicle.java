@@ -1,5 +1,6 @@
 package net.slashie.expedition.domain;
 
+import net.slashie.expedition.item.StorageType;
 import net.slashie.serf.level.AbstractLevel;
 import net.slashie.utils.Util;
 
@@ -57,7 +58,7 @@ public class Vehicle extends ExpeditionItem{
 	public Vehicle(String classifierId, String description, String pluralDescription, String longDescription,
 			int weight, boolean moveOnWater,
 			boolean moveOnAir, int speedModifier, int carryCapacity, int resistance, boolean fakeVehicle, GoodType goodType, int palosStoreValue, int baseTradingValue) {
-		super(classifierId, description,pluralDescription, longDescription, classifierId, weight, goodType, palosStoreValue, baseTradingValue);
+		super(classifierId, description,pluralDescription, longDescription, classifierId, weight, goodType, palosStoreValue, baseTradingValue, StorageType.WAREHOUSE);
 		this.moveOnWater = moveOnWater;
 		this.moveOnAir = moveOnAir;
 		this.speedModifier = speedModifier;

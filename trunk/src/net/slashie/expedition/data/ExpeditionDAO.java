@@ -21,17 +21,14 @@ import net.slashie.expedition.domain.Expedition.MovementSpeed;
 import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
+import net.slashie.expedition.item.StorageType;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.Farm;
-import net.slashie.expedition.town.Building.SpecialCapability;
 import net.slashie.expedition.world.Culture;
-import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionFeature;
-import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.expedition.world.StoreFactory;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.libjcsi.ConsoleSystemInterface;
-import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.consoleUI.CharAppearance;
 import net.slashie.util.Pair;
@@ -434,40 +431,40 @@ public class ExpeditionDAO {
 					new ArmorType[]{ArmorType.LIGHT}, 200),
 			
 			//Goods
-			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 1, 1),
-			new Food("BREAD", "Bread", "Bread", "Food Ration", 1, 1, 1, 2),
-			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 2, 1, 1,1),
-			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 2, 1, 2,1),
+			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 1, 1, StorageType.WAREHOUSE),
+			new Food("BREAD", "Bread", "Bread", "Food Ration", 1, 1, 1, 2, StorageType.WAREHOUSE),
+			new Food("DRIED_MEAT", "Dried Meat", "Dried Meat", "Food Ration", 2, 1, 1,1, StorageType.WAREHOUSE),
+			new Food("SAUERKRAUT", "Sauerkraut","Sauerkraut", "Food Ration", 2, 1, 2,1, StorageType.WAREHOUSE),
 			
-			new Food("BEANS", "Beans", "Beans", "Food Ration", 2, 1, 4,1),
-			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 2,1),
-			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 1,2),
-			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 5, 1, 4,1),
-			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 2, 1, 4,1),
-			new Food("FISH", "Fish", "Fish", "Food Ration", 1, 1, 1, 1),
-			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 1, 1),
+			new Food("BEANS", "Beans", "Beans", "Food Ration", 2, 1, 4,1, StorageType.GRANARY),
+			new Food("MAIZE", "Maize", "Maize", "Food Ration", 3, 1, 2,1, StorageType.GRANARY),
+			new Food("WHEAT", "Wheat", "Wheat", "Food Ration", 3, 1, 1,2, StorageType.GRANARY),
+			new Food("POTATOES", "Potatoes", "Potatoes", "Food Ration", 5, 1, 4,1, StorageType.GRANARY),
+			new Food("TOMATOES", "Tomatoes", "Tomatoes", "Food Ration", 2, 1, 4,1, StorageType.GRANARY),
+			new Food("FISH", "Fish", "Fish", "Food Ration", 1, 1, 1, 1, StorageType.WAREHOUSE),
+			new Food("FRUIT", "Fruit", "Fruit", "Food Ration", 3, 1, 1, 1, StorageType.WAREHOUSE),
 			
-			new ExpeditionItem("FRESHWATER", "Freshwater", "Freshwater", "Liquid of Life", "FRESHWATER", 2, GoodType.SUPPLIES, 20,5),
-			new ExpeditionItem("RUM", "Rum", "Rum", "Liquid of Life", "RUM", 2, GoodType.SUPPLIES, 400,500),
+			new ExpeditionItem("FRESHWATER", "Freshwater", "Freshwater", "Liquid of Life", "FRESHWATER", 2, GoodType.SUPPLIES, 20,5, StorageType.WAREHOUSE),
+			new ExpeditionItem("RUM", "Rum", "Rum", "Liquid of Life", "RUM", 2, GoodType.SUPPLIES, 400,500, StorageType.WAREHOUSE),
 			
-			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "Wood piece", "WOOD", 10, GoodType.SUPPLIES, 1,1),
+			new ExpeditionItem("WOOD", "Wooden log", "Wooden logs", "Wood piece", "WOOD", 10, GoodType.SUPPLIES, 1,1, StorageType.WAREHOUSE),
 			
 			// Trade Goods, Old world
-			new ExpeditionItem("COTTON", "Cotton", "Cotton", "Trade Good", "COTTON", 200, GoodType.TRADE_GOODS, 200 , 400),
-			new ExpeditionItem("SUGAR", "Sugar", "Sugar", "Trade Good", "SUGAR", 800, GoodType.TRADE_GOODS, 400 , 800),
-			new ExpeditionItem("CLOTH", "Cloth", "Cloth", "Trade Good", "CLOTH", 50, GoodType.TRADE_GOODS, 600, 700 ),
+			new ExpeditionItem("COTTON", "Cotton", "Cotton", "Trade Good", "COTTON", 200, GoodType.TRADE_GOODS, 200 , 400, StorageType.WAREHOUSE),
+			new ExpeditionItem("SUGAR", "Sugar", "Sugar", "Trade Good", "SUGAR", 800, GoodType.TRADE_GOODS, 400 , 800, StorageType.WAREHOUSE),
+			new ExpeditionItem("CLOTH", "Cloth", "Cloth", "Trade Good", "CLOTH", 50, GoodType.TRADE_GOODS, 600, 700, StorageType.WAREHOUSE),
 			
 			// Trade Goods, New world
-			new ExpeditionItem("COCA", "Coca", "Coca", "Trade Good", "COCA", 500, GoodType.TRADE_GOODS, 200, 500 ),
-			new ExpeditionItem("COCOA", "Cocoa", "Cocoa", "Trade Good", "COCOA", 600, GoodType.TRADE_GOODS, 1200, 400 ),
-			new ExpeditionItem("CHILI_PEPPER", "Chili", "Chili", "Trade Good", "CHILI_PEPPER", 600, GoodType.TRADE_GOODS, 1800, 400 ),
-			new ExpeditionItem("PINEAPPLE", "Pineapple", "Pineapple", "Trade Good", "PINEAPPLE", 800, GoodType.TRADE_GOODS, 1000, 500 ),
-			new ExpeditionItem("STRAWBERRIES", "Strawberries", "Strawberries", "Trade Good", "STRAWBERRIES", 800, GoodType.TRADE_GOODS, 1000 , 300),
-			new ExpeditionItem("TOBACCO", "Tobacco", "Tobacco", "Trade Good", "TOBACCO", 200, GoodType.TRADE_GOODS, 1500 , 500),
-			new ExpeditionItem("COATS", "Coats", "Coats", "Trade Good", "COATS", 60, GoodType.TRADE_GOODS, 2000, 800 ),
-			new ExpeditionItem("FURS", "Furs", "Furs", "Trade Good", "FURS", 60, GoodType.TRADE_GOODS, 1000, 500 ),
-			new ExpeditionItem("GOLD_ARTIFACTS", "Gold Artifacts", "Gold Artifacts", "Trade Good", "GOLD_ARTIFACTS", 40, GoodType.TRADE_GOODS, 1600, 500 ),
-			new ExpeditionItem("NATIVE_ARTIFACTS", "Native Artifacts", "Native Artifacts", "Trade Good", "NATIVE_ARTIFACTS", 20, GoodType.TRADE_GOODS, 800, 200 ),
+			new ExpeditionItem("COCA", "Coca", "Coca", "Trade Good", "COCA", 500, GoodType.TRADE_GOODS, 200, 500, StorageType.WAREHOUSE ),
+			new ExpeditionItem("COCOA", "Cocoa", "Cocoa", "Trade Good", "COCOA", 600, GoodType.TRADE_GOODS, 1200, 400, StorageType.WAREHOUSE ),
+			new ExpeditionItem("CHILI_PEPPER", "Chili", "Chili", "Trade Good", "CHILI_PEPPER", 600, GoodType.TRADE_GOODS, 1800, 400, StorageType.WAREHOUSE ),
+			new ExpeditionItem("PINEAPPLE", "Pineapple", "Pineapple", "Trade Good", "PINEAPPLE", 800, GoodType.TRADE_GOODS, 1000, 500, StorageType.WAREHOUSE ),
+			new ExpeditionItem("STRAWBERRIES", "Strawberries", "Strawberries", "Trade Good", "STRAWBERRIES", 800, GoodType.TRADE_GOODS, 1000 , 300, StorageType.WAREHOUSE),
+			new ExpeditionItem("TOBACCO", "Tobacco", "Tobacco", "Trade Good", "TOBACCO", 200, GoodType.TRADE_GOODS, 1500 , 500, StorageType.WAREHOUSE),
+			new ExpeditionItem("COATS", "Coats", "Coats", "Trade Good", "COATS", 60, GoodType.TRADE_GOODS, 2000, 800, StorageType.WAREHOUSE),
+			new ExpeditionItem("FURS", "Furs", "Furs", "Trade Good", "FURS", 60, GoodType.TRADE_GOODS, 1000, 500, StorageType.WAREHOUSE ),
+			new ExpeditionItem("GOLD_ARTIFACTS", "Gold Artifacts", "Gold Artifacts", "Trade Good", "GOLD_ARTIFACTS", 40, GoodType.TRADE_GOODS, 1600, 500, StorageType.WAREHOUSE),
+			new ExpeditionItem("NATIVE_ARTIFACTS", "Native Artifacts", "Native Artifacts", "Trade Good", "NATIVE_ARTIFACTS", 20, GoodType.TRADE_GOODS, 800, 200, StorageType.WAREHOUSE),
 
 			
 			// Armory
@@ -486,11 +483,11 @@ public class ExpeditionDAO {
 			new Armor(ArmorType.LIGHT, "STUDDED_VEST", "Studded Vest", "Studded Vests", "[Marine, Soldier, Archer, Officer]", 10, 1, new Roll("1D2"), "Leather", 50, 70),
 			
 			// Livestock
-			new ExpeditionItem("ATTACK_DOG", "Attack Dog", "Attack Dogs", "Men best companion", "ATTACK_DOG",  50, GoodType.LIVESTOCK, 200, 150),
-			new ExpeditionItem("COW", "Cow", "Cows", "Cow", "COW",  500, GoodType.LIVESTOCK, 5000, 6000),
+			new ExpeditionItem("ATTACK_DOG", "Attack Dog", "Attack Dogs", "Men best companion", "ATTACK_DOG",  50, GoodType.LIVESTOCK, 200, 150, StorageType.BARN),
+			new ExpeditionItem("COW", "Cow", "Cows", "Cow", "COW",  500, GoodType.LIVESTOCK, 5000, 6000, StorageType.BARN),
 			new Mount("HORSE", "Horse", "Horses", "Mounts", "HORSE",  800, GoodType.LIVESTOCK, 2000, 3000, 1600, MovementSpeed.FAST),
-			new ExpeditionItem("PIGS", "Pig", "Pigs", "Big Pink Pig", "PIGS",  150, GoodType.LIVESTOCK, 500, 400),
-			new ExpeditionItem("LLAMA", "Llama", "Llamas", "Horse-like creature", "LLAMA",  300, GoodType.LIVESTOCK, 4000, 2000),
+			new ExpeditionItem("PIGS", "Pig", "Pigs", "Big Pink Pig", "PIGS",  150, GoodType.LIVESTOCK, 500, 400, StorageType.BARN),
+			new ExpeditionItem("LLAMA", "Llama", "Llamas", "Horse-like creature", "LLAMA",  300, GoodType.LIVESTOCK, 4000, 2000, StorageType.BARN),
 
 			
 			//Ships
@@ -551,36 +548,39 @@ public class ExpeditionDAO {
 		
 	}
 
-	private final static Map<SpecialCapability, Object> NO_CAPABILITIES = new HashMap<SpecialCapability, Object>();
-	private final static Map<SpecialCapability, Object> PLAZA_CAPABILITIES = new HashMap<SpecialCapability, Object>();
+	private final static Map<StorageType, Integer> NO_CAPABILITIES = new HashMap<StorageType, Integer>();
+	private final static Map<StorageType, Integer> PLAZA_CAPABILITIES = new HashMap<StorageType, Integer>();
 	static {
-		PLAZA_CAPABILITIES.put(SpecialCapability.FORAGED_FOOD_STORAGE, 50);
+		PLAZA_CAPABILITIES.put(StorageType.WAREHOUSE, 50);
 	}
-	private final static Map<SpecialCapability, Object> STORAGE_CAPABILITIES = new HashMap<SpecialCapability, Object>();
+	private final static Map<StorageType, Integer> STORAGE_CAPABILITIES = new HashMap<StorageType, Integer>();
 	static {
-		STORAGE_CAPABILITIES.put(SpecialCapability.FORAGED_FOOD_STORAGE, 300);
+		STORAGE_CAPABILITIES.put(StorageType.WAREHOUSE, 300);
 	}
 	
 	private static Building[] buildings = new Building[]{
 		new Building("PLAZA", "Plaza", "Center of community life", 40, DayShiftAgent.TICKS_PER_DAY * 120, 0, 14, PLAZA_CAPABILITIES),
 		new Building("HOUSE", "House", "Simple wooden house, can hold 10 persons", 40, DayShiftAgent.TICKS_PER_DAY * 90, 10, 7, NO_CAPABILITIES),
-		// new Building("CHURCH", "Small Church", "", 60, DayShiftAgent.TICKS_PER_DAY * 60, 0, 10),
+		
 		
 		new Building("STORAGE", "Storage Tower", "Can hold 300 units of foraged food", 60, DayShiftAgent.TICKS_PER_DAY * 240, 0, 14, STORAGE_CAPABILITIES),
 		new Farm(),
-		/*new Building(),
+		/*
 		new Building("MILL", "Mill", "Transforms grain into bread", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
 		
 		new Building("LUMBER_CAMP", "Lumber Camp", "Can hold 500 units of wood", 60, DayShiftAgent.TICKS_PER_DAY * 80, 0, 14),
-		
 		new Building("TRADING_OUTPOST", "Trading Outpost", "", 60, DayShiftAgent.TICKS_PER_DAY * 120, 0, 10),
 		new Building("HARBOR", "Harbor", "", 60, DayShiftAgent.TICKS_PER_DAY * 120, 0, 14),
 		new Building("BLACKSMITH", "Blacksmith", "", 60, DayShiftAgent.TICKS_PER_DAY * 200, 0, 14),
+		
+		new Building("CHURCH", "Small Church", "", 60, DayShiftAgent.TICKS_PER_DAY * 60, 0, 10),
 		new Building("MISSION", "Mission", "", 60, DayShiftAgent.TICKS_PER_DAY * 400, 0, 30),
+		new Building("CATHEDRAL", "Cathedral", "", 60, DayShiftAgent.TICKS_PER_DAY * 1000, 0, 120),
+		
 		new Building("BARRACKS", "Barracks", "", 60, DayShiftAgent.TICKS_PER_DAY * 400, 0, 30),
 		new Building("STABLES", "Stables", "", 60, DayShiftAgent.TICKS_PER_DAY * 500, 0, 30),
+		
 		new Building("FORT", "Fort", "", 60, DayShiftAgent.TICKS_PER_DAY * 1000, 0, 120),
-		new Building("CATHEDRAL", "Cathedral", "", 60, DayShiftAgent.TICKS_PER_DAY * 1000, 0, 120),
 		new Building("PALISADE", "Palisade", "", 60, DayShiftAgent.TICKS_PER_DAY * 400, 0, 30),
 		new Building("STONE_WALL", "Stone Wall", "", 60, DayShiftAgent.TICKS_PER_DAY * 800, 0, 60),
 		new Building("WATCH_TOWER", "Watch tower", "", 60, DayShiftAgent.TICKS_PER_DAY * 500, 0, 20)*/

@@ -683,4 +683,13 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			return super.filterAppearance(appearance);
 		}
 	}
+	
+	public List<OverworldExpeditionCell> getMapCellsAround(Position p){
+		List<OverworldExpeditionCell> ret = new ArrayList<OverworldExpeditionCell>();
+		List<Position> positions = getPositionsAround(p);
+		for (Position position: positions){
+			ret.add((OverworldExpeditionCell)getMapCell(position));
+		}
+		return ret;
+	}
 }

@@ -12,9 +12,8 @@ public class WeeklyAgent extends Actor{
 	protected static final Action BEAT = new Action() {
 		@Override
 		public void execute() {
-			// Forage food at colonies
+			// Check crops at colonies
 			for (Town town: ExpeditionGame.getCurrentGame().getExpedition().getTowns()){
-				town.forageFood();
 				town.checkCrops();
 			}
 			
