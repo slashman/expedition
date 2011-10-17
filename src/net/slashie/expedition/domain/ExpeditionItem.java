@@ -1,5 +1,6 @@
 package net.slashie.expedition.domain;
 
+import net.slashie.expedition.item.StorageType;
 import net.slashie.libjcsi.ConsoleSystemInterface;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.ui.Appearance;
@@ -18,13 +19,14 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 	private String appearanceId;
 	private int weight;
 	private String pluralDescription;
+	private StorageType storageType;
 	
 	public int getWeight() {
 		return weight;
 	}
 
 	public ExpeditionItem(String classifierId, String description, String pluralDescription, String longDescription, String appearanceId, int weight, GoodType goodType, 
-			int palosStoreValue, int baseTradingValue) {
+			int palosStoreValue, int baseTradingValue, StorageType storageType) {
 		super(appearanceId);
 		this.classifierId = classifierId;
 		this.description = description;
@@ -35,6 +37,7 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 		this.goodType = goodType;
 		this.palosStoreValue = palosStoreValue;
 		this.baseTradingValue = baseTradingValue;
+		this.storageType = storageType;
 	}
 	
 	public GoodType getGoodType() {
@@ -148,5 +151,10 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 	@Override
 	public boolean equals(Object obj) {
 		return obj != null && ((ExpeditionItem)obj).getFullID().equals(getFullID());
+	}
+
+	
+	public StorageType getStorageType() {
+		return storageType;
 	}
 }

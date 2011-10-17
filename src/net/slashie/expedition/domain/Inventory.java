@@ -5,6 +5,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import net.slashie.expedition.item.ItemFactory;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 
@@ -44,6 +45,17 @@ public class Inventory {
 		Equipment equipmentx = itemsHash.get(toAddID);
 		if (equipmentx == null){
 			equipmentx = new Equipment(item, quantity);
+			itemsHash.put(toAddID, equipmentx);
+			items.add(equipmentx);
+		} else {
+			equipmentx.increaseQuantity(quantity);
+		}
+	}
+	
+	public void addItem(String toAddID, int quantity) {
+		Equipment equipmentx = itemsHash.get(toAddID);
+		if (equipmentx == null){
+			equipmentx = new Equipment(ItemFactory.createItem(toAddID), quantity);
 			itemsHash.put(toAddID, equipmentx);
 			items.add(equipmentx);
 		} else {

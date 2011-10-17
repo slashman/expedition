@@ -172,6 +172,10 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		inventory.addItem(item, quantity);
 	}
 	
+	public void addItem(String itemID, int quantity) {
+		inventory.addItem(itemID, quantity);
+	}
+	
 	@Override
 	public String getDescription() {
 		return "Ground";
@@ -222,6 +226,10 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	@Override
 	public List<Equipment> getItems() {
 		return inventory.getItems();
+	}
+	
+	public List<Equipment> getItemsWithBaseID(String baseId){
+		return inventory.getItemsWithBaseID(baseId);
 	}
 	
 	@Override

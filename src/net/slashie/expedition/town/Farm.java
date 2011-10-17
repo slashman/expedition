@@ -2,24 +2,21 @@ package net.slashie.expedition.town;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.item.StorageType;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.utils.Util;
 
+@SuppressWarnings("serial")
 public class Farm extends Building {
-	private static final long serialVersionUID = 1L;
-
-	private final static Map<SpecialCapability, Object> NO_CAPABILITIES = new HashMap<SpecialCapability, Object>();
-	
 	private Calendar nextCrop;
 
 	public Farm() {
-		super("FARM", "Farm", "Produces 5000 food each six months", 60, DayShiftAgent.TICKS_PER_DAY * 240, 0, 14, NO_CAPABILITIES);
+		super("FARM", "Farm", "Produces 5000 food each six months", 60, DayShiftAgent.TICKS_PER_DAY * 240, 0, 14, new HashMap<StorageType, Integer>());
 	}
 	
 	public void plant(Calendar date){

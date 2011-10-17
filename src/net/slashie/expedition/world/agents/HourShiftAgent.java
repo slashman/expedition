@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.serf.action.Action;
@@ -33,6 +34,11 @@ public class HourShiftAgent extends Actor{
 				List<FoodConsumer> foodConsumers = ExpeditionGame.getCurrentGame().getFoodConsumers();
 				for (int i = 0; i < foodConsumers.size(); i++){
 					foodConsumers.get(i).consumeFood();
+				}
+				
+				// All towns gather resources
+				for (Town town: ExpeditionGame.getCurrentGame().getExpedition().getTowns()){
+					town.gatherResources();
 				}
 				
 				Expedition expedition = ExpeditionGame.getCurrentGame().getExpedition();

@@ -1,5 +1,6 @@
 package net.slashie.expedition.domain;
 
+import net.slashie.expedition.item.StorageType;
 import net.slashie.utils.roll.Roll;
 
 public class Weapon extends ExpeditionItem{
@@ -49,7 +50,7 @@ public class Weapon extends ExpeditionItem{
 
 	public Weapon(WeaponType weaponType, String classifierId, String description, String pluralDescription, String longDescription,
 			Roll attack, Roll defense, boolean isTool, int hitChance, boolean isRanged, int weight, int palosStoreValue, int baseTradingValue) {
-		super(classifierId, description, pluralDescription, longDescription, classifierId, weight, GoodType.ARMORY, palosStoreValue, baseTradingValue);
+		super(classifierId, description, pluralDescription, longDescription, classifierId, weight, GoodType.ARMORY, palosStoreValue, baseTradingValue, StorageType.WAREHOUSE);
 		this.weaponType = weaponType;
 		this.isTool = isTool;
 		this.attack = attack;
