@@ -20,6 +20,7 @@ import net.slashie.serf.game.SworeGame;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.oryxUI.AnimatedGFXAppearance;
 import net.slashie.serf.ui.oryxUI.GFXAppearance;
+import net.slashie.util.Pair;
 import net.slashie.utils.ImageUtils;
 import net.slashie.utils.Position;
 
@@ -159,21 +160,48 @@ public class MapCellsLoader {
 		return ret;
 	}
 
-	private static AbstractCell processOverworldCell(Element baseElement) {
+	private static AbstractCell processOverworldCell(Element cellElement) {
+		List<Pair<String, Integer>> resources = null;
+		NodeList baseNodes = cellElement.getChildNodes();
+		for (int i = 0; i < baseNodes.getLength(); i++){
+			Node baseNode = baseNodes.item(i);
+			if (baseNode.getNodeType() == Node.ELEMENT_NODE){
+				Element baseElement = (Element) baseNode;
+				if (baseElement.getTagName().equals("resources")){
+					resources = processResources(baseElement);
+				}			
+			}
+		}
+		
 		return new OverworldExpeditionCell (
-			baseElement.getAttribute("id"),
-			baseElement.getAttribute("description"),
-			baseElement.getAttribute("isLand").equals("true"),
-			Integer.parseInt(baseElement.getAttribute("height")),
-			baseElement.getAttribute("isShallowWater").equals("true"),
-			baseElement.getAttribute("isSolid").equals("true"),
-			baseElement.getAttribute("isWood").equals("true"),
-			baseElement.getAttribute("isOpaque").equals("true"),
-			Integer.parseInt(baseElement.getAttribute("forageChance")),
-			Integer.parseInt(baseElement.getAttribute("forageQuantity")),
-			baseElement.getAttribute("isForest").equals("true"),
-			baseElement.getAttribute("isDeepWater").equals("true"), 
-			null);
+			cellElement.getAttribute("id"),
+			cellElement.getAttribute("description"),
+			cellElement.getAttribute("isLand").equals("true"),
+			Integer.parseInt(cellElement.getAttribute("height")),
+			cellElement.getAttribute("isShallowWater").equals("true"),
+			cellElement.getAttribute("isSolid").equals("true"),
+			cellElement.getAttribute("isWood").equals("true"),
+			cellElement.getAttribute("isOpaque").equals("true"),
+			Integer.parseInt(cellElement.getAttribute("forageChance")),
+			Integer.parseInt(cellElement.getAttribute("forageQuantity")),
+			cellElement.getAttribute("isForest").equals("true"),
+			cellElement.getAttribute("isDeepWater").equals("true"), 
+			resources);
 
+	}
+
+	private static List<Pair<String, Integer>> processResources(Element resourcesElement) {
+		List<Pair<String, Integer>> resources = new ArrayList<Pair<String,Integer>>();
+		NodeList baseNodes = resourcesElement.getChildNodes();
+		for (int i = 0; i < baseNodes.getLength(); i++){
+			Node baseNode = baseNodes.item(i);
+			if (baseNode.getNodeType() == Node.ELEMENT_NODE){
+				Element baseElement = (Element) baseNode;
+				if (baseElement.getTagName().equals("resource")){
+					resources.add(new Pair<String, Integer>(baseElement.getAttribute("id"), Integer.parseInt(baseElement.getAttribute("quantity"))));
+				}			
+			}
+		}
+		return resources;
 	}
 }

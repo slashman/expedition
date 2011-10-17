@@ -23,7 +23,7 @@ public class OverworldExpeditionCell extends AbstractCell{
 	private int forageChance, forageQuantity;
 	private boolean isForest;
 	
-	private List<Pair<ExpeditionItem, Integer>> dailyResources;
+	private List<Pair<String, Integer>> dailyResources;
 	
 	public boolean isRiver() {
 		return isShallowWater;
@@ -33,7 +33,7 @@ public class OverworldExpeditionCell extends AbstractCell{
 		return isLand;
 	}
 
-	public OverworldExpeditionCell(String pid, String description, boolean isLand, int heightMod, boolean isShallowWater, boolean isSolid, boolean isWood, boolean isOpaque, int forageChance, int forageQuantity, boolean isForest, boolean isDeepWater, List<Pair<ExpeditionItem, Integer>> dailyResources) {
+	public OverworldExpeditionCell(String pid, String description, boolean isLand, int heightMod, boolean isShallowWater, boolean isSolid, boolean isWood, boolean isOpaque, int forageChance, int forageQuantity, boolean isForest, boolean isDeepWater, List<Pair<String, Integer>> dailyResources) {
 		super(pid, description, description, AppearanceFactory.getAppearanceFactory().getAppearance(pid), isSolid, isOpaque);
 		this.isLand = isLand;
 		this.heightMod = heightMod;
@@ -86,7 +86,7 @@ public class OverworldExpeditionCell extends AbstractCell{
 		return isForest;
 	}
 
-	public List<Pair<ExpeditionItem, Integer>> getDailyResources() {
+	public List<Pair<String, Integer>> getDailyResources() {
 		return dailyResources;
 	}
 
