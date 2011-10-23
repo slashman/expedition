@@ -56,7 +56,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		
 		this.si = si;
 		try {
-			int tileSize = PropertyFilters.inte(p.getProperty("TILE_SIZE"));
+			int tileSize = PropertyFilters.inte(p.getProperty("BORDER_SIZE"));
 			
 			BufferedImage BORDER1 = ImageUtils.createImage(IMG_BORDERS, tileSize,0,tileSize,tileSize);
 			BufferedImage BORDER2 = ImageUtils.crearImagen(IMG_BORDERS, 0,0,tileSize,tileSize);
