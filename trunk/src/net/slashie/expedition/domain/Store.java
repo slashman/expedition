@@ -134,6 +134,11 @@ public class Store implements ItemContainer, Serializable, Cloneable{
 	public Appearance getAppearance() {
 		return getOwnerAppearance();
 	}
+	
+	@Override
+	public Appearance getDialogAppearance() {
+		return null;
+	}
 
 	@Override
 	public int getCarryCapacity() {

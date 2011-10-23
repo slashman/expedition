@@ -17,6 +17,8 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 	private int baseTradingValue;
 	private transient Appearance appearance;
 	private String appearanceId;
+	private transient Appearance dialogAppearance;
+	private String dialogAppearanceId;
 	private int weight;
 	private String pluralDescription;
 	private StorageType storageType;
@@ -28,6 +30,7 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 	public ExpeditionItem(String classifierId, String description, String pluralDescription, String longDescription, String appearanceId, int weight, GoodType goodType, 
 			int palosStoreValue, int baseTradingValue, StorageType storageType) {
 		super(appearanceId);
+		this.dialogAppearanceId = "DIALOG_"+appearanceId;
 		this.classifierId = classifierId;
 		this.description = description;
 		this.appearanceId = appearanceId;
@@ -43,8 +46,6 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 	public GoodType getGoodType() {
 		return goodType;
 	}
-
-	
 	
 	public void setDescription(String description) {
 		this.description = description;
@@ -60,6 +61,13 @@ public class ExpeditionItem extends AbstractItem implements Cloneable{
 			appearance = AppearanceFactory.getAppearanceFactory().getAppearance(appearanceId);
 		}
 		return appearance;
+	}
+	
+	public Appearance getDialogAppearance() {
+		if (dialogAppearance == null){
+			dialogAppearance = AppearanceFactory.getAppearanceFactory().getAppearance(dialogAppearanceId);
+		}
+		return dialogAppearance;
 	}
 
 	@Override

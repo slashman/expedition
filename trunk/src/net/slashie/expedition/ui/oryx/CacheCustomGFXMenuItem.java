@@ -56,7 +56,7 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getAppearance()).getImage();
+		Image unitImage = ((GFXAppearance)item.getDialogAppearance()).getImage();
 		String itemDescription = item.getDescription();
 		
 		// Draw a cute border
@@ -108,7 +108,7 @@ public class CacheCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawMenuItem(SwingSystemInterface si, int x, int y, int index, boolean highlight) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getAppearance()).getImage();
+		Image unitImage = ((GFXAppearance)item.getDialogAppearance()).getImage();
 		String itemDescription = item.getDescription();
 		int inventory = from.getItemCount(item.getFullID());
 		String current = to.getItemCount(item.getFullID())+"";

@@ -791,6 +791,12 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		return null;
 	}
+	
+	public Appearance getDialogAppearance(){
+		Appearance mapAppearance = getAppearance();
+		String mapAppearanceId = mapAppearance.getID();
+		return AppearanceFactory.getAppearanceFactory().getAppearance("DIALOG_"+mapAppearanceId);
+	}
 
 	private AbstractCell getCurrentCell() {
 		return getLocation().getMapCell(getPosition());

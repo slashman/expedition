@@ -33,6 +33,11 @@ public class ItemOffshoreExpeditionContainer implements ItemContainer{
 	public Appearance getAppearance() {
 		return getExpedition().getAppearance();
 	}
+	
+	@Override
+	public Appearance getDialogAppearance() {
+		return getExpedition().getDialogAppearance();
+	}
 
 	@Override
 	public int getCarryCapacity() {

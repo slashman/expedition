@@ -568,7 +568,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			
 			@Override
 			public Appearance getAppearance() {
-				return getExpedition().getAppearance();
+				return getExpedition().getDialogAppearance();
 			}
 		};
 		
@@ -1158,7 +1158,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		int gridX = 0;
 		int gridY = 0;
 		for (Equipment equipment: attackingUnits){
-			GFXAppearance appearance = (GFXAppearance) equipment.getItem().getAppearance();
+			GFXAppearance appearance = (GFXAppearance) ((ExpeditionItem)equipment.getItem()).getDialogAppearance();
 			for (int i = 0; i < equipment.getQuantity(); i++){
 				gridX = Util.rand(0,15);
 				gridY = Util.rand(0,12);
@@ -1175,7 +1175,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		gridY = 0;
 
 		for (Equipment equipment: defendingUnits){
-			GFXAppearance appearance = (GFXAppearance) equipment.getItem().getAppearance();
+			GFXAppearance appearance = (GFXAppearance) ((ExpeditionItem)equipment.getItem()).getDialogAppearance();
 			Image img = ImageUtils.vFlip((BufferedImage)appearance.getImage());
 			for (int i = 0; i < equipment.getQuantity(); i++){
 				gridX = Util.rand(0,15);

@@ -33,7 +33,6 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 	
 	public Image getMenuImage() {
 		return null;
-		//return ((GFXAppearance)item.getItem().getAppearance()).getImage();
 	}
 	
 	public String getMenuDetail() {
@@ -69,8 +68,8 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
 		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
+		Image unitImage = ((GFXAppearance)eitem.getDialogAppearance()).getImage();
 		String itemDescription = item.getItem().getDescription();
 		int quantity = item.getQuantity();
 		
@@ -114,8 +113,8 @@ public class InventoryCustomGFXMenuItem implements CustomGFXMenuItem{
 	@Override
 	public void drawMenuItem(SwingSystemInterface si, int x, int y, int index, boolean highlight) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getItem().getAppearance()).getImage();
 		ExpeditionItem eitem = (ExpeditionItem)item.getItem();
+		Image unitImage = ((GFXAppearance)eitem.getDialogAppearance()).getImage();
 		String itemDescription = item.getItem().getDescription();
 		int quantity = item.getQuantity();
 		
