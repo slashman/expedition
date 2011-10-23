@@ -169,6 +169,133 @@
 		<!-- Corpses -->
 		<appearance id = "DEAD_NATIVE" x = "4" y = "12"/>
 	</appearances>
+	<appearances file = "img/expedition.png" tileWidth = "24" tileHeight = "24">
+		<!-- Main Expedition -->
+		<appearance id = "DIALOG_EXPEDITION" x = "1" y = "16"/>
+		<appearance id = "DIALOG_SHIP_EXPEDITION_N" x = "1" y = "15"/>
+		<appearance id = "DIALOG_SHIP_EXPEDITION_E" x = "2" y = "15"/>
+		<appearance id = "DIALOG_SHIP_EXPEDITION_S" x = "3" y = "15"/>
+		<appearance id = "DIALOG_SHIP_EXPEDITION_W" x = "4" y = "15"/>
+		<appearance id = "DIALOG_SHIP_EXPEDITION_NE" x = "5" y = "15"/>
+		<appearance id = "DIALOG_SHIP_EXPEDITION_SE" x = "6" y = "15"/>
+		<appearance id = "DIALOG_SHIP_EXPEDITION_SW" x = "7" y = "15"/>
+		<appearance id = "DIALOG_SHIP_EXPEDITION_NW" x = "8" y = "15"/>
+		<appearance id = "DIALOG_BOAT_EXPEDITION" x = "3" y = "16"/>
+		<appearance id = "DIALOG_HORSE_EXPEDITION" x = "2" y = "16"/>
+		<!-- Native Expedition -->
+		<appearance id = "DIALOG_HOSTILE_EXPEDITION" x = "6" y = "16"/>
+		<appearance id = "DIALOG_BOAT_HOSTILE_EXPEDITION" x = "8" y = "16"/>
+		<!-- Overworld Terrain -->
+		<appearance id = "DIALOG_GRASS" x = "3" y = "3"/>
+		<appearance id = "DIALOG_PLAINS" x = "4" y = "3"/>
+		<appearance id = "DIALOG_WATER_SHADOW" x = "4" y = "20"/>
+		<appearance id = "DIALOG_MOUNTAIN" x = "5" y = "17"/>
+		<appearance id = "DIALOG_SNOWY_MOUNTAIN" x = "6" y = "17"/>
+		<appearance id = "DIALOG_FOREST" x = "2" y = "17"/>
+		<appearance id = "DIALOG_CHOPPED_FOREST" x = "4" y = "17"/>
+		<appearance id = "DIALOG_PORT_CITY" x = "11" y = "6"/>
+		<appearance id = "DIALOG_STORM" x = "1" y = "17"/>
+		<animatedAppearance id = "DIALOG_WATER" x = "2,2" y = "1,2" delay = "500"/>
+		<animatedAppearance id = "DIALOG_WATER2" x = "3,3" y = "1,2" delay = "500"/>
+		<!-- Overworld Features -->
+		<appearance id = "DIALOG_SHIP" x = "1" y = "5"/>
+		<appearance id = "DIALOG_GOODS_CACHE" x = "9" y = "6"/>
+		<appearance id = "DIALOG_TOWN" x = "11" y = "6"/>
+		<appearance id = "DIALOG_NATIVE_VILLAGE" x = "10" y = "6"/>
+		<appearance id = "DIALOG_NATIVE_TOWN" x = "10" y = "6"/>
+		<appearance id = "DIALOG_NATIVE_CITY" x = "11" y = "6"/>		
+		
+		<!-- Units -->
+		<appearance id = "DIALOG_SAILOR" x = "1" y = "10"/>
+		<appearance id = "DIALOG_ROGUE" x = "2" y = "10"/>
+		<appearance id = "DIALOG_MARINE" x = "3" y = "10"/>
+		<appearance id = "DIALOG_SOLDIER" x = "6" y = "10"/>
+		<appearance id = "DIALOG_GUARD" x = "7" y = "19"/>
+		<appearance id = "DIALOG_ARCHER" x = "5" y = "10"/>
+		<appearance id = "DIALOG_CAPTAIN" x = "7" y = "10"/>
+		<appearance id = "DIALOG_EXPLORER" x = "8" y = "10"/>
+		<appearance id = "DIALOG_CARPENTER" x = "9" y = "10"/>
+		<appearance id = "DIALOG_COLONIST" x = "10" y = "10"/>
+		<appearance id = "DIALOG_NATIVE_WARRIOR" x = "1" y = "11"/>
+		<appearance id = "DIALOG_NATIVE_ARCHER" x = "3" y = "11"/>
+		<appearance id = "DIALOG_NATIVE_COMMONER" x = "3" y = "19"/>
+		<appearance id = "DIALOG_NATIVE_SHAMAN" x = "3" y = "11"/>
+		<appearance id = "DIALOG_QUETZAL_ARCHER" x = "8" y = "19"/>
+		<appearance id = "DIALOG_EAGLE_WARRIOR" x = "9" y = "19"/>
+		<appearance id = "DIALOG_JAGUAR_WARRIOR" x = "10" y = "19"/>
+		<appearance id = "DIALOG_DOCTOR" x = "11" y = "19"/>
+		<compositeAppearance id = "DIALOG_SAILOR_MOUNTED" x1 = "1" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_ROGUE_MOUNTED" x1 = "2" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_MARINE_MOUNTED" x1 = "3" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_SOLDIER_MOUNTED" x1 = "6" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_GUARD_MOUNTED" x1 = "7" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_ARCHER_MOUNTED" x1 = "5" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_CAPTAIN_MOUNTED" x1 = "7" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_EXPLORER_MOUNTED" x1 = "8" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_CARPENTER_MOUNTED" x1 = "9" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_COLONIST_MOUNTED" x1 = "10" y1 = "10" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_COLOMBUS_MOUNTED" x1 = "2" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_NATIVE_WARRIOR_MOUNTED" x1 = "1" y1 = "11" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_NATIVE_ARCHER_MOUNTED" x1 = "3" y1 = "11" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_NATIVE_COMMONER_MOUNTED" x1 = "3" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_NATIVE_SHAMAN_MOUNTED" x1 = "3" y1 = "11" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_QUETZAL_ARCHER_MOUNTED" x1 = "8" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_EAGLE_WARRIOR_MOUNTED" x1 = "9" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_JAGUAR_WARRIOR_MOUNTED" x1 = "10" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_DOCTOR_MOUNTED" x1 = "11" y1 = "19" x2 = "1" y2 = "25"/>
+		<!-- Supplies -->
+		<appearance id = "DIALOG_BISCUIT" x = "6" y = "8"/>
+		<appearance id = "DIALOG_FRUIT" x = "7" y = "7"/>
+		<appearance id = "DIALOG_BREAD" x = "7" y = "7"/>
+		<appearance id = "DIALOG_DRIED_MEAT" x = "4" y = "7"/>
+		<appearance id = "DIALOG_RUM" x = "5" y = "8"/>
+		<appearance id = "DIALOG_WOOD" x = "4" y = "24"/>
+		<appearance id = "DIALOG_FRESHWATER" x = "8" y = "7"/>
+		<appearance id = "DIALOG_SAUERKRAUT" x = "9" y = "7"/>
+		<appearance id = "DIALOG_BEANS" x = "1" y = "24"/>
+		<appearance id = "DIALOG_MAIZE" x = "6" y = "7"/>
+		<appearance id = "DIALOG_WHEAT" x = "5" y = "24"/>
+		<appearance id = "DIALOG_POTATOES" x = "2" y = "24"/>
+		<appearance id = "DIALOG_TOMATOES" x = "3" y = "24"/>
+		<appearance id = "DIALOG_FISH" x = "1" y = "22"/>
+		<!-- Trade Goods -->
+		<appearance id = "DIALOG_COTTON" x = "4" y = "8"/>
+		<appearance id = "DIALOG_SUGAR" x = "4" y = "8"/>
+		<appearance id = "DIALOG_CLOTH" x = "4" y = "8"/>
+		<appearance id = "DIALOG_COCA" x = "4" y = "8"/>
+		<appearance id = "DIALOG_COCOA" x = "4" y = "8"/>
+		<appearance id = "DIALOG_CHILI_PEPPER" x = "4" y = "8"/>
+		<appearance id = "DIALOG_PINEAPPLE" x = "4" y = "8"/>
+		<appearance id = "DIALOG_STRAWBERRIES" x = "4" y = "8"/>
+		<appearance id = "DIALOG_TOBACCO" x = "4" y = "8"/>
+		<appearance id = "DIALOG_COATS" x = "4" y = "8"/>
+		<appearance id = "DIALOG_FURS" x = "4" y = "8"/>
+		<appearance id = "DIALOG_GOLD_ARTIFACTS" x = "4" y = "8"/>
+		<appearance id = "DIALOG_NATIVE_ARTIFACTS" x = "4" y = "8"/>
+		<!-- Weapons -->
+		<appearance id = "DIALOG_STEEL_SPEAR" x = "1" y = "9"/>
+		<appearance id = "DIALOG_STEEL_SWORD" x = "2" y = "9"/>
+		<appearance id = "DIALOG_WOODEN_CROSSBOW" x = "4" y = "9"/>
+		<appearance id = "DIALOG_COMPOSITE_BOW" x = "3" y = "17"/>
+		<appearance id = "DIALOG_HARQUEBUS" x = "6" y = "9"/>
+		<appearance id = "DIALOG_STUDDED_VEST" x = "7" y = "9"/>
+		<appearance id = "DIALOG_BREASTPLATE" x = "8" y = "9"/>
+		<appearance id = "DIALOG_PLUMED_BOW" x = "2" y = "23"/>
+		<appearance id = "DIALOG_SIMPLE_BOW" x = "1" y = "23"/>
+		<appearance id = "DIALOG_OBSIDIAN_SWORD" x = "4" y = "23"/>
+		<appearance id = "DIALOG_WOODEN_MACE" x = "3" y = "23"/>
+		<!-- Livestock -->
+		<appearance id = "DIALOG_ATTACK_DOG" x = "1" y = "21"/>
+		<appearance id = "DIALOG_COW" x = "2" y = "21"/>
+		<appearance id = "DIALOG_HORSE" x = "3" y = "21"/>
+		<appearance id = "DIALOG_PIGS" x = "4" y = "21"/>
+		<appearance id = "DIALOG_LLAMA" x = "5" y = "21"/>
+		<!-- Vehicles -->
+		<appearance id = "DIALOG_CARRACK" x = "5" y = "5"/>
+		<appearance id = "DIALOG_CARAVEL" x = "1" y = "5"/>
+		<!-- Corpses -->
+		<appearance id = "DIALOG_DEAD_NATIVE" x = "4" y = "12"/>
+	</appearances>	
 	<appearances file = "img/expedition_fog.png" tileWidth = "24" tileHeight = "24">
 		<appearance id = "GRASS_FOG" x = "3" y = "3"/>
 		<appearance id = "PLAINS_FOG" x = "4" y = "3"/>
