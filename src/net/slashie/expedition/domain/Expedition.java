@@ -1108,9 +1108,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			for (Vehicle vehicle: vehiclesToRemove){
 				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLevel().getMapCell(getPosition());
 				if (cell.isRiver()){
-					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We lost a "+vehicle.getDescription()+" into the shallow water.");
+					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We lost "+vehicle.getName()+".");
 				} else {
-					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We lost a "+vehicle.getDescription()+" to the sea.");
+					UserInterface.getUI().showImportantMessage(getEventDatePreffix()+"We lost "+vehicle.getName()+" to the sea.");
 				}
 				vehicles.remove(vehicle);
 			}
