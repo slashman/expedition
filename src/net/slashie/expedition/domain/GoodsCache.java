@@ -1,9 +1,7 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 
 import net.slashie.expedition.domain.Expedition.DeathCause;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -23,7 +21,11 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	private FoodConsumerDelegate foodConsumerDelegate;
 	private Inventory inventory;
-	private String nonEmptyAppearanceId; 
+	private String nonEmptyAppearanceId;
+
+	private transient Appearance dialogAppearance;
+	private String dialogAppearanceId; 
+
 	
 	public GoodsCache(boolean abstractCache) {
 		setAppearanceId("GOODS_CACHE");
@@ -37,6 +39,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	public GoodsCache(ExpeditionGame game, String appearanceId, String nonEmptyAppearanceId) {
 		setAppearanceId(appearanceId);
+		dialogAppearanceId = "DIALOG_"+dialogAppearanceId;
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		inventory = new Inventory();
 		game.addFoodConsumer(this);
@@ -50,6 +53,12 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		else {
 			return super.getAppearance();
 		}
+	}
+	
+	public Appearance getDialogAppearance() {
+		if (dialogAppearance == null)
+			dialogAppearance = AppearanceFactory.getAppearanceFactory().getAppearance(dialogAppearanceId);
+		return dialogAppearance;
 	}
 	
 	public GoodsCache() {

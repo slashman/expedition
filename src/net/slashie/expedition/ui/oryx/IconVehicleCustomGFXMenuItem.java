@@ -70,7 +70,7 @@ public class IconVehicleCustomGFXMenuItem implements CustomGFXMenuItem{
 	
 	@Override
 	public void drawMenuItem(SwingSystemInterface si, int x, int y, int index, boolean highlight) {
-		Image unitImage = ((GFXAppearance)vehicle.getAppearance()).getImage();
+		Image unitImage = ((GFXAppearance)vehicle.getDialogAppearance()).getImage();
 		if (flip){
 			Image img = ImageUtils.vFlip((BufferedImage)unitImage);
 			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x, y, img);

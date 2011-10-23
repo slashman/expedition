@@ -31,4 +31,5 @@ public interface ItemContainer {
 	 */
 	String getTypeDescription();
 	int getVehicleCount(String fullID);
+	Appearance getDialogAppearance();
 }

@@ -301,7 +301,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		// Draw current unit
 		if (highlight != null){
 			// Get some info
-			Image unitImage = ((GFXAppearance)highlight.getAppearance()).getImage();
+			Image unitImage = ((GFXAppearance)highlight.getDialogAppearance()).getImage();
 
 			// Draw the unit info
 			si.drawImage(ExpeditionOryxUI.UI_WIDGETS_LAYER, x + 117, y + 132, unitImage);
@@ -534,7 +534,7 @@ public class TransferBorderGridBox extends BorderedGridBox{
 	}
 	
 	private void drawContainerInfo(int x, int y, ItemContainer container, boolean alignRight) {
-		Appearance containerAppearance = container.getAppearance();
+		Appearance containerAppearance = container.getDialogAppearance();
 		if (containerAppearance != null){
 			Image containerImage = null;
 			if (containerAppearance instanceof GFXAppearance){

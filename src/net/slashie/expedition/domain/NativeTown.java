@@ -260,7 +260,7 @@ public class NativeTown extends Town{
 					break;
 				}
 				if (nativeTown.canTradeGoodType(goodType)){
-					List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer", getAppearance());
+					List<Equipment> offer = ((ExpeditionUserInterface)UserInterface.getUI()).selectItemsFromExpedition("What goods do you offer?", "offer", getDialogAppearance());
 					if (offer == null){
 						//Cancelled
 						break;
