@@ -13,7 +13,7 @@ WINDOW_HEIGHT = 768
 
 # Mouse parameters
 useMouse = true
-mouseQuadrant = 496,304,64,64
+mouseQuadrant = 464,272,96,96
 
 # Colors
 COLOR_MSGBOX_ACTIVE = 0,100,200
