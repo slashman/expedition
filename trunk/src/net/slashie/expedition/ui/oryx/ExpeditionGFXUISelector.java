@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 
@@ -15,17 +16,20 @@ import javax.swing.Timer;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Expedition.MovementMode;
+import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.action.Message;
 import net.slashie.serf.ui.UserAction;
 import net.slashie.serf.ui.oryxUI.Assets;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.Position;
+import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
@@ -122,8 +126,8 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		chopButton.setPopupText("Chop Woods (w)");
 		anchorButton.setPopupText("Anchor Ships (A)");
 		
-		musicButton.setPopupText("Switch Music (m)");
-		sfxButton.setPopupText("Switch SFX (f)");
+		musicButton.setPopupText("Switch Music (M)");
+		sfxButton.setPopupText("Switch SFX (F)");
 		saveButton.setPopupText("Save and Quit (S)");
 		quitButton.setPopupText("Quit (Q)");
 		logButton.setPopupText("Message Log (L)");
@@ -187,8 +191,16 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		super.activate();
 		// Reenable buttons
 		armButton.setEnabled(true);
+		buildButton.setVisible(true);
+		dropButton.setVisible(true);
 		inventoryButton.setEnabled(true);
 		lookButton.setEnabled(true);
+		//mountButton.setVisible(true);
+		//repairButton.setVisible(true);
+		//resetButton.setVisible(true);
+		//chopButton.setVisible(true);
+		
+		//Always enable them, though the may be invisible
 		buildButton.setEnabled(true);
 		dropButton.setEnabled(true);
 		mountButton.setEnabled(true);
@@ -196,6 +208,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.setEnabled(true);
 		chopButton.setEnabled(true);
 		anchorButton.setEnabled(true);
+		
 		musicButton.setEnabled(true);
 		sfxButton.setEnabled(true);
 		saveButton.setEnabled(true);
