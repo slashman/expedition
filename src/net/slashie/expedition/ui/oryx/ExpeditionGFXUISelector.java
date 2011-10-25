@@ -6,7 +6,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 
@@ -16,20 +15,17 @@ import javax.swing.Timer;
 
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Expedition.MovementMode;
-import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.action.Message;
 import net.slashie.serf.ui.UserAction;
 import net.slashie.serf.ui.oryxUI.Assets;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.utils.Position;
-import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
@@ -189,29 +185,30 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	@Override
 	public void activate() {
 		super.activate();
-		buttonsPanel.setVisible(true);
-		musicButton.setVisible(true);
-		sfxButton.setVisible(true);
-		saveButton.setVisible(true);
-		quitButton.setVisible(true);
-		logButton.setVisible(true);
-		
+		// Reenable buttons
 		armButton.setEnabled(true);
-		//buildButton.setVisible(true);
-		//dropButton.setVisible(true);
 		inventoryButton.setEnabled(true);
 		lookButton.setEnabled(true);
-		//mountButton.setVisible(true);
-		//repairButton.setVisible(true);
-		//resetButton.setVisible(true);
-		//chopButton.setVisible(true);
-		
+		buildButton.setEnabled(true);
+		dropButton.setEnabled(true);
+		mountButton.setEnabled(true);
+		repairButton.setEnabled(true);
+		resetButton.setEnabled(true);
+		chopButton.setEnabled(true);
+		anchorButton.setEnabled(true);
 		musicButton.setEnabled(true);
 		sfxButton.setEnabled(true);
 		saveButton.setEnabled(true);
 		quitButton.setEnabled(true);
 		logButton.setEnabled(true);
 		
+		// Make buttons visible
+		buttonsPanel.setVisible(true);
+		musicButton.setVisible(true);
+		sfxButton.setVisible(true);
+		saveButton.setVisible(true);
+		quitButton.setVisible(true);
+		logButton.setVisible(true);
 		updateButtonStatus();
 	}
 	
@@ -270,17 +267,17 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	
 	private void updateButtonStatus(){
 		Expedition expedition = (Expedition) getUI().getPlayer();
-		
+		boolean doRevalidate = false;
 		if (expedition.isMounted()){
 			mountButton.setVisible(true);
 			mountButton.setFace(unmountImage);
 			mountButton.setPopupText("Unmount (m)");
-			si.revalidate();
+			doRevalidate = true;
 		} else if (expedition.getItemCountBasic("HORSE") > 0){
 			mountButton.setVisible(true);
 			mountButton.setFace(mountImage);
 			mountButton.setPopupText("Ride Mounts (m)");
-			si.revalidate();
+			doRevalidate = true;
 		} else {
 			mountButton.setVisible(false);
 		}
@@ -288,10 +285,14 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		if (expedition.isArmed()){
 			armButton.setFace(disarmImage);
 			armButton.setPopupText("Disarm Expedition (a)");
-			si.revalidate();
+			doRevalidate = true;
 		} else {
 			armButton.setFace(armImage);
 			armButton.setPopupText("Arm Expedition (a)");
+			doRevalidate = true;
+		}
+		
+		if (doRevalidate){
 			si.revalidate();
 		}
 		
