@@ -14,8 +14,8 @@
 		<appearance id = "BOAT_EXPEDITION" x = "10" y = "1"/>
 		<appearance id = "HORSE_EXPEDITION" x = "11" y = "1"/>
 		<!-- Native Expedition -->
-		<appearance id = "HOSTILE_EXPEDITION" x = "12" y = "2"/>
-		<appearance id = "BOAT_HOSTILE_EXPEDITION" x = "13" y = "2"/>
+		<appearance id = "HOSTILE_EXPEDITION" x = "12" y = "1"/>
+		<appearance id = "BOAT_HOSTILE_EXPEDITION" x = "13" y = "1"/>
 		<!-- Overworld Terrain -->
 		<appearance id = "GRASS" x = "1" y = "2"/>
 		<appearance id = "PLAINS" x = "2" y = "2"/>
@@ -184,8 +184,8 @@
 		<appearance id = "DIALOG_BOAT_EXPEDITION" x = "10" y = "1"/>
 		<appearance id = "DIALOG_HORSE_EXPEDITION" x = "11" y = "1"/>
 		<!-- Native Expedition -->
-		<appearance id = "DIALOG_HOSTILE_EXPEDITION" x = "12" y = "2"/>
-		<appearance id = "DIALOG_BOAT_HOSTILE_EXPEDITION" x = "13" y = "2"/>
+		<appearance id = "DIALOG_HOSTILE_EXPEDITION" x = "12" y = "1"/>
+		<appearance id = "DIALOG_BOAT_HOSTILE_EXPEDITION" x = "13" y = "1"/>
 		<!-- Overworld Terrain -->
 		<appearance id = "DIALOG_GRASS" x = "1" y = "2"/>
 		<appearance id = "DIALOG_PLAINS" x = "2" y = "2"/>
