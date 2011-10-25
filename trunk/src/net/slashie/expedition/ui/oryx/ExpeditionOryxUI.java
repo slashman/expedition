@@ -306,7 +306,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		saveMapLayer();
 		
-		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH, 3, 6, null, inventorySelectionQueue);
+		InventoryBorderGridBox menuBox = new InventoryBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH, 3, 6, null, inventorySelectionQueue);
 		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
   		menuBox.setTitle("Examine Expedition Inventory");
@@ -441,13 +441,13 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 				COLOR_BORDER_OUT,
 				COLOR_BORDER_IN,
 				COLOR_WINDOW_BACKGROUND,
-				tileSize,
+				borderSize,
 				6,9,12 );
 
 		p.setBounds(x, y, w, h);
 		p.paintAt(si.getDrawingGraphics(getUILayer()), x, y);
 		si.setColor(getUILayer(), TEXT_COLOR);
-		si.printAtPixel(getUILayer(), x+tileSize, y+tileSize*2, prompt);
+		si.printAtPixel(getUILayer(), x+tileWidth, y+tileHeight*2, prompt);
 		si.commitLayer(getUILayer());
 		String ret = si.input(getUILayer(), xp,yp,TEXT_COLOR,length);
 		
@@ -680,7 +680,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		// Create the gridbox component. Send the transferFromExpeditionHandler to allow item selection with both mouse and keyb
    		TransferBorderGridBox menuBox = new TransferBorderGridBox(
-   				BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
+   				BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderSize, 6,9,12,
    				STANDARD_ITEM_HEIGHT,STANDARD_ITEM_WIDTH, 2, 6, IMG_BOX, null, 
    				from, to, transferFromExpeditionHandler, itemTransferFunctionality);
    		menuBox.setCursor(si.getCursor());
@@ -1219,7 +1219,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		Equipment.eqMode = true;
 		clearTextBox();
 		final ExpeditionOryxUI this_ = this;
-   		BorderedGridBox cacheBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH,2,4,null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER,HAND_CURSOR) {
+   		BorderedGridBox cacheBox = new BorderedGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderSize, 6,9,12,STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH,2,4,null, null, BTN_SPLIT_UP, BTN_SPLIT_DOWN, ExpeditionOryxUI.BTN_SPLIT_UP_HOVER, ExpeditionOryxUI.BTN_SPLIT_DOWN_HOVER,HAND_CURSOR) {
    			KeyListener changePageKeyListener;
    			@Override
    			protected void customInit() {
@@ -1304,7 +1304,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		BlockingQueue<String> selectionHandler = new LinkedBlockingQueue<String>();
 		closeButton.addActionListener(getStringCallBackActionListener(selectionHandler, "CANCEL"));
 		
-		BuildingPlanBorderGridBox menuBox = new BuildingPlanBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, tileSize, 6,9,12,
+		BuildingPlanBorderGridBox menuBox = new BuildingPlanBorderGridBox(BORDER1, BORDER2, BORDER3, BORDER4, si, COLOR_WINDOW_BACKGROUND, COLOR_BORDER_IN, COLOR_BORDER_OUT, borderSize, 6,9,12,
 				STANDARD_ITEM_HEIGHT, STANDARD_ITEM_WIDTH+43, 3, 5, selectionHandler, closeButton);
 		menuBox.setCursor(si.getCursor());
   		menuBox.setBounds(16, 16, 768,480);
