@@ -29,6 +29,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	public GoodsCache(boolean abstractCache) {
 		setAppearanceId("GOODS_CACHE");
+		dialogAppearanceId = "DIALOG_GOODS_CACHE";
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		inventory = new Inventory();
 	}
@@ -39,7 +40,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	
 	public GoodsCache(ExpeditionGame game, String appearanceId, String nonEmptyAppearanceId) {
 		setAppearanceId(appearanceId);
-		dialogAppearanceId = "DIALOG_"+dialogAppearanceId;
+		dialogAppearanceId = "DIALOG_"+appearanceId;
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		inventory = new Inventory();
 		game.addFoodConsumer(this);
