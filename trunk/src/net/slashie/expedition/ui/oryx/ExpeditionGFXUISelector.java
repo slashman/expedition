@@ -226,6 +226,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 	}
 	
 	public void shutdown() {
+		super.shutdown();
 		buttonsPanel.setVisible(false);
 		musicButton.setVisible(false);
 		sfxButton.setVisible(false);
