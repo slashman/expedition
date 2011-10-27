@@ -1201,7 +1201,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		int i = 0;
 		for (String message: messages){
 			message = message.replaceAll("XXX", "\n");
-			showTextBox(message, 16, 380, 776, 200, i < messages.size()-1);
+			showTextBox(message, getLayout().BATTLE_OUTCOME_BOUNDS.x, getLayout().BATTLE_OUTCOME_BOUNDS.y, getLayout().BATTLE_OUTCOME_BOUNDS.width, getLayout().BATTLE_OUTCOME_BOUNDS.height, i < messages.size()-1);
 			i++;
 		}
 	}
