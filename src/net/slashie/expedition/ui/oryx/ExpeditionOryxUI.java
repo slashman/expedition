@@ -120,9 +120,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image BTN_SPLIT_RIGHT_ALL;
 	public static Image BTN_SPLIT_LEFT_HOVER_ALL;
 	public static Image BTN_SPLIT_RIGHT_HOVER_ALL;
-	
-	public static Image BTN_MOVE;
-	
+		
 	public static Image BTN_PEOPLE;
 	public static Image BTN_SUPPLIES;
 	public static Image BTN_MERCHANDISE;
@@ -1014,7 +1012,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		vehiclesMenuBox.draw(false);
 		
 		si.printAtPixel(getUILayer(), layout.POS_VERSION.x, layout.POS_VERSION.y, ExpeditionGame.getVersion());
-		si.drawImage(getUILayer(), layout.POS_MOVE_ACTION.x, layout.POS_MOVE_ACTION.y, BTN_MOVE);
 	}
 	
 	@SuppressWarnings("serial")
@@ -1079,8 +1076,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		BTN_SPLIT_RIGHT_ALL = assets.getImageAsset("BTN_SPLIT_RIGHT_ALL");
 		BTN_SPLIT_LEFT_HOVER_ALL = assets.getImageAsset("BTN_SPLIT_LEFT_HOVER_ALL");
 		BTN_SPLIT_RIGHT_HOVER_ALL = assets.getImageAsset("BTN_SPLIT_RIGHT_HOVER_ALL");
-		
-		BTN_MOVE = assets.getImageAsset("BTN_MOVE");
 		
 		BTN_PEOPLE = assets.getImageAsset("BTN_PEOPLE");
 		BTN_SUPPLIES = assets.getImageAsset("BTN_SUPPLIES");

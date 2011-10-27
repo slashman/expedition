@@ -47,7 +47,6 @@ public class Layout {
 	public Position POS_SEADAYS;
 	public Position POS_SUPPLIES_MOD;
 	public Position POS_VERSION;
-	public Position POS_MOVE_ACTION;
 	
 	public Position POS_TITLE_VERSION;
 	public Position POS_TITLE_ABOUT;
@@ -98,7 +97,6 @@ public class Layout {
 		
 		POS_LOCATION_Y = PropertyFilters.inte(p.getProperty("POS_LOCATION_Y"));
 		
-		POS_MOVE_ACTION = PropertyFilters.getPosition(p.getProperty("POS_MOVE_ACTION"));		
 		POS_JOURNAL_ACTION = PropertyFilters.getPosition(p.getProperty("POS_JOURNAL_ACTION"));
 		POS_MUSIC_ACTION = PropertyFilters.getPosition(p.getProperty("POS_MUSIC_ACTION"));
 		POS_SFX_ACTION = PropertyFilters.getPosition(p.getProperty("POS_SFX_ACTION"));
