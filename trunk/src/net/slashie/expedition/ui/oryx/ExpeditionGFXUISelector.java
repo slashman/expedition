@@ -191,16 +191,8 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		super.activate();
 		// Reenable buttons
 		armButton.setEnabled(true);
-		buildButton.setVisible(true);
-		dropButton.setVisible(true);
 		inventoryButton.setEnabled(true);
 		lookButton.setEnabled(true);
-		//mountButton.setVisible(true);
-		//repairButton.setVisible(true);
-		//resetButton.setVisible(true);
-		//chopButton.setVisible(true);
-		
-		//Always enable them, though the may be invisible
 		buildButton.setEnabled(true);
 		dropButton.setEnabled(true);
 		mountButton.setEnabled(true);
@@ -208,7 +200,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		resetButton.setEnabled(true);
 		chopButton.setEnabled(true);
 		anchorButton.setEnabled(true);
-		
 		musicButton.setEnabled(true);
 		sfxButton.setEnabled(true);
 		saveButton.setEnabled(true);
@@ -306,10 +297,6 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			doRevalidate = true;
 		}
 		
-		if (doRevalidate){
-			si.revalidate();
-		}
-		
 		if (expedition.isAnchored()){
 			anchorButton.setPopupText("Weigh Anchors (A)");
 		} else {
@@ -327,19 +314,23 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 		} else if (expedition.getMovementMode().isLandMovement()){
 			buildButton.setVisible(true);
 			dropButton.setVisible(true);
-			dropButton.setPopupText("Caché Equipment (d)");
 			repairButton.setVisible(false);
 			resetButton.setVisible(true);
 			chopButton.setVisible(true);
 			anchorButton.setVisible(false);
+			dropButton.setPopupText("Caché Equipment (d)");
 		} else {
 			buildButton.setVisible(false);
 			dropButton.setVisible(true);
-			dropButton.setPopupText("Landfall / Drop (d)");
 			repairButton.setVisible(true);
 			resetButton.setVisible(true);
 			chopButton.setVisible(false);
 			anchorButton.setVisible(true);
+			dropButton.setPopupText("Make Landfall (d)");
+		}
+		
+		if (doRevalidate){
+			si.revalidate();
 		}
 	}
 
