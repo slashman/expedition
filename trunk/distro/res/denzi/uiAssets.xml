@@ -82,8 +82,6 @@
 		<image id = "BTN_UNMOUNT" bounds = "480,160,32,32"/>
 		<image id = "BTN_ANCHOR" bounds = "512,160,32,32"/>
 
-		<image id = "BTN_MOVE" bounds = "32,0,16,16"/>
-
 		<image id = "BTN_PEOPLE" bounds = "0,192,32,32"/>
 		<image id = "BTN_SUPPLIES" bounds = "32,192,32,32"/>
 		<image id = "BTN_MERCHANDISE" bounds = "64,192,32,32"/>
