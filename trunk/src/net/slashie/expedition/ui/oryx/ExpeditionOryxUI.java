@@ -233,7 +233,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	public void showInventory() {
 		Equipment.eqMode = true;
-		((GFXUISelector)getPlayer().getSelector()).deactivate();
+		enterScreen();
 		
 		int startX = 480-40;
 		int gapX = 40;
@@ -381,6 +381,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		si.removeKeyListener(cbkl);
   		resetMapLayer();
  		//((GFXUISelector)getPlayer().getSelector()).setMouseMovementActive(false);
+  		leaveScreen();
  		Equipment.eqMode = false;
 	}
 
@@ -1718,8 +1719,6 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	@Override
 	protected void enterScreen() {
 		super.enterScreen();
-		if (getPlayer() != null && getPlayer().getSelector() != null)
-			((GFXUISelector)getPlayer().getSelector()).deactivate();
    		clearTextBox();
    		unitsMenuBox.setHoverDisabled(true);
    		vehiclesMenuBox.setHoverDisabled(true);
