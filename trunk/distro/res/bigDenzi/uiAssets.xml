@@ -93,7 +93,7 @@
 		<image id = "IMG_BORDERS" bounds = "128,224,128,32"/>
 		
 		<image id = "TILE_LINE_AIM" bounds = "32,0,16,16"/>
-		<image id = "TILE_SCAN" bounds = "0,256,64,64"/>
+		<image id = "TILE_SCAN" bounds = "0,256,64,32"/>
 		<image id = "TILE_LINE_STEPS" bounds = "192,0,16,16"/>
 		
 		<image id = "IMG_MORALE_10" bounds = "224,0,16,16"/>

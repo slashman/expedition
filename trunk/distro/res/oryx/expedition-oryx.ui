@@ -15,6 +15,9 @@ WINDOW_HEIGHT = 600
 useMouse = true
 mouseQuadrant = 364,216,72,72
 
+# Basic UI Params
+SCAN_CURSOR_Y_VAR = 0
+
 # Colors
 COLOR_MSGBOX_ACTIVE = 0,100,200
 COLOR_MSGBOX_INACTIVE = 0,200,100
