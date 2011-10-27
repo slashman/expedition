@@ -9,6 +9,7 @@ import net.slashie.utils.PropertyFilters;
 public class Layout {
 	public Rectangle PROMPTBOX_BOUNDS;
 	public Rectangle POPUPMESSAGE_BOUNDS;
+	public Rectangle BATTLE_OUTCOME_BOUNDS;
 	public Rectangle MSGBOX_BOUNDS;
 	public Rectangle INTRO_TEXT_BOUNDS;
 	public Rectangle NEW_WORLD_BUTTON_BOUNDS;
@@ -64,6 +65,7 @@ public class Layout {
 		ACTIONS_PANEL_BOUNDS = PropertyFilters.getRectangle(p.getProperty("ACTIONS_PANEL_BOUNDS"));
 		PROMPTBOX_BOUNDS = PropertyFilters.getRectangle(p.getProperty("PROMPTBOX_BOUNDS"));
 		POPUPMESSAGE_BOUNDS = PropertyFilters.getRectangle(p.getProperty("POPUPMESSAGE_BOUNDS"));
+		BATTLE_OUTCOME_BOUNDS = PropertyFilters.getRectangle(p.getProperty("BATTLE_OUTCOME_BOUNDS"));
 		INTRO_TEXT_BOUNDS = PropertyFilters.getRectangle(p.getProperty("INTRO_TEXT_BOUNDS"));
 		NEW_WORLD_BUTTON_BOUNDS = PropertyFilters.getRectangle(p.getProperty("NEW_WORLD_BUTTON_BOUNDS"));
 		
