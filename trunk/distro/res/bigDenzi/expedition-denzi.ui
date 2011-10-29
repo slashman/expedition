@@ -10,6 +10,7 @@ TILE_SUPER_HEIGHT = -32
 BORDER_SIZE = 32
 WINDOW_WIDTH = 1024
 WINDOW_HEIGHT = 768
+CELL_HEIGHT_OFFSET = 48
 
 # Mouse parameters
 useMouse = true
@@ -30,6 +31,8 @@ MSGBOX_BGROUND = 0,0,0
 # Map Positioning
 POS_MAP = -96,32
 MAX_SIGHT_RANGE = 9
+
+
 
 # Layout 
 MSGBOX_BOUNDS = 192,658,663,83
