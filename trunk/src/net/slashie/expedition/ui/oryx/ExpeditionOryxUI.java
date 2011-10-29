@@ -88,8 +88,8 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static final int STANDARD_ITEM_WIDTH = 237;
 	public static final int STANDARD_ITEM_HEIGHT = 62;
 	public static final int MAP_LAYER = 0;
-	public static final int SFX_LAYER = 2;
-	public static final int UI_WIDGETS_LAYER = 3;
+	public static final int SFX_LAYER = 1;
+	public static final int UI_WIDGETS_LAYER = 2;
 	
 	public static final Color ITEM_BOX_COLOR = new Color(90,51,7);
 	public static final Color ITEM_BOX_BORDER_COLOR = new Color(188,158,76);
@@ -1699,15 +1699,15 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	}
 	   
     public int getFeaturesLayer(){
-    	return 1;
+    	return MAP_LAYER; //1
     }
     
     public int getItemsLayer(){
-    	return 1;
+    	return MAP_LAYER; //1
     }
     
     public int getActorsLayer(){
-    	return 1;
+    	return MAP_LAYER; //1
     }
 	
 	@Override
