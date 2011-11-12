@@ -10,7 +10,7 @@
 	<image id = "BTN_THE_NEW_WORLD" file = "img/theNewWorld.png"/>
 	<image id = "IMG_THE_NEW_WORLD_INTRO" file = "img/theNewWorldIntro.png"/>
 	
-	<font id = "FNT_TEXT" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "18"/>
+	<font id = "FNT_TEXT" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "16"/>
 	<font id = "FNT_MESSAGEBOX" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "18"/>
 	<font id = "FNT_PERSISTANTMESSAGEBOX" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "18"/>
 	<font id = "FNT_DIALOGUE" file = "Rom_Ftl_Srif_Std_Juan_Casco.TTF" size = "18"/>
