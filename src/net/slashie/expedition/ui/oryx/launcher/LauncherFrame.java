@@ -121,7 +121,7 @@ public class LauncherFrame extends JFrame{
 	
 	private BlockingQueue<String> bq;
 	private JCheckBox fullScreenButton;
-	private String command1;
+	private String command1 = "gfx res/bigDenzi/expedition-denzi.ui";
 	
 	private JPanel getGFXPanel() {
 		JRadioButton bigDenzi = new JRadioButton("BigDenzi");
