@@ -333,7 +333,7 @@ public class ExpeditionUnit extends Vehicle{
 		for (WeaponType weaponType: weaponTypes){
 			if (weaponType.equals(""))
 				continue;
-			ret.add(AppearanceFactory.getAppearanceFactory().getAppearance(weaponType.getAppearanceId()));
+			ret.add(AppearanceFactory.getAppearanceFactory().getAppearance("DIALOG_"+weaponType.getAppearanceId()));
 		}
 		return ret;
 	}
@@ -344,7 +344,7 @@ public class ExpeditionUnit extends Vehicle{
 		for (ArmorType armorType: armorTypes){
 			if (armorType.equals(""))
 				continue;
-			ret.add(AppearanceFactory.getAppearanceFactory().getAppearance(armorType.getAppearanceId()));
+			ret.add(AppearanceFactory.getAppearanceFactory().getAppearance("DIALOG_"+armorType.getAppearanceId()));
 		}
 		return ret;
 	}
