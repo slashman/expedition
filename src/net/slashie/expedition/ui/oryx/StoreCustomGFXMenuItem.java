@@ -56,7 +56,7 @@ public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 	@Override
 	public void drawTooltip(SwingSystemInterface si, int x, int y, int index) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getAppearance()).getImage();
+		Image unitImage = ((GFXAppearance)item.getDialogAppearance()).getImage();
 		String itemDescription = item.getDescription();
 		StoreItemInfo itemInfo = store.getBasicInfo(item, expedition);
 	
@@ -112,7 +112,7 @@ public class StoreCustomGFXMenuItem extends CacheCustomGFXMenuItem{
 	@Override
 	public void drawMenuItem(SwingSystemInterface si, int x, int y, int index, boolean highlight) {
 		// Get some info
-		Image unitImage = ((GFXAppearance)item.getAppearance()).getImage();
+		Image unitImage = ((GFXAppearance)item.getDialogAppearance()).getImage();
 		String itemDescription = item.getDescription();
 		StoreItemInfo itemInfo = store.getBasicInfo(item, expedition);
 		
