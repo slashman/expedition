@@ -9,6 +9,8 @@ import java.lang.reflect.Field;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.sound.midi.MidiUnavailableException;
 
@@ -43,6 +45,7 @@ import net.slashie.expedition.ui.oryx.ExpeditionGFXUISelector;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.expedition.ui.oryx.OryxExpeditionDisplay;
 import net.slashie.expedition.ui.oryx.effects.GFXEffects;
+import net.slashie.expedition.ui.oryx.launcher.LauncherFrame;
 import net.slashie.expedition.world.StoreFactory;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
@@ -111,8 +114,26 @@ public class RunExpedition {
 			else if (args[0].equalsIgnoreCase("sc"))
 				mode = DisplayMode.SWING_CONSOLE;
 		} else {
-			mode = DisplayMode.SWING_GFX;
-			fullscreen = true;
+			// Launcher
+			/*mode = DisplayMode.SWING_GFX;
+			fullscreen = true;*/
+			BlockingQueue<String> bq = new LinkedBlockingQueue<String>();
+			new LauncherFrame(bq).setVisible(true);
+			String newArgs = null;
+			while (newArgs == null) {
+				try {
+					newArgs = bq.take();
+				} catch (InterruptedException e1) {}
+			}
+			args = newArgs.split(" ");
+			if (args[0].equalsIgnoreCase("gfx")){
+				mode = DisplayMode.SWING_GFX;
+				preselectedUIFile = args[1];
+				fullscreen = args[2].equals("fullscreen");
+			} else if (args[0].equalsIgnoreCase("jc"))
+				mode = DisplayMode.JCURSES_CONSOLE;
+			else if (args[0].equalsIgnoreCase("sc"))
+				mode = DisplayMode.SWING_CONSOLE;
 		}
 		
 		if (createNew){
@@ -451,35 +472,6 @@ public class RunExpedition {
 		case SWING_GFX:
 			SwingSystemInterface ssi = (SwingSystemInterface)si;
 			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
-			UserInterface.getUI().showImportantMessage("Thank you for trying out this version of Expedition: The New World.\n\nThis game is in active development, if you like the game please visit http://slashware.net to learn about ways to help us complete it!");
-			/*if (((ExpeditionOryxUI)ui).promptChat(" Do you want to enable full screen mode?")){
-				si = new SwingSystemInterface(LAYERS, true, 
-						PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_WIDTH")), 
-						PropertyFilters.inte(UIconfiguration.getProperty("WINDOW_HEIGHT")), 
-						PropertyFilters.inte(UIconfiguration.getProperty("FRAMES_PER_SECOND")));
-				ssi = (SwingSystemInterface)si;
-				System.out.println("Initializing Oryx GFX User Interface");
-				UserInterface.setSingleton(new ExpeditionOryxUI());
-				ExpeditionDisplay.thus = new OryxExpeditionDisplay(ssi, assets, UIconfiguration);
-				ui = UserInterface.getUI();
-				((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
-			}*/
-			if (((ExpeditionOryxUI)ui).promptChat("Do you want to check for new versions?")){
-				try {
-					ExpeditionVersion latestVersion = ExpeditionGame.checkNewVersion();
-					if (latestVersion == null){
-						UserInterface.getUI().showImportantMessage("Error connecting to expeditionworld.net. Please browse to ensure you have the latest version :)");
-					} else if (latestVersion.equals(ExpeditionGame.getExpeditionVersion())){
-						UserInterface.getUI().showImportantMessage("You are up to date :)");
-					} else {
-						UserInterface.getUI().showImportantMessage("A newer version, "+latestVersion.getCode()+" from "+latestVersion.getFormattedDate()+" is available at the website! Please download it from http://expeditionworld.net");
-					}
-				} catch (HttpException e) {
-					UserInterface.getUI().showImportantMessage("Error connecting to expeditionworld.net. Please browse to ensure you have the latest version :)");
-				} catch (IOException e) {
-					UserInterface.getUI().showImportantMessage("Error connecting to expeditionworld.net. Please browse to ensure you have the latest version :)");
-				}
-			}
 			uiSelector = new ExpeditionGFXUISelector();
 			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings, assets);
 			break;
