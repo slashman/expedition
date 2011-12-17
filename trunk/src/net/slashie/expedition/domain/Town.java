@@ -1,6 +1,7 @@
 package net.slashie.expedition.domain;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,15 +11,25 @@ import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.StorageType;
 import net.slashie.expedition.town.Building;
+import net.slashie.expedition.town.BuildingFactory;
+import net.slashie.expedition.town.BuildingTeam;
 import net.slashie.expedition.town.Farm;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
+import net.slashie.expedition.world.FoodConsumerDelegate;
+import net.slashie.expedition.world.Forest;
 import net.slashie.expedition.world.OverworldExpeditionCell;
+import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.lang.Percentage;
+import net.slashie.serf.action.Action;
 import net.slashie.serf.action.Actor;
+import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
+import net.slashie.serf.ui.ActionCancelException;
 import net.slashie.serf.ui.UserInterface;
 import net.slashie.util.Pair;
+import net.slashie.utils.OutParameter;
+import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 /**
@@ -28,16 +39,11 @@ import net.slashie.utils.Util;
  * placed temporary by the expedition on the town, as well as goods
  * available for the expeditionary to transfer into self.
  * 
- * There's a separate inventory representing units and goods beyond
- * the reach of the Expeditionary
- *  * Settled colonists and units
- *  * Gathered resources
- *  
  * @author Slash
  *
  */
 @SuppressWarnings("serial")
-public class Town extends GoodsCache{
+public class Town extends GoodsCache implements BuildingTeam {
 	private static final String[] TOWN_ACTIONS = new String[] { 
 		"Transfer equipment and people",
 		"Construct building on settlement",
@@ -45,21 +51,21 @@ public class Town extends GoodsCache{
 		"Pass through the settlement",
 		"Do nothing"
 	};
-	
 	private String name;
 	protected Expedition founderExpedition;
 	protected Date foundedIn;
+	
+	/**
+	 * Represents the accumulated surplus from resource gathering and 
+	 * production
+	 */
+	private int economicWelfare;
 	
 	/**
 	 * Represents the buildings constructed on the settlement
 	 */
 	private List<Building> buildings = new ArrayList<Building>();
 	
-	/**
-	 * This separate inventory represents units that can't be transferred directly to the 
-	 * Expedition, but are used for the daily production cycle.
-	 */
-	private Inventory localInventory;
 	
 	/**
 	 * Represents how much can the founding expedition use the local
@@ -71,12 +77,14 @@ public class Town extends GoodsCache{
 	 */
 	private Percentage governance;
 	
+	private Calendar delayedCalendar;
+	private Action delayedAction;
+	
 	public Town(ExpeditionGame game) {
 		super(game, "TOWN");
 		founderExpedition = game.getExpedition();
 		foundedIn = game.getGameTime().getTime();
 		governance = founderExpedition.getBaseGovernance();
-		localInventory = new Inventory();
 	}
 	
 	/**
@@ -172,14 +180,6 @@ public class Town extends GoodsCache{
 		return getSize() > 20;
 	}
 	
-	public void addLocalItem (ExpeditionItem item, int quantity){
-		localInventory.addItem(item, quantity);
-	}
-	
-	public void addLocalItem (String itemID, int quantity){
-		localInventory.addItem(itemID, quantity);
-	}
-	
 	public String getTitle(){
 		if (isCity())
 			return "city";
@@ -190,6 +190,9 @@ public class Town extends GoodsCache{
 	
 	public void addBuilding(Building building) {
 		buildings.add(building);
+		if (building instanceof Farm){
+			((Farm)building).plant(ExpeditionGame.getCurrentGame().getGameTime());
+		}
 	}
 	
 	public Expedition getFounderExpedition() {
@@ -212,41 +215,85 @@ public class Town extends GoodsCache{
 	 *  * Storage capacity
 	 */
 	public void gatherResources(){
-		int internalWorkforce = getTotalLocalUnits();
-		int externalWorkforce = getTotalUnits();
-		int workforce = internalWorkforce + externalWorkforce;
-		List<OverworldExpeditionCell> cellsAround = ((ExpeditionMacroLevel)getLevel()).getMapCellsAround(getPosition());
-		for (OverworldExpeditionCell cell: cellsAround){
-			for (Pair<String, Integer> resource: cell.getDailyResources()){
-				int maxStorage = getStoreable(resource.getA());
+		int settledUnits = getTotalSettledUnits();
+		int externalWorkforce = getTotalUnits() - settledUnits;
+		//int workforce = internalWorkforce + externalWorkforce;
+		List<Pair<Position,OverworldExpeditionCell>> cellsAround = ((ExpeditionMacroLevel)getLevel()).getMapCellsAndPositionsAround(getPosition());
+		for (Pair<Position,OverworldExpeditionCell> cell: cellsAround){
+			for (Pair<String, Integer> resource: cell.getB().getDailyResources()){
+				// How much of the resource can we store at town
+				int maxStorage = getCarryable(ItemFactory.createItem(resource.getA()));
 				if (maxStorage == 0)
 					continue;
-				int gatherQuantity = workforce * resource.getB();
-				if (gatherQuantity > maxStorage)
+				
+				// How much of the resource is available at the cell? null represents infinite resources
+				Integer maxAvailable = null;
+				if (resource.getA().equals("WOOD")){
+					Forest f = ((ExpeditionMacroLevel)getLevel()).getOrCreateForest(cell.getA());
+					maxAvailable = f.getAvailableWood();
+				}
+				
+				// How much can we gather? 
+				int internalGatherQuantity = settledUnits * resource.getB();
+				int externalGatherQuantity = externalWorkforce * resource.getB();
+				int gatherQuantity = internalGatherQuantity+externalGatherQuantity;
+
+				if (maxAvailable != null && gatherQuantity > maxAvailable){
+					gatherQuantity = maxAvailable;
+					if (externalGatherQuantity > maxAvailable){
+						externalGatherQuantity = maxAvailable;
+						internalGatherQuantity = 0;
+					} else {
+						internalGatherQuantity = maxAvailable - externalGatherQuantity;
+					}
+				}
+				
+				// How much of the gathered can we really store
+				if (gatherQuantity > maxStorage){
 					gatherQuantity = maxStorage;
+					if (externalGatherQuantity > maxStorage){
+						externalGatherQuantity = maxStorage;
+						internalGatherQuantity = 0;
+					} else {
+						internalGatherQuantity = maxStorage - externalGatherQuantity;
+					}
+				}
+				
+				// Expedition contribution
+				addItem(resource.getA(), externalGatherQuantity);
+				
 				// Feudal contribution
-				int feudal = governance.transformInt(gatherQuantity);
+				int feudal = governance.transformInt(internalGatherQuantity);
 				addItem(resource.getA(), feudal);
-				addLocalItem(resource.getA(), gatherQuantity-feudal);
+				// The remainder is translated into economic welfare
+				increaseEconomicWelfare(resource.getA(), internalGatherQuantity-feudal);
+				
+				if (resource.getA().equals("WOOD")){
+					Forest f = ((ExpeditionMacroLevel)getLevel()).getOrCreateForest(cell.getA());
+					f.substractWood(gatherQuantity);
+				}
 				// TODO: Spend non-renewable items from the world, wood for example
 			}
 		}
 	}
 	
-	/**
-	 * If the item is food (other than fish), check the foraged storage capacity
-	 * @param itemId
-	 * @return
-	 */
-	private int getStoreable(String itemId){
-		ExpeditionItem itemSample = ItemFactory.createItem(itemId);
-		StorageType storageType = itemSample.getStorageType();
-		int maxStorage = getMaxStorage(storageType);
-		int currentLocalStorage = getCurrentLocalStorage(storageType);
-		return maxStorage - currentLocalStorage;
-
+	private int getTotalSettledUnits() {
+		int totalUnits = 0;
+		List<Equipment> inventory = getItems();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof ExpeditionUnit && ((ExpeditionUnit)equipment.getItem()).isSettled()){
+				totalUnits += equipment.getQuantity();
+			}
+		}
+		return totalUnits;
 	}
-	
+
+	private void increaseEconomicWelfare(String itemId, int surplus) {
+		ExpeditionItem item = ItemFactory.createItem(itemId);
+		int welfareContribution = item.getBaseTradingValue() * surplus;
+		economicWelfare += welfareContribution;
+	}
+
 	private int getMaxStorage(StorageType storageType) {
 		int acum = 0;
 		for (Building building: buildings){
@@ -257,7 +304,7 @@ public class Town extends GoodsCache{
 	
 	private int getCurrentLocalStorage(StorageType storageType) {
 		int acum = 0;
-		for (Equipment e: localInventory.getItems()){
+		for (Equipment e: getInventory()){
 			if (((ExpeditionItem)e.getItem()).getStorageType() == storageType){
 				acum += e.getQuantity();
 			}
@@ -273,18 +320,71 @@ public class Town extends GoodsCache{
 		}
 	}
 	
+	public int getGrowthRate(){
+		// TODO: Based on economic welfare
+		return (int)Math.round(getPopulation() * ((double)Util.rand(1, 5)/100.0d));
+	}
+	
 	
 	/* Growth*/
 	public void tryGrowing(){
-		//This is called each 30 days
-		if (Util.chance(95)){
-			int growth = (int)Math.round(getPopulation() * ((double)Util.rand(1, 5)/100.0d));
-			if (growth > 0){
-				if (getPopulation() + growth > getPopulationCapacity()){
-					growth = getPopulationCapacity() - getPopulation(); 
+		int growth = getGrowthRate();
+		if (getPopulation() == getPopulationCapacity()){
+			// Can't grow, let's build some houses
+			Building houseBuilding = BuildingFactory.createBuilding("HOUSE");
+			// How many houses do we need?
+			int requiredHouses = (int)Math.ceil((double)growth / (double) houseBuilding.getPopulationCapacity());
+			// How much wood have we got?
+			int availableWood = getItemCountBasic("WOOD");
+			// How many houses can we build?
+			int possibleHouses = (int)Math.ceil((double)availableWood / (double)houseBuilding.getWoodCost());
+			// How many houses will we build.
+			int buildHouses = requiredHouses;
+			if (buildHouses > possibleHouses)
+				buildHouses = possibleHouses;
+			final int housesToBuild = buildHouses;
+			// How long will this take?
+			List<Building> buildingPlan = new ArrayList<Building>();
+			buildingPlan.add(houseBuilding);
+			OutParameter woodCost = new OutParameter();
+			OutParameter netTimeCostObj = new OutParameter();
+			try {
+				BuildingFactory.getPlanCost(buildingPlan, this, netTimeCostObj, woodCost);
+			} catch (ActionCancelException e) {
+				// Not enough wood (this should never happen
+				return;
+			}
+			int netTimeCost = netTimeCostObj.getIntValue();
+			int daysCost = (int)Math.ceil((double)netTimeCost / (double)DayShiftAgent.TICKS_PER_DAY);
+			// Set delayed action
+			delayedCalendar.setTime(ExpeditionGame.getCurrentGame().getGameTime().getTime());
+			delayedCalendar.roll(Calendar.DATE, daysCost);
+			delayedAction = new Action() {
+				@Override
+				public String getID() {
+					return null;
 				}
+				
+				@Override
+				public void execute() {
+					// Build the houses
+					for (int i = 0; i < housesToBuild; i++){
+						Building houseBuilding = BuildingFactory.createBuilding("HOUSE");
+						addBuilding( houseBuilding);
+					}
+					
+				}
+			};
+		} else {
+			//This is called each 30 days
+			if (Util.chance(95)){
+				
 				if (growth > 0){
-					addLocalItem(ItemFactory.createItem("COLONIST"), growth);
+					if (getPopulation() + growth > getPopulationCapacity()){
+						// Maximum growth to achieve pop capacity
+						growth = getPopulationCapacity() - getPopulation(); 
+					}
+					addItem(ItemFactory.createItem("CHILD"), growth);
 				}
 			}
 		}
@@ -314,11 +414,6 @@ public class Town extends GoodsCache{
 	}
 	
 	@Override
-	public void consumeFood() {
-		//Do nothing, this must be handled differently
-	}
-	
-	@Override
 	/**
 	 * Determines how many of an item from the expedition can the town carry
 	 */	
@@ -326,7 +421,10 @@ public class Town extends GoodsCache{
 		if (item instanceof ExpeditionUnit){
 			return getLodgingCapacity() - getTotalUnits();
 		} else {
-			return super.getCarryable(item);
+			StorageType storageType = item.getStorageType();
+			int maxStorage = getMaxStorage(storageType);
+			int currentLocalStorage = getCurrentLocalStorage(storageType);
+			return maxStorage - currentLocalStorage;
 		}
 	}
 	
@@ -371,14 +469,21 @@ public class Town extends GoodsCache{
 		((ExpeditionUserInterface)UserInterface.getUI()).afterTownAction();
 	}
 	
-	public int getTotalLocalUnits() {
-		int totalUnits = 0;
-		for (Equipment equipment: localInventory.getItems()){
+	@Override
+	public int getBuildingCapacity() {
+		int power = 0;
+		List<Equipment> inventory = getInventory();
+		for (Equipment equipment: inventory){
 			if (equipment.getItem() instanceof ExpeditionUnit){
-				totalUnits += equipment.getQuantity();
+				int multiplier = ((ExpeditionUnit)equipment.getItem()).getBaseID().equals("CARPENTER") ? 2 : 1;
+				power += equipment.getQuantity() * multiplier;
 			}
 		}
-		return totalUnits;
+		return power;
 	}
 	
+	@Override
+	public void reduceQuantityOf(AbstractItem item, int quantity) {
+		super.reduceQuantityOf(item, quantity);
+	}
 }

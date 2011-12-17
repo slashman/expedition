@@ -68,4 +68,9 @@ public class Forest extends AbstractFeature{
 		return getAvailableWood() <= 0;
 	}
 
+	public int substractWood(int wood) {
+		availableWood -= wood;
+		return wood;
+	}
+
 }
