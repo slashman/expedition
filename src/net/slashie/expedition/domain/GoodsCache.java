@@ -26,7 +26,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	private transient Appearance dialogAppearance;
 	private String dialogAppearanceId; 
 
-	
+
 	public GoodsCache(boolean abstractCache) {
 		setAppearanceId("GOODS_CACHE");
 		dialogAppearanceId = "DIALOG_GOODS_CACHE";
@@ -353,5 +353,9 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	@Override
 	public String getTypeDescription() {
 		return "Ground";
+	}
+
+	public FoodConsumerDelegate getFoodConsumerDelegate() {
+		return foodConsumerDelegate;
 	}
 }

@@ -47,30 +47,13 @@ public class ChopWoods extends Action{
 				}
 			}
 			
-			AbstractFeature f = null;
-			List<AbstractFeature> otherFeatures = level.getFeaturesAt(expedition.getPosition());
-			if (otherFeatures == null){
-				
-			} else {
-				for (AbstractFeature feature: otherFeatures){
-					if (feature instanceof Forest){
-						f = feature;
-						break;
-					}
-				}
-			}
-			if ( f == null ) {
-				//No feature here yet, but since this is a forest, let's add a forest feature;
-				f = new Forest(Util.rand(500, 750));
-				f.setPosition(new Position(expedition.getPosition()));
-				level.addFeature(f);
-				expedition.setPosition(f.getPosition());
-			} else if (((Forest)f).getAvailableWood() == 0){
+			Forest f = level.getOrCreateForest(expedition.getPosition());
+			if (f.getAvailableWood() == 0){
 				level.addMessage("There's no more wood in this forest.");
 				actionCost = 0;
 				return ;
 			}
-			
+			expedition.setPosition(f.getPosition());
 			int wood = ((Forest)f).substractWood(expedition);
 			ExpeditionItem woodSample = ItemFactory.createItem("WOOD");
 			int currentWood = expedition.getItemCount("WOOD");

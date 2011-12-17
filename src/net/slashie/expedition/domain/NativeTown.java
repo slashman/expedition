@@ -379,4 +379,9 @@ public class NativeTown extends Town{
 	public boolean requiresUnitsToContainItems() {
 		return false;
 	}
+	
+	@Override
+	public void consumeFood() {
+		// Do nothing
+	}
 }

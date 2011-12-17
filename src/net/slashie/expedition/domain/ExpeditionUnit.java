@@ -48,7 +48,8 @@ public class ExpeditionUnit extends Vehicle{
 	private Weapon weapon;
 	private Armor armor;
 	private Mount mount;
-	
+
+	private boolean isSettled;
 	
 	public void setArmor(Armor armor) {
 		this.armor = armor;
@@ -364,6 +365,11 @@ public class ExpeditionUnit extends Vehicle{
 		} else {
 			return getArmor().getDescription();
 		}
+	}
+
+	
+	public boolean isSettled() {
+		return isSettled;
 	}
 }
 

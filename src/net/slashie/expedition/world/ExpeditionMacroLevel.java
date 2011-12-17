@@ -684,6 +684,15 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 	}
 	
+	public List<Pair<Position,OverworldExpeditionCell>> getMapCellsAndPositionsAround(Position p){
+		List<Pair<Position,OverworldExpeditionCell>> ret = new ArrayList<Pair<Position,OverworldExpeditionCell>>();
+		List<Position> positions = getPositionsAround(p);
+		for (Position position: positions){
+			ret.add(new Pair<Position,OverworldExpeditionCell>(position, (OverworldExpeditionCell)getMapCell(position)));
+		}
+		return ret;
+	}
+		
 	public List<OverworldExpeditionCell> getMapCellsAround(Position p){
 		List<OverworldExpeditionCell> ret = new ArrayList<OverworldExpeditionCell>();
 		List<Position> positions = getPositionsAround(p);
@@ -691,5 +700,26 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			ret.add((OverworldExpeditionCell)getMapCell(position));
 		}
 		return ret;
+	}
+
+	
+	public Forest getOrCreateForest(Position position) {
+		Forest f = null;
+		List<AbstractFeature> allFeatures = getFeaturesAt(position);
+		if (allFeatures != null){
+			for (AbstractFeature feature: allFeatures){
+				if (feature instanceof Forest){
+					f = (Forest) feature;
+					break;
+				}
+			}
+		}
+		if ( f == null ) {
+			//No feature here yet, but since this is a forest, let's add a forest feature;
+			f = new Forest(Util.rand(500, 750));
+			f.setPosition(new Position(position));
+			addFeature(f);
+		} 
+		return f;
 	}
 }

@@ -19,6 +19,7 @@ import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
+import net.slashie.expedition.town.BuildingTeam;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
@@ -49,7 +50,7 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 @SuppressWarnings("serial")
-public class Expedition extends Player implements FoodConsumer, UnitContainer, ItemContainer{
+public class Expedition extends Player implements FoodConsumer, UnitContainer, ItemContainer, BuildingTeam{
 	private ExpeditionUnit leaderUnit;
 	
 	public enum Title {

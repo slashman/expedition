@@ -40,9 +40,6 @@ public class BuildingFactory {
 		for (Building plannedBuilding: plan){
 			Building building = createBuilding(plannedBuilding.getId());
 			town.addBuilding(building);
-			if (building instanceof Farm){
-				((Farm)building).plant(ExpeditionGame.getCurrentGame().getGameTime());
-			}
 		}
 		
 		builders.reduceGood("WOOD", woodCost);
@@ -56,7 +53,7 @@ public class BuildingFactory {
 	}
 	
 
-	public static void getPlanCost(List<Building> plan, Expedition builders, OutParameter netTimeCost, OutParameter woodCost) throws ActionCancelException{
+	public static void getPlanCost(List<Building> plan, BuildingTeam builders, OutParameter netTimeCost, OutParameter woodCost) throws ActionCancelException{
 		int woodCostInt = 0;
 		int timeCost = 0;
 		int minDays = 0;
