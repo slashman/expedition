@@ -221,10 +221,13 @@ public class Town extends GoodsCache implements BuildingTeam {
 		List<Pair<Position,OverworldExpeditionCell>> cellsAround = ((ExpeditionMacroLevel)getLevel()).getMapCellsAndPositionsAround(getPosition());
 		for (Pair<Position,OverworldExpeditionCell> cell: cellsAround){
 			for (Pair<String, Integer> resource: cell.getB().getDailyResources()){
+				townLog(">>> Trying to fetch "+resource.getA());
 				// How much of the resource can we store at town
 				int maxStorage = getCarryable(ItemFactory.createItem(resource.getA()));
-				if (maxStorage == 0)
+				if (maxStorage == 0){
+					townLog("Can't store "+resource.getA()+" in town");
 					continue;
+				}
 				
 				// How much of the resource is available at the cell? null represents infinite resources
 				Integer maxAvailable = null;
@@ -232,6 +235,7 @@ public class Town extends GoodsCache implements BuildingTeam {
 					Forest f = ((ExpeditionMacroLevel)getLevel()).getOrCreateForest(cell.getA());
 					maxAvailable = f.getAvailableWood();
 				}
+				townLog("There is "+maxAvailable+" on land");
 				
 				// How much can we gather? 
 				int internalGatherQuantity = settledUnits * resource.getB();
@@ -248,6 +252,15 @@ public class Town extends GoodsCache implements BuildingTeam {
 					}
 				}
 				
+				townLog("Our staff can gather "+externalGatherQuantity);				
+				townLog("Settled units can gather "+internalGatherQuantity);
+				townLog("In total, we can gather "+gatherQuantity);
+
+				if (gatherQuantity == 0)
+					continue;
+						
+				townLog("We can store "+maxStorage);
+
 				// How much of the gathered can we really store
 				if (gatherQuantity > maxStorage){
 					gatherQuantity = maxStorage;
@@ -259,22 +272,31 @@ public class Town extends GoodsCache implements BuildingTeam {
 					}
 				}
 				
+				townLog("in the end, expedition staff gathered "+externalGatherQuantity+" all tributed");
+				townLog("in the end, settled units gathered "+internalGatherQuantity);
+				
 				// Expedition contribution
 				addItem(resource.getA(), externalGatherQuantity);
 				
 				// Feudal contribution
 				int feudal = governance.transformInt(internalGatherQuantity);
-				addItem(resource.getA(), feudal);
+				if (feudal > 0)
+					addItem(resource.getA(), feudal);
+				townLog("Settled units tributed "+feudal);
 				// The remainder is translated into economic welfare
-				increaseEconomicWelfare(resource.getA(), internalGatherQuantity-feudal);
+				if (internalGatherQuantity-feudal > 0)
+					increaseEconomicWelfare(resource.getA(), internalGatherQuantity-feudal);
 				
 				if (resource.getA().equals("WOOD")){
 					Forest f = ((ExpeditionMacroLevel)getLevel()).getOrCreateForest(cell.getA());
 					f.substractWood(gatherQuantity);
 				}
-				// TODO: Spend non-renewable items from the world, wood for example
 			}
 		}
+	}
+	
+	private void townLog(String event){
+		System.out.println("Town "+getName()+": "+event);
 	}
 	
 	private int getTotalSettledUnits() {
@@ -291,6 +313,7 @@ public class Town extends GoodsCache implements BuildingTeam {
 	private void increaseEconomicWelfare(String itemId, int surplus) {
 		ExpeditionItem item = ItemFactory.createItem(itemId);
 		int welfareContribution = item.getBaseTradingValue() * surplus;
+		townLog("Welfare increase by "+welfareContribution+" based on a "+surplus+" surplus of "+itemId);
 		economicWelfare += welfareContribution;
 	}
 
