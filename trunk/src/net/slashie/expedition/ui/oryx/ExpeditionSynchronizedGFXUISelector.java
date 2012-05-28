@@ -25,13 +25,14 @@ import net.slashie.serf.ui.oryxUI.Assets;
 import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
+import net.slashie.serf.ui.oryxUI.SynchronizedGFXUISelector;
 import net.slashie.utils.Position;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
 
 @SuppressWarnings("serial")
-public class ExpeditionGFXUISelector extends GFXUISelector{
+public class ExpeditionSynchronizedGFXUISelector extends SynchronizedGFXUISelector{
 	private CleanButton armButton;
 	private CleanButton buildButton;
 	private CleanButton dropButton;
@@ -314,7 +315,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 			resetButton.setVisible(true);
 			chopButton.setVisible(true);
 			anchorButton.setVisible(false);
-			dropButton.setPopupText("Caché Equipment (d)");
+			dropButton.setPopupText("Cachï¿½ Equipment (d)");
 		} else {
 			buildButton.setVisible(false);
 			dropButton.setVisible(true);
@@ -427,7 +428,7 @@ public class ExpeditionGFXUISelector extends GFXUISelector{
 				performMovement();
 			}
 		};
-		final Timer gotoDirectionTimer = new Timer(200, gotoDirectionAction);
+		final Timer gotoDirectionTimer = new Timer(50, gotoDirectionAction);
 		return new CallbackMouseListener<String>(selectionHandler_){
 			public void mousePressed(final MouseEvent e) {
 				if (!selectionActive)
