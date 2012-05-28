@@ -29,7 +29,6 @@ import net.slashie.expedition.data.MapCellsLoader;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.game.ExpeditionMusicManager;
 import net.slashie.expedition.game.GameFiles;
-import net.slashie.expedition.game.ExpeditionGame.ExpeditionVersion;
 import net.slashie.expedition.game.GameFiles.SaveGameFilenameFilter;
 import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.level.FlatMapModelSeconds;
@@ -41,7 +40,7 @@ import net.slashie.expedition.ui.console.CharExpeditionDisplay;
 import net.slashie.expedition.ui.console.ExpeditionConsoleUI;
 import net.slashie.expedition.ui.console.ExpeditionConsoleUISelector;
 import net.slashie.expedition.ui.console.effects.CharEffects;
-import net.slashie.expedition.ui.oryx.ExpeditionGFXUISelector;
+import net.slashie.expedition.ui.oryx.ExpeditionContinuousGFXUISelector;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
 import net.slashie.expedition.ui.oryx.OryxExpeditionDisplay;
 import net.slashie.expedition.ui.oryx.effects.GFXEffects;
@@ -71,16 +70,14 @@ import net.slashie.serf.ui.consoleUI.ConsoleUISelector;
 import net.slashie.serf.ui.consoleUI.ConsoleUserInterface;
 import net.slashie.serf.ui.consoleUI.effects.CharEffectFactory;
 import net.slashie.serf.ui.oryxUI.Assets;
+import net.slashie.serf.ui.oryxUI.ContinuousGFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXAppearances;
-import net.slashie.serf.ui.oryxUI.GFXUISelector;
 import net.slashie.serf.ui.oryxUI.GFXUserInterface;
 import net.slashie.serf.ui.oryxUI.SwingSystemInterface;
 import net.slashie.serf.ui.oryxUI.UIAssetsLoader;
 import net.slashie.serf.ui.oryxUI.effects.GFXEffectFactory;
 import net.slashie.utils.PropertyFilters;
 import net.slashie.utils.sound.midi.STMidiPlayer;
-
-import org.apache.commons.httpclient.HttpException;
 
 public class RunExpedition {
 	enum DisplayMode {
@@ -184,6 +181,7 @@ public class RunExpedition {
 					initializeUI(si);
 					ExpeditionDisplay.thus = new OryxExpeditionDisplay(si, assets, UIconfiguration);
 					break;
+				
 				case JCURSES_CONSOLE:
 					System.out.println("Initializing JCurses System Interface");
 					ConsoleSystemInterface csi = null;
@@ -472,8 +470,8 @@ public class RunExpedition {
 		case SWING_GFX:
 			SwingSystemInterface ssi = (SwingSystemInterface)si;
 			((ExpeditionOryxUI)ui).init(ssi, "Expedition: The New World v"+ExpeditionGame.getVersion()+", Santiago Zapata 2009-2011", userCommands, UIconfiguration, assets, null);
-			uiSelector = new ExpeditionGFXUISelector();
-			((GFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings, assets);
+			uiSelector = new ExpeditionContinuousGFXUISelector();
+			((ContinuousGFXUISelector)uiSelector).init((SwingSystemInterface)si, userActions, UIconfiguration, walkAction, null, meleeAction, (GFXUserInterface)ui, keyBindings, assets);
 			break;
 		case JCURSES_CONSOLE: case SWING_CONSOLE:
 			((ExpeditionConsoleUI)ui).init((ConsoleSystemInterface)si, userCommands, null);
