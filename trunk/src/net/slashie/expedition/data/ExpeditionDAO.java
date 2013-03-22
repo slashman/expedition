@@ -24,6 +24,7 @@ import net.slashie.expedition.item.Mount;
 import net.slashie.expedition.item.StorageType;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.Farm;
+import net.slashie.expedition.world.AnimalNest;
 import net.slashie.expedition.world.Culture;
 import net.slashie.expedition.world.ExpeditionFeature;
 import net.slashie.expedition.world.StoreFactory;
@@ -437,6 +438,16 @@ public class ExpeditionDAO {
 					2,
 					new WeaponType[]{WeaponType.BOW, WeaponType.SPEAR, WeaponType.MACE},
 					new ArmorType[]{ArmorType.LIGHT}, 200),
+				
+			//Animals units
+			new ExpeditionUnit("LLAMA", "Wild Llama", "Wild Llamas", "Wild animal", UNIT_WEIGHT, 200,
+					new Roll("1D2"),
+					new Roll("1D2"),
+					3,
+					95,5,
+					2,
+					null,
+					null, 200),
 			
 			//Goods
 			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 1, 1, StorageType.WAREHOUSE),
@@ -503,14 +514,14 @@ public class ExpeditionDAO {
 			new Vehicle("CARAVEL","Caravel","Caravels", "Small, quick ship", 1,true,false,4,60000, 15, false, GoodType.VEHICLE, 120000, 24000),
 			
 			//Special
-			new ExpeditionUnit("KING_FERDINAND", "Ferdinand II, King of Aragón","Kings", "King", UNIT_WEIGHT, 300, 
+			new ExpeditionUnit("KING_FERDINAND", "Ferdinand II, King of Aragï¿½n","Kings", "King", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					2,
 					50,5, 
 					1, new WeaponType[]{},
 					new ArmorType[]{},5000) ,
-			new ExpeditionUnit("QUEEN_ISABELLE", "Isabella, Queen of Castile and León","Queens", "Queen", UNIT_WEIGHT, 300, 
+			new ExpeditionUnit("QUEEN_ISABELLE", "Isabella, Queen of Castile and Leï¿½n","Queens", "Queen", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
@@ -524,7 +535,7 @@ public class ExpeditionDAO {
 					50,5, 
 					1, new WeaponType[]{},
 					new ArmorType[]{}, 5000),
-			new ExpeditionUnit("COLOMBUS", "Colón","Colones", "",  UNIT_WEIGHT, 300, 
+			new ExpeditionUnit("COLOMBUS", "Colï¿½n","Colones", "",  UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
@@ -538,7 +549,7 @@ public class ExpeditionDAO {
 					50,5, 
 					1, new WeaponType[]{},
 					new ArmorType[]{}, 5000),
-			new ExpeditionUnit("CRISTOFORO", "Juan Cristóforo, el bardo","Jices", "", UNIT_WEIGHT, 300, 
+			new ExpeditionUnit("CRISTOFORO", "Juan Cristï¿½foro, el bardo","Jices", "", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
@@ -642,7 +653,7 @@ public class ExpeditionDAO {
 					gtvm(2.0d,2.0d,0.1d,1.0d,1),
 					composePairList("PLUMED_BOW,5","SIMPLE_BOW,10","WOODEN_MACE,10","MAIZE,200","FISH,50","CLOTH,10","COCOA,10","FURS,5","GOLD_ARTIFACTS,1","NATIVE_ARTIFACTS,2"),
 					2, 2, 3),
-			new Culture("PURHE", "P'urhépecha", true, 3, 
+			new Culture("PURHE", "P'urhï¿½pecha", true, 3, 
 					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10", "EAGLE_WARRIOR,20", "JAGUAR_WARRIOR,10"),
 					gtvm(0.5d,0.1d,0.5d,3.0d,1),
 					composePairList("SIMPLE_BOW,5","OBSIDIAN_SWORD,5","WOODEN_MACE,10","MAIZE,200","FISH,50","CLOTH,10","COCOA,10","FURS,5","NATIVE_ARTIFACTS,2"),
@@ -657,7 +668,7 @@ public class ExpeditionDAO {
 					gtvm(1.0d,1.0d,1.0d,1.0d,1),
 					composePairList("OBSIDIAN_SWORD,5","WOODEN_MACE,10","MAIZE,200","FISH,50","CLOTH,10","CHILI_PEPPER,10","NATIVE_ARTIFACTS,5"),
 					2, 2, 2),
-			new Culture("CANAR", "Cañaris", true, 3, 
+			new Culture("CANAR", "Caï¿½aris", true, 3, 
 					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,20"), 
 					gtvm(1.0d,2.0d,0.1d,1.0d,1),
 					composePairList("SIMPLE_BOW,5","OBSIDIAN_SWORD,10","DRIED_MEAT,100","BEANS,120","POTATOES,40","FISH,50","CLOTH,5","COCA,3","PINEAPPLE,3","NATIVE_ARTIFACTS,5"),
@@ -667,7 +678,7 @@ public class ExpeditionDAO {
 					gtvm(1.0d,1.5d,1.0d,0.5d,1),
 					composePairList("SIMPLE_BOW,5","OBSIDIAN_SWORD,10","LLAMA,3","DRIED_MEAT,100","BEANS,120","POTATOES,40","FISH,50","CLOTH,5","COCA,3","PINEAPPLE,3","NATIVE_ARTIFACTS,5"),
 					2, 2, 3),
-			new Culture("CHIMU", "Chimú", true, 1, 
+			new Culture("CHIMU", "Chimï¿½", true, 1, 
 					composePairList("NATIVE_WARRIOR,20", "NATIVE_ARCHER,10"),
 					gtvm(1.0d,1.0d,1.0d,1.0d,1),
 					composePairList("SIMPLE_BOW,5","OBSIDIAN_SWORD,10","LLAMA,3","DRIED_MEAT,100","BEANS,120","POTATOES,40","FISH,50","CLOTH,5","COCA,3","PINEAPPLE,3","NATIVE_ARTIFACTS,5"),
@@ -758,8 +769,23 @@ public class ExpeditionDAO {
 				new NPC((ExpeditionUnit)ItemFactory.createItem("ARCHER"), false, false, "Gunpowder weapons will never replace the keen archer", "May I go with you? You have my bow."),
 				new NPC((ExpeditionUnit)ItemFactory.createItem("GUARD"), true, false),
 				new NPC((ExpeditionUnit)ItemFactory.createItem("COLONIST"), false, false, "Many a grave has been unjustly filled in the name of justice.", "I will not speak of my sin!"),
-				new NPC((ExpeditionUnit)ItemFactory.createItem("KING_FERDINAND"), true, true, "I am glad we could fetch you before leaving Córdova!", "You have my blessing, may you have success in your journey"),
+				new NPC((ExpeditionUnit)ItemFactory.createItem("KING_FERDINAND"), true, true, "I am glad we could fetch you before leaving Cï¿½rdova!", "You have my blessing, may you have success in your journey"),
 				new NPC((ExpeditionUnit)ItemFactory.createItem("QUEEN_ISABELLE"), true, true, "I hope our Holy mother Mary blesses your trip", "Please spread our faith around the world")
 			};
+	}
+	
+	public static Map<String, AnimalNest> animalNestsMap = new HashMap<String, AnimalNest>();
+	static{
+		AnimalNest[] nests = new AnimalNest[]{
+			new AnimalNest("SPACE", "Llamas From Space", 3, 20, "LLAMA")	
+		};
+		
+		for (AnimalNest nest: nests){
+			animalNestsMap.put(nest.getCode(), nest);
+		}
+	}
+	
+	public static AnimalNest getAnimalNest(String animalNestCode){
+		return animalNestsMap.get(animalNestCode);
 	}
 }

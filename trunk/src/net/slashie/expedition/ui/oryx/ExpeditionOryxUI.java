@@ -881,7 +881,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		String ui_locationDescription = getExpedition().getLocation().getDescription()+", "+gameTime.get(Calendar.YEAR);
 		String ui_terrainDescription = currentCell.getDescription();
 		//String ui_debug = "X " +statsExpedition.getPosition().x +" Y "+statsExpedition.getPosition().y+" Scale "+GlobeMapModel.getSingleton().getLongitudeScale(statsExpedition.getPosition().y);
-		String ui_debug = "";
+		String ui_debug = "Whata " +statsExpedition.getPosition().x + "," + statsExpedition.getPosition().y;
 		String ui_weatherDescription =getExpedition().getLocation().getWeather().getDescription(); 
 		String ui_temperatureDescription = getExpedition().getLocation().getTemperatureDescription();
 		String ui_windDirection = getExpedition().getLocation().getWindDirection().getAbbreviation();
@@ -927,7 +927,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		// Draw
 		si.setColor(getUILayer(), Color.WHITE);
 		
-		si.printAtPixel(getUILayer(), 200, 20, ui_debug);
+		si.printAtPixel(getUILayer(), 200, 40, ui_debug);
 		
 		// Left Column
 		si.printAtPixel(getUILayer(), layout.POS_WEATHER.x, layout.POS_WEATHER.y, ui_weatherDescription);

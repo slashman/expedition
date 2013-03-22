@@ -11,6 +11,7 @@ import java.util.TimeZone;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Expedition.MovementMode;
+import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -197,7 +198,7 @@ public class ExpeditionGame extends SworeGame {
 		if (level.getID().equals("PALOS")){
 			int sumOfValuables = getExpedition().getSumOfValuables(); 
 			if (sumOfValuables > 0){
-				String prompt = "Do you want to cash your valuables for "+sumOfValuables+" maravedíes?";
+				String prompt = "Do you want to cash your valuables for "+sumOfValuables+" maravedï¿½es?";
 				if (UserInterface.getUI().promptChat(prompt)){
 					getExpedition().cashValuables();
 				}
@@ -207,9 +208,9 @@ public class ExpeditionGame extends SworeGame {
 		if (level.getID().equals("WORLD")){
 			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar
 			level.getPlayer().setPosition(-4330, 732, 0); // Cabo dela vela
-			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atlántico
+			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atlï¿½ntico*/
 			level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
-			level.getPlayer().setPosition(-329, 3000, 0); // North
+			//level.getPlayer().setPosition(-329, 3000, 0); // North
 			int lat = 889*60;
 			int longi = -4362*60;
 			lat = GlobeMapModel.getSingleton().normalizeLat(lat);

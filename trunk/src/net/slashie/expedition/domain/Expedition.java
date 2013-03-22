@@ -17,10 +17,12 @@ import net.slashie.expedition.item.ItemFactory;
 import net.slashie.expedition.item.Mount;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.level.GlobeMapModel;
+import net.slashie.expedition.level.GlobeModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.town.BuildingTeam;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.world.AnimalNest;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -32,6 +34,7 @@ import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.expedition.world.SettlementLevel;
 import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.expedition.world.Weather;
+import net.slashie.expedition.worldGen.WorldGenerator;
 import net.slashie.lang.Percentage;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.baseDomain.AbstractItem;
@@ -56,10 +59,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public enum Title {
 		EXPLORER (1, "Explorador", 0, 0, 0, 0),
 		HIDALGO  (2, "Hidalgo",    0, 0, 1, 200000),
-		LORD     (3, "Señor",      0, 1, 2, 500000),
+		LORD     (3, "Seï¿½or",      0, 1, 2, 500000),
 		VIZCOUNT (4, "Vizconde",   1, 2, 5, 1000000),
 		COUNT    (5, "Conde",      2, 5,10, 1500000),
-		MARCHIS  (6, "Marqués",    5,10,30, 3000000),
+		MARCHIS  (6, "Marquï¿½s",    5,10,30, 3000000),
 		DUKE     (7, "Duque",     10,30,60, 5000000),
 		VICEROY  (8, "Virrey",    30,60,90, 9500000)
 		;
@@ -1275,7 +1278,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		        		
 	        		}
 	        	} else if (cell.getStepCommand().equals("TRAVEL_CASTLE")){
-	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("A charriot takes you to the Alcazar of Córdova");
+	        		((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("A charriot takes you to the Alcazar of Cï¿½rdova");
 	        	}
 	        }
         } else {
@@ -2022,7 +2025,44 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				}
 			}
 			
+		}else if (Util.chance(25)){
+			//Try to deploy an animal expedition only if the chance
+			List<Pair<Position, AnimalNest>> nests = WorldGenerator.animalNests;
+			Pair<Position, AnimalNest> nearestNest = null;
+			double minDistance = -1;
+			
+			for (Pair<Position, AnimalNest> n: nests){
+				double distance = Position.distance(getPosition(), n.getA());
+				double nestRadius = GlobeMapModel.getSingleton().getLongitudeScale(n.getA().y())*n.getB().getRadius();
+				if (distance <= nestRadius){
+					if (minDistance == -1){
+						minDistance = distance;
+						nearestNest = n;
+					}else if (distance < minDistance){
+						minDistance = distance;
+						nearestNest = n;
+					}
+				}
+			}
+			
+			if (nearestNest != null){
+				int r = GlobeMapModel.getSingleton().getLongitudeScale(nearestNest.getA().y())*nearestNest.getB().getRadius();
+				Position p = new Position(Util.rand(nearestNest.getA().x() - r, nearestNest.getA().x() + r), Util.rand(nearestNest.getA().y() - r, nearestNest.getA().y() + r));
+				
+				double sight = getSightRangeInDots();
+				//boolean isFar = (Position.distance(p, getPosition()) > sight);
+				boolean isFar = true;
+				
+				OverworldExpeditionCell cell = (OverworldExpeditionCell)getLevel().getMapCell(p);
+				if (isFar && cell != null && !cell.isRiver() && cell.isLand() && getLevel().getFeaturesAt(p) == null){
+					Expedition expedition = nearestNest.getB().deployAnimalGroup();
+					expedition.setPosition(new Position(getPosition().x()+2, getPosition().y()));
+					getLevel().addActor(expedition);
+					getLevel().addMessage("A group of "+nearestNest.getB().getName()+" appears!");
+				}
+			}
 		}
+		
 
 	}
 	
