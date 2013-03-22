@@ -21,6 +21,7 @@ import net.slashie.expedition.data.ExpeditionDAO;
 import net.slashie.expedition.domain.NativeTown;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.GlobeMapModel;
+import net.slashie.expedition.world.AnimalNest;
 import net.slashie.expedition.world.Culture;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -213,17 +214,40 @@ public class WorldGenerator {
 
 
 	private static int parseLongitude(String longStr) {
-		int degrees = Integer.parseInt(longStr.substring(0, longStr.indexOf('บ')));
-		int minutes = Integer.parseInt(longStr.substring(longStr.indexOf('บ')+1, longStr.indexOf('\'')));
+		int degrees = Integer.parseInt(longStr.substring(0, longStr.indexOf('ยบ')));
+		int minutes = Integer.parseInt(longStr.substring(longStr.indexOf('ยบ')+1, longStr.indexOf('\'')));
 		boolean west = longStr.substring(longStr.indexOf('\'')+1).equals("W");
 		return (degrees * 60 + minutes) * 60 * (west ? -1 : 1);
 	}
 
 
 	private static int parseLatitude(String latStr) {
-		int degrees = Integer.parseInt(latStr.substring(0, latStr.indexOf("บ")));
-		int minutes = Integer.parseInt(latStr.substring(latStr.indexOf("บ")+1, latStr.indexOf("'")));
+		int degrees = Integer.parseInt(latStr.substring(0, latStr.indexOf("ยบ")));
+		int minutes = Integer.parseInt(latStr.substring(latStr.indexOf("ยบ")+1, latStr.indexOf("'")));
 		boolean north = latStr.substring(latStr.indexOf("'")+1).equals("N");
 		return (degrees * 60 + minutes )* 60 * (north ? 1 : -1);
+	}
+	
+	public static List<Pair<Position, AnimalNest>> animalNests = new ArrayList<Pair<Position,AnimalNest>>();
+	public static void addAnimalNests(){
+		try{
+			//read the animal nests
+			try{
+				BufferedReader r = FileUtil.getReader("scenarios/theNewWorld/animalNests.properties");
+				String line = r.readLine();
+				while (line != null){
+					String[] row = line.split(",");
+					AnimalNest n = ExpeditionDAO.getAnimalNest(row[2]);
+					Position p = new Position(Integer.parseInt(row[0]), Integer.parseInt(row[1]));
+					animalNests.add(new Pair<Position, AnimalNest>(p, n));
+					line = r.readLine();
+				}
+			}catch (FileNotFoundException fnfe){
+				SworeGame.crash("Animal Nests File Not Found");
+				return;
+			}
+		}catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 }

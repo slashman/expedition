@@ -9,11 +9,13 @@ import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.item.ItemFactory;
+import net.slashie.expedition.world.AnimalNest;
 import net.slashie.serf.action.Action;
 import net.slashie.serf.ai.SimpleAI;
 import net.slashie.serf.game.Equipment;
 import net.slashie.util.Pair;
 import net.slashie.util.Util;
+import net.slashie.utils.Position;
 
 public class ExpeditionFactory {
 	public static Expedition getExpedition(String classifierId, int expeditionPower){
@@ -170,4 +172,61 @@ public class ExpeditionFactory {
 		
 		return ret;
 	}
+
+	public static Expedition deployAnimalGroup(AnimalNest nest) {
+		ExpeditionGame game = ExpeditionGame.getCurrentGame();
+		AnimalPack ret = new AnimalPack(game, "animalPack"+game.getLastExpeditionId());
+		ret.setGame(game);
+		ret.setAppearanceId(nest.getMembers());
+		ret.setName(nest.getName()+" group");
+		ret.setExpeditionary("-");
+		
+		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
+		ai.setBumpEnemy(true);
+		ret.setSelector(ai);
+		int targetPopulation = 30 + Util.rand(-20, 20);
+		int specializedPopulation = 0;
+		
+			
+		int commoners = targetPopulation - specializedPopulation - 1;
+		if (commoners > 0){
+			ret.addItem(ItemFactory.createItem(nest.getMembers()), commoners);
+			//town.reduceQuantityOf("NATIVE_COMMONER", commoners);
+		}
+		
+		// Add some treasure
+		/*List<Equipment> items = town.getItems();
+		int treasure = Util.rand(0, (int)Math.round(ret.getTotalUnits() / 2.0d));
+		for (int i = 0; i < items.size(); i++){
+			Equipment item = (Equipment) items.get(i);
+			GoodType goodType = ((ExpeditionItem)item.getItem()).getGoodType(); 
+			if (goodType == GoodType.ARMORY || goodType == GoodType.PEOPLE)
+				continue;
+			int quantity = Util.rand(0, expeditionPower*3);
+			int max = town.getItemCount(item.getItem().getFullID()) - 1;
+			if (quantity > max)
+				quantity = max;
+			if (quantity > treasure){
+				quantity = treasure;
+				treasure = 0;
+			} else {
+				treasure -= quantity;
+			}
+			
+			ret.addItem(ItemFactory.createItem(item.getItem().getFullID()), quantity);
+			town.reduceQuantityOf(ItemFactory.createItem(item.getItem().getFullID()), quantity);
+			if (treasure <= 0)
+				break;
+		}*/
+		
+		
+		Action armExpedition = new ArmExpedition();
+		armExpedition.setPerformer(ret);
+		armExpedition.execute();
+		
+		//ret.calculateInitialPower();
+		
+		return ret;
+	}
+	
 }
