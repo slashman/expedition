@@ -21,6 +21,8 @@ import net.slashie.expedition.level.GlobeModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.BuildingFactory;
 import net.slashie.expedition.town.BuildingTeam;
+import net.slashie.expedition.ui.ExpeditionDiscovery;
+import net.slashie.expedition.ui.ExpeditionDiscovery.Discovery;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.AnimalNest;
 import net.slashie.expedition.world.CardinalDirection;
@@ -55,6 +57,8 @@ import net.slashie.utils.Util;
 @SuppressWarnings("serial")
 public class Expedition extends Player implements FoodConsumer, UnitContainer, ItemContainer, BuildingTeam{
 	private ExpeditionUnit leaderUnit;
+	private List<ExpeditionDiscovery> discoveryLog;
+	private int fame;
 	
 	public enum Title {
 		EXPLORER (1, "Explorador", 0, 0, 0, 0),
@@ -260,6 +264,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		foodConsumerDelegate = new FoodConsumerDelegate(this);
 		game.addFoodConsumer(this);
 		expeditionMorale = 5;
+		discoveryLog = new ArrayList<ExpeditionDiscovery>();
+		fame = 0;
 	}
 	
 	
@@ -2450,5 +2456,25 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	 */
 	public Percentage getBaseGovernance() {
 		return new Percentage(getMorale()*10);
+	}
+	
+	public List<ExpeditionDiscovery> getDiscoveryLog() {
+		return discoveryLog;
+	}
+
+	public void addDiscoveryLog(ExpeditionDiscovery discoveryLog) {
+		this.discoveryLog.add(discoveryLog);
+	}
+	
+	public void reportDiscoveries(){
+		if (discoveryLog.size() == 0) return;
+		
+		for (ExpeditionDiscovery d: discoveryLog){
+			if (d.isReported()) continue;
+			
+			fame += d.getFame();
+			getLevel().addMessage("You reported " + d.getDiscoveryText() + " to Spain and gain " + d.getFame() + " points of fame");
+			d.setReported(true);
+		}
 	}
 }

@@ -204,11 +204,12 @@ public class ExpeditionGame extends SworeGame {
 				}
 			}
 			getExpedition().touchPort();
+			getExpedition().reportDiscoveries();
 		}
 		if (level.getID().equals("WORLD")){
 			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar
 			level.getPlayer().setPosition(-4330, 732, 0); // Cabo dela vela
-			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atl�ntico*/
+			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atl�ntico
 			level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
 			//level.getPlayer().setPosition(-329, 3000, 0); // North
 			int lat = 889*60;
