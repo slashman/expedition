@@ -46,6 +46,7 @@ import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.ui.CommonUI;
+import net.slashie.expedition.ui.ExpeditionDiscovery;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.ui.oryx.sfx.EffectsServer;
 import net.slashie.expedition.world.ExpeditionLevel;

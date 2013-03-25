@@ -1,18 +1,26 @@
 package net.slashie.expedition.action;
 
+import java.util.Calendar;
 import java.util.List;
 
 import net.slashie.expedition.action.navigation.TurnShip;
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.Ruin;
 import net.slashie.expedition.domain.SailingPoint;
 import net.slashie.expedition.domain.ShipCache;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.ExpeditionLevelReader;
 import net.slashie.expedition.level.GlobeMapModel;
+import net.slashie.expedition.ui.ExpeditionDiscovery;
+import net.slashie.expedition.ui.ExpeditionDiscovery.Discovery;
+import net.slashie.expedition.ui.ExpeditionDisplay;
+import net.slashie.expedition.ui.ExpeditionUserInterface;
+import net.slashie.expedition.ui.oryx.OryxExpeditionDisplay;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
+import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
 import net.slashie.serf.action.Action;
@@ -139,6 +147,24 @@ public class Walk extends Action{
 	        	invalidationMessage = "You can't go there";
 	        	return false;
 	        }
+	        
+	        Actor actor = a.getLevel().getActorAt(destinationPoint);
+	        if (actor != null){
+	        	if (actor instanceof Ruin){
+	        		Ruin r = (Ruin)actor;
+	        		invalidationMessage = "You can't go there";
+	        		if (!r.isDiscovered()){
+	        			String discoveryText = "You discovered " + r.getDescription();
+	        			invalidationMessage = discoveryText;
+	        			r.setDiscovered();
+	        			Calendar gameTime = ExpeditionGame.getCurrentGame().getGameTime();
+	        			String time = ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+", "+ExpeditionMacroLevel.getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
+	        			expedition.addDiscoveryLog(new ExpeditionDiscovery(discoveryText, Discovery.Ruin, time, 20));
+	        		}
+		        	return false;
+	        	}
+	        }
+	        
         }
 		return true;
 	}

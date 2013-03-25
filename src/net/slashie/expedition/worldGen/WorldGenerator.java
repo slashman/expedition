@@ -19,6 +19,7 @@ import org.xml.sax.SAXException;
 
 import net.slashie.expedition.data.ExpeditionDAO;
 import net.slashie.expedition.domain.NativeTown;
+import net.slashie.expedition.domain.Ruin;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.AnimalNest;
@@ -68,12 +69,19 @@ public class WorldGenerator {
 					
 					//Check if this is land
 					if ( cell != null && !cell.isRiver() && cell.isLand() && level.getFeaturesAt(settlementPosition) == null){
-						//Place a settlement
-						NativeTown t = new NativeTown(ExpeditionGame.getCurrentGame(), cultureCenter.getB(), cultureCenter.getB().getASize());
-						t.setPosition(new Position(settlementPosition));
-						t.setUnfriendly(Util.chance(30*cultureCenter.getB().getAggresiveness()));
-						level.addNativeTown(t);
-						//level.addFeature(t);
+						//Make a chance depending for place a ruin or a settlement
+						if (Util.chance(100)){
+							Ruin r = new Ruin(ExpeditionGame.getCurrentGame(), cultureCenter.getB());
+							r.setPosition(new Position(settlementPosition));
+							level.addActor(r);
+						}else{
+							//Place a settlement
+							NativeTown t = new NativeTown(ExpeditionGame.getCurrentGame(), cultureCenter.getB(), cultureCenter.getB().getASize());
+							t.setPosition(new Position(settlementPosition));
+							t.setUnfriendly(Util.chance(30*cultureCenter.getB().getAggresiveness()));
+							level.addNativeTown(t);
+							//level.addFeature(t);
+						}
 					} else {
 						fussible++;
 						if (fussible < 1000){

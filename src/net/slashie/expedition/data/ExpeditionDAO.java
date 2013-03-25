@@ -202,6 +202,8 @@ public class ExpeditionDAO {
 			new CharAppearance("NATIVE_VILLAGE", '^', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("NATIVE_TOWN", '^', ConsoleSystemInterface.RED),
 			new CharAppearance("NATIVE_CITY", '^', ConsoleSystemInterface.RED),
+			
+			new CharAppearance("RUIN", '&', ConsoleSystemInterface.PURPLE),
 
 			
 			//Stores
