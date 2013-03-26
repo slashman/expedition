@@ -23,6 +23,7 @@ import net.slashie.expedition.domain.Ruin;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.world.AnimalNest;
+import net.slashie.expedition.world.BotanyCrop;
 import net.slashie.expedition.world.Culture;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 import net.slashie.expedition.world.OverworldExpeditionCell;
@@ -254,6 +255,27 @@ public class WorldGenerator {
 				SworeGame.crash("Animal Nests File Not Found");
 				return;
 			}
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public static List<Pair<Position, BotanyCrop>> botanyCrops = new ArrayList<Pair<Position,BotanyCrop>>();
+	public static void addBotanyCrops(){
+		try{
+			//Read the botany crops
+			BufferedReader r = FileUtil.getReader("scenarios/theNewWorld/botanyCrops.properties");
+			String line = r.readLine();
+			while (line != null){
+				String[] row = line.split(",");
+				BotanyCrop c = ExpeditionDAO.getBotanyCrop(row[2]);
+				Position p = new Position(Integer.parseInt(row[0]), Integer.parseInt(row[1]));
+				botanyCrops.add(new Pair<Position, BotanyCrop>(p, c));
+				line = r.readLine();
+			}
+		}catch (FileNotFoundException fnfe){
+			SworeGame.crash("Botany Crops File Not Found");
+			return;
 		}catch (IOException e){
 			e.printStackTrace();
 		}

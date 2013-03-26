@@ -35,6 +35,8 @@ public class HourShiftAgent extends Actor{
 				for (int i = 0; i < foodConsumers.size(); i++){
 					foodConsumers.get(i).consumeFood();
 				}
+				//Everybody drinks
+				
 				
 				// All towns gather resources
 				for (Town town: ExpeditionGame.getCurrentGame().getExpedition().getTowns()){

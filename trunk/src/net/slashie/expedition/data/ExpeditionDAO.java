@@ -1,6 +1,7 @@
 package net.slashie.expedition.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,10 @@ import net.slashie.expedition.item.StorageType;
 import net.slashie.expedition.town.Building;
 import net.slashie.expedition.town.Farm;
 import net.slashie.expedition.world.AnimalNest;
+import net.slashie.expedition.world.BotanyCrop;
 import net.slashie.expedition.world.Culture;
 import net.slashie.expedition.world.ExpeditionFeature;
+import net.slashie.expedition.world.Plant;
 import net.slashie.expedition.world.StoreFactory;
 import net.slashie.expedition.world.agents.DayShiftAgent;
 import net.slashie.libjcsi.ConsoleSystemInterface;
@@ -41,7 +44,8 @@ public class ExpeditionDAO {
 		Store goodsStore = new Store(GoodType.SUPPLIES);
 		goodsStore.setOwnerName("Supplies Store");
 		goodsStore.addItem(50000, new StoreItemInfo("BISCUIT", 500, 0));
-		// goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", Store.LIQUID_PACK, "barrels")); TODO: Implement
+		//goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", Store.LIQUID_PACK, "barrels")); //TODO: Implement
+		goodsStore.addItem(10000, new StoreItemInfo("FRESHWATER", 500, 0));
 		// goodsStore.addItem(10000, new StoreItemInfo("SAUERKRAUT", Store.FOOD_PACK, "barrels")); TODO: Implement
 		// goodsStore.addItem(500, new StoreItemInfo("RUM", Store.LIQUID_PACK, "barrels")); TODO: Implement
 		goodsStore.addItem(10000, new StoreItemInfo("WOOD", 100, 0));
@@ -93,6 +97,7 @@ public class ExpeditionDAO {
 		guild.addItem(50, new StoreItemInfo("CARPENTER", 1, 0));
 		guild.addItem(10, new StoreItemInfo("DOCTOR", 1, 0));
 		guild.addItem(10, new StoreItemInfo("EXPLORER", 1, 0));
+		guild.addItem(15, new StoreItemInfo("BOTANIST", 1, 0));
 		StoreFactory.getSingleton().addStore("PALOS_GUILD", guild);
 	}
 	
@@ -188,6 +193,7 @@ public class ExpeditionDAO {
 			new CharAppearance("CARPENTER", 'c', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("COLONIST", 'c', ConsoleSystemInterface.YELLOW),
 			new CharAppearance("DOCTOR", 'D', ConsoleSystemInterface.BLUE),
+			new CharAppearance("BOTANIST", 'B', ConsoleSystemInterface.BLUE),
 			
 			new CharAppearance("EAGLE_WARRIOR", 'w', ConsoleSystemInterface.GREEN),
 			new CharAppearance("JAGUAR_WARRIOR", 'w', ConsoleSystemInterface.YELLOW),
@@ -375,6 +381,14 @@ public class ExpeditionDAO {
 					new WeaponType[]{},
 					new ArmorType[]{}, 100),
 			new ExpeditionUnit("DOCTOR",  "Doctor",  "Doctors",  "Heals expedition units", UNIT_WEIGHT, 300, 
+					new Roll("1D1"),
+					new Roll("1D1"),
+					1,
+					50,5,
+					1,
+					new WeaponType[]{WeaponType.SPEAR, WeaponType.MACE},
+					new ArmorType[]{}, 4000),
+			new ExpeditionUnit("BOTANIST",  "Botanist",  "Botanists",  "Search for exotic plants and animals", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,
@@ -789,5 +803,23 @@ public class ExpeditionDAO {
 	
 	public static AnimalNest getAnimalNest(String animalNestCode){
 		return animalNestsMap.get(animalNestCode);
+	}
+
+	public static Map<String, BotanyCrop> botanyCropsMap = new HashMap<String, BotanyCrop>();
+	static{
+		BotanyCrop[] crops = new BotanyCrop[]{
+				new BotanyCrop("POISON", "Poison Plants", Arrays.asList(new Plant[]{
+					new Plant("Aconitum", "Aconitum. The dark green leaves of Aconitum species lack stipules. They are palmate or deeply palmately lobed with 5–7 segments. Each segment again is 3-lobed with coarse sharp teeth. The leaves have a spiral (alternate) arrangement. The lower leaves have long petioles.", ""),
+					new Plant("Agave", "Aconitum. Chiefly Mexican, agaves are also native to the southern and western United States and central and tropical South America. They are succulents with a large rosette of thick, fleshy leaves, each ending generally in a sharp point and with a spiny margin; the stout stem is usually short, the leaves apparently springing from the root. Along with plants from the related genus Yucca, various Agave species are popular ornamental plants.", "")
+				}), 20)
+		};
+		
+		for (BotanyCrop bc: crops){
+			botanyCropsMap.put(bc.getCode(), bc);
+		}
+	}
+	
+	public static BotanyCrop getBotanyCrop(String botanyCrop) {
+		return botanyCropsMap.get(botanyCrop);
 	}
 }

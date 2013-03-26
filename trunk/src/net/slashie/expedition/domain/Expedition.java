@@ -25,6 +25,7 @@ import net.slashie.expedition.ui.ExpeditionDiscovery;
 import net.slashie.expedition.ui.ExpeditionDiscovery.Discovery;
 import net.slashie.expedition.ui.ExpeditionUserInterface;
 import net.slashie.expedition.world.AnimalNest;
+import net.slashie.expedition.world.BotanyCrop;
 import net.slashie.expedition.world.CardinalDirection;
 import net.slashie.expedition.world.ExpeditionCell;
 import net.slashie.expedition.world.ExpeditionLevel;
@@ -33,6 +34,7 @@ import net.slashie.expedition.world.ExpeditionMicroLevel;
 import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.FoodConsumerDelegate;
 import net.slashie.expedition.world.OverworldExpeditionCell;
+import net.slashie.expedition.world.Plant;
 import net.slashie.expedition.world.SettlementLevel;
 import net.slashie.expedition.world.TemperatureRules;
 import net.slashie.expedition.world.Weather;
@@ -2031,40 +2033,81 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				}
 			}
 			
-		}else if (Util.chance(25)){
-			//Try to deploy an animal expedition only if the chance
-			List<Pair<Position, AnimalNest>> nests = WorldGenerator.animalNests;
-			Pair<Position, AnimalNest> nearestNest = null;
-			double minDistance = -1;
-			
-			for (Pair<Position, AnimalNest> n: nests){
-				double distance = Position.distance(getPosition(), n.getA());
-				double nestRadius = GlobeMapModel.getSingleton().getLongitudeScale(n.getA().y())*n.getB().getRadius();
-				if (distance <= nestRadius){
-					if (minDistance == -1){
-						minDistance = distance;
-						nearestNest = n;
-					}else if (distance < minDistance){
-						minDistance = distance;
-						nearestNest = n;
+		}else{
+			if (Util.chance(25)){
+				//Try to deploy an animal expedition only if the chance
+				List<Pair<Position, AnimalNest>> nests = WorldGenerator.animalNests;
+				Pair<Position, AnimalNest> nearestNest = null;
+				double minDistance = -1;
+				
+				for (Pair<Position, AnimalNest> n: nests){
+					double distance = Position.distance(getPosition(), n.getA());
+					double nestRadius = GlobeMapModel.getSingleton().getLongitudeScale(n.getA().y())*n.getB().getRadius();
+					if (distance <= nestRadius){
+						if (minDistance == -1){
+							minDistance = distance;
+							nearestNest = n;
+						}else if (distance < minDistance){
+							minDistance = distance;
+							nearestNest = n;
+						}
+					}
+				}
+				
+				if (nearestNest != null){
+					int r = GlobeMapModel.getSingleton().getLongitudeScale(nearestNest.getA().y())*nearestNest.getB().getRadius();
+					Position p = new Position(Util.rand(nearestNest.getA().x() - r, nearestNest.getA().x() + r), Util.rand(nearestNest.getA().y() - r, nearestNest.getA().y() + r));
+					
+					double sight = getSightRangeInDots();
+					boolean isFar = (Position.distance(p, getPosition()) > sight);
+					
+					OverworldExpeditionCell cell = (OverworldExpeditionCell)getLevel().getMapCell(p);
+					if (isFar && cell != null && !cell.isRiver() && cell.isLand() && getLevel().getFeaturesAt(p) == null){
+						Expedition expedition = nearestNest.getB().deployAnimalGroup();
+						expedition.setPosition(new Position(getPosition().x()+2, getPosition().y()));
+						getLevel().addActor(expedition);
+						getLevel().addMessage("A group of "+nearestNest.getB().getName()+" appears!");
 					}
 				}
 			}
 			
-			if (nearestNest != null){
-				int r = GlobeMapModel.getSingleton().getLongitudeScale(nearestNest.getA().y())*nearestNest.getB().getRadius();
-				Position p = new Position(Util.rand(nearestNest.getA().x() - r, nearestNest.getA().x() + r), Util.rand(nearestNest.getA().y() - r, nearestNest.getA().y() + r));
+			
+			//According to the botanist number then pickup exotic plants
+			int botanist = getBotanistNumber() * 10;
+			if (Util.chance(botanist)){
+				List<Pair<Position, BotanyCrop>> crops = WorldGenerator.botanyCrops;
+				Pair<Position, BotanyCrop> nearest = null;
+				double minDistance = -1;
 				
-				double sight = getSightRangeInDots();
-				//boolean isFar = (Position.distance(p, getPosition()) > sight);
-				boolean isFar = true;
+				for (Pair<Position, BotanyCrop> b: crops){
+					double distance = Position.distance(getPosition(), b.getA());
+					double nestRadius = GlobeMapModel.getSingleton().getLongitudeScale(b.getA().y())*b.getB().getRadius();
+					if (distance <= nestRadius){
+						if (minDistance == -1){
+							minDistance = distance;
+							nearest = b;
+						}else if (distance < minDistance){
+							minDistance = distance;
+							nearest = b;
+						}
+					}
+				}
 				
-				OverworldExpeditionCell cell = (OverworldExpeditionCell)getLevel().getMapCell(p);
-				if (isFar && cell != null && !cell.isRiver() && cell.isLand() && getLevel().getFeaturesAt(p) == null){
-					Expedition expedition = nearestNest.getB().deployAnimalGroup();
-					expedition.setPosition(new Position(getPosition().x()+2, getPosition().y()));
-					getLevel().addActor(expedition);
-					getLevel().addMessage("A group of "+nearestNest.getB().getName()+" appears!");
+				if (nearest != null){
+					List<Plant> plants = nearest.getB().getPlants();
+					int ind = Util.rand(0, plants.size() - 1);
+					
+					Plant plant = plants.get(ind);
+					
+					String discoveryText = "You discovered a " + plant.getName();
+					if (!hasDiscovered(Discovery.Plant, discoveryText)){
+        				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(plant.getDescription());
+        				getLevel().addMessage(discoveryText);
+					}
+					
+        			Calendar gameTime = ExpeditionGame.getCurrentGame().getGameTime();
+        			String time = ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+", "+ExpeditionMacroLevel.getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
+        			addDiscoveryLog(new ExpeditionDiscovery(discoveryText, Discovery.Plant, time, 5));
 				}
 			}
 		}
@@ -2476,5 +2519,24 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			getLevel().addMessage("You reported " + d.getDiscoveryText() + " to Spain and gain " + d.getFame() + " points of fame");
 			d.setReported(true);
 		}
+	}
+	
+	public int getBotanistNumber(){
+		int acum = 0;
+		List<Equipment> units = getGoods(GoodType.PEOPLE);
+		for (Equipment unit: units){
+			if (unit.getItem().getFullID().equals("BOTANIST"))
+				acum += unit.getQuantity();
+		}
+		return acum;
+	}
+	
+	public boolean hasDiscovered(Discovery discovery, String discoveryText){
+		for (ExpeditionDiscovery d: discoveryLog){
+			if (d.getDiscoveryType() == discovery && d.getDiscoveryText().equals(discoveryText)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

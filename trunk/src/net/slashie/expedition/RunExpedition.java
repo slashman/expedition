@@ -42,6 +42,7 @@ import net.slashie.expedition.ui.console.ExpeditionConsoleUISelector;
 import net.slashie.expedition.ui.console.effects.CharEffects;
 import net.slashie.expedition.ui.oryx.ExpeditionContinuousGFXUISelector;
 import net.slashie.expedition.ui.oryx.ExpeditionOryxUI;
+import net.slashie.expedition.ui.oryx.ExpeditionSynchronizedGFXUISelector;
 import net.slashie.expedition.ui.oryx.OryxExpeditionDisplay;
 import net.slashie.expedition.ui.oryx.effects.GFXEffects;
 import net.slashie.expedition.ui.oryx.launcher.LauncherFrame;

@@ -27,7 +27,7 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Position;
 
 /**
- * Allow transfering equipment from an expedition into a caché, or drop it in the sea, or landing
+ * Allow transfering equipment from an expedition into a cachï¿½, or drop it in the sea, or landing
  * @author Slash
  *
  */
@@ -39,7 +39,7 @@ public class DropEquipment extends Action{
 		Expedition expedition = (Expedition)performer;
 		OverworldExpeditionCell standingCell = ((OverworldExpeditionCell) performer.getLevel().getMapCell(performer.getPosition()));
 		if (standingCell.isLand()){
-			// Droping things from expedition into land caché
+			// Droping things from expedition into land cachï¿½
 			GoodsCache cache = ((ExpeditionMacroLevel)performer.getLevel()).getOrCreateCache(performer.getPosition());
 			performer.setPosition(cache.getPosition());
 			((ExpeditionUserInterface)UserInterface.getUI()).transferFromExpedition(cache);
@@ -161,6 +161,10 @@ public class DropEquipment extends Action{
 		
 		if (landingParty.getColonists() != LandingSpec.NONE){
 			addItemsForLanding(ship, ret, landingParty.getColonists(), "COLONIST");
+		}
+		
+		if (landingParty.getBotanist() != LandingSpec.NONE){
+			addItemsForLanding(ship, ret, landingParty.getBotanist(), "BOTANIST");
 		}
 
 		return ret;

@@ -109,7 +109,7 @@ public class GameFiles {
 	}
 	
 	public static void main (String [] args){
-		System.out.println(encode("Name","Level"));
+		System.out.println(encode("Tom Lorenzen","Preorder Supporter"));
 	}
 	
 	public static class SaveGameFilenameFilter implements FilenameFilter {

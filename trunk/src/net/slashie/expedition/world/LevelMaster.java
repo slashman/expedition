@@ -71,6 +71,7 @@ public class LevelMaster {
 			WorldGenerator.addCities(ret);
 			WorldGenerator.addNativeSettlements(ret);
 			WorldGenerator.addAnimalNests();
+			WorldGenerator.addBotanyCrops();
 			ret.setID("WORLD");
 			ret.setWindDirection(CardinalDirection.WEST);
 			return ret;
