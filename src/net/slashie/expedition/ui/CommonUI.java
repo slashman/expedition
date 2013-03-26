@@ -324,6 +324,7 @@ public class CommonUI {
 		allParty.setCarpenters(LandingSpec.ALL);
 		allParty.setCrew(LandingSpec.ALL);
 		allParty.setColonists(LandingSpec.ALL);
+		allParty.setBotanist(LandingSpec.ALL);
 		allParty.setName("Everybody");
 		allParty.setMounted(false);
 		STANDARD_LANDING_PARTIES.add(allParty);

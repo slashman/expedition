@@ -114,7 +114,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 
 	@Override
 	public String getDescription() {
-		return "Alcazar of Córdova";
+		return "Alcazar of Cï¿½rdova";
 	}
 
 	@Override
@@ -159,10 +159,10 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				}
 				switch (choice){
 				case 0:
-					m(ferdinandSays()+"We will outfit the ships with sailors, officers and carpenters, we will also grant you 23.500 royal maravedíes and supplies for a five months voyage.");
+					m(ferdinandSays()+"We will outfit the ships with sailors, officers and carpenters, we will also grant you 23.500 royal maravedï¿½es and supplies for a five months voyage.");
 					break;
 				case 1:
-					m(ferdinandSays()+"We will outfit the ships with crew and will assign ten soldiers to your expedition, we will also grant you 10.000 royal maravedíes and supplies for a four months voyage.");
+					m(ferdinandSays()+"We will outfit the ships with crew and will assign ten soldiers to your expedition, we will also grant you 10.000 royal maravedï¿½es and supplies for a four months voyage.");
 					break;
 				}
 				stockExpedition(exp, choice);
@@ -170,22 +170,22 @@ public class SpainCastle extends StaticPattern implements Serializable {
 					choice = -1;
 					while (choice == -1){
 						choice = (UserInterface.getUI()).switchChat("Audience with the King and Queen","How much would you need?",
-								"By my accounts, I need 111.650 Maravedíes.",
-								"70.000 Maravedíes will be more than enough",
-								"40.000 Maravedíes, and your blessing."
+								"By my accounts, I need 111.650 Maravedï¿½es.",
+								"70.000 Maravedï¿½es will be more than enough",
+								"40.000 Maravedï¿½es, and your blessing."
 								);
 					}
 					switch (choice){
 					case 0:
-						m(isabellaSays()+"Then, we trust 111.650 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						m(isabellaSays()+"Then, we trust 111.650 royal maravedï¿½es in you, and we hope you use your best judgment to outfit the expedition.");
 						exp.setAccountedGold(111650);
 						break;
 					case 1:
-						m(isabellaSays()+"Then, we trust 70.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						m(isabellaSays()+"Then, we trust 70.000 royal maravedï¿½es in you, and we hope you use your best judgment to outfit the expedition.");
 						exp.setAccountedGold(70000);
 						break;
 					case 2:
-						m(ferdinandSays()+"Are you sure? You are a brave explorer. We trust 40.000 royal maravedíes in you, and we hope you use your best judgment to outfit the expedition.");
+						m(ferdinandSays()+"Are you sure? You are a brave explorer. We trust 40.000 royal maravedï¿½es in you, and we hope you use your best judgment to outfit the expedition.");
 						exp.setAccountedGold(40000);
 						break;
 					}
@@ -206,7 +206,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				}
 				if (earnedTitle) {
 					m(ferdinandSays()+"Because of your service to the crown, We, the Catholic Kings of Spain, name you "+exp.getTitle().getFullDescription(exp.getExpeditionary())+"..");
-					m(ferdinandSays()+"Take "+exp.getTitle().getPrize()+" maravedíes from the royal treasure, and continue defending our flag in the new world.");					
+					m(ferdinandSays()+"Take "+exp.getTitle().getPrize()+" maravedï¿½es from the royal treasure, and continue defending our flag in the new world.");					
 					ml(ferdinandSays()+"May God be with you in your journey. You are dismissed.");
 					exp.setAccountedGold(exp.getAccountedGold()+exp.getTitle().getPrize());
 				} else {
@@ -231,11 +231,11 @@ public class SpainCastle extends StaticPattern implements Serializable {
 		
 
 		private String isabellaSays() {
-			return "Isabella, Queen of Castile and León says: XXX XXX ";
+			return "Isabella, Queen of Castile and Leï¿½n says: XXX XXX ";
 		}
 
 		private String ferdinandSays() {
-			return "Ferdinand II, King of Aragón says: XXX XXX " ;
+			return "Ferdinand II, King of Aragï¿½n says: XXX XXX " ;
 		}
 
 		private void m(String string) {
@@ -261,7 +261,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SPEAR"), 82);
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 3);
 				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 3);
-				//ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
+				ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
 				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
 				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 15000);
 				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 100);
@@ -274,7 +274,7 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SPEAR"), 82);
 				ret.addItemOffshore(ItemFactory.createItem("STEEL_SWORD"), 3);
 				ret.addItemOffshore(ItemFactory.createItem("BREASTPLATE"), 3);
-				//ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
+				ret.addItemOffshore(ItemFactory.createItem("FRESHWATER"), 1000);
 				ret.addItemOffshore(ItemFactory.createItem("EXPLORER"), 2);
 				ret.addItemOffshore(ItemFactory.createItem("BISCUIT"), 15000);
 				ret.addItemOffshore(ItemFactory.createItem("WOOD"), 100);

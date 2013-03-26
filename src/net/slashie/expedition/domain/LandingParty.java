@@ -12,7 +12,14 @@ public class LandingParty {
 	private LandingSpec carpenters = LandingSpec.NONE;
 	private LandingSpec horses = LandingSpec.NONE;
 	private LandingSpec colonists = LandingSpec.NONE;
+	private LandingSpec botanist = LandingSpec.NONE;
 	
+	public LandingSpec getBotanist() {
+		return botanist;
+	}
+	public void setBotanist(LandingSpec botanist) {
+		this.botanist = botanist;
+	}
 	private boolean isMounted;
 	
 	public boolean isMounted() {

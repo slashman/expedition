@@ -2,7 +2,8 @@ package net.slashie.expedition.ui;
 
 public class ExpeditionDiscovery {
 	public enum Discovery{
-		Ruin("RUIN");
+		Ruin("RUIN"),
+		Plant("PLANT");
 		
 		String discovery;
 		private Discovery(String discovery){
