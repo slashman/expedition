@@ -97,7 +97,7 @@ public class ExpeditionDAO {
 		guild.addItem(50, new StoreItemInfo("CARPENTER", 1, 0));
 		guild.addItem(10, new StoreItemInfo("DOCTOR", 1, 0));
 		guild.addItem(10, new StoreItemInfo("EXPLORER", 1, 0));
-		guild.addItem(15, new StoreItemInfo("BOTANIST", 1, 0));
+		guild.addItem(15, new StoreItemInfo("NATURALIST", 1, 0));
 		StoreFactory.getSingleton().addStore("PALOS_GUILD", guild);
 	}
 	
@@ -193,7 +193,7 @@ public class ExpeditionDAO {
 			new CharAppearance("CARPENTER", 'c', ConsoleSystemInterface.DARK_RED),
 			new CharAppearance("COLONIST", 'c', ConsoleSystemInterface.YELLOW),
 			new CharAppearance("DOCTOR", 'D', ConsoleSystemInterface.BLUE),
-			new CharAppearance("BOTANIST", 'B', ConsoleSystemInterface.BLUE),
+			new CharAppearance("NATURALIST", 'N', ConsoleSystemInterface.BLUE),
 			
 			new CharAppearance("EAGLE_WARRIOR", 'w', ConsoleSystemInterface.GREEN),
 			new CharAppearance("JAGUAR_WARRIOR", 'w', ConsoleSystemInterface.YELLOW),
@@ -400,7 +400,7 @@ public class ExpeditionDAO {
 					2,
 					new WeaponType[]{WeaponType.SPEAR, WeaponType.MACE},
 					new ArmorType[]{}, 4000),
-			new ExpeditionUnit("BOTANIST",  "Botanist",  "Botanists",  "Search for exotic plants and animals", UNIT_WEIGHT, 300, 
+			new ExpeditionUnit("NATURALIST",  "Naturalist",  "Naturalists",  "Search for exotic plants and animals", UNIT_WEIGHT, 300, 
 					new Roll("1D1"),
 					new Roll("1D1"),
 					1,

@@ -163,8 +163,8 @@ public class DropEquipment extends Action{
 			addItemsForLanding(ship, ret, landingParty.getColonists(), "COLONIST");
 		}
 		
-		if (landingParty.getBotanist() != LandingSpec.NONE){
-			addItemsForLanding(ship, ret, landingParty.getBotanist(), "BOTANIST");
+		if (landingParty.getNaturalist() != LandingSpec.NONE){
+			addItemsForLanding(ship, ret, landingParty.getNaturalist(), "NATURALIST");
 		}
 
 		return ret;
