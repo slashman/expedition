@@ -88,7 +88,7 @@
 		<appearance id = "CARPENTER" x = "9" y = "6"/>
 		<appearance id = "COLONIST" x = "10" y = "6"/>
 		<appearance id = "DOCTOR" x = "11" y = "6"/>
-		<appearance id = "BOTANIST" x = "11" y = "6"/>
+		<appearance id = "NATURALIST" x = "11" y = "6"/>
 		
 		<appearance id = "NATIVE_WARRIOR" x = "1" y = "7"/>
 		<appearance id = "NATIVE_ARCHER" x = "2" y = "7"/>
@@ -109,7 +109,7 @@
 		<appearance id = "CARPENTER_MOUNTED" x = "9" y = "6"/>
 		<appearance id = "COLONIST_MOUNTED" x = "10" y = "6"/>
 		<appearance id = "DOCTOR_MOUNTED" x = "11" y = "6"/>
-		<appearance id = "BOTANIST_MOUNTED" x = "11" y = "6"/>
+		<appearance id = "NATURALIST_MOUNTED" x = "11" y = "6"/>
 		
 		<appearance id = "NATIVE_WARRIOR_MOUNTED" x = "1" y = "7"/>
 		<appearance id = "NATIVE_ARCHER_MOUNTED" x = "2" y = "7"/>
@@ -219,7 +219,7 @@
 		<appearance id = "DIALOG_CARPENTER" x = "9" y = "6"/>
 		<appearance id = "DIALOG_COLONIST" x = "10" y = "6"/>
 		<appearance id = "DIALOG_DOCTOR" x = "11" y = "6"/>
-		<appearance id = "DIALOG_BOTANIST" x = "11" y = "6"/>
+		<appearance id = "DIALOG_NATURALIST" x = "11" y = "6"/>
 		
 		<appearance id = "DIALOG_NATIVE_WARRIOR" x = "1" y = "7"/>
 		<appearance id = "DIALOG_NATIVE_ARCHER" x = "2" y = "7"/>
@@ -240,7 +240,7 @@
 		<appearance id = "DIALOG_CARPENTER_MOUNTED" x = "9" y = "6"/>
 		<appearance id = "DIALOG_COLONIST_MOUNTED" x = "10" y = "6"/>
 		<appearance id = "DIALOG_DOCTOR_MOUNTED" x = "11" y = "6"/>
-		<appearance id = "DIALOG_BOTANIST_MOUNTED" x = "11" y = "6"/>
+		<appearance id = "DIALOG_NATURALIST_MOUNTED" x = "11" y = "6"/>
 		
 		<appearance id = "DIALOG_NATIVE_WARRIOR_MOUNTED" x = "1" y = "7"/>
 		<appearance id = "DIALOG_NATIVE_ARCHER_MOUNTED" x = "2" y = "7"/>

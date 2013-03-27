@@ -267,6 +267,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		game.addFoodConsumer(this);
 		expeditionMorale = 5;
 		discoveryLog = new ArrayList<ExpeditionDiscovery>();
+		//discoveryLog.add(new ExpeditionDiscovery("You discovered an ancient ruin of Tairona culture", Discovery.Ruin, "August 23", 23));
 		fame = 0;
 	}
 	
@@ -2072,9 +2073,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 			
 			
-			//According to the botanist number then pickup exotic plants
-			int botanist = getBotanistNumber() * 10;
-			if (Util.chance(botanist)){
+			//According to the naturalist number then pickup exotic plants
+			int naturalist = getNaturalistNumber() * 10;
+			if (Util.chance(naturalist)){
 				List<Pair<Position, BotanyCrop>> crops = WorldGenerator.botanyCrops;
 				Pair<Position, BotanyCrop> nearest = null;
 				double minDistance = -1;
@@ -2521,11 +2522,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 	}
 	
-	public int getBotanistNumber(){
+	public int getNaturalistNumber(){
 		int acum = 0;
 		List<Equipment> units = getGoods(GoodType.PEOPLE);
 		for (Equipment unit: units){
-			if (unit.getItem().getFullID().equals("BOTANIST"))
+			if (unit.getItem().getFullID().equals("NATURALIST"))
 				acum += unit.getQuantity();
 		}
 		return acum;

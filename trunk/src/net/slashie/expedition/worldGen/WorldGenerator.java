@@ -71,7 +71,7 @@ public class WorldGenerator {
 					//Check if this is land
 					if ( cell != null && !cell.isRiver() && cell.isLand() && level.getFeaturesAt(settlementPosition) == null){
 						//Make a chance depending for place a ruin or a settlement
-						if (Util.chance(10)){
+						if (Util.chance(100)){
 							Ruin r = new Ruin(ExpeditionGame.getCurrentGame(), cultureCenter.getB());
 							r.setPosition(new Position(settlementPosition));
 							level.addActor(r);
