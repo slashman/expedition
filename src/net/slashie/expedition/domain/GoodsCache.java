@@ -142,7 +142,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	@Override
 	public void onStep(Actor a) {
 		if (a instanceof Expedition && !(a instanceof NonPrincipalExpedition)){
-			switch (UserInterface.getUI().switchChat("Goods Cache","What do you want to do?", "Fetch Equipment", "Caché Equipment", "Carry all", "Do Nothing")){
+			switch (UserInterface.getUI().switchChat("Goods Cache","What do you want to do?", "Fetch Equipment", "Cachï¿½ Equipment", "Carry all", "Do Nothing")){
 			case 0:
 				((ExpeditionUserInterface)UserInterface.getUI()).transferFromCache("Select the goods to transfer", null, this);
     			break;
@@ -357,5 +357,22 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 
 	public FoodConsumerDelegate getFoodConsumerDelegate() {
 		return foodConsumerDelegate;
+	}
+
+	@Override
+	public int getDailyWaterConsumption() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getWaterConsumptionMultiplier() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public void consumeWater() {
+		foodConsumerDelegate.consumeWater();
 	}
 }

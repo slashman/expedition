@@ -30,13 +30,12 @@ public class HourShiftAgent extends Actor{
 				if (currentTime.get(Calendar.MONTH) > month){
 					ExpeditionGame.getCurrentGame().monthChange();
 				}
-				//Everybody eat
+				//Everybody eat and drinks
 				List<FoodConsumer> foodConsumers = ExpeditionGame.getCurrentGame().getFoodConsumers();
 				for (int i = 0; i < foodConsumers.size(); i++){
 					foodConsumers.get(i).consumeFood();
+					foodConsumers.get(i).consumeWater();
 				}
-				//Everybody drinks
-				
 				
 				// All towns gather resources
 				for (Town town: ExpeditionGame.getCurrentGame().getExpedition().getTowns()){

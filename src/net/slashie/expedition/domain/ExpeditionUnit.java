@@ -33,6 +33,7 @@ public class ExpeditionUnit extends Vehicle{
 	private String name;
 	private int resistance;  //TODO: Make this affect battle performance
 	private int dailyFoodConsumption;
+	private int dailyWaterConsumption;
 	private int baseHitChance;
 	private Roll baseAttack;
 	private Roll baseDefense;
@@ -119,6 +120,7 @@ public class ExpeditionUnit extends Vehicle{
 			int baseHitChance,
 			int evadeChance,
 			int dailyFoodConsumption,
+			int dailyWaterConsumption,
 			WeaponType[] weaponTypes, ArmorType[] armorTypes, int palosStoreValue) {
 		super(classifierId, description, pluralDescription, longDescription, weight, false, false, 1, carryCapacity, 1, true, GoodType.PEOPLE, palosStoreValue, 999999999);
 		// A life is too expensive to trade with it (Slavery isn't yet added)
@@ -129,6 +131,7 @@ public class ExpeditionUnit extends Vehicle{
 		this.evadeChance = evadeChance;
 		this.resistance = resistance;
 		this.dailyFoodConsumption = dailyFoodConsumption;
+		this.dailyWaterConsumption = dailyWaterConsumption;
 		this.weaponTypes = weaponTypes;
 		this.armorTypes = armorTypes;
 		updateCompositeVariables();
@@ -370,6 +373,10 @@ public class ExpeditionUnit extends Vehicle{
 	
 	public boolean isSettled() {
 		return isSettled;
+	}
+	
+	public int getDailyWaterConsumption() {
+		return dailyWaterConsumption;
 	}
 }
 
