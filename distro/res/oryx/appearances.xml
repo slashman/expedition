@@ -97,6 +97,7 @@
 		<appearance id = "EAGLE_WARRIOR" x = "9" y = "19"/>
 		<appearance id = "JAGUAR_WARRIOR" x = "10" y = "19"/>
 		<appearance id = "DOCTOR" x = "11" y = "19"/>
+		<appearance id = "BOTANIST" x = "11" y = "19"/>
 		<compositeAppearance id = "SAILOR_MOUNTED" x1 = "1" y1 = "10" x2 = "1" y2 = "25"/>
 		<compositeAppearance id = "ROGUE_MOUNTED" x1 = "2" y1 = "10" x2 = "1" y2 = "25"/>
 		<compositeAppearance id = "MARINE_MOUNTED" x1 = "3" y1 = "10" x2 = "1" y2 = "25"/>
@@ -116,6 +117,7 @@
 		<compositeAppearance id = "EAGLE_WARRIOR_MOUNTED" x1 = "9" y1 = "19" x2 = "1" y2 = "25"/>
 		<compositeAppearance id = "JAGUAR_WARRIOR_MOUNTED" x1 = "10" y1 = "19" x2 = "1" y2 = "25"/>
 		<compositeAppearance id = "DOCTOR_MOUNTED" x1 = "11" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DOCTOR_BOTANIST" x1 = "11" y1 = "19" x2 = "1" y2 = "25"/>
 		<!-- Supplies -->
 		<appearance id = "BISCUIT" x = "6" y = "8"/>
 		<appearance id = "FRUIT" x = "7" y = "7"/>
@@ -224,6 +226,7 @@
 		<appearance id = "DIALOG_EAGLE_WARRIOR" x = "9" y = "19"/>
 		<appearance id = "DIALOG_JAGUAR_WARRIOR" x = "10" y = "19"/>
 		<appearance id = "DIALOG_DOCTOR" x = "11" y = "19"/>
+		<appearance id = "DIALOG_BOTANIST" x = "11" y = "19"/>
 		<compositeAppearance id = "DIALOG_SAILOR_MOUNTED" x1 = "1" y1 = "10" x2 = "1" y2 = "25"/>
 		<compositeAppearance id = "DIALOG_ROGUE_MOUNTED" x1 = "2" y1 = "10" x2 = "1" y2 = "25"/>
 		<compositeAppearance id = "DIALOG_MARINE_MOUNTED" x1 = "3" y1 = "10" x2 = "1" y2 = "25"/>
@@ -243,6 +246,7 @@
 		<compositeAppearance id = "DIALOG_EAGLE_WARRIOR_MOUNTED" x1 = "9" y1 = "19" x2 = "1" y2 = "25"/>
 		<compositeAppearance id = "DIALOG_JAGUAR_WARRIOR_MOUNTED" x1 = "10" y1 = "19" x2 = "1" y2 = "25"/>
 		<compositeAppearance id = "DIALOG_DOCTOR_MOUNTED" x1 = "11" y1 = "19" x2 = "1" y2 = "25"/>
+		<compositeAppearance id = "DIALOG_BOTANIST_MOUNTED" x1 = "11" y1 = "19" x2 = "1" y2 = "25"/>
 		<!-- Supplies -->
 		<appearance id = "DIALOG_BISCUIT" x = "6" y = "8"/>
 		<appearance id = "DIALOG_FRUIT" x = "7" y = "7"/>
@@ -308,5 +312,9 @@
 		<appearance id = "STORM_FOG" x = "1" y = "17"/>
 		<animatedAppearance id = "WATER_FOG" x = "2,2" y = "1,2" delay = "500"/>
 		<animatedAppearance id = "WATER2_FOG" x = "3,3" y = "1,2" delay = "500"/>
+	</appearances>
+	<appearances file = "img/plants.png" tileWidth = "32" tileHeight = "32">
+		<appearance id = "PLANT_ACONITUM" x = "0" y = "0"/>
+		<appearance id = "PLANT_AGAVE" x = "1" y = "0"/>
 	</appearances>
 </graphicsPack>
