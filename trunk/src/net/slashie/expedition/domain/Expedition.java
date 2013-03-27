@@ -1762,6 +1762,11 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			expeditionMorale ++;
 		}
 		
+		//Thirst
+		if (foodConsumerDelegate.getThirstResistance() >= 30){
+			expeditionMorale --;
+		}
+		
 		if (expeditionMorale > 10){
 			expeditionMorale = 10;
 			return;
@@ -2538,5 +2543,27 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 		}
 		return false;
+	}
+	
+	public double getWaterConsumptionMultiplier() {
+		if (getLevel() instanceof ExpeditionMacroLevel)
+			return TemperatureRules.getTemperatureWaterModifier(getLocation().getTemperature());
+		else
+			return 1;
+
+	}
+
+	@Override
+	public int getDailyWaterConsumption() {
+		if (isHibernate()){
+			return 0;
+		} else {
+			return foodConsumerDelegate.getDailyWaterConsumption();
+		}
+	}
+	
+	@Override
+	public void consumeWater(){
+		foodConsumerDelegate.consumeWater();
 	}
 }

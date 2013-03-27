@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 
+import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Food;
 import net.slashie.expedition.domain.NonPrincipalExpedition;
@@ -19,13 +21,15 @@ public class FoodConsumerDelegate implements Serializable{
 	private FoodConsumer foodConsumer;
 	
 	private int starveResistance;
+	private int thirstResistance;
 	public FoodConsumerDelegate(FoodConsumer foodConsumer) {
 		super();
 		this.foodConsumer = foodConsumer;
 	}
 
-	public void setStarveResistance(int starveResistance) {
+	public void setStarveResistance(int starveResistance, int thirstResistance) {
 		this.starveResistance = starveResistance;
+		this.thirstResistance = thirstResistance;
 	}
 
 	public int getDailyFoodConsumption(){
@@ -88,6 +92,7 @@ public class FoodConsumerDelegate implements Serializable{
 		}
 		return foodToSpend;
 	}
+	
 	private Equipment chooseRandomEquipmentUsingWeights(List<Pair<Equipment,Double>> weights){
 		double pin = Util.rand(0, 100) / 100.0d;
 		for (Pair<Equipment,Double> weightedEquipment: weights){
@@ -169,5 +174,73 @@ public class FoodConsumerDelegate implements Serializable{
 
 	private int getCurrentFood() {
 		return foodConsumer.getCurrentFood();
+	}
+	
+	public int getDailyWaterConsumption(){
+		if (foodConsumer instanceof NonPrincipalExpedition)
+			return 0;
+		int dailyWaterConsumption = 0;
+		List<Equipment> inventory = this.foodConsumer.getInventory();
+		for (Equipment equipment: inventory){
+			if (equipment.getItem() instanceof ExpeditionUnit){
+				ExpeditionUnit unit = (ExpeditionUnit)equipment.getItem();
+				dailyWaterConsumption += unit.getDailyWaterConsumption() * equipment.getQuantity();
+			}
+		}
+		return (int)Math.floor(dailyWaterConsumption * foodConsumer.getWaterConsumptionMultiplier());
+	}
+	
+	public int reduceWater(int quantity){
+		if (quantity == 0)
+			return 0;
+		int waterToSpend = quantity;
+		List<Equipment> inventory = this.foodConsumer.getInventory();
+		int originalSize = inventory.size();
+		for (int i = 0; i < inventory.size(); i++){
+			Equipment equipment = (Equipment) inventory.get(i);
+			if (!equipment.getItem().getFullID().equals("FRESHWATER"))
+				continue;
+			
+			int unitsToSpend = waterToSpend;
+			if (unitsToSpend > equipment.getQuantity()){
+				unitsToSpend = equipment.getQuantity();
+			}
+			waterToSpend -= unitsToSpend;
+			foodConsumer.reduceQuantityOf(equipment.getItem(), unitsToSpend);
+			if (inventory.size() < originalSize){
+				i--;
+				originalSize = inventory.size();
+			}
+			if (waterToSpend <= 0){
+				return 0;
+			}
+		}
+		return waterToSpend;
+	}
+	
+	public void consumeWater(){
+		int remainder = reduceWater(foodConsumer.getDailyWaterConsumption());
+		if (remainder > 0){
+			//Reduce expedition thirst 
+			thirstResistance--;
+			if (thirstResistance <= 0){
+				int unitsToKill = (int)Math.ceil((double) foodConsumer.getTotalUnits()*(double)Util.rand(5, 20)/100.0d);
+				if (unitsToKill > 0)
+					foodConsumer.killUnits(unitsToKill);
+			}
+		} else {
+			if (thirstResistance < 30)
+				thirstResistance++;
+			else{
+				if (foodConsumer instanceof NonPrincipalExpedition)
+					return;
+				System.out.println("FUUUUUCK");
+				((Expedition)foodConsumer).getLevel().addMessage("Your crowd is thirsty!");
+			}
+		}
+	}
+	
+	public int getThirstResistance(){
+		return thirstResistance;
 	}
 }

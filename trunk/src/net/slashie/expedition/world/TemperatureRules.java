@@ -88,4 +88,13 @@ public class TemperatureRules {
 		}
 		return itczLats[month];
 	}
+	
+	public static double getTemperatureWaterModifier(int temperatureC){
+		if (temperatureC > 5)
+			return 1.2;
+		else if (temperatureC > -5)
+			return 1.4;
+		else 
+			return 1.6;
+	}
 }

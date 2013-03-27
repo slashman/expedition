@@ -9,6 +9,8 @@ import net.slashie.utils.Position;
 
 public interface FoodConsumer {
 	public void consumeFood();
+	
+	public void consumeWater();
 
 	public void checkDeath();
 
@@ -16,7 +18,11 @@ public interface FoodConsumer {
 	
 	public int getDailyFoodConsumption();
 	
+	public int getDailyWaterConsumption();
+	
 	public double getFoodConsumptionMultiplier();
+	
+	public double getWaterConsumptionMultiplier();
 
 	public void reduceQuantityOf(AbstractItem item, int killUnits);
 	
