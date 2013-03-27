@@ -371,6 +371,7 @@ public class OryxExpeditionDisplay extends ExpeditionDisplay{
 		si.print(0, 3,15, "  r: Repair damaged ships", Color.WHITE);
 		si.print(0, 3,16, "  R: Reset dead' reckon counter", Color.WHITE);
 		si.print(0, 3,17, "  w: Chop wood from forests", Color.WHITE);
+		si.print(0, 3,17, "  z: Search around", Color.WHITE);
 		si.print(0, 3,18, "  F: Change SFX volume", Color.WHITE);
 		si.print(0, 3,19, "  M: Change Music Volume", Color.WHITE);
 		si.print(0, 3,20, "  S: Save Game", Color.WHITE);

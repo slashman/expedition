@@ -26,7 +26,7 @@ public interface FoodConsumer {
 
 	public void reduceQuantityOf(AbstractItem item, int killUnits);
 	
-	public void killUnits(int quantity);
+	public void killUnits(int quantity, String cause);
 
 	public int getTotalUnits();
 

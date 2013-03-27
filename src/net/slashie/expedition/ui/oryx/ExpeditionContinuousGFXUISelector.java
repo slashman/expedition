@@ -45,6 +45,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 	private CleanButton quitButton;
 	private CleanButton logButton;
 	private CleanButton anchorButton;
+	private CleanButton searchAroundButton;
 	private CleanButton musicButton;
 	private CleanButton sfxButton;
 	private Image unmountImage;
@@ -87,6 +88,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 		resetButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_RESET"), HAND_CURSOR);
 		chopButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_CHOP"), HAND_CURSOR);
 		anchorButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_ANCHOR"), HAND_CURSOR);
+		searchAroundButton = new CleanButton(smallButtonBack, smallButtonHover, assets.getImageAsset("BTN_LOOK"), HAND_CURSOR);
 		
 		musicButton = new CleanButton(null, assets.getImageAsset("BTN_MUSIC"), assets.getImageAsset("BTN_MUSIC"), HAND_CURSOR);
 		sfxButton = new CleanButton(null, assets.getImageAsset("BTN_SFX"), assets.getImageAsset("BTN_SFX"), HAND_CURSOR);
@@ -105,6 +107,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 		resetButton.addActionListener(getStringCallBackActionListener(Integer.parseInt(keyBindings.getProperty("RESET_RECKON_KEY"))));
 		chopButton.addActionListener(getStringCallBackActionListener(Integer.parseInt(keyBindings.getProperty("CHOP_WOODS_KEY"))));
 		anchorButton.addActionListener(getStringCallBackActionListener(Integer.parseInt(keyBindings.getProperty("ANCHOR_KEY"))));
+		searchAroundButton.addActionListener(getStringCallBackActionListener(Integer.parseInt(keyBindings.getProperty("SEARCH_AROUND_KEY"))));
 		musicButton.addActionListener(getStringCallBackActionListener(Integer.parseInt(keyBindings.getProperty("SWITCH_MUSIC_KEY"))));
 		sfxButton.addActionListener(getStringCallBackActionListener(Integer.parseInt(keyBindings.getProperty("SWITCH_SFX_KEY"))));
 		saveButton.addActionListener(getStringCallBackActionListener(Integer.parseInt(keyBindings.getProperty("PROMPT_SAVE_KEY"))));
@@ -121,6 +124,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 		resetButton.setPopupText("Reset Dead' Reckon (R)");
 		chopButton.setPopupText("Chop Woods (w)");
 		anchorButton.setPopupText("Anchor Ships (A)");
+		searchAroundButton.setPopupText("Search Around (z)");
 		
 		musicButton.setPopupText("Switch Music (M)");
 		sfxButton.setPopupText("Switch SFX (F)");
@@ -138,6 +142,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 		resetButton.setVisible(true);
 		chopButton.setVisible(true);
 		anchorButton.setVisible(true);
+		searchAroundButton.setVisible(true);
 		
 		buttonsPanel = new JPanel();
 		buttonsPanel.setOpaque(false);
@@ -158,6 +163,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 		buttonsPanel.add(repairButton);
 		buttonsPanel.add(resetButton);
 		buttonsPanel.add(anchorButton);
+		buttonsPanel.add(searchAroundButton);
 		
 		// Add these in the border
 		musicButton.setVisible(false);
@@ -196,6 +202,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 		resetButton.setEnabled(true);
 		chopButton.setEnabled(true);
 		anchorButton.setEnabled(true);
+		searchAroundButton.setEnabled(true);
 		musicButton.setEnabled(true);
 		sfxButton.setEnabled(true);
 		saveButton.setEnabled(true);
@@ -236,6 +243,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 		repairButton.setEnabled(false);
 		resetButton.setEnabled(false);
 		anchorButton.setEnabled(false);
+		searchAroundButton.setEnabled(false);
 		chopButton.setEnabled(false);
 		
 		musicButton.setEnabled(false);
@@ -305,6 +313,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 			resetButton.setVisible(false);
 			chopButton.setVisible(false);
 			anchorButton.setVisible(false);
+			searchAroundButton.setVisible(false);
 		} else if (expedition.getMovementMode().isLandMovement()){
 			buildButton.setVisible(true);
 			dropButton.setVisible(true);
@@ -312,6 +321,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 			resetButton.setVisible(true);
 			chopButton.setVisible(true);
 			anchorButton.setVisible(false);
+			searchAroundButton.setVisible(true);
 			dropButton.setPopupText("Cach� Equipment (d)");
 		} else {
 			buildButton.setVisible(false);
@@ -320,6 +330,7 @@ public class ExpeditionContinuousGFXUISelector extends ContinuousGFXUISelector{
 			resetButton.setVisible(true);
 			chopButton.setVisible(false);
 			anchorButton.setVisible(true);
+			searchAroundButton.setVisible(false);
 			dropButton.setPopupText("Make Landfall (d)");
 		}
 		

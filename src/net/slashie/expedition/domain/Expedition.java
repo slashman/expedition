@@ -1041,7 +1041,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		return ret;
 	}
 
-	public void killUnits(int quantity) {
+	public void killUnits(int quantity, String cause) {
 		Collection<Pair<ExpeditionUnit, Integer>> values = foodConsumerDelegate.killUnits(quantity);
 		String killMessage = "";
 		int i = 0;
@@ -1063,9 +1063,9 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			i++;
 		}
 		if (quantity == 1)
-			getLevel().addMessage(killMessage +" starves to death.");
+			getLevel().addMessage(killMessage +" "+cause+" to death.");
 		else
-			getLevel().addMessage(killMessage +" starve to death.");
+			getLevel().addMessage(killMessage +" "+cause+" to death.");
 	}
 
 	public void addTown(Town town) {
@@ -1760,11 +1760,6 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		// Temporary Mod
 		if (hasCounter("MORALE_UP")){
 			expeditionMorale ++;
-		}
-		
-		//Thirst
-		if (foodConsumerDelegate.getThirstResistance() >= 30){
-			expeditionMorale --;
 		}
 		
 		if (expeditionMorale > 10){
@@ -2564,6 +2559,21 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	
 	@Override
 	public void consumeWater(){
-		foodConsumerDelegate.consumeWater();
+		//Consume water only if is not near to a sweet water spot
+		List<Pair<Position, OverworldExpeditionCell>> around = ((ExpeditionMacroLevel)getLevel()).getMapCellsAndPositionsAround(getPosition());
+		for (Pair<Position, OverworldExpeditionCell> a: around){
+			if (a.getB().isRiver()){
+				foodConsumerDelegate.removeThirst();
+				return;
+			}
+		}
+		
+		if (foodConsumerDelegate.consumeWater()){
+			if (Util.chance(40)){
+				getLevel().addMessage("Your crowd is thirsty!");
+				if (foodConsumerDelegate.getThirstResistance() >= 5)
+					expeditionMorale--;
+			}
+		}
 	}
 }

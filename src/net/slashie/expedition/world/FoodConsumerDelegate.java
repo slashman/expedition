@@ -53,8 +53,12 @@ public class FoodConsumerDelegate implements Serializable{
 			starveResistance --;
 			if (starveResistance <= 0){
 				int unitsToKill = (int)Math.ceil((double) foodConsumer.getTotalUnits()*(double)Util.rand(5, 20)/100.0d);
-				if (unitsToKill > 0)
-					foodConsumer.killUnits(unitsToKill);
+				if (unitsToKill > 0){
+					String cause = "starves";
+					if (unitsToKill == 1)
+						cause = "starve";
+					foodConsumer.killUnits(unitsToKill, cause);
+				}
 			}
 		} else {
 			if (starveResistance < 7)
@@ -218,29 +222,35 @@ public class FoodConsumerDelegate implements Serializable{
 		return waterToSpend;
 	}
 	
-	public void consumeWater(){
+	public boolean consumeWater(){
 		int remainder = reduceWater(foodConsumer.getDailyWaterConsumption());
 		if (remainder > 0){
 			//Reduce expedition thirst 
 			thirstResistance--;
 			if (thirstResistance <= 0){
 				int unitsToKill = (int)Math.ceil((double) foodConsumer.getTotalUnits()*(double)Util.rand(5, 20)/100.0d);
-				if (unitsToKill > 0)
-					foodConsumer.killUnits(unitsToKill);
+				if (unitsToKill > 0){
+					String cause = "thirsts";
+					if (unitsToKill == 1)
+						cause = "thirst";
+					foodConsumer.killUnits(unitsToKill, cause);
+				}
 			}
+			
+			return false;
 		} else {
-			if (thirstResistance < 30)
+			if (thirstResistance < 5)
 				thirstResistance++;
-			else{
-				if (foodConsumer instanceof NonPrincipalExpedition)
-					return;
-				System.out.println("FUUUUUCK");
-				((Expedition)foodConsumer).getLevel().addMessage("Your crowd is thirsty!");
-			}
+			
+			return true;
 		}
 	}
 	
 	public int getThirstResistance(){
 		return thirstResistance;
+	}
+	
+	public void removeThirst(){
+		thirstResistance = 0;
 	}
 }
