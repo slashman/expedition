@@ -21,6 +21,7 @@ import net.slashie.expedition.action.DropEquipment;
 import net.slashie.expedition.action.MeleeAttack;
 import net.slashie.expedition.action.MountMounts;
 import net.slashie.expedition.action.RepairShips;
+import net.slashie.expedition.action.Search;
 import net.slashie.expedition.action.Walk;
 import net.slashie.expedition.action.navigation.Anchor;
 import net.slashie.expedition.action.navigation.ResetDeadReckon;
@@ -402,6 +403,7 @@ public class RunExpedition {
 		Action chopWoods = new ChopWoods();
 		Action mountMounts = new MountMounts();
 		Action anchor = new Anchor();
+		Action search = new Search();
 
 		keyBindings = new Properties();
 		keyBindings.put("DONOTHING1_KEY", readKeyString(keyConfig, "doNothing"));
@@ -433,6 +435,7 @@ public class RunExpedition {
 		keyBindings.put("CHOP_WOODS_KEY", readKeyString(keyConfig, "chopWoods"));
 		keyBindings.put("MOUNT_KEY", readKeyString(keyConfig, "mount"));
 		keyBindings.put("ANCHOR_KEY", readKeyString(keyConfig, "anchor"));
+		keyBindings.put("SEARCH_AROUND_KEY", readKeyString(keyConfig, "search"));
 		
 		keyBindings.put("QUIT_KEY", readKeyString(keyConfig, "PROMPTQUIT"));
 		keyBindings.put("HELP1_KEY", readKeyString(keyConfig, "HELP1"));
@@ -453,6 +456,7 @@ public class RunExpedition {
 			    new UserAction(chopWoods, i(keyBindings.getProperty("CHOP_WOODS_KEY"))),
 			    new UserAction(mountMounts, i(keyBindings.getProperty("MOUNT_KEY"))),
 			    new UserAction(anchor, i(keyBindings.getProperty("ANCHOR_KEY"))),
+			    new UserAction(search, i(keyBindings.getProperty("SEARCH_AROUND_KEY"))),
 			};
 		
 		UserCommand[] userCommands = new UserCommand[]{

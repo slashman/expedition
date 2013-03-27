@@ -261,7 +261,7 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 		return 0;
 	}
 	
-	public void killUnits(int quantity) {
+	public void killUnits(int quantity, String cause) {
 		foodConsumerDelegate.killUnits(quantity);
 		if (destroyOnEmpty() && getItems().size() == 0){
 			getLevel().destroyFeature(this);

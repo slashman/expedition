@@ -313,8 +313,4 @@
 		<animatedAppearance id = "WATER_FOG" x = "2,2" y = "1,2" delay = "500"/>
 		<animatedAppearance id = "WATER2_FOG" x = "3,3" y = "1,2" delay = "500"/>
 	</appearances>
-	<appearances file = "img/plants.png" tileWidth = "32" tileHeight = "32">
-		<appearance id = "PLANT_ACONITUM" x = "0" y = "0"/>
-		<appearance id = "PLANT_AGAVE" x = "1" y = "0"/>
-	</appearances>
 </graphicsPack>
