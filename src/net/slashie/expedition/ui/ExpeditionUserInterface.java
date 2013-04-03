@@ -61,4 +61,6 @@ public interface ExpeditionUserInterface {
 	public LandingParty selectLandingParty();
 	public void notifyWeatherChange(Weather weather);
 	public void reactivate();
+	public void showImageBlockingMessage(String message, String imageIndex);
+	public void showImageBlockingMessage(String message, String imageIndex, boolean keepMessage);
 }

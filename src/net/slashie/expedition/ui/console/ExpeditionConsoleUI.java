@@ -340,14 +340,14 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 			int gold = storeItemInfo.getPrice() * buyQuantity;	
 			if (item instanceof ExpeditionUnit){
 				if (quantity > 1)
-					menuBox.setPrompt("Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
+					menuBox.setPrompt("Hire "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedï¿½es? (Y/n)");
 				else
-					menuBox.setPrompt("Hire a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
+					menuBox.setPrompt("Hire a "+item.getDescription()+" for "+gold+" maravedï¿½es? (Y/n)");
 			} else {
 				if (quantity > 1)
-					menuBox.setPrompt("Buy "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedíes? (Y/n)");
+					menuBox.setPrompt("Buy "+quantity+" "+item.getPluralDescription()+" for "+gold+" maravedï¿½es? (Y/n)");
 				else
-					menuBox.setPrompt("Buy a "+item.getDescription()+" for "+gold+" maravedíes? (Y/n)");
+					menuBox.setPrompt("Buy a "+item.getDescription()+" for "+gold+" maravedï¿½es? (Y/n)");
 			}
 			menuBox.draw();
 	 		if (prompt())
@@ -1120,5 +1120,15 @@ public class ExpeditionConsoleUI extends ConsoleUserInterface implements Expedit
 	@Override
 	public void reactivate() {
 
+	}
+
+	@Override
+	public void showImageBlockingMessage(String message, String imageIndex) {
+		showBlockingMessage(message);
+	}
+
+	@Override
+	public void showImageBlockingMessage(String message, String imageIndex, boolean keepMessage) {
+		showBlockingMessage(message, keepMessage);
 	}
 }

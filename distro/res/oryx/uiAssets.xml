@@ -111,4 +111,9 @@
 		<image id = "IMG_MORALE_1" bounds = "216,432,24,24"/>
 		<image id = "IMG_MORALE_0" bounds = "240,432,24,24"/>
 	</tileSet>
+	
+	<tileSet file = "img/flowers.png">
+		<image id = "FLW_ACONITUM" bounds = "0,0,96,96"/>
+		<image id = "FLW_AGAVE" bounds = "0,0,96,96"/>
+	</tileSet>
 </uiAssets>

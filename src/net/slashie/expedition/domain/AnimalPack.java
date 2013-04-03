@@ -3,12 +3,13 @@ package net.slashie.expedition.domain;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.ExpeditionMacroLevel;
 
-public class AnimalPack extends Expedition{
+@SuppressWarnings("serial")
+public class AnimalPack extends NonPrincipalExpedition{
 	private String classifierId;
 	private boolean isHostile = false;
 	
 	public AnimalPack(ExpeditionGame game, String classifierId){
-		super(game);
+		super(game, classifierId);
 		this.classifierId = classifierId;
 	}
 

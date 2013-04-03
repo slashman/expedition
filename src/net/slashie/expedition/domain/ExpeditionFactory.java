@@ -172,12 +172,28 @@ public class ExpeditionFactory {
 		
 		return ret;
 	}
-
+	
 	public static Expedition deployAnimalGroup(AnimalNest nest) {
 		ExpeditionGame game = ExpeditionGame.getCurrentGame();
 		AnimalPack ret = new AnimalPack(game, "animalPack"+game.getLastExpeditionId());
+		
 		ret.setGame(game);
 		ret.setAppearanceId(nest.getMembers());
+		ret.setName(nest.getName()+" group");
+		ret.addItem(ItemFactory.createItem(nest.getMembers()), 10);
+		
+		SimpleAI ai = new SimpleAI(game.getPlayer(), new Bump()) ;
+		ai.setBumpEnemy(true);
+		ret.setSelector(ai);
+		
+		return ret;
+	}
+
+	public static Expedition deployAnimalGroupOld(AnimalNest nest) {
+		ExpeditionGame game = ExpeditionGame.getCurrentGame();
+		AnimalPack ret = new AnimalPack(game, "animalPack"+game.getLastExpeditionId());
+		ret.setGame(game);
+		ret.setAppearanceId(nest.getMembers()); 
 		ret.setName(nest.getName()+" group");
 		ret.setExpeditionary("-");
 		
