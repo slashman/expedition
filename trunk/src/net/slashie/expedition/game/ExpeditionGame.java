@@ -20,6 +20,7 @@ import net.slashie.expedition.world.FoodConsumer;
 import net.slashie.expedition.world.GlobeFOV;
 import net.slashie.expedition.world.LevelMaster;
 import net.slashie.expedition.world.SettlementLevel;
+import net.slashie.expedition.worldGen.WorldGenerator;
 import net.slashie.serf.action.Actor;
 import net.slashie.serf.fov.FOV;
 import net.slashie.serf.game.Player;
@@ -140,17 +141,20 @@ public class ExpeditionGame extends SworeGame {
 	@Override
 	public void onGameResume() {
 		currentGame = this;
+		WorldGenerator.addAnimalNests();
+		WorldGenerator.addBotanyCrops();
 		ExpeditionLevel expeditionLevel = (ExpeditionLevel)getExpedition().getLevel();
 		expeditionLevel.enterLevel();
 		((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(expeditionLevel.getWeather());
 		((ExpeditionUserInterface)UserInterface.getUI()).reactivate();
 		expeditionLevel.playMusic();
-		
 	}
 
 	@Override
 	public void onGameStart(int gameType) {
 		currentGame = this;
+		WorldGenerator.addAnimalNests();
+		WorldGenerator.addBotanyCrops();
 		ExpeditionDisplay.thus.showIntro(getExpedition());
 		loadMetadata();
 		loadLevel("SPAIN_CASTLE");
@@ -209,7 +213,7 @@ public class ExpeditionGame extends SworeGame {
 		if (level.getID().equals("WORLD")){
 			/*level.getPlayer().setPosition(-329, 2158, 0); // Gibraltar
 			level.getPlayer().setPosition(-4330, 732, 0); // Cabo dela vela
-			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atl�ntico
+			level.getPlayer().setPosition(-2063, -1821, 0); // En medio del atl�ntico*/
 			level.getPlayer().setPosition(-4362, 889, 0); // Near the Tairona
 			//level.getPlayer().setPosition(-329, 3000, 0); // North
 			int lat = 889*60;

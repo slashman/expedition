@@ -2035,7 +2035,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			}
 			
 		}else{
-			if (Util.chance(25)){
+			if (Util.chance(100)){
 				//Try to deploy an animal expedition only if the chance
 				List<Pair<Position, AnimalNest>> nests = WorldGenerator.animalNests;
 				Pair<Position, AnimalNest> nearestNest = null;
@@ -2056,8 +2056,15 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 				}
 				
 				if (nearestNest != null){
-					int r = GlobeMapModel.getSingleton().getLongitudeScale(nearestNest.getA().y())*nearestNest.getB().getRadius();
-					Position p = new Position(Util.rand(nearestNest.getA().x() - r, nearestNest.getA().x() + r), Util.rand(nearestNest.getA().y() - r, nearestNest.getA().y() + r));
+					int r = nearestNest.getB().getRadius();
+					
+					int longScale = GlobeMapModel.getSingleton().getLongitudeScale(getLatitude());
+					int latScale = GlobeMapModel.getSingleton().getLatitudeHeight();
+					
+					int xx = Util.rand(getPosition().x() - r * longScale, getPosition().x() + r * longScale);
+					int yy = Util.rand(getPosition().y() - r * latScale, getPosition().y() + r * latScale);
+					
+					Position p = new Position(xx, yy);
 					
 					double sight = getSightRangeInDots();
 					boolean isFar = (Position.distance(p, getPosition()) > sight);
@@ -2065,7 +2072,8 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					OverworldExpeditionCell cell = (OverworldExpeditionCell)getLevel().getMapCell(p);
 					if (isFar && cell != null && !cell.isRiver() && cell.isLand() && getLevel().getFeaturesAt(p) == null){
 						Expedition expedition = nearestNest.getB().deployAnimalGroup();
-						expedition.setPosition(new Position(getPosition().x()+2, getPosition().y()));
+						expedition.setPosition(p);
+						//expedition.setPosition(new Position(getPosition().x()+2*GlobeMapModel.getSingleton().getLongitudeScale(getLatitude()), getPosition().y()));
 						getLevel().addActor(expedition);
 						getLevel().addMessage("A group of "+nearestNest.getB().getName()+" appears!");
 					}
@@ -2102,7 +2110,7 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 					
 					String discoveryText = "You discovered a " + plant.getName();
 					if (!hasDiscovered(Discovery.Plant, discoveryText)){
-        				((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage(plant.getDescription());
+        				((ExpeditionUserInterface)UserInterface.getUI()).showImageBlockingMessage(plant.getDescription(), plant.getName());
         				getLevel().addMessage(discoveryText);
 					}
 					

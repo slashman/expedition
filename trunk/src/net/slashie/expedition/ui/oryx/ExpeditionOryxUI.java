@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,6 +23,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
@@ -79,6 +81,7 @@ import net.slashie.utils.swing.BorderedGridBox;
 import net.slashie.utils.swing.BorderedMenuBox;
 import net.slashie.utils.swing.CallbackActionListener;
 import net.slashie.utils.swing.CallbackKeyListener;
+import net.slashie.utils.swing.CallbackMouseListener;
 import net.slashie.utils.swing.CleanButton;
 import net.slashie.utils.swing.CustomGFXMenuItem;
 import net.slashie.utils.swing.GFXMenuItem;
@@ -132,6 +135,7 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	public static Image IMG_SMALL_BUTTON_BACK;
 	public static Image IMG_SMALL_BUTTON_HOVER_BACK;
 	public static Image[] MORALE_IMAGES;
+	public static Map<String, Image> FLOWERS;
 	
 	private Image IMG_BOX;
 	public static Cursor HAND_CURSOR;
@@ -1096,6 +1100,10 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			MORALE_IMAGES[i]= assets.getImageAsset("IMG_MORALE_"+i);
 		}
 		
+		FLOWERS = new HashMap<String, Image>();
+		FLOWERS.put("FLW_ACONITUM",assets.getImageAsset("FLW_ACONITUM"));
+		
+		
 		HORSES_ITEM = ItemFactory.createItem("HORSE");
 		addornedTextArea.setCursor(si.getCursor());
 		
@@ -1735,5 +1743,77 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	
 	public Layout getLayout() {
 		return layout;
+	}
+	
+	public void showImageBlockingMessage(String message, String imageIndex) {
+		showImageBlockingMessage(message, imageIndex, false);
+	}
+
+	public void showImageBlockingMessage(String message, String imageIndex, boolean keepMessage) {
+		showImageBlockingMessage(message, imageIndex, layout.POPUPMESSAGE_BOUNDS.x, layout.POPUPMESSAGE_BOUNDS.y, layout.POPUPMESSAGE_BOUNDS.width,  layout.POPUPMESSAGE_BOUNDS.height, keepMessage);
+	}
+	
+	public void showImageBlockingMessage(String message, String imageIndex, int x, int y, int w, int h, boolean keepMessage) {
+		if (getPlayer() != null)
+			((GFXUISelector)getPlayer().getSelector()).deactivate();
+		message = message.replaceAll("XXX", "\n");
+		showImageTextBox(message, imageIndex, x, y, w, h, keepMessage);
+	}
+	
+	public void showImageTextBox(String text, String imageIndex, int x, int y, int w, int h, final boolean keep){
+		final BlockingQueue<String> selectionQueue = new LinkedBlockingQueue<String>();
+		
+		final CallbackKeyListener<String> cbkl = new CallbackKeyListener<String>(selectionQueue){
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					CharKey x = new CharKey(SwingSystemInterface.charCode(e));
+					if (x.code == CharKey.ENTER || x.code == CharKey.SPACE || x.code == CharKey.ESC)
+						handler.put("OK");
+				} catch (InterruptedException e1) {}
+			}
+		};
+		
+		final CallbackMouseListener<String> cbml = new CallbackMouseListener<String>(selectionQueue){
+			@Override
+			public void mousePressed(MouseEvent e) {
+				try {
+					handler.put("OK");
+				} catch (InterruptedException e1) {}
+			}
+		};
+		
+		si.addKeyListener(cbkl);
+		si.addMouseListener(cbml);
+		addornedTextArea.addMouseListener(cbml);
+		
+		printTextBox(text, x, y, w, h);
+		
+		si.drawImage(getUILayer(), x+(w/2)-48, y-112, FLOWERS.get("FLW_"+imageIndex.toUpperCase()));
+		si.commitLayer(getUILayer());
+		
+		Runnable r = new Runnable(){
+			@Override
+			public void run() {
+				String choice = null;
+				while (choice == null){
+					try {
+						choice = selectionQueue.take();
+					} catch (InterruptedException e1) {}
+				}
+				if (!keep)
+					clearTextBox();
+				si.removeKeyListener(cbkl);
+				si.removeMouseListener(cbml);
+				addornedTextArea.removeMouseListener(cbml);
+			}
+		};
+		
+		if (SwingUtilities.isEventDispatchThread()){
+			// To prevent locking, should perform the selection on a separate thread
+			new Thread(r).start();
+		} else {
+			r.run();
+		}
 	}
 }

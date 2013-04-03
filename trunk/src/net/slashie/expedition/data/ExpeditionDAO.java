@@ -476,15 +476,15 @@ public class ExpeditionDAO {
 					new ArmorType[]{ArmorType.LIGHT}, 200),
 				
 			//Animals units
-			new ExpeditionUnit("LLAMA", "Wild Llama", "Wild Llamas", "Wild animal", UNIT_WEIGHT, 200,
+			new ExpeditionUnit("LLAMA_UNIT", "Llama", "Llamas", "Wild Llamas", UNIT_WEIGHT, 200,
 					new Roll("1D2"),
 					new Roll("1D2"),
-					3,
-					95,5,
 					2,
-					3,
+					70,10,
+					2,
+					2,
 					null,
-					null, 200),
+					null, 800),
 			
 			//Goods
 			new Food("BISCUIT", "Biscuit", "Biscuit", "Food Ration", 3, 1, 1, 1, StorageType.WAREHOUSE),
@@ -821,7 +821,7 @@ public class ExpeditionDAO {
 	public static Map<String, AnimalNest> animalNestsMap = new HashMap<String, AnimalNest>();
 	static{
 		AnimalNest[] nests = new AnimalNest[]{
-			new AnimalNest("SPACE", "Llamas From Space", 3, 20, "LLAMA")	
+			new AnimalNest("SPACE", "Llamas From Space", 3, 20, "LLAMA_UNIT")	
 		};
 		
 		for (AnimalNest nest: nests){
