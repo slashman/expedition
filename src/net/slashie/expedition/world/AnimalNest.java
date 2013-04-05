@@ -11,14 +11,16 @@ public class AnimalNest {
 	private String members;
 	private int aggresiveness;
 	private int radius;
+	private boolean isExotic;
 	
-	public AnimalNest(String code, String name, int aggresiveness, int radius, String members) {
+	public AnimalNest(String code, String name, int aggresiveness, int radius, String members, boolean isExotic) {
 		super();
 		this.code = code;
 		this.name = name;
 		this.aggresiveness = aggresiveness;
 		this.radius = radius;
 		this.members = members;
+		this.isExotic = isExotic;
 	}
 	
 	public Expedition deployAnimalGroup(){
@@ -63,5 +65,13 @@ public class AnimalNest {
 
 	public void setRadius(int radius) {
 		this.radius = radius;
+	}
+
+	public boolean isExotic() {
+		return isExotic;
+	}
+
+	public void setExotic(boolean isExotic) {
+		this.isExotic = isExotic;
 	}
 }

@@ -821,7 +821,7 @@ public class ExpeditionDAO {
 	public static Map<String, AnimalNest> animalNestsMap = new HashMap<String, AnimalNest>();
 	static{
 		AnimalNest[] nests = new AnimalNest[]{
-			new AnimalNest("SPACE", "Llamas From Space", 3, 20, "LLAMA_UNIT")	
+			new AnimalNest("SPACE", "Llamas From Space", 3, 20, "LLAMA_UNIT", true)	
 		};
 		
 		for (AnimalNest nest: nests){
