@@ -65,10 +65,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 	public enum Title {
 		EXPLORER (1, "Explorador", 0, 0, 0, 0),
 		HIDALGO  (2, "Hidalgo",    0, 0, 1, 200000),
-		LORD     (3, "Se�or",      0, 1, 2, 500000),
+		LORD     (3, "Señor",      0, 1, 2, 500000),
 		VIZCOUNT (4, "Vizconde",   1, 2, 5, 1000000),
 		COUNT    (5, "Conde",      2, 5,10, 1500000),
-		MARCHIS  (6, "Marqu�s",    5,10,30, 3000000),
+		MARCHIS  (6, "Marqués",    5,10,30, 3000000),
 		DUKE     (7, "Duque",     10,30,60, 5000000),
 		VICEROY  (8, "Virrey",    30,60,90, 9500000)
 		;
@@ -2177,6 +2177,10 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 			if (Util.chance(5)){
 				OverworldExpeditionCell cell = (OverworldExpeditionCell) getLocation().getMapCell(point);
 				if (cell != null && !cell.isWater()){
+					if (!getFlag("APROACHING_LAND_TUTORIAL")){
+						setFlag("APROACHING_LAND_TUTORIAL", true);
+						FriarTutorial.activate(FriarTutorial.APROACHING_LAND);
+					}
 					switch (Util.rand(0, 3)){
 					case 0:
 						message("You see some tufts of grass floating on the sea!");
@@ -2457,6 +2461,13 @@ public class Expedition extends Player implements FoodConsumer, UnitContainer, I
 		}
 		if (getDaysOnSea() > 20){
 			message("Land at last!");
+		}
+		int longitudeDegrees = GlobeMapModel.getSingleton().getLongitudeDegrees(getPosition().x);
+		if (longitudeDegrees < -30){
+			if (!getFlag("FIRST_LAND_TUTORIAL")){
+				setFlag("FIRST_LAND_TUTORIAL", true);
+				FriarTutorial.activate(FriarTutorial.FIRST_LAND);
+			}
 		}
 		resetDaysAtSea();
 	}

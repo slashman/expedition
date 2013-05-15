@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.FriarTutorial;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Expedition.Title;
 import net.slashie.expedition.item.ItemFactory;
@@ -194,6 +195,8 @@ public class SpainCastle extends StaticPattern implements Serializable {
 				m(isabellaSays()+"We have instructed Friar Domenico to answer your questions about this journey, you will find him next to the Alcazar entrance.");
 				ml(ferdinandSays()+"May God be with you in your journey, we await your safe return. XXX XXX You are dismissed.");
 				level.addMessage("You see the exit of the Alcazar to the south");
+				
+				FriarTutorial.activate(FriarTutorial.AFTER_TALK_KING);
 			} else {
 				boolean earnedTitle = false;
 				for (Title title: Expedition.Title.values()){

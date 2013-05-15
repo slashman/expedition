@@ -60,6 +60,11 @@ public class Layout {
 	public Position POS_SCENARIO_USE;
 	public Position POS_SCENARIO_BACK;
 	
+	public Position POS_FRIAR_TUTORIAL;
+	public Rectangle MSGBOX_FRIAR_TEXT_TUTORIAL;
+	public Position BTN_TUTORIAL_NEXT;
+	public Position BTN_TUTORIAL_CLOSE;
+	
 	public void initialize(Properties p){
 		MSGBOX_BOUNDS = PropertyFilters.getRectangle(p.getProperty("MSGBOX_BOUNDS"));
 		ACTIONS_PANEL_BOUNDS = PropertyFilters.getRectangle(p.getProperty("ACTIONS_PANEL_BOUNDS"));
@@ -115,5 +120,11 @@ public class Layout {
 		
 		POS_SCENARIO_USE = PropertyFilters.getPosition(p.getProperty("POS_SCENARIO_USE"));
 		POS_SCENARIO_BACK = PropertyFilters.getPosition(p.getProperty("POS_SCENARIO_BACK"));
+		
+		POS_FRIAR_TUTORIAL = PropertyFilters.getPosition(p.getProperty("POS_FRIAR_TUTORIAL"));
+		MSGBOX_FRIAR_TEXT_TUTORIAL = PropertyFilters.getRectangle(p.getProperty("MSGBOX_FRIAR_TEXT_TUTORIAL"));
+		
+		BTN_TUTORIAL_NEXT = PropertyFilters.getPosition(p.getProperty("BTN_TUTORIAL_NEXT"));
+		BTN_TUTORIAL_CLOSE = PropertyFilters.getPosition(p.getProperty("BTN_TUTORIAL_CLOSE"));
 	}
 }

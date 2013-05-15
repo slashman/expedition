@@ -1,6 +1,7 @@
 package net.slashie.expedition.world;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.FriarTutorial;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.level.GlobeMapModel;
 import net.slashie.expedition.locations.Spain;
@@ -36,6 +37,13 @@ public class LevelMaster {
 			ret.setDock(true);
 			ret.setZoomIn(false);
 			ret.setTemperature(20);
+			
+			if (!expedition.getFlag("PALOS_TUTORIAL")){
+				expedition.setFlag("PALOS_TUTORIAL", true);
+				FriarTutorial.activate(FriarTutorial.ENTERING_TOWN);
+			}
+			
+			
 			return ret;
 		} if (levelID.equals("SPAIN_CASTLE")){
 			ExpeditionMicroLevel ret = new ExpeditionMicroLevel();
@@ -72,6 +80,12 @@ public class LevelMaster {
 			WorldGenerator.addNativeSettlements(ret);
 			ret.setID("WORLD");
 			ret.setWindDirection(CardinalDirection.WEST);
+			
+			if (!expedition.getFlag("LEAVING_PALOS_TUTORIAL")){
+				expedition.setFlag("LEAVING_PALOS_TUTORIAL", true);
+				FriarTutorial.activate(FriarTutorial.LEAVING_TOWN);
+			}
+			
 			return ret;
 		} else if (levelID.equals("NEW_WORLD")){
 			
