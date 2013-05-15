@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import net.slashie.expedition.domain.Expedition;
+import net.slashie.expedition.domain.FriarTutorial;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.domain.Expedition.MovementMode;
 import net.slashie.expedition.level.GlobeMapModel;
@@ -159,6 +160,7 @@ public class ExpeditionGame extends SworeGame {
 		loadMetadata();
 		loadLevel("SPAIN_CASTLE");
 		((ExpeditionUserInterface)UserInterface.getUI()).reactivate();
+		//FriarTutorial.activate(0);
 
 		setGameTime(3,8,1492,13,0);
 	}

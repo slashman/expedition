@@ -25,10 +25,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
+import net.slashie.expedition.data.ExpeditionDAO;
 import net.slashie.expedition.domain.AssaultOutcome;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
+import net.slashie.expedition.domain.FriarTutorial;
 import net.slashie.expedition.domain.GoodType;
 import net.slashie.expedition.domain.GoodsCache;
 import net.slashie.expedition.domain.ItemContainer;
@@ -64,6 +66,7 @@ import net.slashie.serf.game.Equipment;
 import net.slashie.serf.game.Player;
 import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.Appearance;
+import net.slashie.serf.ui.AppearanceFactory;
 import net.slashie.serf.ui.CommandListener;
 import net.slashie.serf.ui.UserCommand;
 import net.slashie.serf.ui.oryxUI.AddornedBorderPanel;
@@ -86,6 +89,7 @@ import net.slashie.utils.swing.CleanButton;
 import net.slashie.utils.swing.CustomGFXMenuItem;
 import net.slashie.utils.swing.GFXMenuItem;
 import net.slashie.utils.swing.GridBox;
+import net.slashie.utils.swing.PlainTextArea;
 
 @SuppressWarnings("serial")
 public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUserInterface{
@@ -150,6 +154,9 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 	private GridBox unitsMenuBox;
 	private GridBox vehiclesMenuBox;
 	private Layout layout;
+	private PlainTextArea friarTutorialTextBox;
+	private CleanButton tutorialNextButton;
+	private CleanButton tutorialCloseButton;
 	
 	@Override
 	protected Position getRelativePosition(Position position, Position offset) {
@@ -1008,14 +1015,24 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 			}
 		}
 		//expeditionUnitItems.add(0, mainUnitMenuItem);
-		unitsMenuBox.setMenuItems(expeditionUnitItems);
-		unitsMenuBox.setUsedBuffer(1);
-		Collections.sort(expeditionUnitItems, ITEMS_COMPARATOR);
-		unitsMenuBox.draw(false);
-		
-		vehiclesMenuBox.setMenuItems(expeditionVehicleItems);
-		vehiclesMenuBox.setUsedBuffer(1);
-		vehiclesMenuBox.draw(false);
+		if (FriarTutorial.active){
+			friarTutorialTextBox.setVisible(true);
+			friarTutorialTextBox.setText(FriarTutorial.getText());
+			
+			tutorialNextButton.setVisible(true);
+			tutorialCloseButton.setVisible(true);
+			
+			si.drawImage(getMapLayer(), layout.POS_FRIAR_TUTORIAL.x, layout.POS_FRIAR_TUTORIAL.y, ((GFXAppearance)AppearanceFactory.getAppearanceFactory().getAppearance("DOMINIK")).getImage());
+		}else{
+			unitsMenuBox.setMenuItems(expeditionUnitItems);
+			unitsMenuBox.setUsedBuffer(1);
+			Collections.sort(expeditionUnitItems, ITEMS_COMPARATOR);
+			unitsMenuBox.draw(false);
+			
+			vehiclesMenuBox.setMenuItems(expeditionVehicleItems);
+			vehiclesMenuBox.setUsedBuffer(1);
+			vehiclesMenuBox.draw(false);
+		}
 		
 		si.printAtPixel(getUILayer(), layout.POS_VERSION.x, layout.POS_VERSION.y, ExpeditionGame.getVersion());
 	}
@@ -1109,6 +1126,59 @@ public class ExpeditionOryxUI extends GFXUserInterface implements ExpeditionUser
 		
 		sfxQueue = new LinkedBlockingQueue<String>();
 		EffectsServer sfxServer = new EffectsServer(si, sfxQueue);
+		
+		friarTutorialTextBox = new PlainTextArea();
+		friarTutorialTextBox.setBounds(layout.MSGBOX_FRIAR_TEXT_TUTORIAL);
+		friarTutorialTextBox.setFont(getFontAsset("FNT_DIALOGUE"));
+		friarTutorialTextBox.setText("");
+		friarTutorialTextBox.setForeground(Color.WHITE);
+		friarTutorialTextBox.setVisible(false);
+		
+		si.add(friarTutorialTextBox);
+		si.changeZOrder(friarTutorialTextBox, 0);
+
+		tutorialNextButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, null, HAND_CURSOR, ">");
+		tutorialNextButton.setForeground(Color.WHITE);
+		tutorialNextButton.setPopupText("Next");
+		tutorialNextButton.setLocation(layout.BTN_TUTORIAL_NEXT.x, layout.BTN_TUTORIAL_NEXT.y);
+		tutorialNextButton.setVisible(false);
+		tutorialNextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (FriarTutorial.nextPage()){
+					friarTutorialTextBox.setText(FriarTutorial.getText());
+				}else{
+					friarTutorialTextBox.setVisible(false);
+					friarTutorialTextBox.setText("");
+					tutorialNextButton.setVisible(false);
+					tutorialCloseButton.setVisible(false);
+					
+					drawStatus();
+				}
+			}
+		});
+		si.add(tutorialNextButton);
+		
+		tutorialCloseButton = new CleanButton(IMG_SMALL_BUTTON_BACK, IMG_SMALL_BUTTON_HOVER_BACK, null, HAND_CURSOR, "X");
+		tutorialCloseButton.setForeground(Color.WHITE);
+		tutorialCloseButton.setPopupText("Close");
+		tutorialCloseButton.setLocation(layout.BTN_TUTORIAL_CLOSE.x, layout.BTN_TUTORIAL_CLOSE.y);
+		tutorialCloseButton.setVisible(false);
+		tutorialCloseButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				FriarTutorial.deactivate();
+				
+				friarTutorialTextBox.setVisible(false);
+				friarTutorialTextBox.setText("");
+				tutorialNextButton.setVisible(false);
+				tutorialCloseButton.setVisible(false);
+				
+				drawStatus();
+			}
+		});
+		si.add(tutorialCloseButton);
+		
 		// new Thread(sfxServer).start();
 	}
 	
