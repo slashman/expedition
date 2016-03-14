@@ -1,10 +1,8 @@
 package net.slashie.expedition.ui.console;
 
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionFactory;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -13,7 +11,6 @@ import net.slashie.expedition.game.GameFiles;
 import net.slashie.expedition.ui.ExpeditionDisplay;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.ConsoleSystemInterface;
-import net.slashie.serf.sound.STMusicManagerNew;
 import net.slashie.utils.FileUtil;
 
 public class CharExpeditionDisplay extends ExpeditionDisplay{
@@ -82,11 +79,14 @@ public class CharExpeditionDisplay extends ExpeditionDisplay{
 		File saveDirectory = new File("savegame");
 		File[] saves = saveDirectory.listFiles(new GameFiles.SaveGameFilenameFilter() );
 		boolean loadDisabled = false;
+		if (saves != null)
+		{
 		if (saves.length == 0){
 			csi.print(20,14, "c. Resume Expedition", ConsoleSystemInterface.GRAY);
 			loadDisabled = true;
 		} else {
 			csi.print(20,14, "c. Resume Expedition", ConsoleSystemInterface.WHITE);
+		}
 		}
 		csi.print(20,15, "d. Quit", ConsoleSystemInterface.WHITE);
 		csi.print(8,17, "Expedition "+ExpeditionGame.getVersion()+", Developed by Santiago Zapata 2009-2011", ConsoleSystemInterface.CYAN);

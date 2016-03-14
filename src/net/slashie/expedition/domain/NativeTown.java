@@ -94,13 +94,13 @@ public class NativeTown extends Town{
 	public Appearance getAppearance() {
 		if (isTown()){
 			setAppearanceId("NATIVE_TOWN");
-			return AppearanceFactory.getAppearanceFactory().getAppearance("NATIVE_TOWN");
+			return AppearanceFactory.getAppearanceFactory().getAppearance(getAppearanceId());
 		} else if (isCity()){
 			setAppearanceId("NATIVE_CITY");
-			return AppearanceFactory.getAppearanceFactory().getAppearance("NATIVE_CITY");
+			return AppearanceFactory.getAppearanceFactory().getAppearance(getAppearanceId());
 		} else
 			setAppearanceId("NATIVE_VILLAGE");
-			return AppearanceFactory.getAppearanceFactory().getAppearance("NATIVE_VILLAGE");
+			return AppearanceFactory.getAppearanceFactory().getAppearance(getAppearanceId());
 	}
 	
 	@Override

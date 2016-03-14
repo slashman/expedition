@@ -2,7 +2,7 @@ package net.slashie.expedition.action;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import net.ck.expedition.utils.swing.MessengerService;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -102,7 +102,7 @@ public class BuildSettlement extends Action{
 	}
 	
 	public void msg(String message){
-        UserInterface.getUI().showImportantMessage(message);
+        MessengerService.showImportantMessage(message);
 	}
 	
 	@Override

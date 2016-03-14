@@ -3,7 +3,6 @@ package net.slashie.expedition.domain;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.expedition.world.Culture;
 import net.slashie.serf.action.Actor;
-import net.slashie.serf.level.AbstractCell;
 import net.slashie.serf.ui.Appearance;
 import net.slashie.serf.ui.AppearanceFactory;
 
@@ -19,7 +18,7 @@ public class Ruin extends Actor{
 	}
 	
 	public Appearance getAppearance(){
-		return AppearanceFactory.getAppearanceFactory().getAppearance("LLAMA");
+		return AppearanceFactory.getAppearanceFactory().getAppearance(getAppearanceId());
 	}
 	
 	@Override

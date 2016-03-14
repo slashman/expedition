@@ -2,7 +2,7 @@ package net.slashie.expedition.action;
 
 import java.util.Calendar;
 import java.util.List;
-
+import net.ck.expedition.utils.swing.MessengerService;
 import net.slashie.expedition.action.navigation.TurnShip;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Ruin;
@@ -158,7 +158,7 @@ public class Walk extends Action{
 	        			invalidationMessage = discoveryText;
 	        			r.setDiscovered();
 	        			Calendar gameTime = ExpeditionGame.getCurrentGame().getGameTime();
-	        			String time = ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+", "+ExpeditionMacroLevel.getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
+	        			String time = ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+", "+MessengerService.getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
 	        			expedition.addDiscoveryLog(new ExpeditionDiscovery(discoveryText, Discovery.Ruin, time, 20));
 	        		}
 		        	return false;

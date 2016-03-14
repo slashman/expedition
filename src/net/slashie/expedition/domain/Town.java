@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
+import org.apache.log4j.Logger;
 import net.slashie.expedition.action.BuildBuildings;
 import net.slashie.expedition.action.Hibernate;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -54,7 +54,8 @@ public class Town extends GoodsCache implements BuildingTeam {
 	private String name;
 	protected Expedition founderExpedition;
 	protected Date foundedIn;
-	
+	private BFC bigFatCross;
+	final static Logger logger = Logger.getRootLogger();
 	/**
 	 * Represents the accumulated surplus from resource gathering and 
 	 * production
@@ -87,12 +88,21 @@ public class Town extends GoodsCache implements BuildingTeam {
 		governance = founderExpedition.getBaseGovernance();
 	}
 	
+	public Town(ExpeditionGame game, Expedition ret)
+	{
+		super(game, "TOWN");
+		foundedIn = game.getGameTime().getTime();
+		founderExpedition = ret;
+		governance = founderExpedition.getBaseGovernance();
+		
+	}
+
 	/**
 	 * Determines how many expedition members is the settlement
 	 * willing to host, based on the governance
 	 * @return
 	 */
-	public int getLodgingCapacity(){
+	public int getLodgingCapacity(){		
 		return governance.transformInt(getPopulationCapacity());
 	}
 	
@@ -298,6 +308,37 @@ public class Town extends GoodsCache implements BuildingTeam {
 	private void townLog(String event){
 		System.out.println("Town "+getName()+": "+event);
 	}
+
+	//TODO.
+	public void addUnitsWithLodgingCapacity(ExpeditionUnit unit, int quantity) {
+		//super.addUnits(unit, quantity);
+		//currently available units:
+		
+		int remaining = getLodgingCapacity() - getTotalSettledUnits();
+		if (quantity <= remaining)
+		{
+			super.addUnits(unit, quantity);
+		}
+		else
+		{
+			super.addUnits(unit, remaining);
+		}
+	}
+	public void addUnits(ExpeditionUnit unit, int quantity) {
+		//super.addUnits(unit, quantity);
+		//currently available units:
+		
+		int remaining = getPopulationCapacity() - getTotalSettledUnits();
+		if (quantity <= remaining)
+		{
+			super.addUnits(unit, quantity);
+		}
+		else
+		{
+			super.addUnits(unit, remaining);
+		}
+	}
+		
 	
 	private int getTotalSettledUnits() {
 		int totalUnits = 0;
@@ -380,6 +421,7 @@ public class Town extends GoodsCache implements BuildingTeam {
 			int netTimeCost = netTimeCostObj.getIntValue();
 			int daysCost = (int)Math.ceil((double)netTimeCost / (double)DayShiftAgent.TICKS_PER_DAY);
 			// Set delayed action
+			delayedCalendar = Calendar.getInstance();
 			delayedCalendar.setTime(ExpeditionGame.getCurrentGame().getGameTime().getTime());
 			delayedCalendar.roll(Calendar.DATE, daysCost);
 			delayedAction = new Action() {
@@ -508,5 +550,10 @@ public class Town extends GoodsCache implements BuildingTeam {
 	@Override
 	public void reduceQuantityOf(AbstractItem item, int quantity) {
 		super.reduceQuantityOf(item, quantity);
+	}
+
+	public void setBFC()
+	{		
+		new BFC(this);
 	}
 }

@@ -11,6 +11,10 @@ import net.slashie.serf.ui.UserInterface;
 import net.slashie.utils.Util;
 
 public class NPC extends AwareActor implements Cloneable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ExpeditionUnit unit;
 	private String[] talkLines;
 	private boolean unique;

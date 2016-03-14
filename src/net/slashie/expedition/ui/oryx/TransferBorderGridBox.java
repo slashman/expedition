@@ -274,14 +274,14 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+1, y+1, 270 - 2, 390 - 2);
 		si.getDrawingGraphics(ExpeditionOryxUI.UI_WIDGETS_LAYER).drawRect(x+2, y+2, 270 - 4, 390 - 4);
 		
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+94, y + 76, "Carrying", OryxExpeditionDisplay.COLOR_BOLD);
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+100, y + 90, "People", OryxExpeditionDisplay.COLOR_BOLD);
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+83, y + 104, "Food Days", OryxExpeditionDisplay.COLOR_BOLD);
-		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+75, y + 118, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+105, y + 76, "Carrying", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+105, y + 90, "People", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+105, y + 104, "Food Days", OryxExpeditionDisplay.COLOR_BOLD);
+		si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+105, y + 118, "Water Days", OryxExpeditionDisplay.COLOR_BOLD);
 		
 		if (highlight != null){
 			int textWidth = (int) (si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, highlight.getDescription()) / 2.0d);
-			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+(145-textWidth)-10, y + 174, highlight.getDescription(), Color.WHITE);
+			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+(145-textWidth)-10, y + 174, highlight.getDescription(), Color.RED);
 			
 			if (highlight instanceof ExpeditionUnit){
 				textWidth = (int) (si.getTextWidth(ExpeditionOryxUI.UI_WIDGETS_LAYER, ((ExpeditionUnit)highlight).getWeaponDescription()) / 2.0d);
@@ -295,8 +295,9 @@ public class TransferBorderGridBox extends BorderedGridBox{
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+93, y + 230, "Current", OryxExpeditionDisplay.COLOR_BOLD);
 			si.printAtPixel(ExpeditionOryxUI.UI_WIDGETS_LAYER, x+114, y + 244, "Max", OryxExpeditionDisplay.COLOR_BOLD);
 		}
-			
+		//draw left side, meaning either store or good cache	
 		drawContainerInfo(x+10, y, source, false);
+		//draw right side, meaning expedition
 		drawContainerInfo(x+260, y, destination, true);	
 		// Draw current unit
 		if (highlight != null){
@@ -533,6 +534,15 @@ public class TransferBorderGridBox extends BorderedGridBox{
 		si.commitLayer(ExpeditionOryxUI.UI_WIDGETS_LAYER);
 	}
 	
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @param container
+	 * @param alignRight
+	 * 
+	 * This method draws the store container info with item, currently carrying in percent, total units, food days and water days
+	 */
 	private void drawContainerInfo(int x, int y, ItemContainer container, boolean alignRight) {
 		Appearance containerAppearance = container.getDialogAppearance();
 		if (containerAppearance != null){

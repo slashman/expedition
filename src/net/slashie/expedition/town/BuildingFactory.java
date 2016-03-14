@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import net.ck.expedition.utils.swing.MessengerService;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.Town;
 import net.slashie.expedition.game.ExpeditionGame;
@@ -65,8 +65,12 @@ public class BuildingFactory {
 			}
 		}
 		//Check resources availability 
-		if (builders.getItemCount("WOOD") < woodCostInt){
-			((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("You need at least "+woodCostInt+" wood to execute the plan.");
+		if (builders.getItemCount("WOOD") < woodCostInt)
+		{
+			String msg = "You need at least "+ woodCostInt + " wood to execute the plan.";
+			MessengerService.showBlockingMessage(msg);
+			//((ExpeditionUserInterface)UserInterface.getUI()).showBlockingMessage("You need at least "+woodCostInt+" wood to execute the plan.");
+			
 			throw new ActionCancelException();
 		}
 		

@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-
+import org.apache.log4j.Logger;
 import net.slashie.expedition.domain.Armor;
+import net.slashie.expedition.domain.Armor.ArmorType;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.ExpeditionUnit;
 import net.slashie.expedition.domain.Vehicle;
 import net.slashie.expedition.domain.Weapon;
-import net.slashie.expedition.domain.Armor.ArmorType;
 import net.slashie.expedition.domain.Weapon.WeaponType;
 import net.slashie.expedition.game.ExpeditionGame;
 import net.slashie.serf.ui.Appearance;
 
 public class ItemFactory {
+	static final Logger logger = Logger.getRootLogger();
 	private static Hashtable<String, ExpeditionItem> definitions = new Hashtable<String, ExpeditionItem>();
 	private static Map<WeaponType, List<Weapon>> weaponTypesMap = new Hashtable<WeaponType, List<Weapon>>();
 	private static Map<ArmorType, List<Armor>> armorTypesMap = new Hashtable<ArmorType, List<Armor>>();
@@ -41,7 +42,9 @@ public class ItemFactory {
 		}
 	}
 	
-	public static ExpeditionItem createItem(String itemId){
+	public static ExpeditionItem createItem(String itemId)
+	{
+		//logger.debug("Start: createItem Arguments: " + itemId);
 		ExpeditionItem ret = definitions.get(itemId);
 		if (ret == null){
 			ExpeditionGame.crash("Item "+itemId+" not found");
@@ -50,10 +53,16 @@ public class ItemFactory {
 		return ret.clone();
 	}
 
-	
-	public static ExpeditionUnit createUnit(String fullID, String weaponType) {
-		
-		return null;
+	/**
+	 * 
+	 * @param fullID "EXPLORER"
+	 * @param weaponType currently unused
+	 * @return returns the unit, cast to a unit, not an item
+	 */
+	public static ExpeditionUnit createUnit(String fullID, String weaponType) 
+	{
+		ExpeditionUnit unit = (ExpeditionUnit) definitions.get(fullID);
+		return unit;
 	}
 
 	public static int getPalosStorePrice(String fullId) {

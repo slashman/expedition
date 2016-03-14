@@ -1,7 +1,7 @@
 package net.slashie.expedition.world;
 
 import java.util.List;
-
+import net.slashie.expedition.domain.Expedition;
 import net.slashie.serf.baseDomain.AbstractItem;
 import net.slashie.serf.game.Equipment;
 import net.slashie.serf.level.AbstractLevel;
@@ -35,4 +35,18 @@ public interface FoodConsumer {
 	public Position getPosition();
 
 	public int getCurrentFood();
-}
+
+	public int getCurrentWater();
+
+	public int getHungerResistance();
+
+	public int getThirstResistance();
+
+	public int getMaxThirstResistance();
+	
+	public int getMaxHungerResistance();
+
+	public void setHungerResistance(int i);
+	
+	public void setThirstResistance(int i);
+	}

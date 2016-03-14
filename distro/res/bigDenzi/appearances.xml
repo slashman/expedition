@@ -171,6 +171,7 @@
 		<appearance id = "CARAVEL" x = "2" y = "12"/>
 		<!-- Corpses -->
 		<appearance id = "DEAD_NATIVE" x = "1" y = "13"/>
+		<appearance id = "PUEBLO" x = "2" y = "13"/>
 	</appearances>
 	<appearances file = "img/DenziTileset32.png" tileWidth = "32" tileHeight = "32">
 		<!-- Main Expedition -->

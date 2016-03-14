@@ -118,8 +118,9 @@ public class ItemOffshoreExpeditionContainer implements ItemContainer{
 	}
 
 	@Override
-	public int getWaterDays() {
-		return getExpedition().getWaterDays();
+	public int getWaterDays() 
+	{		
+		return getExpedition().getOffShoreWaterDays();
 	}
 
 	@Override
