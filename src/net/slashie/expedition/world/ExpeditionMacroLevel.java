@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.List;
-
+import org.apache.log4j.Logger;
+import net.ck.expedition.model.test.ExpeditionProperties;
 import net.slashie.expedition.domain.Expedition;
 import net.slashie.expedition.domain.ExpeditionItem;
 import net.slashie.expedition.domain.GoodsCache;
@@ -32,16 +33,18 @@ import net.slashie.utils.Position;
 import net.slashie.utils.Util;
 
 @SuppressWarnings("serial")
-public class ExpeditionMacroLevel extends ExpeditionLevelReader{
+public class ExpeditionMacroLevel extends ExpeditionLevelReader
+{
 	private Actor currentWindAgent;
 	private Actor currentHourShiftAgent;
 	private Actor currentForageAgent;
 	private Actor currentWeeklyAgent;
 	private Actor currentRandomEventsAgent;
+	final Logger logger = Logger.getRootLogger();
 
-	public ExpeditionMacroLevel(String levelNameset, int levelWidth,
-			int levelHeight, int gridWidth, int gridHeight,
-			Hashtable<String, String> charmap, Position startPosition, GlobeModel globeModel) {
+	public ExpeditionMacroLevel(String levelNameset, int levelWidth, int levelHeight, int gridWidth, int gridHeight,
+			Hashtable<String, String> charmap, Position startPosition, GlobeModel globeModel)
+	{
 		super(levelNameset, levelWidth, levelHeight, gridWidth, gridHeight, charmap, startPosition, globeModel);
 		currentWindAgent = new WindAgent();
 		currentHourShiftAgent = new HourShiftAgent();
@@ -52,61 +55,72 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		addActor(currentHourShiftAgent);
 		addActor(currentForageAgent);
 		addActor(currentWeeklyAgent);
-		addActor(currentRandomEventsAgent);
+		addActor(currentRandomEventsAgent);		
 	}
 
-	private Pair<Integer,Integer> handyReusablePair = new Pair<Integer, Integer>(0,0);
+	private Pair<Integer, Integer> handyReusablePair = new Pair<Integer, Integer>(0, 0);
 
 	private Weather weather = Weather.CLEAR;
-	
-	public Pair<Integer, Integer> getLocation() {
+
+	public Pair<Integer, Integer> getLocation()
+	{
 		handyReusablePair.setA(resolveYToLatitude());
 		handyReusablePair.setB(resolveXToLongitude());
 		return handyReusablePair;
 	}
-	
-	private int resolveXToLongitude(){
+
+	private int resolveXToLongitude()
+	{
 		return globeModel.getLongitudeDegrees(getPlayer().getPosition().x);
 	}
-	
-	private int resolveYToLatitude(){
+
+	private int resolveYToLatitude()
+	{
 		return globeModel.getLatitudeDegrees(getPlayer().getPosition().y);
 	}
-	
+
 	private int currentTemperature = 15;
-	public int getTemperature() {
+
+	public int getTemperature()
+	{
 		return currentTemperature;
 	}
-	
+
 	private int apparentTemperature = 0;
-	
-	
-	public String getTemperatureDescription(){
+
+	public String getTemperatureDescription()
+	{
 		return TemperatureRules.getTemperatureDescription(apparentTemperature);
 	}
-	
-	public Weather getWeather() {
+
+	public Weather getWeather()
+	{
 		return weather;
 	}
-	
-	private Pair<String,String> handyReusableObject = new Pair<String, String>("H","H");
-	public Pair<String,String> getLocationDescription(){
+
+	private Pair<String, String> handyReusableObject = new Pair<String, String>("H", "H");
+
+	public Pair<String, String> getLocationDescription()
+	{
 		Pair<Integer, Integer> location = getLocation();
-		
-		handyReusableObject.setA(Math.abs(location.getA()) + (location.getA() > 0?"ºN":"ºS"));
-		//This is the real longitude calculation:
-		if (getExpedition().hasMarineChronometer()){
-			handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0?"E":"W"));
-		} else {
-			if (getExpedition().getDeducedReckonWest()>0)
-				handyReusableObject.setB(getExpedition().getDeducedReckonWest()+"nl");
+
+		handyReusableObject.setA(Math.abs(location.getA()) + (location.getA() > 0 ? "ºN" : "ºS"));
+		// This is the real longitude calculation:
+		if (getExpedition().hasMarineChronometer())
+		{
+			handyReusableObject.setB(Math.abs(location.getB()) + (location.getB() > 0 ? "E" : "W"));
+		}
+		else
+		{
+			if (getExpedition().getDeducedReckonWest() > 0)
+				handyReusableObject.setB(getExpedition().getDeducedReckonWest() + "nl");
 			else
-				handyReusableObject.setB((-getExpedition().getDeducedReckonWest())+"nl");
+				handyReusableObject.setB((-getExpedition().getDeducedReckonWest()) + "nl");
 		}
 		return handyReusableObject;
 	}
-	
-	private Pair<String,String> handyReusableObject2 = new Pair<String, String>("H","H");
+
+	private Pair<String, String> handyReusableObject2 = new Pair<String, String>("H", "H");
 
 	private int weatherChangeCounter;
 
@@ -114,151 +128,194 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 
 	private boolean isOnITZ;
 
-	public Pair<String,String> getLocationMeans(){
+	public Pair<String, String> getLocationMeans()
+	{
 		handyReusableObject2.setA("Sextant");
 		handyReusableObject2.setB("Ded'Reckon");
 		return handyReusableObject2;
 	}
-	
-	private Pair<String,String> handyReusableObject3 = new Pair<String, String>("H","H");
+
+	private Pair<String, String> handyReusableObject3 = new Pair<String, String>("H", "H");
 
 	private boolean onMountains = false;
+
 	@Override
-	public Pair<String, String> getLocationLabels() {
+	public Pair<String, String> getLocationLabels()
+	{
 		handyReusableObject3.setA("LAT");
-		if (getExpedition().getDeducedReckonWest()>0)
+		if (getExpedition().getDeducedReckonWest() > 0)
 			handyReusableObject3.setB("West");
 		else
 			handyReusableObject3.setB("East");
 		return handyReusableObject3;
 	}
-	
+
 	@Override
-	public void updateLevelStatus() {
+	public void updateLevelStatus()
+	{
 		super.updateLevelStatus();
 	}
-	
-	
-	public void addEquipment(ExpeditionItem item, int quantity, Position where){
-		if (((OverworldExpeditionCell) getMapCell(where)).isLand()){
+
+	public void addEquipment(ExpeditionItem item, int quantity, Position where)
+	{
+		if (((OverworldExpeditionCell) getMapCell(where)).isLand())
+		{
 			GoodsCache cache = getOrCreateCache(where);
 			cache.addItem(item, quantity);
 			if (cache.getItems().size() == 0)
 				destroyFeature(cache);
-		} else {
-			//Drop things into the big sea
+		}
+		else
+		{
+			// Drop things into the big sea
 		}
 	}
 
 	/**
-	 * Gets a cache at a locations or returns a new instance 
+	 * Gets a cache at a locations or returns a new instance
+	 * 
 	 * @param where
-	 * @param appearance 
+	 * @param appearance
 	 * @return
 	 */
-	public GoodsCache getOrCreateCache(Position where){
+	public GoodsCache getOrCreateCache(Position where)
+	{
 		List<AbstractFeature> features = getFeaturesAt(where);
 		GoodsCache cache = null;
 		boolean newCache = false;
-		if (features == null || features.size() == 0){
+		if (features == null || features.size() == 0)
+		{
 			newCache = true;
-		} else {
-			for (AbstractFeature feature: features){
-				if (feature instanceof GoodsCache){
+		}
+		else
+		{
+			for (AbstractFeature feature : features)
+			{
+				if (feature instanceof GoodsCache)
+				{
 					cache = (GoodsCache) feature;
 					newCache = false;
 					break;
-				} else {
+				}
+				else
+				{
 					newCache = true;
 				}
 			}
 		}
-		if (newCache){
-			cache = new GoodsCache((ExpeditionGame)(getExpedition().getGame()), getMapCell(where).getAppearance().getID(), "GOODS_CACHE");
+		if (newCache)
+		{
+			cache = new GoodsCache((ExpeditionGame) (getExpedition().getGame()),
+					getMapCell(where).getAppearance().getID(), "GOODS_CACHE");
 			cache.setPosition(new Position(where));
 			addFeature(cache);
 		}
 		return cache;
 	}
-	
-	public GoodsCache getCache(Position where){
+
+	public GoodsCache getCache(Position where)
+	{
 		List<AbstractFeature> features = getFeaturesAt(where);
-		if (features == null || features.size() == 0){
+		if (features == null || features.size() == 0)
+		{
 			return null;
-		} else {
-			for (AbstractFeature feature: features){
-				if (feature instanceof GoodsCache){
+		}
+		else
+		{
+			for (AbstractFeature feature : features)
+			{
+				if (feature instanceof GoodsCache)
+				{
 					return (GoodsCache) feature;
-				} 
+				}
 			}
 		}
 		return null;
 	}
-	
-	public void addAllEquipment(Expedition expedition, Position where) {
-		if (((OverworldExpeditionCell) getMapCell(where)).isLand()){
+
+	public void addAllEquipment(Expedition expedition, Position where)
+	{
+		if (((OverworldExpeditionCell) getMapCell(where)).isLand())
+		{
 			GoodsCache cache = getOrCreateCache(where);
 			cache.addAllGoods(expedition);
 			if (cache.getItems().size() == 0)
 				destroyFeature(cache);
-		} else {
-			//Drop things into the big sea
+		}
+		else
+		{
+			// Drop things into the big sea
 		}
 	}
 
 	@Override
-	public boolean isZoomIn() {
+	public boolean isZoomIn()
+	{
 		return false;
 	}
 
 	@Override
-	public CardinalDirection getWindDirection() {
+	public CardinalDirection getWindDirection()
+	{
 		return currentWind;
 	}
-	
-	public void setWindDirection(CardinalDirection direction){
+
+	public void setWindDirection(CardinalDirection direction)
+	{
 		currentWind = direction;
 	}
-	
 
 	@Override
-	public void elapseTime(int lastActionTimeCost) {
-		//TODO: Create Agents for each of this phenomena
+	public void elapseTime(int lastActionTimeCost)
+	{
+		// TODO: Create Agents for each of this phenomena
 		stormBreedCounter -= lastActionTimeCost;
 		stormChangeCounter += lastActionTimeCost;
 		weatherChangeCounter -= lastActionTimeCost;
 		tempChangeCounter -= lastActionTimeCost;
 
-		if (weatherChangeCounter < 0){
+		if (weatherChangeCounter < 0)
+		{
 			weatherChange();
-			weatherChangeCounter = Util.rand(200,400);
+			weatherChangeCounter = Util.rand(200, 400);
 		}
 		OverworldExpeditionCell currentCell = (OverworldExpeditionCell) getMapCell(getExpedition().getPosition());
-		if (currentCell.getHeightMod() > 1){
+		if (currentCell.getHeightMod() > 1)
+		{
 			tempChangeCounter = -1;
-			onMountains  = true;
-		} else if (onMountains) {
+			onMountains = true;
+		}
+		else if (onMountains)
+		{
 			tempChangeCounter = -1;
 			onMountains = false;
 		}
-		if (tempChangeCounter < 0){
-			if (currentCell.getHeightMod() > 1){
+		if (tempChangeCounter < 0)
+		{
+			if (currentCell.getHeightMod() > 1)
+			{
 				currentTemperature = 5;
-			} else {
-				currentTemperature = (int)Math.round(TemperatureRules.getRulingTemperature(resolveYToLatitude(), ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH)+1));
-				if (currentCell.isSea()){
+			}
+			else
+			{
+				currentTemperature = (int) Math.round(TemperatureRules.getRulingTemperature(resolveYToLatitude(),
+						ExpeditionGame.getCurrentGame().getGameTime().get(Calendar.MONTH) + 1));
+				if (currentCell.isSea())
+				{
 					currentTemperature += 5;
 				}
 			}
-			apparentTemperature = currentTemperature + getWeather().getTemperatureModification(); 
-			
-			tempChangeCounter = Util.rand(200,400);
+			apparentTemperature = currentTemperature + getWeather().getTemperatureModification();
+
+			tempChangeCounter = Util.rand(200, 400);
 		}
-		
-		if (stormBreedCounter <= 0){
-			//More storms on gale winds and hurricanes
+
+		if (stormBreedCounter <= 0)
+		{
+			// More storms on gale winds and hurricanes
 			int chance = 0;
-			switch (getWeather()){
+			switch (getWeather())
+			{
 			case STORM:
 				chance = 80;
 				stormBreedCounter = 120;
@@ -276,12 +333,15 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				stormBreedCounter = 40;
 				break;
 			}
-			
-			if (getExpedition().getMovementMode() != MovementMode.SHIP){
+
+			if (getExpedition().getMovementMode() != MovementMode.SHIP)
+			{
 				chance /= 3.0d;
 			}
-			if (Util.chance(chance)){
-				for (int i = 0; i < 3; i++){
+			if (Util.chance(chance))
+			{
+				for (int i = 0; i < 3; i++)
+				{
 					Position pos = new Position(getExpedition().getPosition());
 					int signX = Util.chance(50) ? 1 : -1;
 					int signY = Util.chance(50) ? 1 : -1;
@@ -294,114 +354,142 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				}
 			}
 		}
-		
-		if (stormChangeCounter >= 40){
+
+		if (stormChangeCounter >= 40)
+		{
 			List<Storm> removeList = new ArrayList<Storm>();
-			for (Storm storm: storms){
+			for (Storm storm : storms)
+			{
 				storm.evolve();
-				if (storm.getMass() < 5){
+				if (storm.getMass() < 5)
+				{
 					removeList.add(storm);
 				}
 				storm.move(getWindDirection());
 			}
-			for (Storm storm: removeList){
+			for (Storm storm : removeList)
+			{
 				storms.remove(storm);
 			}
 
 			stormChangeCounter = 0;
 		}
 	}
-	
-	private void weatherChange(){
+
+	private void weatherChange()
+	{
 		Weather currentWeather = getWeather();
 		OverworldExpeditionCell currentCell = (OverworldExpeditionCell) getMapCell(getExpedition().getPosition());
-		
+
 		// Special weather transitions: Fog, Hurricane, Snow and Dust Storm
-		
+
 		// Fog
-		if (getTemperature() > 10){
+		if (getTemperature() > 10)
+		{
 			// Hot fog
-			if (currentCell.isWater()){
+			if (currentCell.isWater())
+			{
 				// In the ocean, fog only rises if there's no wind
-				if (getWindDirection() == CardinalDirection.NULL) {
-					if (Util.chance(currentWeather.getTransitionChance(Weather.FOG))){
-						setWeather(Weather.FOG);
-						return;
-					}
-				}
-			} else {
-				// In land, fog rises when the terrain is wet and temperature rises
-				if (currentCell.isRiver() || currentCell.isMarsh()){
-					//Note that rain makes terrain wet, thus must have an higher chance
-					if (Util.chance(currentWeather.getTransitionChance(Weather.FOG))){
+				if (getWindDirection() == CardinalDirection.NULL)
+				{
+					if (Util.chance(currentWeather.getTransitionChance(Weather.FOG)))
+					{
 						setWeather(Weather.FOG);
 						return;
 					}
 				}
 			}
-		} else {
+			else
+			{
+				// In land, fog rises when the terrain is wet and temperature
+				// rises
+				if (currentCell.isRiver() || currentCell.isMarsh())
+				{
+					// Note that rain makes terrain wet, thus must have an
+					// higher chance
+					if (Util.chance(currentWeather.getTransitionChance(Weather.FOG)))
+					{
+						setWeather(Weather.FOG);
+						return;
+					}
+				}
+			}
+		}
+		else
+		{
 			// Cold fog
-			if (Util.chance(currentWeather.getTransitionChance(Weather.FOG))){
+			if (Util.chance(currentWeather.getTransitionChance(Weather.FOG)))
+			{
 				setWeather(Weather.FOG);
 				return;
 			}
 		}
-		
-		//Hurricane
-		if (currentCell.isSea()){
-			if (Util.chance(currentWeather.getTransitionChance(Weather.HURRICANE))){
+
+		// Hurricane
+		if (currentCell.isSea())
+		{
+			if (Util.chance(currentWeather.getTransitionChance(Weather.HURRICANE)))
+			{
 				setWeather(Weather.HURRICANE);
 				return;
 			}
 		}
-		
+
 		// Snow
-		if (getTemperature() < 0){
-			if (Util.chance(currentWeather.getTransitionChance(Weather.SNOW))){
+		if (getTemperature() < 0)
+		{
+			if (Util.chance(currentWeather.getTransitionChance(Weather.SNOW)))
+			{
 				setWeather(Weather.SNOW);
 				return;
 			}
 		}
 
 		// Dust Storm
-		if (currentCell.isDesert()){
-			if (Util.chance(currentWeather.getTransitionChance(Weather.DUST_STORM))){
+		if (currentCell.isDesert())
+		{
+			if (Util.chance(currentWeather.getTransitionChance(Weather.DUST_STORM)))
+			{
 				setWeather(Weather.DUST_STORM);
 				return;
 			}
 		}
-		
-		// Storms at the doldrums 
-		if (isOnITZ() && currentCell.isSea()){
-			if (Util.chance(currentWeather.getTransitionChance(Weather.DUST_STORM))){
+
+		// Storms at the doldrums
+		if (isOnITZ() && currentCell.isSea())
+		{
+			if (Util.chance(currentWeather.getTransitionChance(Weather.DUST_STORM)))
+			{
 				setWeather(Weather.STORM);
 				return;
 			}
 		}
 		// "Normal" weather chances
-		setWeather (currentWeather.nextWeather());
-		
+		setWeather(currentWeather.nextWeather());
+
 	}
-	
+
 	private List<Storm> storms = new ArrayList<Storm>();
-	
+
 	private int stormBreedCounter;
 	private int stormChangeCounter;
 
 	private CardinalDirection currentWind;
 
-	public CardinalDirection getPrevailingWind(int month) {
+	public CardinalDirection getPrevailingWind(int month)
+	{
 		int itcz = TemperatureRules.getITCZ(month) + Util.rand(-5, 5);
 		int latitude = resolveYToLatitude();
-		if (latitude >= itcz -4 && latitude <= itcz +4){
-			
+		if (latitude >= itcz - 4 && latitude <= itcz + 4)
+		{
+
 			return CardinalDirection.NULL;
 		}
-		
+
 		if (latitude > 60)
 			return CardinalDirection.SOUTH;
 		if (latitude > 30)
-			return CardinalDirection.NORTHEAST; 
+			return CardinalDirection.NORTHEAST;
 		if (latitude > 5)
 			return CardinalDirection.SOUTHWEST; //
 		if (latitude > -5)
@@ -413,10 +501,12 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		else
 			return CardinalDirection.NORTH;
 	}
-	
+
 	@Override
-	public boolean hasStorm(Position position) {
-		for (Storm storm: storms){
+	public boolean hasStorm(Position position)
+	{
+		for (Storm storm : storms)
+		{
 			if (storm.hasStormlet(position))
 				return true;
 		}
@@ -424,76 +514,95 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		return false;
 	}
 
-	AbstractFeature shadowFeature = new AbstractFeature(){
+	AbstractFeature shadowFeature = new AbstractFeature()
+	{
 		{
 			setAppearanceId("WATER_SHADOW");
 		}
-		
+
 		@Override
-		public String getClassifierID() {
+		public String getClassifierID()
+		{
 			return "WaterShadow";
 		}
 
 		@Override
-		public String getDescription() {
+		public String getDescription()
+		{
 			return "Sea Wind Shadow";
 		}
-		
+
 		@Override
-		public Appearance getAppearance() {
+		public Appearance getAppearance()
+		{
 			return super.getAppearance();
 		}
-		
+
 		@Override
-		public boolean isInvisible() {
+		public boolean isInvisible()
+		{
 			return false;
 		}
-		
+
 		@Override
-		public boolean isVisible() {
+		public boolean isVisible()
+		{
 			return true;
 		}
-		
+
 		@Override
-		public boolean isOpaque() {
+		public boolean isOpaque()
+		{
 			return false;
 		}
 	};
-	
+
 	AbstractFeature stormletFeature = new StormletFeature();
+
 	@Override
 	@Deprecated
-	public AbstractFeature getFeatureAt(Position position) {
+	public AbstractFeature getFeatureAt(Position position)
+	{
 		if (hasStorm(position))
 			return stormletFeature;
 		return super.getFeatureAt(position);
 	}
-	
+
 	@Override
-	public List<AbstractFeature> getFeaturesAt(Position tempP) {
+	public List<AbstractFeature> getFeaturesAt(Position tempP)
+	{
 		// Base list
 		List<AbstractFeature> ret = super.getFeaturesAt(tempP);
-		
+
 		// Stormlets
-		if (hasStorm(tempP)){
+		if (hasStorm(tempP))
+		{
 			if (ret == null)
 				ret = new ArrayList<AbstractFeature>();
-			if (!ret.contains(stormletFeature)){
+			if (!ret.contains(stormletFeature))
+			{
 				ret.add(stormletFeature);
 			}
-		}else if (ret != null){
-			if (ret.contains(stormletFeature)){
+		}
+		else if (ret != null)
+		{
+			if (ret.contains(stormletFeature))
+			{
 				ret.remove(stormletFeature);
 			}
 		}
-		
-		// Ship shadow (Consider removing this as a feature, should be just an UI thing)
+
+		// Ship shadow (Consider removing this as a feature, should be just an
+		// UI thing)
 		OverworldExpeditionCell cell = (OverworldExpeditionCell) getMapCell(tempP);
-		if (ret == null && cell != null && getExpedition() != null && getExpedition().getMovementMode() == MovementMode.SHIP){
+		if (ret == null && cell != null && getExpedition() != null
+				&& getExpedition().getMovementMode() == MovementMode.SHIP)
+		{
 			// Get cell to the wind shadow
 			Position var = new Position(getWindDirection().getVectors());
 			var = globeModel.scaleVar(var, getExpedition().getLatitude());
-			if (tempP.equals(Position.add(getExpedition().getPosition(), var))){
+			if (tempP.equals(Position.add(getExpedition().getPosition(), var)))
+			{
 				if (ret == null)
 					ret = new ArrayList<AbstractFeature>();
 				ret.add(shadowFeature);
@@ -501,105 +610,141 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 		}
 		return ret;
 	}
-	
-	protected boolean remembers(int x, int y, int z){
+
+	protected boolean remembers(int x, int y, int z)
+	{
 		return false;
 	}
 
-	class StormletFeature extends AbstractFeature {
+	class StormletFeature extends AbstractFeature
+	{
 		private static final long serialVersionUID = 1L;
 
-		public StormletFeature() {
+		public StormletFeature()
+		{
 			setAppearanceId("STORM");
 		}
-		
+
 		@Override
-		public String getClassifierID() {
+		public String getClassifierID()
+		{
 			return "Storm";
 		}
 
 		@Override
-		public String getDescription() {
+		public String getDescription()
+		{
 			return "Storm";
 		}
-		
+
 		@Override
-		public Appearance getAppearance() {
+		public Appearance getAppearance()
+		{
 			return super.getAppearance();
 		}
-		
+
 		@Override
-		public boolean isInvisible() {
+		public boolean isInvisible()
+		{
 			return false;
 		}
-		
+
 		@Override
-		public boolean isVisible() {
+		public boolean isVisible()
+		{
 			return true;
 		}
-		
+
 		@Override
-		public boolean isOpaque() {
+		public boolean isOpaque()
+		{
 			return true;
 		}
 	}
 
 	private long lastPlayedLevelTune = -1;
-	private long LEVEL_MUSIC_TUNE_PLAYBACK_GAP = 120 * 1000; 
-	public void setWeather(Weather weather) {
+	private long LEVEL_MUSIC_TUNE_PLAYBACK_GAP = 120 * 1000;
+
+	public void setWeather(Weather weather)
+	{
 		Weather formerWeather = this.weather;
 		this.weather = weather;
-		if (formerWeather != weather){
-			((ExpeditionUserInterface)UserInterface.getUI()).notifyWeatherChange(weather);
-			addMessage(weather.getChangeMessage(formerWeather));
-			if (weather.isWindy() && getWindDirection() == CardinalDirection.NULL){
+		if (formerWeather != weather)
+		{
+			if (UserInterface.getUI() != null)
+			{
+				((ExpeditionUserInterface) UserInterface.getUI()).notifyWeatherChange(weather);
+				addMessage(weather.getChangeMessage(formerWeather));
+			}
+			else
+			{
+				logger.debug(weather.getChangeMessage(formerWeather));
+			}
+
+			if (weather.isWindy() && getWindDirection() == CardinalDirection.NULL)
+			{
 				setWindDirection(getWindDirection().rotate(1));
 			}
-			if (formerWeather.isStormy() && !weather.isStormy()){
+			if (formerWeather.isStormy() && !weather.isStormy())
+			{
 				// Remove all storms
 				storms.clear();
 			}
-			playMusic();
+			if (ExpeditionProperties.isDebug())
+			{
+
+			}
+			else
+			{
+				playMusic();
+			}
 		}
-		
+
 	}
-	
+
 	@Override
-	public String getMusicKey() {
-		if (((OverworldExpeditionCell)getMapCell(getPlayer().getPosition())).isSea())
+	public String getMusicKey()
+	{
+		if (((OverworldExpeditionCell) getMapCell(getPlayer().getPosition())).isSea())
 			return "SEA";
 		else
 			return "LAND";
 	}
 
-	public boolean isOnITZ() {
+	public boolean isOnITZ()
+	{
 		return isOnITZ;
 	}
 
-	public int getApparentTemperature() {
+	public int getApparentTemperature()
+	{
 		return apparentTemperature;
 	}
 
-	
-	public void setIsOnITZ(boolean isOnITZ) {
+	public void setIsOnITZ(boolean isOnITZ)
+	{
 		this.isOnITZ = isOnITZ;
 	}
-	
-	private Position LOSPosition= new Position(0,0,0);
-	public boolean blockLOS(int x, int y) {
+
+	private Position LOSPosition = new Position(0, 0, 0);
+
+	public boolean blockLOS(int x, int y)
+	{
 		LOSPosition.x = x;
 		LOSPosition.y = y;
 		LOSPosition.z = 0;
-		if (!isValidCoordinate(x,y))
+		if (!isValidCoordinate(x, y))
 			return true;
 		List<AbstractFeature> feats = getFeaturesAt(LOSPosition);
 		AbstractCell cell = getMapCell(x, y, getPlayer().getPosition().z);
 
 		if (feats != null)
-			for (AbstractFeature feat: feats){
+			for (AbstractFeature feat : feats)
+			{
 				if (feat != null && feat.isOpaque())
 					return true;
-				if (feat != null && feat.overrideOpacity() && cell.isOpaque()){
+				if (feat != null && feat.overrideOpacity() && cell.isOpaque())
+				{
 					return false;
 				}
 				if (feat != null)
@@ -607,7 +752,8 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 			}
 		if (cell == null)
 			return false;
-		else {
+		else
+		{
 			AbstractCell playerCell = getMapCell(getPlayer().getPosition());
 			if (cell.getHeightMod() == playerCell.getHeightMod())
 				return cell.isOpaque();
@@ -615,111 +761,110 @@ public class ExpeditionMacroLevel extends ExpeditionLevelReader{
 				return true;
 			else
 				return false;
-				
+
 		}
 	}
-	
+
 	@Override
-	public void playMusic() {
-		if (weather.getMusicKey() != null){
+	public void playMusic()
+	{
+		if (weather.getMusicKey() != null)
+		{
 			ExpeditionMusicManager.playTune(weather.getMusicKey());
-		} else {
-			if (System.currentTimeMillis() > lastPlayedLevelTune + LEVEL_MUSIC_TUNE_PLAYBACK_GAP) {
+		}
+		else
+		{
+			if (System.currentTimeMillis() > lastPlayedLevelTune + LEVEL_MUSIC_TUNE_PLAYBACK_GAP)
+			{
 				ExpeditionMusicManager.playTune(getMusicKey());
 				lastPlayedLevelTune = System.currentTimeMillis();
-			} else {
+			}
+			else
+			{
 				ExpeditionMusicManager.stopWeather();
 			}
 		}
 	}
-	
+
 	@Override
-	public void enterLevel() {
-		lastPlayedLevelTune = -1;	
+	public void enterLevel()
+	{
+		lastPlayedLevelTune = -1;
 	}
 
-	
 	private List<NativeTown> nativeTowns = new ArrayList<NativeTown>();
-	public void addNativeTown(NativeTown t) {
+
+	public void addNativeTown(NativeTown t)
+	{
 		nativeTowns.add(t);
 		addFeature(t);
 	}
-	
-	public List<NativeTown> getNativeTowns(){
+
+	public List<NativeTown> getNativeTowns()
+	{
 		return nativeTowns;
 	}
-	
-	public void addMessage(String what, Position where){
-		addMessage(new Message(what, where, formatTime(ExpeditionGame.getCurrentGame().getGameTime())));
-	}
 
-	private String formatTime(Calendar gameTime) {
-		return ExpeditionUserInterface.months[gameTime.get(Calendar.MONTH)] +" "+ gameTime.get(Calendar.DATE)+", "+getTimeDescriptionFromHour(gameTime.get(Calendar.HOUR_OF_DAY));
-	}
-	
-	public static String getTimeDescriptionFromHour(int i) {
-		if (i > 22){
-			return "Midnight";
-		} else if (i > 18){
-			return "Night";
-		} else if (i > 14){
-			return "Afternoon";
-		} else if (i > 10){
-			return "Noon";
-		} else if (i > 6){
-			return "Morning";
-		} else if (i > 4){
-			return "Dawn";
-		} else {
-			return "Midnight";
-		}
-	}
 	
 	@Override
-	public Appearance filterAppearance(Appearance appearance) {
-		if (getWeather() == Weather.FOG){
-			return AppearanceFactory.getAppearanceFactory().getAppearance(appearance.getID()+"_FOG");
-		} else {
+	public Appearance filterAppearance(Appearance appearance)
+	{
+		if (getWeather() == Weather.FOG)
+		{
+			return AppearanceFactory.getAppearanceFactory().getAppearance(appearance.getID() + "_FOG");
+		}
+		else
+		{
 			return super.filterAppearance(appearance);
 		}
 	}
-	
-	public List<Pair<Position,OverworldExpeditionCell>> getMapCellsAndPositionsAround(Position p){
-		List<Pair<Position,OverworldExpeditionCell>> ret = new ArrayList<Pair<Position,OverworldExpeditionCell>>();
+
+	public List<Pair<Position, OverworldExpeditionCell>> getMapCellsAndPositionsAround(Position p)
+	{
+		List<Pair<Position, OverworldExpeditionCell>> ret = new ArrayList<Pair<Position, OverworldExpeditionCell>>();
 		List<Position> positions = getPositionsAround(p);
-		for (Position position: positions){
-			ret.add(new Pair<Position,OverworldExpeditionCell>(position, (OverworldExpeditionCell)getMapCell(position)));
-		}
-		return ret;
-	}
-		
-	public List<OverworldExpeditionCell> getMapCellsAround(Position p){
-		List<OverworldExpeditionCell> ret = new ArrayList<OverworldExpeditionCell>();
-		List<Position> positions = getPositionsAround(p);
-		for (Position position: positions){
-			ret.add((OverworldExpeditionCell)getMapCell(position));
+		for (Position position : positions)
+		{
+			ret.add(new Pair<Position, OverworldExpeditionCell>(position,
+					(OverworldExpeditionCell) getMapCell(position)));
 		}
 		return ret;
 	}
 
-	
-	public Forest getOrCreateForest(Position position) {
+	public List<OverworldExpeditionCell> getMapCellsAround(Position p)
+	{
+		List<OverworldExpeditionCell> ret = new ArrayList<OverworldExpeditionCell>();
+		List<Position> positions = getPositionsAround(p);
+		for (Position position : positions)
+		{
+			ret.add((OverworldExpeditionCell) getMapCell(position));
+		}
+		return ret;
+	}
+
+	public Forest getOrCreateForest(Position position)
+	{
 		Forest f = null;
 		List<AbstractFeature> allFeatures = getFeaturesAt(position);
-		if (allFeatures != null){
-			for (AbstractFeature feature: allFeatures){
-				if (feature instanceof Forest){
+		if (allFeatures != null)
+		{
+			for (AbstractFeature feature : allFeatures)
+			{
+				if (feature instanceof Forest)
+				{
 					f = (Forest) feature;
 					break;
 				}
 			}
 		}
-		if ( f == null ) {
-			//No feature here yet, but since this is a forest, let's add a forest feature;
+		if (f == null)
+		{
+			// No feature here yet, but since this is a forest, let's add a
+			// forest feature;
 			f = new Forest(Util.rand(500, 750));
 			f.setPosition(new Position(position));
 			addFeature(f);
-		} 
+		}
 		return f;
 	}
 }

@@ -11,6 +11,10 @@ import net.slashie.serf.ui.oryxUI.GFXAppearance;
 import net.slashie.utils.swing.GFXMenuItem;
 
 public class StoreGFXMenuItem implements GFXMenuItem {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Equipment item;
 	private Store store;
 	private Expedition offShore;

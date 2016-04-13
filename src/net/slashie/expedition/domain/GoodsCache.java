@@ -375,4 +375,53 @@ public class GoodsCache extends AbstractFeature implements FoodConsumer, UnitCon
 	public void consumeWater() {
 		foodConsumerDelegate.consumeWater();
 	}
+
+	@Override
+	public int getCurrentWater()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getHungerResistance()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getThirstResistance()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getMaxThirstResistance()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getMaxHungerResistance()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setHungerResistance(int i)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setThirstResistance(int i)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
